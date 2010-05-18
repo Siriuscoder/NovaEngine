@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NovaEditor", "NovaEditor\NovaEditor.vcproj", "{4DB54F60-F9C5-420F-B6FB-4F3F9239515C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4} = {26C0FEBA-9218-4C94-991C-30BB7FE130E4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Nova", "nova\nova.vcproj", "{26C0FEBA-9218-4C94-991C-30BB7FE130E4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleWin", "Examples\SimpleWin\SimpleWin.vcproj", "{FBB5CE8B-CD7A-4146-B63C-B44E91BED39E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4} = {26C0FEBA-9218-4C94-991C-30BB7FE130E4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleParser", "Examples\Parser\Parser.vcproj", "{D7BB521D-4DA2-4653-A1FE-89485C736503}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4} = {26C0FEBA-9218-4C94-991C-30BB7FE130E4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImageSample", "Examples\ImageSample\ImageSample.vcproj", "{FF6824F6-5E8E-44BD-AC5B-68E860D45590}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4} = {26C0FEBA-9218-4C94-991C-30BB7FE130E4}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DB54F60-F9C5-420F-B6FB-4F3F9239515C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4DB54F60-F9C5-420F-B6FB-4F3F9239515C}.Release|Win32.ActiveCfg = Release|Win32
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4}.Debug|Win32.Build.0 = Debug|Win32
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4}.Release|Win32.ActiveCfg = Release|Win32
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4}.Release|Win32.Build.0 = Release|Win32
+		{FBB5CE8B-CD7A-4146-B63C-B44E91BED39E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FBB5CE8B-CD7A-4146-B63C-B44E91BED39E}.Debug|Win32.Build.0 = Debug|Win32
+		{FBB5CE8B-CD7A-4146-B63C-B44E91BED39E}.Release|Win32.ActiveCfg = Release|Win32
+		{FBB5CE8B-CD7A-4146-B63C-B44E91BED39E}.Release|Win32.Build.0 = Release|Win32
+		{D7BB521D-4DA2-4653-A1FE-89485C736503}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D7BB521D-4DA2-4653-A1FE-89485C736503}.Debug|Win32.Build.0 = Debug|Win32
+		{D7BB521D-4DA2-4653-A1FE-89485C736503}.Release|Win32.ActiveCfg = Release|Win32
+		{D7BB521D-4DA2-4653-A1FE-89485C736503}.Release|Win32.Build.0 = Release|Win32
+		{FF6824F6-5E8E-44BD-AC5B-68E860D45590}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FF6824F6-5E8E-44BD-AC5B-68E860D45590}.Debug|Win32.Build.0 = Debug|Win32
+		{FF6824F6-5E8E-44BD-AC5B-68E860D45590}.Release|Win32.ActiveCfg = Release|Win32
+		{FF6824F6-5E8E-44BD-AC5B-68E860D45590}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

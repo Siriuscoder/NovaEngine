@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Nova" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="libnova-deb" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Debug" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-D_DEBUG" />
+					<Add directory="./include" />
+					<Add directory="./" />
+					<Add directory="/usr/include" />
+					<Add directory="/usr/include/freetype2" />
+					<Add directory="/usr/include/SDL" />
+					<Add directory="/usr/include/IL" />
+					<Add directory="/usr/include/libxml2" />
+					<Add directory="/usr/include/GL" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="./include" />
+					<Add directory="./" />
+				</ResourceCompiler>
+				<Linker>
+					<Add directory="./lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="libnova" prefix_auto="1" extension_auto="1" />
+				<Option object_output="Release" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-D_RELEASE" />
+					<Add directory="./include" />
+					<Add directory="./" />
+					<Add directory="/usr/include" />
+					<Add directory="/usr/include/freetype2" />
+					<Add directory="/usr/include/SDL" />
+					<Add directory="/usr/include/IL" />
+					<Add directory="/usr/include/libxml2" />
+					<Add directory="/usr/include/GL" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="./include" />
+					<Add directory="./" />
+				</ResourceCompiler>
+				<Linker>
+					<Add directory="./lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-march=i586" />
+			<Add option="-w" />
+			<Add option="-DUSE_CODE_BLOCKS" />
+		</Compiler>
+		<Linker>
+			<Add directory="/usr/lib" />
+		</Linker>
+		<Unit filename="ClassDiagram1.cd">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="GPL.txt">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="UpgradeLog.XML">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="icons/Scificons/1.cur">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="icons/Scificons/burn.ico">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="icons/Scificons/fav.ico">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/config/winconfig.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/nova_3ds_loader.h" />
+		<Unit filename="include/nova_allocator.h" />
+		<Unit filename="include/nova_base.h" />
+		<Unit filename="include/nova_bounding_box.h" />
+		<Unit filename="include/nova_camera.h" />
+		<Unit filename="include/nova_color.h" />
+		<Unit filename="include/nova_configloader.h" />
+		<Unit filename="include/nova_console.h" />
+		<Unit filename="include/nova_cpu_timer.h" />
+		<Unit filename="include/nova_devil_codec.h" />
+		<Unit filename="include/nova_display_list.h" />
+		<Unit filename="include/nova_engine.h" />
+		<Unit filename="include/nova_error.h" />
+		<Unit filename="include/nova_event_listener.h" />
+		<Unit filename="include/nova_events.h" />
+		<Unit filename="include/nova_fonts.h" />
+		<Unit filename="include/nova_formats.h" />
+		<Unit filename="include/nova_frustum.h" />
+		<Unit filename="include/nova_glsupport.h" />
+		<Unit filename="include/nova_gui_base.h" />
+		<Unit filename="include/nova_gui_renderer.h" />
+		<Unit filename="include/nova_gzstreams.h" />
+		<Unit filename="include/nova_hardware_buffer.h" />
+		<Unit filename="include/nova_hardware_pixel_buffer.h" />
+		<Unit filename="include/nova_image_codecs.h" />
+		<Unit filename="include/nova_images.h" />
+		<Unit filename="include/nova_lenear_scene_manager.h" />
+		<Unit filename="include/nova_log.h" />
+		<Unit filename="include/nova_material.h" />
+		<Unit filename="include/nova_math.h" />
+		<Unit filename="include/nova_matrix2d.h" />
+		<Unit filename="include/nova_matrix3d.h" />
+		<Unit filename="include/nova_matrix4d.h" />
+		<Unit filename="include/nova_memory.h" />
+		<Unit filename="include/nova_mesh_box.h" />
+		<Unit filename="include/nova_mesh_loader.h" />
+		<Unit filename="include/nova_movable_object.h" />
+		<Unit filename="include/nova_object.h" />
+		<Unit filename="include/nova_object_constructor.h" />
+		<Unit filename="include/nova_parser.h" />
+		<Unit filename="include/nova_plane.h" />
+		<Unit filename="include/nova_quaternion.h" />
+		<Unit filename="include/nova_render_system.h" />
+		<Unit filename="include/nova_render_target.h" />
+		<Unit filename="include/nova_render_window.h" />
+		<Unit filename="include/nova_renderable_object.h" />
+		<Unit filename="include/nova_resource_manager.h" />
+		<Unit filename="include/nova_scene_manager.h" />
+		<Unit filename="include/nova_sdl_support.h" />
+		<Unit filename="include/nova_sdl_workspace.h" />
+		<Unit filename="include/nova_singelton.h" />
+		<Unit filename="include/nova_smart_ptr.h" />
+		<Unit filename="include/nova_sockets.h" />
+		<Unit filename="include/nova_sphere.h" />
+		<Unit filename="include/nova_stable_precompiled_headers.h" />
+		<Unit filename="include/nova_static_object.h" />
+		<Unit filename="include/nova_streams.h" />
+		<Unit filename="include/nova_string_utils.h" />
+		<Unit filename="include/nova_texture_manager.h" />
+		<Unit filename="include/nova_textures.h" />
+		<Unit filename="include/nova_threads.h" />
+		<Unit filename="include/nova_tree.h" />
+		<Unit filename="include/nova_unicode.h" />
+		<Unit filename="include/nova_vector2d.h" />
+		<Unit filename="include/nova_vector3d.h" />
+		<Unit filename="include/nova_vector4d.h" />
+		<Unit filename="include/nova_viewport.h" />
+		<Unit filename="include/nova_wgl_support.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/nova_win32_context.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/nova_win32_workspace.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="include/sys/nova_ogl.h" />
+		<Unit filename="include/sys/nova_system.h" />
+		<Unit filename="nova_resource.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="res.rc">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/nova_3ds_loader.cpp" />
+		<Unit filename="src/nova_allocator.cpp" />
+		<Unit filename="src/nova_base.cpp" />
+		<Unit filename="src/nova_bounding_box.cpp" />
+		<Unit filename="src/nova_camera.cpp" />
+		<Unit filename="src/nova_color.cpp" />
+		<Unit filename="src/nova_configloader.cpp" />
+		<Unit filename="src/nova_console.cpp" />
+		<Unit filename="src/nova_cpu_timer.cpp" />
+		<Unit filename="src/nova_devil_codec.cpp" />
+		<Unit filename="src/nova_display_list.cpp" />
+		<Unit filename="src/nova_engine.cpp" />
+		<Unit filename="src/nova_error.cpp" />
+		<Unit filename="src/nova_event_listener.cpp" />
+		<Unit filename="src/nova_events.cpp" />
+		<Unit filename="src/nova_fonts.cpp" />
+		<Unit filename="src/nova_formats.cpp" />
+		<Unit filename="src/nova_frustum.cpp" />
+		<Unit filename="src/nova_glsupport.cpp" />
+		<Unit filename="src/nova_gui_base.cpp" />
+		<Unit filename="src/nova_gui_renderer.cpp" />
+		<Unit filename="src/nova_gzstreams.cpp" />
+		<Unit filename="src/nova_hardware_buffer.cpp" />
+		<Unit filename="src/nova_hardware_pixel_buffer.cpp" />
+		<Unit filename="src/nova_image_codecs.cpp" />
+		<Unit filename="src/nova_images.cpp" />
+		<Unit filename="src/nova_lenear_scene_manager.cpp" />
+		<Unit filename="src/nova_log.cpp" />
+		<Unit filename="src/nova_material.cpp" />
+		<Unit filename="src/nova_math.cpp" />
+		<Unit filename="src/nova_matrix2d.cpp" />
+		<Unit filename="src/nova_matrix3d.cpp" />
+		<Unit filename="src/nova_matrix4d.cpp" />
+		<Unit filename="src/nova_memory.cpp" />
+		<Unit filename="src/nova_mesh_box.cpp" />
+		<Unit filename="src/nova_mesh_loader.cpp" />
+		<Unit filename="src/nova_movable_object.cpp" />
+		<Unit filename="src/nova_object.cpp" />
+		<Unit filename="src/nova_object_constructor.cpp" />
+		<Unit filename="src/nova_parser.cpp" />
+		<Unit filename="src/nova_precompiled_headers.cpp" />
+		<Unit filename="src/nova_quaternion.cpp" />
+		<Unit filename="src/nova_render_system.cpp" />
+		<Unit filename="src/nova_render_target.cpp" />
+		<Unit filename="src/nova_render_window.cpp" />
+		<Unit filename="src/nova_renderable_object.cpp" />
+		<Unit filename="src/nova_resource_manager.cpp" />
+		<Unit filename="src/nova_scene_manager.cpp" />
+		<Unit filename="src/nova_sdl_support.cpp" />
+		<Unit filename="src/nova_sdl_workspace.cpp" />
+		<Unit filename="src/nova_smart_ptr.cpp" />
+		<Unit filename="src/nova_sockets.cpp" />
+		<Unit filename="src/nova_stable_precompiled_headers.cpp" />
+		<Unit filename="src/nova_static_object.cpp" />
+		<Unit filename="src/nova_streams.cpp" />
+		<Unit filename="src/nova_string_utils.cpp" />
+		<Unit filename="src/nova_texture_manager.cpp" />
+		<Unit filename="src/nova_textures.cpp" />
+		<Unit filename="src/nova_threads.cpp" />
+		<Unit filename="src/nova_tree.cpp" />
+		<Unit filename="src/nova_unicode.cpp" />
+		<Unit filename="src/nova_vector2d.cpp" />
+		<Unit filename="src/nova_vector3d.cpp" />
+		<Unit filename="src/nova_vector4d.cpp" />
+		<Unit filename="src/nova_viewport.cpp" />
+		<Unit filename="src/nova_wgl_support.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/nova_win32_context.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="src/nova_win32_workspace.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

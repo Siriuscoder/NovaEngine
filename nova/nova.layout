@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="include/nova_3ds_loader.h" open="0" top="0" tabpos="0">
+		<Cursor position="2978" topLine="80" />
+	</File>
+	<File name="include/nova_allocator.h" open="0" top="0" tabpos="0">
+		<Cursor position="4794" topLine="59" />
+	</File>
+	<File name="include/nova_cpu_timer.h" open="0" top="0" tabpos="0">
+		<Cursor position="1735" topLine="27" />
+	</File>
+	<File name="include/nova_engine.h" open="0" top="0" tabpos="5">
+		<Cursor position="2318" topLine="172" />
+	</File>
+	<File name="include/nova_error.h" open="0" top="0" tabpos="0">
+		<Cursor position="4716" topLine="100" />
+	</File>
+	<File name="include/nova_events.h" open="0" top="0" tabpos="0">
+		<Cursor position="4728" topLine="132" />
+	</File>
+	<File name="include/nova_fonts.h" open="0" top="0" tabpos="0">
+		<Cursor position="8567" topLine="221" />
+	</File>
+	<File name="include/nova_glsupport.h" open="0" top="0" tabpos="0">
+		<Cursor position="2416" topLine="65" />
+	</File>
+	<File name="include/nova_gzstreams.h" open="0" top="0" tabpos="0">
+		<Cursor position="1843" topLine="35" />
+	</File>
+	<File name="include/nova_hardware_buffer.h" open="0" top="0" tabpos="0">
+		<Cursor position="3272" topLine="103" />
+	</File>
+	<File name="include/nova_hardware_pixel_buffer.h" open="0" top="0" tabpos="0">
+		<Cursor position="3614" topLine="124" />
+	</File>
+	<File name="include/nova_images.h" open="0" top="0" tabpos="0">
+		<Cursor position="2512" topLine="78" />
+	</File>
+	<File name="include/nova_log.h" open="0" top="0" tabpos="3">
+		<Cursor position="2614" topLine="54" />
+	</File>
+	<File name="include/nova_math.h" open="0" top="0" tabpos="0">
+		<Cursor position="21417" topLine="649" />
+	</File>
+	<File name="include/nova_mesh_loader.h" open="0" top="0" tabpos="0">
+		<Cursor position="1633" topLine="18" />
+	</File>
+	<File name="include/nova_render_system.h" open="0" top="0" tabpos="2">
+		<Cursor position="1672" topLine="21" />
+	</File>
+	<File name="include/nova_resource_manager.h" open="0" top="0" tabpos="0">
+		<Cursor position="2339" topLine="50" />
+	</File>
+	<File name="include/nova_sdl_support.h" open="0" top="0" tabpos="0">
+		<Cursor position="1672" topLine="25" />
+	</File>
+	<File name="include/nova_sdl_workspace.h" open="0" top="0" tabpos="0">
+		<Cursor position="1583" topLine="21" />
+	</File>
+	<File name="include/nova_singelton.h" open="0" top="0" tabpos="1">
+		<Cursor position="1409" topLine="18" />
+	</File>
+	<File name="include/nova_streams.h" open="0" top="0" tabpos="0">
+		<Cursor position="2254" topLine="61" />
+	</File>
+	<File name="include/nova_string_utils.h" open="0" top="0" tabpos="0">
+		<Cursor position="1477" topLine="23" />
+	</File>
+	<File name="include/nova_texture_manager.h" open="0" top="0" tabpos="0">
+		<Cursor position="1872" topLine="29" />
+	</File>
+	<File name="include/nova_textures.h" open="0" top="0" tabpos="0">
+		<Cursor position="4939" topLine="219" />
+	</File>
+	<File name="include/nova_unicode.h" open="0" top="0" tabpos="0">
+		<Cursor position="6560" topLine="136" />
+	</File>
+	<File name="include/sys/nova_ogl.h" open="0" top="0" tabpos="0">
+		<Cursor position="1782" topLine="26" />
+	</File>
+	<File name="include/sys/nova_system.h" open="0" top="0" tabpos="0">
+		<Cursor position="6702" topLine="213" />
+	</File>
+	<File name="src/nova_3ds_loader.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="22564" topLine="762" />
+	</File>
+	<File name="src/nova_console.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="6916" topLine="251" />
+	</File>
+	<File name="src/nova_cpu_timer.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3665" topLine="105" />
+	</File>
+	<File name="src/nova_devil_codec.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1575" topLine="18" />
+	</File>
+	<File name="src/nova_engine.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="3845" topLine="282" />
+	</File>
+	<File name="src/nova_error.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2525" topLine="51" />
+	</File>
+	<File name="src/nova_events.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1460" topLine="12" />
+	</File>
+	<File name="src/nova_fonts.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3803" topLine="86" />
+	</File>
+	<File name="src/nova_frustum.cpp" open="1" top="1" tabpos="1">
+		<Cursor position="1602" topLine="173" />
+	</File>
+	<File name="src/nova_glsupport.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1785" topLine="18" />
+	</File>
+	<File name="src/nova_hardware_buffer.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3447" topLine="96" />
+	</File>
+	<File name="src/nova_hardware_pixel_buffer.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="10583" topLine="390" />
+	</File>
+	<File name="src/nova_images.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2795" topLine="60" />
+	</File>
+	<File name="src/nova_log.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2389" topLine="27" />
+	</File>
+	<File name="src/nova_material.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="5493" topLine="210" />
+	</File>
+	<File name="src/nova_math.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2092" topLine="22" />
+	</File>
+	<File name="src/nova_mesh_box.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="12477" topLine="477" />
+	</File>
+	<File name="src/nova_mesh_loader.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1550" topLine="12" />
+	</File>
+	<File name="src/nova_render_system.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="2612" topLine="269" />
+	</File>
+	<File name="src/nova_resource_manager.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1621" topLine="17" />
+	</File>
+	<File name="src/nova_scene_manager.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1538" topLine="15" />
+	</File>
+	<File name="src/nova_sdl_support.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3020" topLine="62" />
+	</File>
+	<File name="src/nova_sdl_workspace.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3306" topLine="166" />
+	</File>
+	<File name="src/nova_streams.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="4277" topLine="154" />
+	</File>
+	<File name="src/nova_texture_manager.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="4104" topLine="105" />
+	</File>
+	<File name="src/nova_textures.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="5811" topLine="141" />
+	</File>
+	<File name="src/nova_unicode.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="24553" topLine="643" />
+	</File>
+	<File name="src/nova_win32_workspace.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="455" />
+	</File>
+</CodeBlocks_layout_file>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Nova workspace">
+		<Project filename="NovaEditor/NovaEditor.cbp" />
+		<Project filename="nova/nova.cbp" />
+		<Project filename="Examples/SimpleWin/SimpleWin.cbp" />
+		<Project filename="Examples/Parser/Parser.cbp" />
+		<Project filename="Examples/ImageSample/ImageSample.cbp" active="1" />
+	</Workspace>
+</CodeBlocks_workspace_file>
