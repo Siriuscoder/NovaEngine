@@ -23,14 +23,6 @@
 
 #include "nova_fstream.h"
 
-/********************************
-Yes? we can change master branch to test =)
-/**********************************/
-
-/*********************************
-second test commit
-/******************************/
-
 
 namespace nova
 {
