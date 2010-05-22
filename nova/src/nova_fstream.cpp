@@ -1,5 +1,5 @@
-/***************************************************************************
- *   Copyright (C) 2009 by Sirius										   *
+﻿/***************************************************************************
+ *   Copyright (C) 2010 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
  *																		   *
@@ -23,13 +23,233 @@
 
 #include "nova_fstream.h"
 
-/************************
-test
-/************************/
-
 namespace nova
 {
 
+void CFileStream::Open(const nstring & file, bool wr, bool app)
+{
+/*
+	mIOFile.open(file.c_str(), (wr ? fstream::out : fstream::in) | (app ? fstream::app : 0));
+
+	if(mIOFile.good())
+	{
+		mWrite = wr;
+		mIsOpened = true;
+
+		if(!wr)
+		{
+			mIOFile.seekg(ios_base::end);
+			mSize = mIOFile.tellg();
+			mIOFile.seekg(ios_base::beg);
+		}
+		else
+			mSize = 0;
+	}
+	else
+		throw NOVA_EXP("CFileStream::Open - can not open the file!", BAD_OPERATION);
+*/
+
+	mIOFile = fopen(file.c_str(), (wr ? (app ? "a" : "w") : "r"));
+	if(mIOFile)
+	{
+		mWrite = wr;
+		mIsOpened = true;
+
+		if(!wr)
+		{
+			fseek(mIOFile, 0, SEEK_END);
+			mSize = ftell(mIOFile);
+			fseek(mIOFile, 0, SEEK_SET);
+		}
+		else
+			mSize = 0;
+	}
+	else
+		throw NOVA_EXP("CFileStream::Open - can not open the file!", BAD_OPERATION);
+}
+
+size_t CFileStream::Read (const CMemoryBuffer & dest)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Read - file still not opened!", BAD_OPERATION);
+	if(mWrite)
+		throw NOVA_EXP("CFileStream::Read - file opened for writing!", BAD_OPERATION);
+
+	return fread(dest.GetBegin(), sizeof(nova::byte), dest.GetBufferSize(), mIOFile);
+}
+
+size_t CFileStream::Read (void *dest, const size_t count)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Read - file still not opened!", BAD_OPERATION);
+	if(mWrite)
+		throw NOVA_EXP("CFileStream::Read - file opened for writing!", BAD_OPERATION);
+
+	return fread(dest, sizeof(nova::byte), count, mIOFile);
+}
+
+size_t CFileStream::Write (const CMemoryBuffer & source)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Write - file still not opened!", BAD_OPERATION);
+	if(!mWrite)
+		throw NOVA_EXP("CFileStream::Write - file opened for reading!", BAD_OPERATION);
+
+	return fwrite(source.GetBegin(), sizeof(nova::byte), source.GetBufferSize(), mIOFile);
+}
+
+size_t CFileStream::Write (void *source, const size_t count)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Write - file still not opened!", BAD_OPERATION);
+	if(!mWrite)
+		throw NOVA_EXP("CFileStream::Write - file opened for reading!", BAD_OPERATION);
+
+	return fwrite(source, sizeof(nova::byte), count, mIOFile);
+}
+
+size_t CFileStream::ReadLine (nstring & str, const size_t count)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::ReadLine - stream is not opened!", BAD_OPERATION);
+
+	if(mWrite)
+		throw NOVA_EXP("CFileStream::ReadLine - stream opened for writing", BAD_OPERATION);
+
+	size_t cc = 0;
+
+	register char bb = 0;
+	for(; cc < count; cc++)
+	{
+		if(Eof())
+			break;
+
+		bb = fgetc(mIOFile);
+		str.push_back(bb);
+	}
+
+	return cc;
+}
+
+size_t CFileStream::ReadLine (nstring & str, const char delim)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::ReadLine - stream is not opened!", BAD_OPERATION);
+
+	if(mWrite)
+		throw NOVA_EXP("CFileStream::ReadLine - stream opened for writing", BAD_OPERATION);
+
+	size_t cc = 0;
+
+	register char bb = 0;
+	for(; ; cc++)
+	{
+		if(Eof())
+			break;
+		if(bb == delim)
+			break;
+
+		bb = fgetc(mIOFile);
+		str.push_back(bb);
+	}
+
+	return cc;
+}
+
+size_t CFileStream::WriteLine (const nstring & str, const size_t count)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::WriteLine - stream is not opened!", BAD_OPERATION);
+
+	if(!mWrite)
+		throw NOVA_EXP("CFileStream::WriteLine - stream opened for reading", BAD_OPERATION);
+
+	register size_t cc = 0;
+	for(; cc < count; cc++)
+	{
+		fputc(str.c_str()[cc], mIOFile);
+	}
+
+	return cc;
+}
+
+
+size_t CFileStream::WriteLine (const nstring & str, const char delim)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::WriteLine - stream is not opened!", BAD_OPERATION);
+
+	if(!mWrite)
+		throw NOVA_EXP("CFileStream::WriteLine - stream opened for reading", BAD_OPERATION);
+
+	register size_t cc = 0;
+	for(; ; cc++)
+	{
+		if(str.c_str()[cc] == delim)
+			break;
+
+		fputc(str.c_str()[cc], mIOFile);
+	}
+
+	return cc;
+}
+
+void CFileStream::Skip (long count)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Skip - stream is not opened!", BAD_OPERATION);
+
+	fpos_t pos;
+	fgetpos(mIOFile, &pos);
+
+	pos += count;
+	fsetpos(mIOFile, &pos);
+}
+
+void CFileStream::Seek (size_t pos)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Seek - stream is not opened!", BAD_OPERATION);
+
+	fseek(mIOFile, pos, SEEK_SET);
+}
+
+size_t CFileStream::Tell (void) const
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Tell - stream is not opened!", BAD_OPERATION);
+
+	fpos_t pos;
+	fgetpos(mIOFile, &pos);
+
+	return (size_t)pos;
+}
+
+bool CFileStream::Eof (void) const
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Eof - stream is not opened!", BAD_OPERATION);
+
+	return feof(mIOFile) == 0 ? false : true;
+}
+
+void CFileStream::Flush(void)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Flush - stream is not opened!", BAD_OPERATION);
+
+	fflush(mIOFile);
+}
+
+void CFileStream::Close (void)
+{
+	if(!mIsOpened)
+		throw NOVA_EXP("CFileStream::Close - stream is not opened!", BAD_OPERATION);
+
+	mIsOpened = false;
+	mSize = 0;
+	fclose(mIOFile);
+}
 
 
 }
