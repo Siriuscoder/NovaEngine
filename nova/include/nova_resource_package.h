@@ -48,14 +48,14 @@ private:
 		char package_name[50];
 
 		nova::uint files_count;
-		nova::longlong total_size;
+		size_t total_size;
 	} TPackageHeader;
 
 	typedef struct FileHeader
 	{
 		nova::uint number;
-		nova::uint size;
-		nova::uint pos;
+		size_t size;
+		size_t pos;
 		char file_name[150];
 		char ext[10];
 		char resource_group[50];
@@ -64,7 +64,10 @@ private:
 
 protected:
 
-	stl<nstring, FileHeader>::map mPackageMap;
+	stl<nstring, TFileHeader>::map mPackageMap;
+	TPackageHeader mPackageHeader;
+
+	bool InFileList(const nstring & name);
 
 public:
 
@@ -85,6 +88,9 @@ public:
 	CMemoryBuffer GetFile(const nstring & name);
 
 	bool IsOpened(void);
+
+
+	void PutFile(CDataStream *pfile, const nstring & name, const nstring & ext, const nstring &grs); 
 
 };
 

@@ -19,6 +19,8 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program;					                           *
  ***************************************************************************/
+#pragma once
+
 #include "nova_streams.h"
 
 namespace nova
