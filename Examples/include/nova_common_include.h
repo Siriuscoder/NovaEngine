@@ -19,7 +19,7 @@
 
 #if defined(__WIN32__)
 
-#define ENTRY_POINT	int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+#define ENTRY_POINT	int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hIns, LPSTR cmdParam, int cmdShow)
 
 #define FONT_PATH ".\\Courier10b95.ttf"
 #define CONF_FILE ".\\test.conf"

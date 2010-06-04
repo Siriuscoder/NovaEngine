@@ -22,6 +22,7 @@
 #pragma once
 
 #include "nova_scene_scrap.h"
+#include "nova_resource_package.h"
 
 namespace nova
 {
