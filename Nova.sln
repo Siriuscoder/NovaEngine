@@ -23,6 +23,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImageSample", "Examples\Ima
 		{26C0FEBA-9218-4C94-991C-30BB7FE130E4} = {26C0FEBA-9218-4C94-991C-30BB7FE130E4}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ResourcePacker", "Examples\ResourcePacker\ResourcePacker.vcproj", "{BD3521CA-95FB-4995-88E8-E79BDBE311AD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26C0FEBA-9218-4C94-991C-30BB7FE130E4} = {26C0FEBA-9218-4C94-991C-30BB7FE130E4}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -47,6 +52,10 @@ Global
 		{FF6824F6-5E8E-44BD-AC5B-68E860D45590}.Debug|Win32.Build.0 = Debug|Win32
 		{FF6824F6-5E8E-44BD-AC5B-68E860D45590}.Release|Win32.ActiveCfg = Release|Win32
 		{FF6824F6-5E8E-44BD-AC5B-68E860D45590}.Release|Win32.Build.0 = Release|Win32
+		{BD3521CA-95FB-4995-88E8-E79BDBE311AD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BD3521CA-95FB-4995-88E8-E79BDBE311AD}.Debug|Win32.Build.0 = Debug|Win32
+		{BD3521CA-95FB-4995-88E8-E79BDBE311AD}.Release|Win32.ActiveCfg = Release|Win32
+		{BD3521CA-95FB-4995-88E8-E79BDBE311AD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
