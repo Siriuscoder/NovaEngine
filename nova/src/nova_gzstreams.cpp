@@ -114,12 +114,13 @@ size_t CGZFileStream::Tell() const
 
 void CGZFileStream::Seek(nova::uint pos)
 {
+	int i;
 	if(mIsOpened && mGZFile)
 	{
 //		if(mOpt != GZ_READ)
 //			NOVA_EXP("CGZFileStream::SetReadPos - file opened for write!", BAD_OPERATION);
 
-		gzseek(mGZFile, pos, 0x0);
+		i = gzseek(mGZFile, pos, SEEK_SET);
 	}
 	else
 		throw NOVA_EXP("CGZFileStream::SetReadPos - file is not opened!", BAD_OPERATION);

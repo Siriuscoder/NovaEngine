@@ -17,6 +17,8 @@
  ***************************************************************************/
 #pragma once
 
+#include "nova_engine.h"
+
 #if defined(__WIN32__)
 
 #define ENTRY_POINT	int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hIns, LPSTR cmdParam, int cmdShow)
@@ -37,8 +39,6 @@
 #define CONF_FILE "./test.conf"
 
 #endif
-
-#include "nova_engine.h"
 
 //using namespace nova;
 //using namespace nova::utils;
