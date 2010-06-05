@@ -49,7 +49,7 @@ void CFileStream::Open(const nstring & file, bool wr, bool app)
 		throw NOVA_EXP("CFileStream::Open - can not open the file!", BAD_OPERATION);
 */
 
-	mIOFile = fopen(file.c_str(), (wr ? (app ? "a" : "w") : "r"));
+	mIOFile = fopen(file.c_str(), (wr ? (app ? "ab" : "wb") : "rb"));
 	if(mIOFile)
 	{
 		mWrite = wr;
@@ -199,11 +199,10 @@ void CFileStream::Skip (long count)
 	if(!mIsOpened)
 		throw NOVA_EXP("CFileStream::Skip - stream is not opened!", BAD_OPERATION);
 
-	fpos_t pos;
-	fgetpos(mIOFile, &pos);
+	size_t pos = Tell();
 
 	pos += count;
-	fsetpos(mIOFile, &pos);
+	Seek(pos);
 }
 
 void CFileStream::Seek (size_t pos)
@@ -219,10 +218,7 @@ size_t CFileStream::Tell (void) const
 	if(!mIsOpened)
 		throw NOVA_EXP("CFileStream::Tell - stream is not opened!", BAD_OPERATION);
 
-	fpos_t pos;
-	fgetpos(mIOFile, &pos);
-
-	return (size_t)pos;
+	return (size_t)ftell(mIOFile);
 }
 
 bool CFileStream::Eof (void) const

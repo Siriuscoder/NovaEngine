@@ -24,6 +24,7 @@
 
 #include "nova_error.h"
 #include "nova_gzstreams.h"
+#include "nova_fstream.h"
 
 namespace nova
 {
@@ -46,9 +47,6 @@ private:
 		nova::uint version;
 		nova::uint v_signature;
 		char package_name[50];
-
-		nova::uint files_count;
-		size_t total_size;
 	} TPackageHeader;
 
 	typedef struct FileHeader
@@ -89,8 +87,7 @@ public:
 
 	bool IsOpened(void);
 
-
-	void PutFile(CDataStream *pfile, const nstring & name, const nstring & ext, const nstring &grs); 
+	void PutFile(const CMemoryBuffer &buf , const nstring & name, const nstring & ext, const nstring &grs); 
 
 };
 
