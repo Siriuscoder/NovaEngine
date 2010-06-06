@@ -32,6 +32,8 @@ public:
 
 	static nova::stl<nstring>::vector Split(const nstring & str);
 
+	static nova::stl<nstring>::vector Split(const nstring & str, char delim);
+
 	static int StringToInt(const nstring & str);
 
 	static int StringToInt(const char * str);

@@ -45,6 +45,25 @@ nova::stl<nstring>::vector CStringUtils::Split(const nstring & str)
 	return temp;
 }
 
+nova::stl<nstring>::vector CStringUtils::Split(const nstring & str, char delim)
+{
+	nstringstream stream(str);
+	nova::stl<nstring>::vector temp;
+
+	if(!stream.good())
+		return temp;
+
+	while(!stream.eof())
+	{
+		char buf[0xff];
+		stream.getline(buf, 0xff, delim); 
+
+		temp.push_back(nstring(buf));
+	}
+
+	return temp;
+}
+
 int CStringUtils::StringToInt(const nstring & str)
 {
 	return StringToInt(str.c_str());

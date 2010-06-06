@@ -145,6 +145,7 @@ void CFilesPackage::ClosePackage(void)
 	}
 
 	mIsOpened = false;
+	mSelfOpen = false;
 	mWritePackage = false;
 	mFile = NULL;
 }

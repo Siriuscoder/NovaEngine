@@ -16,6 +16,7 @@
  *   along with this program;					                           *
  ***************************************************************************/
 #include "nova_example_application.h"
+#include "nova_string_utils.h"
 
 using namespace nova;
 
@@ -52,7 +53,11 @@ public:
 			buf.AllocBuffer(packingfile.Size());
 			packingfile.Read(buf);
 
-			mPack.PutFile(buf, files[i], nstring("ext"), nstring("res_pack"));
+			stl<nstring>::vector vf = CStringUtils::Split(files[i], DELIM);
+			stl<nstring>::vector vfex = CStringUtils::Split(files[i], '.');
+			stl<nstring>::vector vfpk = CStringUtils::Split(package, DELIM);
+
+			mPack.PutFile(buf, vf[vf.size()-1], vfex[vfex.size()-1], vfpk[vfpk.size()-1]);
 
 			cout << "=";
 			buf.FreeBuffer();
@@ -61,27 +66,31 @@ public:
 
 		mPack.ClosePackage();
 
-		cout << endl << "Packing complete" << endl;
+		cout << endl << endl << "Packing complete.." << endl;
 	}
 
 	void StartUnpack(const nstring &package)
 	{
 		mPack.OpenPackage(package, false);
 		stl<nstring>::vector vf = mPack.GetFileList();
-		cout << endl << "Unpacking complete, file list: " << endl;
+		cout << endl << "File list unpacket successfully, begin saving files -> " << endl;
 
 		for(nova::uint i = 0; i < vf.size(); i++)
-			cout << vf[i] << endl;
+		{
+			cout << "Unpacking file: " << vf[i] << endl;
+			nova::CMemoryBuffer buf = mPack.GetFile(vf[i]);
 
-		nova::CMemoryBuffer buf = mPack.GetFile(nstring("image.jpg"));
+			nova::CFileStream stream;
+			stream.Open(vf[i], true, false);
+			stream.Write(buf);
 
-		nova::CFileStream stream;
-		stream.Open("test_image.jpg", true, false);
-		stream.Write(buf);
+			buf.FreeBuffer();
+			stream.Close();
+		}
 
-		buf.FreeBuffer();
-		stream.Close();
 		mPack.ClosePackage();
+
+		cout << endl << "Done.." << endl;
 	}
 
 	void Launch(const nstring &package, const stl<nstring>::vector & files, bool extract)
@@ -103,8 +112,11 @@ void RestreamToAllocatedConsole(void)
 	FILE *hfr = _fdopen(_open_osfhandle(
                 (long)GetStdHandle(STD_INPUT_HANDLE), 2), "r");
 
-	*stdout = *stderr = *hf;
-	*stdin = *hfr;
+	if(hf && hfr)
+	{
+		*stdout = *stderr = *hf;
+		*stdin = *hfr;
+	}
 }
 
 void CloseConsole()

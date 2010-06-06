@@ -27,6 +27,8 @@
 #define CONF_FILE ".\\test.conf"
 #define TEXTURE_PATH ".\\back.jpg"
 
+#define DELIM '\\'
+
 #else
 
 #ifdef HAVE_CONFIG_H
@@ -37,6 +39,8 @@
 
 #define FONT_PATH "/usr/local/share/CHICAGO.TTF"
 #define CONF_FILE "./test.conf"
+
+#define DELIM '/'
 
 #endif
 
