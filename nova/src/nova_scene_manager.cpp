@@ -26,7 +26,7 @@
 namespace nova
 {
 
-CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group) : CBase("CSceneManager")
+CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
 {
 	ClearObjects();
 	mRegisterGroup = group;
@@ -62,26 +62,9 @@ void CSceneManager::ClearObjects(void)
 	mObjectsMap.clear();
 }
 
-CWorldObject *CSceneManager::ConstructSingleObjectFromResourceMesh(const nstring & name, const nstring & meshname,
-	bool attach)
+void CSceneManager::AttachSingleObjectToResource(CWorldObject *obj, const nstring & resource)
 {
-	CMeshBoxPtr mesh = CMeshManager::GetSingelton().GetResourceFromHash(meshname);
-
-	if(mesh.IsNull())
-		NOVA_EXP("CSceneManager::ConstructSingleObjectFromResourceMesh: Resource factory returned null \
-			pointer.. (resource not found)", BAD_OPERATION);
-
-	CWorldObject *obj = ConstructRenderableObject(name);
-	if(attach)
-	{
-		AttachSingleObject(obj, mesh->GetResName());
-	}
-
-	return obj;
-}
-
-void CSceneManager::AttachSingleObject(CWorldObject *obj, const nstring & mesh)
-{
+/*
 	if(!obj)
 		NOVA_EXP("CSceneManager::AttachSingleObject: obj is null..", MEM_ERROR);
 
@@ -104,6 +87,7 @@ void CSceneManager::AttachSingleObject(CWorldObject *obj, const nstring & mesh)
 	
 		mObjectsMap.insert(link);
 	}
+*/
 }
 
 int CSceneManager::RenderСompoundObjects(void)

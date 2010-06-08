@@ -38,7 +38,7 @@ public:
 
 	CTreeSceneManager(const nstring &scene_name, const nstring & factory_name) : CSceneManager(scene_name, factory_name) {}
 
-	//void RenderScene(CCamera * camera, CViewPort * view);
+	CWorldObject *ConstructSingleObject(const nstring & name);
 
 	void PrepareScene(void) {}
 

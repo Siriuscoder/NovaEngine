@@ -26,11 +26,26 @@
 #include "nova_movable_object.h"
 #include "nova_mesh_box.h"
 #include "nova_mesh_loader.h"
+#include "nova_tree.h"
 
 namespace nova
 {
 
-class NOVA_EXPORT CSceneManager : public CBase, public CListenerInterface
+class NOVA_EXPORT CSceneNode : public CObjectConstructor
+{
+protected:
+
+
+
+
+public:
+
+	CSceneNode() {}
+
+	CSceneNode(CWorldObject *obj, CResource *res) {}
+};
+
+class NOVA_EXPORT CSceneManager : public CTree<CSceneNode*>, public CListenerInterface
 {
 protected:
 
@@ -59,10 +74,9 @@ public:
 
 	void RenderScene(CCamera *camera, CViewPort *view);
 
-	CWorldObject *ConstructSingleObjectFromResourceMesh(const nstring & name, const nstring & meshname,
-		bool attach);
+	virtual CWorldObject *ConstructSingleObject(const nstring & name) = 0;
 
-	void AttachSingleObject(CWorldObject *obj, const nstring & mesh);
+	void AttachSingleObjectToResource(CWorldObject *obj, const nstring & resource);
 
 	virtual void PrepareScene(void) = 0;
 

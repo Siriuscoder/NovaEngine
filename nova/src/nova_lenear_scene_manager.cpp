@@ -33,6 +33,13 @@ CWorldObject *CTreeSceneManager::ConstructRenderableObject(const nstring & name)
 	return dynamic_cast<CWorldObject *>(myobject);
 }
 
+CWorldObject *CTreeSceneManager::ConstructSingleObject(const nstring & name)
+{
+	CWorldObject *obj = ConstructRenderableObject(name);
+
+	return obj;
+}
+
 void CTreeSceneManager::RenderSceneImpl()
 {
 

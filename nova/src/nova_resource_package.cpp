@@ -233,14 +233,11 @@ void CFilesPackage::PutFile(const CMemoryBuffer &buf , const nstring & name, con
 	if(InFileList(name))
 		throw NOVA_EXP("CFilesPackage::PutFile: package already contains this name!", BAD_OPERATION);	
 
-	int i = mFile->Tell();
-	fheader.pos = i + sizeof(TFileHeader);
+	fheader.pos = mFile->Tell() + sizeof(TFileHeader);
 	fheader.number = mPackageMap.size() + 1;
 	fheader.size = buf.GetBufferSize();
 
 	mFile->Write(&fheader, sizeof(TFileHeader));
-
-	i = mFile->Tell();
 	mFile->Write(buf);
 
 	std::pair<nstring, TFileHeader> pf;
