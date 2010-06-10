@@ -26,6 +26,7 @@
 namespace nova
 {
 
+	/*
 class NOVA_EXPORT CTreeSceneManager : public CSceneManager
 {
 protected:
@@ -46,6 +47,8 @@ public:
 
 	void DestroyScene(void) {}
 };
+
+*/
 
 
 }

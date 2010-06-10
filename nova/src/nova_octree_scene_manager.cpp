@@ -27,6 +27,8 @@
 namespace nova
 {
 
+
+/*
 CWorldObject *COctreeSceneManager::ConstructRenderableObject(const nstring & name)
 {
 	CStaticObject *myobject = NULL;
@@ -39,5 +41,7 @@ void COctreeSceneManager::RenderSceneImpl()
 
 
 }
+
+*/
 
 }

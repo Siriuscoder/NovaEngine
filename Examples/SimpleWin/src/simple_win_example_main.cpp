@@ -43,11 +43,13 @@ public:
 
 	virtual void LoadResources()
 	{
+	/*
 		nova::CTreeSceneManager *moution_manager = 
 			new nova::CTreeSceneManager(nova::nstring("SceneOne"), nova::nstring("movable_factory"));
 
 		nova::CSceneScrap *mainscrap = new nova::CSceneScrap(moution_manager, true);
 		nova::CScene::GetSingelton().AddScrap(mainscrap);
+	*/
 	}
 
 	virtual void InitViewport(void)

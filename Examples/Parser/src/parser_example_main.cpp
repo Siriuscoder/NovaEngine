@@ -88,7 +88,7 @@ public:
 		clock_t timework = clock() - start;
 
 		intree = config.GetTree();
-		intree->GetRootElement()->AddCurentNone(MakeTimeWork(timework));
+		intree->GetRootElement()->AddCurrentNone(MakeTimeWork(timework));
 
 		nstring newfile = filename + "new";
 		config.SaveTree(*intree, newfile);
