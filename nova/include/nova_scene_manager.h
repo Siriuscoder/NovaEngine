@@ -26,26 +26,62 @@
 #include "nova_movable_object.h"
 #include "nova_mesh_box.h"
 #include "nova_mesh_loader.h"
+#include "nova_tree.h"
 
 namespace nova
 {
 
-class NOVA_EXPORT CSceneManager : public CBase, public CListenerInterface
+enum NNodeType
+{
+	NT_MESH_NODE,
+	NT_CAMERA_NODE,
+	NT_LIGHT_NODE,
+	NT_OCTREE_NODE
+};
+
+class NOVA_EXPORT CSceneNode : public CListenerInterface
+{
+protected:
+
+	NNodeType mNodeType;
+	bool isValidated;
+	CWorldObject *mChildObject;
+
+	virtual void ValidateNodeImpl(void) = 0;
+
+public:
+
+	CSceneNode(NNodeType type) : mNodeType(type), mChildObject(NULL) {}
+
+	CSceneNode(NNodeType type, CWorldObject *obj) : mNodeType(type), mChildObject(obj) {}
+
+	virtual CWorldObject* ConstractWorldObject(void) = 0;
+
+	virtual void PrepareNode(void) = 0;
+
+	void SetWorldObject(CWorldObject *obj);
+
+	NNodeType GetNodeType(void);
+
+	void ValidateNode(void);
+
+	void InValidateNode(void);
+
+	void ReleaseNode(void);
+};
+
+class NOVA_EXPORT CSceneManager : public CListenerInterface
 {
 protected:
 
 	int mRenderedBatches;
 	int mRenderedFaces;
 	int mSceneType;
-	typedef stl<nstring, stl<CWorldObject *>::vector>::map TObjectsMap;
-
-	TObjectsMap mObjectsMap;
 	nstring mRegisterGroup;
 	CCamera *mCurCamera; 
 	CViewPort *mCurView;
 	nstring mSceneName;
-
-	virtual CWorldObject *ConstructRenderableObject(const nstring & name) = 0;
+	CTree<CSceneNode*> mSceneTree;
 
 	virtual void RenderSceneImpl(void) = 0;
 
@@ -59,12 +95,13 @@ public:
 
 	void RenderScene(CCamera *camera, CViewPort *view);
 
-	CWorldObject *ConstructSingleObjectFromResourceMesh(const nstring & name, const nstring & meshname,
-		bool attach);
-
-	void AttachSingleObject(CWorldObject *obj, const nstring & mesh);
+	CTreeNode<CSceneNode*> *ConstactSpecifiedNode(NNodeType type);
 
 	virtual void PrepareScene(void) = 0;
+
+	virtual void PrepareRenderQueue(void) = 0;
+
+	virtual void PrepareSceneFrame(void) = 0;
 
 	virtual void BuildScene(void) = 0;
 

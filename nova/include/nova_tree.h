@@ -37,7 +37,7 @@ namespace nova {
 /// вершине хранится лист указателей на все ее потомки.
 template <class usertype> class CTreeNode : public CObjectConstructor
 {
-private:
+protected:
 
 #if !defined(DOXYGEN_IGNORE)
 /// \brief Данные которые хранит вершина
@@ -79,7 +79,7 @@ public:
 	int AddNone(usertype & _data);
 
 /// \brief Добавить вершину в конец листа
-	int AddCurentNone(CTreeNode<usertype> * node);
+	int AddCurrentNone(CTreeNode<usertype> * node);
 
 /// \brief Удалить вершину и все ее дочерние элементы, по номеру листа. 
 	void DeleteNode(int id);
@@ -189,7 +189,7 @@ template <class usertype> int CTreeNode<usertype>::AddNone(usertype &_data)
 	return ch_nodes.size()-1;
 }
 
-template <class usertype> int CTreeNode<usertype>::AddCurentNone(CTreeNode<usertype> * node)
+template <class usertype> int CTreeNode<usertype>::AddCurrentNone(CTreeNode<usertype> * node)
 {
 	ch_nodes.push_back(node);
 

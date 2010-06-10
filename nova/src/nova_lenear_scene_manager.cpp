@@ -26,11 +26,19 @@
 namespace nova
 {
 
+/*
 CWorldObject *CTreeSceneManager::ConstructRenderableObject(const nstring & name)
 {
 	CMovableObject *myobject = NULL;
 	myobject = new CMovableObject(name, mRegisterGroup);
 	return dynamic_cast<CWorldObject *>(myobject);
+}
+
+CWorldObject *CTreeSceneManager::ConstructSingleObject(const nstring & name)
+{
+	CWorldObject *obj = ConstructRenderableObject(name);
+
+	return obj;
 }
 
 void CTreeSceneManager::RenderSceneImpl()
@@ -69,5 +77,7 @@ glBegin(GL_QUADS);			// Рисуем куб
 	glVertex3f( 1.0f,-1.0f,-1.0f);		// Низ право
 	glEnd();				// Закончили квадраты
 }
+
+*/
 
 }

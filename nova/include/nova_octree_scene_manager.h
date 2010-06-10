@@ -26,6 +26,7 @@
 namespace nova
 {
 
+	/*
 class NOVA_EXPORT COctreeSceneManager : public CSceneManager
 {
 protected:
@@ -46,5 +47,7 @@ public:
 
 	void DestroyScene(void) {}
 };
+
+*/
 
 }

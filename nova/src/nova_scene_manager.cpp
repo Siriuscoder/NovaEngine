@@ -26,7 +26,36 @@
 namespace nova
 {
 
-CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group) : CBase("CSceneManager")
+void CSceneNode::SetWorldObject(CWorldObject *obj)
+{
+	if(obj)
+		throw NOVA_EXP("CSceneNode::SetWorldObject - obj is null reference..", MEM_ERROR);
+	mChildObject = obj;
+}
+
+NNodeType CSceneNode::GetNodeType(void)
+{
+	return mNodeType;
+}
+
+void CSceneNode::ValidateNode(void)
+{
+	ValidateNodeImpl();
+	isValidated = true;
+}
+
+void CSceneNode::InValidateNode(void)
+{
+	isValidated = false;
+}
+
+void CSceneNode::ReleaseNode(void)
+{
+	if(mChildObject)
+		delete mChildObject;
+}
+
+CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
 {
 	ClearObjects();
 	mRegisterGroup = group;
@@ -50,60 +79,7 @@ int CSceneManager::GetRenderedFaces(void)
 
 void CSceneManager::ClearObjects(void)
 {
-	TObjectsMap::iterator it = mObjectsMap.begin();
 
-	for(; it != mObjectsMap.end(); ++it)
-	{
-		for(nova::uint i = 0; i < (*it).second.size(); ++i)
-			delete (*it).second[i];
-		(*it).second.clear();
-	}
-
-	mObjectsMap.clear();
-}
-
-CWorldObject *CSceneManager::ConstructSingleObjectFromResourceMesh(const nstring & name, const nstring & meshname,
-	bool attach)
-{
-	CMeshBoxPtr mesh = CMeshManager::GetSingelton().GetResourceFromHash(meshname);
-
-	if(mesh.IsNull())
-		NOVA_EXP("CSceneManager::ConstructSingleObjectFromResourceMesh: Resource factory returned null \
-			pointer.. (resource not found)", BAD_OPERATION);
-
-	CWorldObject *obj = ConstructRenderableObject(name);
-	if(attach)
-	{
-		AttachSingleObject(obj, mesh->GetResName());
-	}
-
-	return obj;
-}
-
-void CSceneManager::AttachSingleObject(CWorldObject *obj, const nstring & mesh)
-{
-	if(!obj)
-		NOVA_EXP("CSceneManager::AttachSingleObject: obj is null..", MEM_ERROR);
-
-	if(CMeshManager::GetSingelton().GetResourceFromHash(mesh).IsNull())
-		NOVA_EXP("CSceneManager::AttachSingleObject: Resource factory returned null \
-			pointer.. (this mesh not found)", BAD_OPERATION);
-
-	TObjectsMap::iterator it;
-	if((it = mObjectsMap.find(mesh)) != mObjectsMap.end())
-		(*it).second.push_back(obj);
-	else
-	{
-		std::pair<nstring, stl<CWorldObject *>::vector> link;
-		TObjectsMap::mapped_type vec;
-
-		link.first = mesh;
-
-		vec.push_back(obj);
-		link.second = vec;
-	
-		mObjectsMap.insert(link);
-	}
 }
 
 int CSceneManager::RenderСompoundObjects(void)
