@@ -527,10 +527,14 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="TreeSceneManager"
+				Name="BasicSceneManager"
 				>
 				<File
-					RelativePath=".\src\nova_lenear_scene_manager.cpp"
+					RelativePath=".\src\nova_basic_tree_scene_manager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\nova_tree_scene_node.cpp"
 					>
 				</File>
 			</Filter>
@@ -909,10 +913,14 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="LenearSceneManager"
+				Name="BasicSceneManager"
 				>
 				<File
-					RelativePath=".\include\nova_lenear_scene_manager.h"
+					RelativePath=".\include\nova_basic_tree_scene_manager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\nova_tree_scene_node.h"
 					>
 				</File>
 			</Filter>

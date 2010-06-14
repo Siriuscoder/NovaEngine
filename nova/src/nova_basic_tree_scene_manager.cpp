@@ -21,7 +21,7 @@
  ***************************************************************************/
 #include "nova_stable_precompiled_headers.h"
 
-#include "nova_lenear_scene_manager.h"
+#include "nova_basic_tree_scene_manager.h"
 
 namespace nova
 {

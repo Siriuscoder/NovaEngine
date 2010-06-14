@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -22,43 +22,48 @@
 #pragma once
 
 #include "nova_scene_manager.h"
-#include "nova_basic_tree_scene_manager.h"
+#include "nova_material.h"
+#include "nova_hardware_texture_buffer.h"
+#include "nova_hardware_vertex_buffer.h"
 
 namespace nova
 {
 
-class NOVA_EXPORT CSceneScrap : public CBase
+class NOVA_EXPORT CMeshSceneNode : public CSceneNode
 {
 public:
 
-	typedef stl<CWorldObject *>::vector TObjects;
+	typedef struct _batch_st
+	{
+		CHardwareVertexBufferPtr Vbo;
+		CHardwareIndexBufferPtr VboIndex;
+		CMaterialPtr Material;
+		int start_index;
+		int end_index;
+	} TBatchStruct;
 
-private:
+	typedef stl<TBatchStruct>::vector TBatchList;
 
-	CSceneManager * mSceneManager;
-	bool mEnabled;
+protected:
+
+	TBatchList mBatchList;
+	CMeshBoxPtr mMeshBox;
+
+	void ValidateNodeImpl(void);
+	void ReleaseNodeImpl(void);
 
 public:
 
-	CSceneScrap(CSceneManager * manager, bool enabled);
+	CMeshSceneNode(NNodeType type);
 
-	~CSceneScrap();
-/*
-	void AddObjects(const TObjects & obj);
+	CWorldObject* ConstractWorldObject(void);
 
-	void AddObject(CWorldObject *obj);
-*/
+	void PrepareNode(void);
 
-	void PrepareScrap(void);
+	void SetMeshBox(CMeshBoxPtr &mesh);
 
-	CSceneManager & GetSceneManager(void);
+	void SetMeshBoxFromResource(const nstring &name);
 
-	void RenderScrap(CCamera * camera, CViewPort * view);
-
-	bool IsEnabled(void);
-
-	void SetEnabled(bool flag);
-	
 };
 
 }
