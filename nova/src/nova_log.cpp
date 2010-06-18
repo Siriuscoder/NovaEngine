@@ -28,6 +28,7 @@
 namespace nova
 {
 
+
 //CLog * CLog::SingeltonObject = NULL;
 CLog * CLog::mInstance = NULL;
 
@@ -35,18 +36,30 @@ CLog::CLog(nstring & file) : mState(LG_ACTIVE), CBase("CLog")
 {
 	mLogFile.open(file.c_str(), ios_base::out);
 	mOut = &std::cout;
-	mOutPutToConsole = false;
 
 	if(!mInstance)
 		mInstance = this;
 	else throw NOVA_EXP("CLog::CLog - log stream already opened!", BAD_OPERATION);
 
+#if defined(__WIN32__)
+	AllocConsole();
+
+	FILE *hf = _fdopen(_open_osfhandle(
+                (long)GetStdHandle(STD_OUTPUT_HANDLE), 2), "w");
+
+	if(hf)
+		*stdout = *stderr = *hf;
+#endif
 }
 
 CLog::~CLog()
 {
 	Close();
 	mInstance = NULL;
+
+#if defined(__WIN32__)
+	FreeConsole();
+#endif
 }
 
 void CLog::Flush()
@@ -144,43 +157,29 @@ int CLog::PrintMessage(const nova::nstring & mes, LogFormat format)
 		} break;
 	}
 
+	// for cross-threads io operations
+	LOG_MUTEX_SECTION_LOCK;
+
 	switch(mState)
 	{
 	case LG_ACTIVE:
 		{
-			// for cross-threads io operations
-			LOG_MUTEX_SECTION_LOCK;
-
 			mLogFile << res.str();
 			Flush();
-
-			// unlocking section
-			LOG_MUTEX_SECTION_UNLOCK;
 		}
 		break;
 	case LG_REDIRECTED:
 		{
-			// for cross-threads io operations
-			LOG_MUTEX_SECTION_LOCK;
-
 			*mOut << res.str();
 			mOut->flush();
-
-			// unlocking section
-			LOG_MUTEX_SECTION_UNLOCK;
 		}
 		break;
 	}
 
-	if(mOutPutToConsole)
-	{
-		CConsoleManager * cm = CConsoleManager::GetSingeltonPtr();
-		if(cm)
-		{
-			if(cm->GetActivePtr())
-				cm->GetActivePtr()->WriteLen(res.str());
-		}
-	}
+	cout << res.str();
+
+	// unlocking section
+	LOG_MUTEX_SECTION_UNLOCK;
 
 	return mes.size();
 }

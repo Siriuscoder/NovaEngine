@@ -57,7 +57,6 @@ private:
 	std::ofstream mLogFile;
 	std::ostream * mOut;
 	LogState mState;
-	bool mOutPutToConsole;
 
 	static CLog * mInstance;
 
@@ -75,11 +74,6 @@ public:
 	void SetState(LogState state);
 
 	void ReDirectTo(std::ostream & out);
-
-	inline void ConsoleOut(bool st)
-	{
-		mOutPutToConsole = st;
-	}
 
 	inline static CLog & GetInstance()
 	{
