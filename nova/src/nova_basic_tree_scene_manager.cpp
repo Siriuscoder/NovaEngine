@@ -26,58 +26,6 @@
 namespace nova
 {
 
-/*
-CWorldObject *CTreeSceneManager::ConstructRenderableObject(const nstring & name)
-{
-	CMovableObject *myobject = NULL;
-	myobject = new CMovableObject(name, mRegisterGroup);
-	return dynamic_cast<CWorldObject *>(myobject);
-}
 
-CWorldObject *CTreeSceneManager::ConstructSingleObject(const nstring & name)
-{
-	CWorldObject *obj = ConstructRenderableObject(name);
-
-	return obj;
-}
-
-void CTreeSceneManager::RenderSceneImpl()
-{
-
-glBegin(GL_QUADS);			// Рисуем куб
-	glColor3f(0.0f,1.0f,0.0f);		// Синий
-	glVertex3f( 1.0f, 1.0f,-1.0f);		// Право верх квадрата (Верх)
-	glVertex3f(-1.0f, 1.0f,-1.0f);		// Лево верх
-	glVertex3f(-1.0f, 1.0f, 1.0f);		// Лево низ
-	glVertex3f( 1.0f, 1.0f, 1.0f);		// Право низ
-	glColor3f(1.0f,0.5f,0.0f);		// Оранжевый
-	glVertex3f( 1.0f,-1.0f, 1.0f);		// Верх право квадрата (Низ)
-	glVertex3f(-1.0f,-1.0f, 1.0f);		// Верх лево
-	glVertex3f(-1.0f,-1.0f,-1.0f);		// Низ лево
-	glVertex3f( 1.0f,-1.0f,-1.0f);		// Низ право
-	glColor3f(1.0f,0.0f,0.0f);		// Красный
-	glVertex3f( 1.0f, 1.0f, 1.0f);		// Верх право квадрата (Перед)
-	glVertex3f(-1.0f, 1.0f, 1.0f);		// Верх лево
-	glVertex3f(-1.0f,-1.0f, 1.0f);		// Низ лево
-	glVertex3f( 1.0f,-1.0f, 1.0f);		// Низ право
-	glColor3f(1.0f,1.0f,0.0f);		// Желтый
-	glVertex3f( 1.0f,-1.0f,-1.0f);		// Верх право квадрата (Зад)
-	glVertex3f(-1.0f,-1.0f,-1.0f);		// Верх лево
-	glVertex3f(-1.0f, 1.0f,-1.0f);		// Низ лево
-	glVertex3f( 1.0f, 1.0f,-1.0f);		// Низ право
-	glColor3f(0.0f,0.0f,1.0f);		// Синий
-	glVertex3f(-1.0f, 1.0f, 1.0f);		// Верх право квадрата (Лево)
-	glVertex3f(-1.0f, 1.0f,-1.0f);		// Верх лево
-	glVertex3f(-1.0f,-1.0f,-1.0f);		// Низ лево
-	glVertex3f(-1.0f,-1.0f, 1.0f);		// Низ право
-	glColor3f(1.0f,0.0f,1.0f);		// Фиолетовый
-	glVertex3f( 1.0f, 1.0f,-1.0f);		// Верх право квадрата (Право)
-	glVertex3f( 1.0f, 1.0f, 1.0f);		// Верх лево
-	glVertex3f( 1.0f,-1.0f, 1.0f);		// Низ лево
-	glVertex3f( 1.0f,-1.0f,-1.0f);		// Низ право
-	glEnd();				// Закончили квадраты
-}
-
-*/
 
 }

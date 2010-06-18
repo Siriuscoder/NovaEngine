@@ -136,7 +136,7 @@ public:
 
 	CBoundingBox GenerateBoundingBox(void);
 
-	void CreateInfo(void);
+	void GenarateNormalsToFaces(void);
 //----------------------------------
 	virtual void FreeResource(void);
 
@@ -196,14 +196,14 @@ public:
 		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
 		CMemoryBuffer & coords, CMemoryBuffer & indexes,
 		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		bool transform, nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
+		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
 		CResource::TAttach state = CResource::NV_ATTACHED); 
 
 	CMeshBoxPtr CreateMeshAsync(nstring & name, nstring & group, 
 		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
 		CMemoryBuffer & coords, CMemoryBuffer & indexes,
 		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		bool transform, nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
+		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 };
 

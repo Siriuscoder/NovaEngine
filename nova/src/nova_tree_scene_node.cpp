@@ -26,5 +26,36 @@
 namespace nova
 {
 
+CMeshSceneNode::CMeshSceneNode(CSceneManager *scene, NNodeType type) : CSceneNode(scene, type)
+{
+
+}
+
+CWorldObject* CMeshSceneNode::ConstractWorldObject(const nstring &name)
+{
+	if(!mParentSceneManager)
+		throw NOVA_EXP("CMeshSceneNode::ConstractWorldObject - mParentSceneManager is bad ptr!", MEM_ERROR); 
+
+	mChildObject = new CMovableObject(name, mParentSceneManager->GetSceneSlavesGroup());
+	
+	return mChildObject;
+}
+
+void CMeshSceneNode::SetMeshBox(CMeshBoxPtr &mesh)
+{
+	if(mesh.IsNull())
+		throw NOVA_EXP("CMeshSceneNode::SetMeshBox - mesh is null ptr!", MEM_ERROR); 
+	mMeshBox = mesh;
+}
+
+void CMeshSceneNode::SetMeshBoxFromResource(const nstring &name)
+{
+	CMeshBoxPtr mesh = CMeshManager::GetSingelton().GetResourceFromHash(name);
+
+	if(mesh.IsNull())
+		throw NOVA_EXP("CMeshSceneNode::SetMeshBoxFromResource - resource manager return null prt, possibly resource not found..", MEM_ERROR);
+
+	mMeshBox = mesh;
+}
 
 }

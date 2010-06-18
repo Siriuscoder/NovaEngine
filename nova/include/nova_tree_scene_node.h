@@ -25,6 +25,11 @@
 #include "nova_material.h"
 #include "nova_hardware_texture_buffer.h"
 #include "nova_hardware_vertex_buffer.h"
+#include "nova_movable_object.h"
+#include "nova_math.h"
+#include "nova_matrix3d.h"
+#include "nova_matrix4d.h"
+
 
 namespace nova
 {
@@ -54,9 +59,11 @@ protected:
 
 public:
 
-	CMeshSceneNode(NNodeType type);
+	CMeshSceneNode(CSceneManager *scene, NNodeType type);
 
-	CWorldObject* ConstractWorldObject(void);
+	~CMeshSceneNode();
+
+	CWorldObject* ConstractWorldObject(const nstring &name);
 
 	void PrepareNode(void);
 

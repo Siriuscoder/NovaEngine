@@ -26,29 +26,45 @@
 namespace nova
 {
 
-	/*
-class NOVA_EXPORT CTreeSceneManager : public CSceneManager
+class CManualSceneManager;
+
+class NOVA_EXPORT CManualSceneManagerListener : public CSceneManagerListener
+{
+public:
+
+	virtual void PrepareSceneListener(CManualSceneManager *scene) {}
+
+	virtual void PrepareSceneFrameListener(CManualSceneManager *scene) {}
+
+	virtual void BuildSceneManager(CManualSceneManager *scene) {}
+
+	virtual void DestroySceneListener(CManualSceneManager *scene) {}
+};
+
+
+class NOVA_EXPORT CManualSceneManager : public CSceneManager
 {
 protected:
-
-	CWorldObject *ConstructRenderableObject(const nstring & name);
 
 	void RenderSceneImpl(void);
 
 public:
 
-	CTreeSceneManager(const nstring &scene_name, const nstring & factory_name) : CSceneManager(scene_name, factory_name) {}
+	CManualSceneManager(const nstring &scene_name, const nstring & factory_name) : CSceneManager(scene_name, factory_name) {}
 
-	CWorldObject *ConstructSingleObject(const nstring & name);
+	~CManualSceneManager();
 
-	void PrepareScene(void) {}
+	void PrepareScene(void);
 
-	void BuildScene(void) {}
+	void PrepareRenderQueue(void);
 
-	void DestroyScene(void) {}
+	void PrepareSceneFrame(void);
+
+	void BuildScene(void);
+
+	void DestroyScene(void);
 };
 
-*/
 
 
 }

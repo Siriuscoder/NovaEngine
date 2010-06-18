@@ -66,6 +66,7 @@ protected:
 	bool isValidated;
 	CWorldObject *mChildObject;
 	CBoundingBox mBoundingBox;
+	CSceneManager *mParentSceneManager;
 
 	virtual void ValidateNodeImpl(void) = 0;
 
@@ -73,15 +74,11 @@ protected:
 
 public:
 
-	CSceneNode(NNodeType type) : mNodeType(type), mChildObject(NULL) {}
+	CSceneNode(CSceneManager *scene, NNodeType type) : mParentSceneManager(scene), mNodeType(type), mChildObject(NULL), isValidated(false) {}
 
-	CSceneNode(NNodeType type, CWorldObject *obj) : mNodeType(type), mChildObject(obj) {}
-
-	virtual CWorldObject* ConstractWorldObject(void) = 0;
+	virtual CWorldObject* ConstractWorldObject(const nstring &name) = 0;
 
 	virtual void PrepareNode(void) = 0;
-
-	void SetWorldObject(CWorldObject *obj);
 
 	CWorldObject *GetWorldObject(void);
 
@@ -149,6 +146,8 @@ public:
 	int GetSceneType(void); 
 
 	nstring GetSceneName(void);
+
+	nstring GetSceneSlavesGroup(void);
 
 	void ClearObjects(void);
 

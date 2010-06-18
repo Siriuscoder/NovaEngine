@@ -57,6 +57,7 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 	t_expl expl;
 	TNormal3d normal;
 	mNormals.clear();
+	mNormals.resize(mVertexes.size());
 
 	expl.resize(mVertexes.size());
 	for(nova::uint i = 0; i < mInfo.size(); ++i)
@@ -204,9 +205,9 @@ void CMeshBox::PrepareResource(void)
 	// Вычисляем нормальное положение объекта в мировой системе координат
 	//ToWorldCoord();
 	// Вычисляем индексы и нормали к граням
-	CreateInfo();
+	//CreateInfo();
 	// Вычисляем нормали к вершинам
-	CalculateNormals();
+	//CalculateNormals();
 	// Сортируем вершины по материалам
 
 	CResource::PrepareResource();
@@ -393,7 +394,7 @@ TTriangleInfo CMeshBox::GetFaceInfo(nova::uint face)
 	return mInfo[face];
 }
 
-void CMeshBox::CreateInfo(void)
+void CMeshBox::GenarateNormalsToFaces(void)
 {
 	TIndexes::iterator it;
 	it = mIndexes.begin();
@@ -471,7 +472,7 @@ CMeshBoxPtr CMeshManager::CreateMesh(nstring & name, nstring & group,
 		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
 		CMemoryBuffer & coords, CMemoryBuffer & indexes,
 		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		bool transform, nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
+		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
 		CResource::TAttach state)
 {
 	CMeshBoxPtr mesh = CResourceManager::AddNewResource(name, group, state);
@@ -492,9 +493,6 @@ CMeshBoxPtr CMeshManager::CreateMesh(nstring & name, nstring & group,
 
 	mesh->SetPosition(trans_vec);
 	mesh->SetRotationMatrix(trans_mat);
-
-	if(transform)
-		mesh->ToWorldCoord();
 
 	mesh->PrepareResource();
 	CResourceManager::BuildNextResource(mesh->GetResName());
@@ -510,7 +508,7 @@ CMeshBoxPtr CMeshManager::CreateMeshAsync(nstring & name, nstring & group,
 		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
 		CMemoryBuffer & coords, CMemoryBuffer & indexes,
 		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		bool transform, nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
+		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
 		CResource::TAttach state)
 {
 	CMeshBoxPtr mesh = CResourceManager::AddNewResource(name, group, state);
@@ -531,9 +529,6 @@ CMeshBoxPtr CMeshManager::CreateMeshAsync(nstring & name, nstring & group,
 
 	mesh->SetPosition(trans_vec);
 	mesh->SetRotationMatrix(trans_mat);
-
-	if(transform)
-		mesh->ToWorldCoord();
 
 	mesh->PrepareResource();
 	mResourceBuildQueue.AddToQueue(mesh.GetPtr());

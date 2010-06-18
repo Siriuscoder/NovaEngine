@@ -27,13 +27,6 @@
 namespace nova
 {
 
-void CSceneNode::SetWorldObject(CWorldObject *obj)
-{
-	if(obj)
-		throw NOVA_EXP("CSceneNode::SetWorldObject - obj is null reference..", MEM_ERROR);
-	mChildObject = obj;
-}
-
 NNodeType CSceneNode::GetNodeType(void)
 {
 	return mNodeType;
@@ -170,6 +163,11 @@ void CSceneManager::SetRootElement(CSceneNode *elem)
 CTree<CSceneNode*> *CSceneManager::GetSceneTreePtr(void)
 {
 	return &mSceneTree;
+}
+
+nstring CSceneManager::GetSceneSlavesGroup(void)
+{
+	return mRegisterGroup;
 }
 
 }
