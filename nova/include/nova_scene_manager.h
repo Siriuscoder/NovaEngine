@@ -27,6 +27,7 @@
 #include "nova_mesh_box.h"
 #include "nova_mesh_loader.h"
 #include "nova_tree.h"
+#include "nova_bounding_box.h"
 
 namespace nova
 {
@@ -39,6 +40,24 @@ enum NNodeType
 	NT_OCTREE_NODE
 };
 
+enum NSceneType
+{
+	NS_BASIC_SCENE,
+	NS_OCTREE_SCENE
+};
+
+class CSceneNode;
+class CSceneManager;
+
+class NOVA_EXPORT CSceneNodeListener : public CEventListener
+{
+public:
+
+	virtual void ValidateNodeListener(CSceneNode * object) {}
+
+	virtual void InValidateNodeListener(CSceneNode * object) {}
+};
+
 class NOVA_EXPORT CSceneNode : public CListenerInterface
 {
 protected:
@@ -46,20 +65,22 @@ protected:
 	NNodeType mNodeType;
 	bool isValidated;
 	CWorldObject *mChildObject;
+	CBoundingBox mBoundingBox;
+	CSceneManager *mParentSceneManager;
 
 	virtual void ValidateNodeImpl(void) = 0;
 
+	virtual void ReleaseNodeImpl(void) = 0;
+
 public:
 
-	CSceneNode(NNodeType type) : mNodeType(type), mChildObject(NULL) {}
+	CSceneNode(CSceneManager *scene, NNodeType type) : mParentSceneManager(scene), mNodeType(type), mChildObject(NULL), isValidated(false) {}
 
-	CSceneNode(NNodeType type, CWorldObject *obj) : mNodeType(type), mChildObject(obj) {}
-
-	virtual CWorldObject* ConstractWorldObject(void) = 0;
+	virtual CWorldObject* ConstractWorldObject(const nstring &name) = 0;
 
 	virtual void PrepareNode(void) = 0;
 
-	void SetWorldObject(CWorldObject *obj);
+	CWorldObject *GetWorldObject(void);
 
 	NNodeType GetNodeType(void);
 
@@ -68,6 +89,15 @@ public:
 	void InValidateNode(void);
 
 	void ReleaseNode(void);
+};
+
+class NOVA_EXPORT CSceneManagerListener : public CEventListener
+{
+public:
+
+	virtual void SceneRenderBeginListener(CSceneManager * object) {}
+
+	virtual void SceneRenderEndListener(CSceneManager * object) {}
 };
 
 class NOVA_EXPORT CSceneManager : public CListenerInterface
@@ -97,6 +127,12 @@ public:
 
 	CTreeNode<CSceneNode*> *ConstactSpecifiedNode(NNodeType type);
 
+	CTreeNode<CSceneNode*> *GetRootElement(void);
+
+	void SetRootElement(CSceneNode *elem);
+
+	CTree<CSceneNode*> *GetSceneTreePtr(void);
+
 	virtual void PrepareScene(void) = 0;
 
 	virtual void PrepareRenderQueue(void) = 0;
@@ -110,6 +146,8 @@ public:
 	int GetSceneType(void); 
 
 	nstring GetSceneName(void);
+
+	nstring GetSceneSlavesGroup(void);
 
 	void ClearObjects(void);
 

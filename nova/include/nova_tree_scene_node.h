@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -22,33 +22,61 @@
 #pragma once
 
 #include "nova_scene_manager.h"
+#include "nova_material.h"
+#include "nova_hardware_texture_buffer.h"
+#include "nova_hardware_vertex_buffer.h"
+#include "nova_movable_object.h"
+#include "nova_math.h"
+#include "nova_matrix3d.h"
+#include "nova_matrix4d.h"
+
 
 namespace nova
 {
 
-	/*
-class NOVA_EXPORT CTreeSceneManager : public CSceneManager
+class NOVA_EXPORT CMeshSceneNode : public CSceneNode
 {
+public:
+
+	typedef struct _batch_st
+	{
+		CHardwareVertexBufferPtr Vbo;
+		CHardwareIndexBufferPtr VboIndex;
+		CMaterialPtr Material;
+		int start_index;
+		int end_index;
+	} TBatchStruct;
+
+	typedef stl<TBatchStruct>::vector TBatchList;
+
 protected:
 
-	CWorldObject *ConstructRenderableObject(const nstring & name);
+	TBatchList mBatchList;
+	CMeshBoxPtr mMeshBox;
 
-	void RenderSceneImpl(void);
+	void ValidateNodeImpl(void);
+	void ReleaseNodeImpl(void);
+
+	bool TestingMeshBox(void);
+
+	void PreparingBatchList(void);
 
 public:
 
-	CTreeSceneManager(const nstring &scene_name, const nstring & factory_name) : CSceneManager(scene_name, factory_name) {}
+	CMeshSceneNode(CSceneManager *scene, NNodeType type);
 
-	CWorldObject *ConstructSingleObject(const nstring & name);
+	~CMeshSceneNode();
 
-	void PrepareScene(void) {}
+	CWorldObject* ConstractWorldObject(const nstring &name);
 
-	void BuildScene(void) {}
+	void BuildWorldObjectFromMeshBox(void);
 
-	void DestroyScene(void) {}
+	void PrepareNode(void);
+
+	void SetMeshBox(CMeshBoxPtr &mesh);
+
+	void SetMeshBoxFromResource(const nstring &name);
+
 };
-
-*/
-
 
 }

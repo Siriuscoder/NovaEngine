@@ -57,6 +57,7 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 	t_expl expl;
 	TNormal3d normal;
 	mNormals.clear();
+	mNormals.resize(mVertexes.size());
 
 	expl.resize(mVertexes.size());
 	for(nova::uint i = 0; i < mInfo.size(); ++i)
@@ -99,6 +100,38 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 	}
 }
 
+int CMeshBox::QComparer(const void * a, const void * b)
+{
+	TTriangleInfo *right = (TTriangleInfo *)b;
+	TTriangleInfo *left = (TTriangleInfo *)a;
+
+	return left->mat_id - right->mat_id;
+}
+
+void CMeshBox::QSortFaces(TIndexes &index, TFacesInfo &faces)
+{
+	qsort(&(faces[0]), faces.size(), sizeof(TTriangleInfo), QComparer);
+
+	TIndexes tmp;
+	tmp.resize(index.size());
+	std::copy(index.begin(), index.end(), tmp.begin());
+// переставляем элементы в массиве индексов
+	for(nova::uint i = 0; i < faces.size(); i++)
+	{
+		index[i] = tmp[faces[i].tri_id];
+		faces[i].tri_id = i;
+	}
+
+	tmp.clear();
+}
+
+
+
+void CMeshBox::SortFaceIndexByMaterials(void)
+{
+	QSortFaces(mIndexes, mInfo);
+}
+
 nova::uint CMeshBox::GetVertexesLen(void)
 {
 	return mVertexes.size();
@@ -119,6 +152,11 @@ size_t CMeshBox::GetTrianglesLenInBytes(void)
 	return mIndexes.size() * sizeof(TTriIndex);
 }
 
+size_t CMeshBox::GetNormalsLen(void)
+{
+	return mNormals.size();
+}
+
 CBoundingBox CMeshBox::GenerateBoundingBox(void)
 {
 	CBoundingBox testbox;
@@ -130,7 +168,7 @@ CBoundingBox CMeshBox::GenerateBoundingBox(void)
 		zmax = mVertexes[0].z,
 		zmin = mVertexes[0].z;
 
-	TVertexes::iterator it = mVertexes.begin();
+	TVertexes::iterator it = mVertexes.begin()+1;
 	for(; it != mVertexes.end(); ++it)
 	{
 		xmax = std::max((*it).x, xmax);
@@ -204,9 +242,9 @@ void CMeshBox::PrepareResource(void)
 	// Вычисляем нормальное положение объекта в мировой системе координат
 	//ToWorldCoord();
 	// Вычисляем индексы и нормали к граням
-	CreateInfo();
+	//CreateInfo();
 	// Вычисляем нормали к вершинам
-	CalculateNormals();
+	//CalculateNormals();
 	// Сортируем вершины по материалам
 
 	CResource::PrepareResource();
@@ -319,19 +357,32 @@ bool CMeshBox::CheckValidLength()
 
 int CMeshBox::GetMaterialIDByName(nstring & name)
 {
-	for(nova::uint i = 0; i < mMatIndexes.size(); ++i)
-		if(mMatIndexes[i] == name)
+	for(nova::uint i = 0; i < mMatNames.size(); ++i)
+		if(mMatNames[i] == name)
 			return i;
 
 	return -1;
+}
+
+nstring CMeshBox::GetMeterialNameByID(nova::uint id)
+{
+	if(id < mMatNames.size())
+		return mMatNames[id];
+
+	return nstring();
+}
+
+stl<nstring>::vector CMeshBox::GetMaterials()
+{
+	return mMatNames;
 }
 
 int CMeshBox::AddNewSubMaterial(nstring & resource_name)
 {
 	if(GetMaterialIDByName(resource_name) < 0)
 	{
-		mMatIndexes.push_back(resource_name);
-		return mMatIndexes.size() -1;
+		mMatNames.push_back(resource_name);
+		return mMatNames.size() -1;
 	}
 
 	return -1;
@@ -393,7 +444,7 @@ TTriangleInfo CMeshBox::GetFaceInfo(nova::uint face)
 	return mInfo[face];
 }
 
-void CMeshBox::CreateInfo(void)
+void CMeshBox::GenerateNormalsToFaces(void)
 {
 	TIndexes::iterator it;
 	it = mIndexes.begin();
@@ -471,7 +522,7 @@ CMeshBoxPtr CMeshManager::CreateMesh(nstring & name, nstring & group,
 		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
 		CMemoryBuffer & coords, CMemoryBuffer & indexes,
 		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		bool transform, nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
+		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
 		CResource::TAttach state)
 {
 	CMeshBoxPtr mesh = CResourceManager::AddNewResource(name, group, state);
@@ -492,9 +543,6 @@ CMeshBoxPtr CMeshManager::CreateMesh(nstring & name, nstring & group,
 
 	mesh->SetPosition(trans_vec);
 	mesh->SetRotationMatrix(trans_mat);
-
-	if(transform)
-		mesh->ToWorldCoord();
 
 	mesh->PrepareResource();
 	CResourceManager::BuildNextResource(mesh->GetResName());
@@ -510,7 +558,7 @@ CMeshBoxPtr CMeshManager::CreateMeshAsync(nstring & name, nstring & group,
 		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
 		CMemoryBuffer & coords, CMemoryBuffer & indexes,
 		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		bool transform, nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
+		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
 		CResource::TAttach state)
 {
 	CMeshBoxPtr mesh = CResourceManager::AddNewResource(name, group, state);
@@ -531,9 +579,6 @@ CMeshBoxPtr CMeshManager::CreateMeshAsync(nstring & name, nstring & group,
 
 	mesh->SetPosition(trans_vec);
 	mesh->SetRotationMatrix(trans_mat);
-
-	if(transform)
-		mesh->ToWorldCoord();
 
 	mesh->PrepareResource();
 	mResourceBuildQueue.AddToQueue(mesh.GetPtr());

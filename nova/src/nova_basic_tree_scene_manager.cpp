@@ -19,46 +19,13 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program;					                           *
  ***************************************************************************/
-#pragma once
+#include "nova_stable_precompiled_headers.h"
 
-#include "nova_scene_manager.h"
 #include "nova_basic_tree_scene_manager.h"
 
 namespace nova
 {
 
-class NOVA_EXPORT CSceneScrap : public CBase
-{
-public:
 
-	typedef stl<CWorldObject *>::vector TObjects;
-
-private:
-
-	CSceneManager * mSceneManager;
-	bool mEnabled;
-
-public:
-
-	CSceneScrap(CSceneManager * manager, bool enabled);
-
-	~CSceneScrap();
-/*
-	void AddObjects(const TObjects & obj);
-
-	void AddObject(CWorldObject *obj);
-*/
-
-	void PrepareScrap(void);
-
-	CSceneManager & GetSceneManager(void);
-
-	void RenderScrap(CCamera * camera, CViewPort * view);
-
-	bool IsEnabled(void);
-
-	void SetEnabled(bool flag);
-	
-};
 
 }

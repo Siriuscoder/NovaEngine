@@ -22,16 +22,10 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_scene_manager.h"
+#include "nova_tree_scene_node.h"
 
 namespace nova
 {
-
-void CSceneNode::SetWorldObject(CWorldObject *obj)
-{
-	if(obj)
-		throw NOVA_EXP("CSceneNode::SetWorldObject - obj is null reference..", MEM_ERROR);
-	mChildObject = obj;
-}
 
 NNodeType CSceneNode::GetNodeType(void)
 {
@@ -40,12 +34,26 @@ NNodeType CSceneNode::GetNodeType(void)
 
 void CSceneNode::ValidateNode(void)
 {
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneNodeListener * lis = 
+			dynamic_cast<CSceneNodeListener *>(GetListener(i));
+		lis->ValidateNodeListener(this);
+	}
+
 	ValidateNodeImpl();
 	isValidated = true;
 }
 
 void CSceneNode::InValidateNode(void)
 {
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneNodeListener * lis = 
+			dynamic_cast<CSceneNodeListener *>(GetListener(i));
+		lis->InValidateNodeListener(this);
+	}
+
 	isValidated = false;
 }
 
@@ -94,6 +102,13 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	if(!camera || !view)
 		return;
 
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneManagerListener * lis = 
+			dynamic_cast<CSceneManagerListener *>(GetListener(i));
+		lis->SceneRenderBeginListener(this);
+	}
+
 	mRenderedFaces = 0;
 	mRenderedBatches = 0;
 	mCurCamera = camera;
@@ -111,6 +126,13 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	RenderSceneImpl();
 
 	RenderСompoundObjects();
+
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneManagerListener * lis = 
+			dynamic_cast<CSceneManagerListener *>(GetListener(i));
+		lis->SceneRenderEndListener(this);
+	}
 }
 
 int CSceneManager::GetSceneType(void)
@@ -121,6 +143,31 @@ int CSceneManager::GetSceneType(void)
 nstring CSceneManager::GetSceneName(void)
 {
 	return mSceneName;
+}
+
+CTreeNode<CSceneNode*> *CSceneManager::ConstactSpecifiedNode(NNodeType type)
+{
+	return NULL;
+}
+
+CTreeNode<CSceneNode*> *CSceneManager::GetRootElement(void)
+{
+	return mSceneTree.GetRootElement();
+}
+
+void CSceneManager::SetRootElement(CSceneNode *elem)
+{
+	mSceneTree.CreateRoot(elem);
+}
+
+CTree<CSceneNode*> *CSceneManager::GetSceneTreePtr(void)
+{
+	return &mSceneTree;
+}
+
+nstring CSceneManager::GetSceneSlavesGroup(void)
+{
+	return mRegisterGroup;
 }
 
 }

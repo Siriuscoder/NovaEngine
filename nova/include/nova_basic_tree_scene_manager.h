@@ -22,43 +22,49 @@
 #pragma once
 
 #include "nova_scene_manager.h"
-#include "nova_basic_tree_scene_manager.h"
 
 namespace nova
 {
 
-class NOVA_EXPORT CSceneScrap : public CBase
+class CManualSceneManager;
+
+class NOVA_EXPORT CManualSceneManagerListener : public CSceneManagerListener
 {
 public:
 
-	typedef stl<CWorldObject *>::vector TObjects;
+	virtual void PrepareSceneListener(CManualSceneManager *scene) {}
 
-private:
+	virtual void PrepareSceneFrameListener(CManualSceneManager *scene) {}
 
-	CSceneManager * mSceneManager;
-	bool mEnabled;
+	virtual void BuildSceneManager(CManualSceneManager *scene) {}
+
+	virtual void DestroySceneListener(CManualSceneManager *scene) {}
+};
+
+
+class NOVA_EXPORT CManualSceneManager : public CSceneManager
+{
+protected:
+
+	void RenderSceneImpl(void);
 
 public:
 
-	CSceneScrap(CSceneManager * manager, bool enabled);
+	CManualSceneManager(const nstring &scene_name, const nstring & factory_name) : CSceneManager(scene_name, factory_name) {}
 
-	~CSceneScrap();
-/*
-	void AddObjects(const TObjects & obj);
+	~CManualSceneManager();
 
-	void AddObject(CWorldObject *obj);
-*/
+	void PrepareScene(void);
 
-	void PrepareScrap(void);
+	void PrepareRenderQueue(void);
 
-	CSceneManager & GetSceneManager(void);
+	void PrepareSceneFrame(void);
 
-	void RenderScrap(CCamera * camera, CViewPort * view);
+	void BuildScene(void);
 
-	bool IsEnabled(void);
-
-	void SetEnabled(bool flag);
-	
+	void DestroyScene(void);
 };
+
+
 
 }
