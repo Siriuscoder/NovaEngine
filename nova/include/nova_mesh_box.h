@@ -96,9 +96,15 @@ public:
 	nova::Matrix3f mRotationMatrix;
 	nova::Vector3f mRealPosition;
 
+	static void QSortFaces(TIndexes &index, TFacesInfo &faces);
+
+private:
+
+	static int QComparer(const void * a, const void * b);
+
 protected:
 
-	stl<nstring>::vector mMatIndexes;
+	stl<nstring>::vector mMatNames;
 
 	TVertexes mVertexes;
 	TNormals mNormals;
@@ -130,13 +136,17 @@ public:
 
 	nova::uint GetTrianglesLen(void);
 
+	nova::uint GetNormalsLen(void);
+
 	size_t GetVertexesLenInBytes(void);
 
 	size_t GetTrianglesLenInBytes(void);
 
 	CBoundingBox GenerateBoundingBox(void);
 
-	void GenarateNormalsToFaces(void);
+	void GenerateNormalsToFaces(void);
+
+	void SortFaceIndexByMaterials(void);
 //----------------------------------
 	virtual void FreeResource(void);
 
@@ -155,6 +165,10 @@ public:
 	void SetMaterialID(nova::uint face, int id);
 
 	int GetMaterialIDByName(nstring & name);
+
+	nstring GetMeterialNameByID(nova::uint id);
+
+	stl<nstring>::vector GetMaterials();
 
 	int AddNewSubMaterial(nstring & resource_name);
 

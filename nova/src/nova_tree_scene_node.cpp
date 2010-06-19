@@ -58,4 +58,46 @@ void CMeshSceneNode::SetMeshBoxFromResource(const nstring &name)
 	mMeshBox = mesh;
 }
 
+
+bool CMeshSceneNode::TestingMeshBox(void)
+{
+	if(mMeshBox->GetVertexesLen() == 0)
+		return false;
+
+	if(mMeshBox->GetTrianglesLen() == 0)
+		return false;
+
+	if(mMeshBox->GetMaterials().size() == 0)
+		return false;
+
+	return true;
+}
+
+void CMeshSceneNode::PrepareNode(void)
+{
+	if(!TestingMeshBox())
+		throw NOVA_EXP("CMeshSceneNode::PrepareNode - testing mesh box faled..", BAD_OPERATION);
+
+	// Preparing mesh
+	// Generating normals to faces and sub mats info
+	mMeshBox->GenerateNormalsToFaces();
+	if(mMeshBox->GetNormalsLen() == 0)
+		//Generating normals to vertexes
+		mMeshBox->CalculateNormals();
+
+	// Sorting faces by material id
+	// using fast qsort algorithm
+	mMeshBox->SortFaceIndexByMaterials();
+
+	// we mast construct batches list for rendering all node
+	// for rendering all node we mast have one vertex buffer, but many index buffers
+	// one batch - one index buffer (buffers splitting by materials and we mast switch the texture id)
+	PreparingBatchList();
+}
+
+void CMeshSceneNode::PreparingBatchList()
+{
+
+}
+
 }

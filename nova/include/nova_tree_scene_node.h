@@ -57,6 +57,10 @@ protected:
 	void ValidateNodeImpl(void);
 	void ReleaseNodeImpl(void);
 
+	bool TestingMeshBox(void);
+
+	void PreparingBatchList(void);
+
 public:
 
 	CMeshSceneNode(CSceneManager *scene, NNodeType type);
@@ -64,6 +68,8 @@ public:
 	~CMeshSceneNode();
 
 	CWorldObject* ConstractWorldObject(const nstring &name);
+
+	void BuildWorldObjectFromMeshBox(void);
 
 	void PrepareNode(void);
 

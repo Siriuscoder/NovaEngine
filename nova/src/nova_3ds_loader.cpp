@@ -351,12 +351,10 @@ CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_nam
 	CMeshBoxPtr mesh;
 	if(	mOwerThread )
 		mesh = CMeshManager::GetSingelton().CreateMeshAsync(obj_name,
-			group, vertexes, normals, mat_coords, indexes, mat_names, mat_indexes,
-			mGeometry, matrix, pos);
+			group, vertexes, normals, mat_coords, indexes, mat_names, mat_indexes, matrix, pos);
 	else
 		mesh = CMeshManager::GetSingelton().CreateMesh(obj_name,
-			group, vertexes, normals, mat_coords, indexes, mat_names, mat_indexes,
-			mGeometry, matrix, pos);
+			group, vertexes, normals, mat_coords, indexes, mat_names, mat_indexes, matrix, pos);
 
 	vertexes.FreeBuffer();
 	mat_coords.FreeBuffer();

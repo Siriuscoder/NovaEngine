@@ -100,6 +100,38 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 	}
 }
 
+int CMeshBox::QComparer(const void * a, const void * b)
+{
+	TTriangleInfo *right = (TTriangleInfo *)b;
+	TTriangleInfo *left = (TTriangleInfo *)a;
+
+	return left->mat_id - right->mat_id;
+}
+
+void CMeshBox::QSortFaces(TIndexes &index, TFacesInfo &faces)
+{
+	qsort(&(faces[0]), faces.size(), sizeof(TTriangleInfo), QComparer);
+
+	TIndexes tmp;
+	tmp.resize(index.size());
+	std::copy(index.begin(), index.end(), tmp.begin());
+// переставляем элементы в массиве индексов
+	for(nova::uint i = 0; i < faces.size(); i++)
+	{
+		index[i] = tmp[faces[i].tri_id];
+		faces[i].tri_id = i;
+	}
+
+	tmp.clear();
+}
+
+
+
+void CMeshBox::SortFaceIndexByMaterials(void)
+{
+	QSortFaces(mIndexes, mInfo);
+}
+
 nova::uint CMeshBox::GetVertexesLen(void)
 {
 	return mVertexes.size();
@@ -120,6 +152,11 @@ size_t CMeshBox::GetTrianglesLenInBytes(void)
 	return mIndexes.size() * sizeof(TTriIndex);
 }
 
+size_t CMeshBox::GetNormalsLen(void)
+{
+	return mNormals.size();
+}
+
 CBoundingBox CMeshBox::GenerateBoundingBox(void)
 {
 	CBoundingBox testbox;
@@ -131,7 +168,7 @@ CBoundingBox CMeshBox::GenerateBoundingBox(void)
 		zmax = mVertexes[0].z,
 		zmin = mVertexes[0].z;
 
-	TVertexes::iterator it = mVertexes.begin();
+	TVertexes::iterator it = mVertexes.begin()+1;
 	for(; it != mVertexes.end(); ++it)
 	{
 		xmax = std::max((*it).x, xmax);
@@ -320,19 +357,32 @@ bool CMeshBox::CheckValidLength()
 
 int CMeshBox::GetMaterialIDByName(nstring & name)
 {
-	for(nova::uint i = 0; i < mMatIndexes.size(); ++i)
-		if(mMatIndexes[i] == name)
+	for(nova::uint i = 0; i < mMatNames.size(); ++i)
+		if(mMatNames[i] == name)
 			return i;
 
 	return -1;
+}
+
+nstring CMeshBox::GetMeterialNameByID(nova::uint id)
+{
+	if(id < mMatNames.size())
+		return mMatNames[id];
+
+	return nstring();
+}
+
+stl<nstring>::vector CMeshBox::GetMaterials()
+{
+	return mMatNames;
 }
 
 int CMeshBox::AddNewSubMaterial(nstring & resource_name)
 {
 	if(GetMaterialIDByName(resource_name) < 0)
 	{
-		mMatIndexes.push_back(resource_name);
-		return mMatIndexes.size() -1;
+		mMatNames.push_back(resource_name);
+		return mMatNames.size() -1;
 	}
 
 	return -1;
@@ -394,7 +444,7 @@ TTriangleInfo CMeshBox::GetFaceInfo(nova::uint face)
 	return mInfo[face];
 }
 
-void CMeshBox::GenarateNormalsToFaces(void)
+void CMeshBox::GenerateNormalsToFaces(void)
 {
 	TIndexes::iterator it;
 	it = mIndexes.begin();
