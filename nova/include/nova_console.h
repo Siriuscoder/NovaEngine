@@ -18,9 +18,9 @@
 #pragma once
 
 /// \file nova_console.h
-/// \brief Файл содержит реализацию игровой консоли.
+/// \brief Р¤Р°Р№Р» СЃРѕРґРµСЂР¶РёС‚ СЂРµР°Р»РёР·Р°С†РёСЋ РёРіСЂРѕРІРѕР№ РєРѕРЅСЃРѕР»Рё.
 ///
-/// Реализованны классы консоли и менеджер консолей.
+/// Р РµР°Р»РёР·РѕРІР°РЅРЅС‹ РєР»Р°СЃСЃС‹ РєРѕРЅСЃРѕР»Рё Рё РјРµРЅРµРґР¶РµСЂ РєРѕРЅСЃРѕР»РµР№.
 
 #include "nova_fonts.h"
 #include "nova_parser.h"
@@ -30,274 +30,86 @@ namespace nova {
 #define COMMAND_LEN										100
 
 /// \struct nv_console_pram
-/// \brief Строчные параметры консоли
+/// \brief РЎС‚СЂРѕС‡РЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РєРѕРЅСЃРѕР»Рё
 ///
-/// Общий набор параметров консоли для инициализации.
+/// РћР±С‰РёР№ РЅР°Р±РѕСЂ РїР°СЂР°РјРµС‚СЂРѕРІ РєРѕРЅСЃРѕР»Рё РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё.
 struct nv_console_pram
 {
-/// \brief Высота строчек (в пикселях)
+/// \brief Р’С‹СЃРѕС‚Р° СЃС‚СЂРѕС‡РµРє (РІ РїРёРєСЃРµР»СЏС…)
 	uint newline;
-/// \brief Расстоние левой границы консоли (в пикселях)
+/// \brief Р Р°СЃСЃС‚РѕРЅРёРµ Р»РµРІРѕР№ РіСЂР°РЅРёС†С‹ РєРѕРЅСЃРѕР»Рё (РІ РїРёРєСЃРµР»СЏС…)
 	uint leftclear;
-/// \brief Дистанция между буквами (в пикселях)
+/// \brief Р”РёСЃС‚Р°РЅС†РёСЏ РјРµР¶РґСѓ Р±СѓРєРІР°РјРё (РІ РїРёРєСЃРµР»СЏС…)
 	uint distance;
-/// \brief Расстояние вехней границы консоли (в пикселях)
+/// \brief Р Р°СЃСЃС‚РѕСЏРЅРёРµ РІРµС…РЅРµР№ РіСЂР°РЅРёС†С‹ РєРѕРЅСЃРѕР»Рё (РІ РїРёРєСЃРµР»СЏС…)
 	uint topclear;
-/// \brief Расстояние нижней границы консоли (в пикселях)
+/// \brief Р Р°СЃСЃС‚РѕСЏРЅРёРµ РЅРёР¶РЅРµР№ РіСЂР°РЅРёС†С‹ РєРѕРЅСЃРѕР»Рё (РІ РїРёРєСЃРµР»СЏС…)
 	uint bottomclear;
-/// \brief Расстояние правой границы консоли (в пикселях)
+/// \brief Р Р°СЃСЃС‚РѕСЏРЅРёРµ РїСЂР°РІРѕР№ РіСЂР°РЅРёС†С‹ РєРѕРЅСЃРѕР»Рё (РІ РїРёРєСЃРµР»СЏС…)
 	uint rightclear;
-/// \brief Ширина табуляции (в пикселях)
+/// \brief РЁРёСЂРёРЅР° С‚Р°Р±СѓР»СЏС†РёРё (РІ РїРёРєСЃРµР»СЏС…)
 	uint tab;
 };
 
 /// \struct nv_console_init
-/// \brief Общие консоли
+/// \brief РћР±С‰РёРµ РєРѕРЅСЃРѕР»Рё
 struct nv_console_init
 {
-/// \brief Тип шрифта
+/// \brief РўРёРї С€СЂРёС„С‚Р°
 ///
-/// Как я говорил, движок поддерживает два типа шрифтов
-/// TrueType Font, Win GDI Font. Второй случай конечно только для винды,
-/// поэтому на других системах его видно не будет, на винде же есть выбор.
-/// \attention Если вы ставите подложку SDL, вы не можете использовать Win GDI Font.
-/// Это связанно с тем, что для Win GDI Font нужен так называемый графический контекст окна
-/// который из SDL не вытащить. поэтому для этого типа шрифтов можно использовать только подложку Win.
-/// Для TrueType Font можно использовать любую.
+/// РљР°Рє СЏ РіРѕРІРѕСЂРёР», РґРІРёР¶РѕРє РїРѕРґРґРµСЂР¶РёРІР°РµС‚ РґРІР° С‚РёРїР° С€СЂРёС„С‚РѕРІ
+/// TrueType Font, Win GDI Font. Р’С‚РѕСЂРѕР№ СЃР»СѓС‡Р°Р№ РєРѕРЅРµС‡РЅРѕ С‚РѕР»СЊРєРѕ РґР»СЏ РІРёРЅРґС‹,
+/// РїРѕСЌС‚РѕРјСѓ РЅР° РґСЂСѓРіРёС… СЃРёСЃС‚РµРјР°С… РµРіРѕ РІРёРґРЅРѕ РЅРµ Р±СѓРґРµС‚, РЅР° РІРёРЅРґРµ Р¶Рµ РµСЃС‚СЊ РІС‹Р±РѕСЂ.
+/// \attention Р•СЃР»Рё РІС‹ СЃС‚Р°РІРёС‚Рµ РїРѕРґР»РѕР¶РєСѓ SDL, РІС‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Win GDI Font.
+/// Р­С‚Рѕ СЃРІСЏР·Р°РЅРЅРѕ СЃ С‚РµРј, С‡С‚Рѕ РґР»СЏ Win GDI Font РЅСѓР¶РµРЅ С‚Р°Рє РЅР°Р·С‹РІР°РµРјС‹Р№ РіСЂР°С„РёС‡РµСЃРєРёР№ РєРѕРЅС‚РµРєСЃС‚ РѕРєРЅР°
+/// РєРѕС‚РѕСЂС‹Р№ РёР· SDL РЅРµ РІС‹С‚Р°С‰РёС‚СЊ. РїРѕСЌС‚РѕРјСѓ РґР»СЏ СЌС‚РѕРіРѕ С‚РёРїР° С€СЂРёС„С‚РѕРІ РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ РїРѕРґР»РѕР¶РєСѓ Win.
+/// Р”Р»СЏ TrueType Font РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р»СЋР±СѓСЋ.
 	uint fonttype;
-/// \brief Размер экрана
+/// \brief Р Р°Р·РјРµСЂ СЌРєСЂР°РЅР°
 ///
-/// x ширина. у высота.
+/// x С€РёСЂРёРЅР°. Сѓ РІС‹СЃРѕС‚Р°.
 	POINT screen;
-/// \brief Максимальное количество символов в консоли.
+/// \brief РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРёРјРІРѕР»РѕРІ РІ РєРѕРЅСЃРѕР»Рё.
 	uint maxchar;
-/// \brief Структура строчных параметров.
+/// \brief РЎС‚СЂСѓРєС‚СѓСЂР° СЃС‚СЂРѕС‡РЅС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ.
 ///
 /// \see nv_console_pram
 	nv_console_pram param;
 };
 
 /// \struct nv_console_char
-/// \brief Символ консоли.
+/// \brief РЎРёРјРІРѕР» РєРѕРЅСЃРѕР»Рё.
 ///
-/// Содержит два поля код символа и цвет символа
-/// таким образом каждый символ может быть разного цвета)
+/// РЎРѕРґРµСЂР¶РёС‚ РґРІР° РїРѕР»СЏ РєРѕРґ СЃРёРјРІРѕР»Р° Рё С†РІРµС‚ СЃРёРјРІРѕР»Р°
+/// С‚Р°РєРёРј РѕР±СЂР°Р·РѕРј РєР°Р¶РґС‹Р№ СЃРёРјРІРѕР» РјРѕР¶РµС‚ Р±С‹С‚СЊ СЂР°Р·РЅРѕРіРѕ С†РІРµС‚Р°)
 struct nv_console_char
 {
-/// \brief Код символа (UTF-8)
+/// \brief РљРѕРґ СЃРёРјРІРѕР»Р° (UTF-8)
 	wchar_t unicode;
-/// Цвет в формате RGB 
+/// Р¦РІРµС‚ РІ С„РѕСЂРјР°С‚Рµ RGB 
 ///
-/// Для установки цвета пользуйтель макросом N_RGB (x, x, x)
+/// Р”Р»СЏ СѓСЃС‚Р°РЅРѕРІРєРё С†РІРµС‚Р° РїРѕР»СЊР·СѓР№С‚РµР»СЊ РјР°РєСЂРѕСЃРѕРј N_RGB (x, x, x)
 	CColorRGB color;
 };
 
-/// \brief Пустой символ. (Завершающий)
+/// \brief РџСѓСЃС‚РѕР№ СЃРёРјРІРѕР». (Р—Р°РІРµСЂС€Р°СЋС‰РёР№)
 const nv_console_char empty = {0};
 
-/// \brief Вектор строк
+/// \brief Р’РµРєС‚РѕСЂ СЃС‚СЂРѕРє
 typedef stl<nstring>::vector args;
 
 /// \class CConsoleBase
-/// \brief Базовая консоль
+/// \brief Р‘Р°Р·РѕРІР°СЏ РєРѕРЅСЃРѕР»СЊ
 /// 
-/// Тут содержится базовое описание консоли.
+/// РўСѓС‚ СЃРѕРґРµСЂР¶РёС‚СЃСЏ Р±Р°Р·РѕРІРѕРµ РѕРїРёСЃР°РЅРёРµ РєРѕРЅСЃРѕР»Рё.
 class NOVA_EXPORT CConsoleBase : public CBase
 {
 protected:
-/// \brief Буфер строки
+/// \brief Р‘СѓС„РµСЂ СЃС‚СЂРѕРєРё
 	stl<nv_console_char>::vector console_string;
 
-/// \brief Параметры консоли
+/// \brief РџР°СЂР°РјРµС‚СЂС‹ РєРѕРЅСЃРѕР»Рё
 	nv_console_init			initdata;
 	CColorRGB				color;
 
-	/// \brief Идентификатор OGL текстуры, которая должна будет рисоваться на заднем фоне.
-	CTexturePtr backtexture;
-
-/// \brief Устанавливает параметры камеры для отрисовки консоли
-///
-/// Ортографическая проекция, координатная сетка полностью совпадает с пикселями экрана
-/// тоесть координаты x = 10, y = 15 будут измеряться именно в пикселях.
-	void SetProjection();
-/// \brief Отрисовка фона косоли.
-	void DrawBackGround();
-/// \brief Очистка буфера строки.
-	void ClearStr();
-
-public:
-/// \brief Отрисовка консоли.
-	virtual int Paint() = 0;
-
-/// \brief Конструктор.
-	CConsoleBase(char * _name) : CBase(_name) 
-	{
-		color = CColorRGB(0.7f, 0.7f, 0.7f);
-	}
-
-	inline void SetDefaultTextColor(CColorRGB & color)
-	{
-		this->color = color;
-	}
-
-	inline void SetTexture(CTexturePtr back)
-	{
-		backtexture = back;
-	}
-
-	inline CTexturePtr GetTexture()
-	{
-		return backtexture;
-	}
-	
-};
-
-/// \class CConsole
-/// \brief Консоль
-class NOVA_EXPORT CConsole : public CConsoleBase, public CParser
-{
-	friend class CConsoleManager;
-private:
-	uint		position;
-	real		dy;
-	int			ypos;
-	CFontPtr	font;
-
-
-public:
-
-/// \brief Конструктор.
-	CConsole(nv_console_init * _init);
-/// \brief Деструктор
-	~CConsole();
-
-/// \brief Вывести строку в консоль.
-///
-/// \param message строка с завершающим нулем!!
-/// \param pc цвет строки
-/// \code
-/// console->writelen("Test!!!", N_RGB(150, 40, 130));
-/// \endcode
-    void WriteLen(const wchar_t *message, const CColorRGB & pc);
-	void WriteLen(const wchar_t *message);
-	void WriteLen(const char *message, const CColorRGB & pc);
-	void WriteLen(const char *message);
-
-    void WriteLen(const nstring & message, const CColorRGB & pc);
-	void WriteLen(const nwstring & message, const CColorRGB & pc);
-	void WriteLen(const nstring & message);
-	void WriteLen(const nwstring & message);
-/// \brief Вывести символ в консоль.
-///
-/// \param bb символ
-/// \param pc цвет символа
-/// \code
-/// console->writelen('c', N_RGB(150, 40, 130));
-/// \endcode
-    int PutChar(const wchar_t bb, const CColorRGB & pc);
-	int PutChar(const char bb, const CColorRGB & pc);
-/// \brief Вывести строку в консоль.
-///
-/// Цвет ставится как стандартный белый.
-/// \param message строка с завершающим нулем!!
-/// \code
-/// console->writelen(L"Test!!!");
-/// \endcode
-	void HoreLine(const wchar_t symbol);
-
-/// \brief Отрисовка консоли 
-    int  Paint();
-/// \brief Очистка консоли.
-	void Clear();
-
-/// \brief Удаление последних х символов консоли.
-	int Delete(int x);
-  
-/// \brief Оператор << 
-///
-/// Предусмотрен для удобства, чтобы не вызывать функцию writelen
-/// можно просто сделать так
-/// \code
-/// CConsole con;
-/// con << "Test!"
-/// \endcode
-	inline void operator << (const wchar_t *mes)
-	{
-		this->WriteLen(mes);
-	}
-
-};
-
-/// \class CConsoleManager
-/// \brief Менеджер консолей
-///
-/// Позволяет управлять консолями. Вообще говоря, количество консолей
-/// не огранмченно. Есть активная консоль, которая отрисовывается с данный момент времени
-/// всегда можно переключить на другую консоль.
-class NOVA_EXPORT CConsoleManager : public CSingelton<CConsoleManager>, public CBase
-{
-private:
-	stl<CConsole *>::vector consoles;
-	int							active;
-	int							iter;
-	CFontPtr					font;
-
-public:
-	
-/// \brief Конструктор.
-	CConsoleManager();
-/// \brief Деструктор
-	~CConsoleManager();
-
-/// \brief Создает новую консоль
-///
-/// \param param Структура параметров новой консоли
-/// \see nv_console_init
-	int NewConsole(nv_console_init * param);
-/// \brief Устанавливает в консоль шрифт.
-///
-/// Для всех консолей будет использоваться именно этот шрифт.
-///
-/// \param _font Объект шрифта
-	void SetFont(CFontPtr _font);
-/// \brief Удаляет выбранную консоль
-///
-/// \param n Номер консоли (0,1,2..)
-	void DeleteConsole(uint n);
-
-/// \brief Удалить все консоли.
-	void Clear();
-/// \brief Отрисовка кадра активной консоли.
-	void Render();
-
-/// \brief Установить активную консоль
-///
-/// \param n Номер консоли (0,1,2..) 
-	void SetActive(uint n);
-
-/// \brief Взять номер активной консоли.
-	const int GetActive();
-/// \brief Взять адрес активной консоли
-	CConsole * GetActivePtr();
-/// \brief Взять количество консолей
-	const int Count();
-
-/// \brief Оператор []
-///
-/// Использовать можно так
-/// \code
-/// CConsoleManager manager;
-///	*(manager[2]) << "Test";
-/// \endcode
-/// \param ind номер консоли которую мы хотим получить.
-	inline CConsole * operator[](uint ind)
-	{
-		if(ind < consoles.size())
-			return consoles[ind];
-
-		return NULL;
-	}
-};
-
-}
-
+	/// \brief Р

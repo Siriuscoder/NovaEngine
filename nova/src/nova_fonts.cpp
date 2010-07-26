@@ -1,4 +1,4 @@
-﻿/***************************************************************************/
+п»ї/***************************************************************************/
 /*                                                                         */
 /*  ft2build.h                                                             */
 /*                                                                         */
@@ -120,14 +120,14 @@ void CFreeFont::SetFontParam(FT_Library library,
 
 void CFreeFont::BuildFont()
 {
-	// Загрузим шрифт из файла. Если файла шрифта не существует или шрифт битый,
-	// то программа может умереть.
+	// Р—Р°РіСЂСѓР·РёРј С€СЂРёС„С‚ РёР· С„Р°Р№Р»Р°. Р•СЃР»Рё С„Р°Р№Р»Р° С€СЂРёС„С‚Р° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РёР»Рё С€СЂРёС„С‚ Р±РёС‚С‹Р№,
+	// С‚Рѕ РїСЂРѕРіСЂР°РјРјР° РјРѕР¶РµС‚ СѓРјРµСЂРµС‚СЊ.
 	if (FT_New_Face(library, ttffile.c_str(), 0, &face))
 		throw NOVA_EXP("CFreeFont::BuildFont - Loading free font failed \
 			(there is probably a problem with your font file)", BAD_OPERATION);
-	// По некоторым причинам FreeType измеряет размер шрифта в терминах 1/64 пикселя.
-	// Таким образом, для того чтобы сделать шрифт выстой h пикселей, мы запрашиваем размер h*64.
-	// (h << 6 тоже самое что и h*64)
+	// РџРѕ РЅРµРєРѕС‚РѕСЂС‹Рј РїСЂРёС‡РёРЅР°Рј FreeType РёР·РјРµСЂСЏРµС‚ СЂР°Р·РјРµСЂ С€СЂРёС„С‚Р° РІ С‚РµСЂРјРёРЅР°С… 1/64 РїРёРєСЃРµР»СЏ.
+	// РўР°РєРёРј РѕР±СЂР°Р·РѕРј, РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ СЃРґРµР»Р°С‚СЊ С€СЂРёС„С‚ РІС‹СЃС‚РѕР№ h РїРёРєСЃРµР»РµР№, РјС‹ Р·Р°РїСЂР°С€РёРІР°РµРј СЂР°Р·РјРµСЂ h*64.
+	// (h << 6 С‚РѕР¶Рµ СЃР°РјРѕРµ С‡С‚Рѕ Рё h*64)
 	FT_Set_Char_Size(face, height << 6, height << 6, 96, 96);
 	slot = face->glyph;
 
@@ -138,7 +138,7 @@ void CFreeFont::BuildFont()
 	for(word ch = rus_begin; ch <= rus_end; ++ch)
 		MakeLetter(ch);
 
-	// Уничтожим шрифт.
+	// РЈРЅРёС‡С‚РѕР¶РёРј С€СЂРёС„С‚.
 	FT_Done_Face(face);
 	isReady = true;
 
@@ -160,264 +160,23 @@ int NextP2(int a)
 
 void CFreeFont::MakeLetter(wchar_t code)
 {
-	// Первая вещь, которую нам надо сделать, это вывести наш символ
-	// в растр. Это делается набором команд FreeType
+	// РџРµСЂРІР°СЏ РІРµС‰СЊ, РєРѕС‚РѕСЂСѓСЋ РЅР°Рј РЅР°РґРѕ СЃРґРµР»Р°С‚СЊ, СЌС‚Рѕ РІС‹РІРµСЃС‚Рё РЅР°С€ СЃРёРјРІРѕР»
+	// РІ СЂР°СЃС‚СЂ. Р­С‚Рѕ РґРµР»Р°РµС‚СЃСЏ РЅР°Р±РѕСЂРѕРј РєРѕРјР°РЅРґ FreeType
 
-	// Загрузить глифы для каждого символа.
+	// Р—Р°РіСЂСѓР·РёС‚СЊ РіР»РёС„С‹ РґР»СЏ РєР°Р¶РґРѕРіРѕ СЃРёРјРІРѕР»Р°.
 	if(FT_Load_Glyph(face, FT_Get_Char_Index(face, code), FT_LOAD_DEFAULT))
 		throw NOVA_EXP("CFreeFont::MakeLetter - FT_Load_Glyph failed", BAD_OPERATION);
 
-	// Поместить глиф в объект.
+	// РџРѕРјРµСЃС‚РёС‚СЊ РіР»РёС„ РІ РѕР±СЉРµРєС‚.
 	FT_Glyph glyph;
 	if(FT_Get_Glyph(face->glyph, &glyph))
 		throw NOVA_EXP("CFreeFont::MakeLetter - FT_Get_Glyph failed", BAD_OPERATION);
 
-	// Конвертировать глиф в растр.
+	// РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ РіР»РёС„ РІ СЂР°СЃС‚СЂ.
 	FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
 	FT_BitmapGlyph bitmap_glyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
 
-	// С помощью этой ссылки, получаем легкий доступ до растра.
+	// РЎ РїРѕРјРѕС‰СЊСЋ СЌС‚РѕР№ СЃСЃС‹Р»РєРё, РїРѕР»СѓС‡Р°РµРј Р»РµРіРєРёР№ РґРѕСЃС‚СѓРї РґРѕ СЂР°СЃС‚СЂР°.
 	FT_Bitmap & bitmap = bitmap_glyph->bitmap;
 
-    // Используем нашу вспомогательную функцию для вычисления ширины и высоты
-	// текстуры для нашего растра.
-	int bwidth = NextP2(bitmap.width);
-	int bheight = NextP2(bitmap.rows);
-
-	// Выделим память для данных текстуры.
-	//byte * expanded_data = NULL;
-	//expanded_data = getmem<byte>(expanded_data, 2 * bwidth * bheight);
-	CMemoryBuffer mem;
-	mem.AllocBuffer(2 * bwidth * bheight);
-	byte * expanded_data = (nova::byte *)mem.GetBegin();
-
-	// Поместим данные в расширенный растр.
-	// Отмечу, что использован двухканальный растр (Один для
-	// канала яркости и один для альфа), но мы будем назначать
-	// обоим каналам одно и тоже значение, которое мы
-	// получим из растра FreeType.
-	// Мы используем оператор ?: для того чтобы поместить 0 в зону вне растра FreeType.
-	for(int j = 0; j < bheight; ++j)
-		for(int i = 0; i < bwidth; ++i)
-			expanded_data[2*(i + j * bwidth)] = expanded_data[2*(i + j * bwidth)+1] =
-				(i >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[i + bitmap.width*j];
-
-/*	GLuint texture;
-	glGenTextures(1, &texture);
-
-	glBindTexture( GL_TEXTURE_2D, texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	// Здесь мы создаем текстуру
-	// Помните, что используем GL_LUMINANCE_ALPHA, чтобы было два альфа канала данных
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bwidth, bheight, 0,
-		GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, expanded_data);
-*/
-	//int tid = CTextureManager::GetSingeltonPtr()->AddTexture(GL_TEXTURE_2D,
-	//	expanded_data, bwidth, bheight, CImageFormats::NF_LUMINANCE_ALPHA);
-/*	CTexturePtr ptex = CTextureManager::GetSingeltonPtr()->AddTexture(new CTexture(fname.c_str(), GL_TEXTURE_2D));
-	ptex->SetEnvType(GL_MODULATE);
-	ptex->CreateTexture(expanded_data, bwidth, bheight, CImageFormats::NF_LUMINANCE_ALPHA, GL_CLAMP);
-
-	// После создания текстуры, мы больше не нуждаемся в промежуточных данных.
-	freemems(expanded_data);
-
-	CLetter letter(slot->metrics.horiBearingX >> 6, slot->metrics.horiBearingY >> 6,
-		slot->metrics.horiAdvance >> 6, bwidth, bheight, bitmap.width, bitmap.rows,
-		code, ptex);
-
-*/
-	nstring resnamet;
-	nstring resnamei("TempFontImage");
-	resnamet = mName + "_" + CStringUtils::IntTo16xString(static_cast<int>(code));
-// Создаем промежуточное изображение в памяти
-	CImagePtr pImage = CImageManager::GetSingelton().CreateNewImage(resnamei, mName, mem,
-		bwidth, bheight, 1, CImageFormats::NF_LUMINANCE_ALPHA, CResource::NV_FREE);
-// На базе изображения создаем текстуру
-	CTexturePtr texp = CTextureManager::GetSingelton().CreateNewTexture(resnamet, mName, pImage);
-
-	// После создания текстуры, мы больше не нуждаемся в промежуточных данных.
-	mem.FreeBuffer();
-
-	CLetter letter(slot->metrics.horiBearingX >> 6, slot->metrics.horiBearingY >> 6,
-		slot->metrics.horiAdvance >> 6, bwidth, bheight, bitmap.width, bitmap.rows,
-		code, texp);
-	mSize += texp->GetSize();
-
-/// Создаем дисплейный список на букву ///////////////////////////////////////////////
-	letter.GetDispList().CreateList();
-	letter.GetDispList().BeginList();
-/// //////////////////////////////////////////////////////////////////////////////////
-	if(!texp.IsNull())
-		texp->ApplyTexture();
-
-// Вычислим какая часть нашей текстуры будет заполнена пустым пространством.
-// Мы рисуем только ту часть текстуры, в которой находится символ, и сохраняем
-// информацию в переменных x и y, затем, когда мы рисуем четырехугольник,
-// мы будем только ссылаться на ту часть текстуры, в которой непосредственно
-// содержится символ.
-	real x = static_cast<real>(letter.GetBitmapw()) / static_cast<real>(letter.GetWidth()),
-		y = static_cast<real>(letter.GetBitmapr()) / static_cast<real>(letter.GetHeight());
-
-	//glBindTexture(GL_TEXTURE_2D, let.GetTex());
-
-	glBegin(GL_QUADS);
-		glTexCoord2f(0,0);
-		glVertex2i(0,0);
-		glTexCoord2f(0,y);
-		glVertex2i(0,letter.GetBitmapr());
-		glTexCoord2f(x,y);
-		glVertex2i(letter.GetBitmapw(), letter.GetBitmapr());
-		glTexCoord2f(x,0);
-		glVertex2i(letter.GetBitmapw(), 0);
-	glEnd();
-
-/// Завершаем дисплейный список //////////////////////////////////////////////////
-	letter.GetDispList().EndList();
-/// //////////////////////////////////////////////////////////////////////////////
-
-	letters_map[code] = letter;
-}
-
-void CFreeFont::Draw(POINT & pos, const CColorRGB & pc, const wchar_t code)
-{
-	stl<wchar_t, CLetter>::map::iterator it;
-	it = letters_map.find(code);
-	if(it == letters_map.end())
-		return;
-
-	CLetter let = (*it).second;
-	//glEnable(GL_TEXTURE_2D);
-	//glDisable(GL_DEPTH_TEST);
-	glDisable(GL_LIGHTING);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glColor3fv(pc);
-
-	//CLetter let(letters_map[code]);
-//	if(!let.GetTex().IsNull())
-//		let.GetTex()->ApplyTexture();
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-
-
-	if(coord_grid == FT_COORD_NORMAL)
-	{
-		glTranslatef(static_cast<real>(pos.x), static_cast<real>(pos.y), 0);
-		glTranslatef(static_cast<real>(let.GetBearingX()), static_cast<real>(let.GetBearingY() - let.GetBitmapr()), 0);
-	}
-	else if(coord_grid == FT_COORD_LEFT_TOP)
-	{
-		glTranslatef(static_cast<real>(pos.x), static_cast<real>(pos.y-let.GetBitmapr()), 0);
-		glTranslatef(static_cast<real>(let.GetBearingX()), static_cast<real>(let.GetBitmapr() - let.GetBearingY()), 0);
-	}
-
-	// вызываем созданный список ----
-	let.GetDispList().SetList();
-
-	glPopMatrix();
-	pos.x += let.GetAdvance();
-}
-
-CFreeFont::~CFreeFont()
-{
-	nova::nstringstream str;
-	str << "CFreeFont::~CFreeFont() " << "name: " << mName << " group: " << mGroup;
-	LOG_MESSAGE(str.str().c_str());
-
-	FreeResource();
-}
-
-void CFreeFont::FreeResource()
-{
-/*
-	nova::stl<wchar_t, CLetter>::map::iterator it;
-	for(it = letters_map.begin(); it != letters_map.end(); it++)
-		CTextureManager::GetSingeltonPtr()->DeleteTexture((*it).second.GetTex().GetPtr());
-*/
-
-	CResource::FreeResource();
-	nova::stl<wchar_t, CLetter>::map::iterator it;
-	for(it = letters_map.begin(); it != letters_map.end(); it++)
-		(*it).second.GetDispList().DestroyList();
-
-	//letters_map[code]
-	CTextureManager::GetSingelton().UnloadResourceGroupFromHash(mName);
-	letters_map.clear();
-}
-
-
-template<> CFontManager * CSingelton<CFontManager>::SingeltonObject = NULL;
-
-CFontManager::CFontManager()
-{
-	// Инициализация библиотеки FreeType.
-	if(FT_Init_FreeType(&library))
-		throw NOVA_EXP("CFontManager::CFontManager() - Error Init freetype fonts..", BAD_OPERATION);
-
-	LOG_MESSAGE("Font manager created..");
-}
-
-CFontManager::~CFontManager()
-{
-	UnloadAllManagerResources();
-	if(FT_Done_FreeType(library))
-		throw NOVA_EXP("CFontManager::CFontManager() - Error done freetype lib..", BAD_OPERATION);
-
-	LOG_MESSAGE("Font manager destroyed..");
-}
-
-CResourcePtr CFontManager::CreateInstance(const nstring & name,
-	const nstring & group, CResource::TAttach state)
-{
-	CFontPtr fontp(new CFreeFont(this, name, group, state));
-	return fontp;
-}
-
-CFontPtr CFontManager::CreateNewFont(const nstring & name, const nstring & group,
-	nova::uint height, const nstring & ttffile, nova::uint coord_grid,
-	CResource::TAttach state)
-{
-	CFontPtr fontp = CResourceManager::AddNewResource(name, group, state);
-	if(fontp.IsNull())
-		throw NOVA_EXP("CFontManager::CreateNewFont - resource factory return \
-							Null pointer...", MEM_ERROR);
-
-	fontp->SetFontParam(library, height, ttffile, coord_grid);
-	CResourceManager::BuildNextResource(name);
-
-	nova::nstringstream str;
-	str << "Font Factory: font object name: " << name << " group: " << group << " created...";
-	LOG_MESSAGE(str.str().c_str());
-
-	return fontp;
-}
-
-CFontPtr CFontManager::CreateNewFontAsync(const nstring & name, const nstring & group,
-	nova::uint height, const nstring & ttffile, nova::uint coord_grid,
-	CResource::TAttach state)
-{
-	CFontPtr fontp = CResourceManager::AddNewResource(name, group, state);
-	if(fontp.IsNull())
-		throw NOVA_EXP("CFontManager::CreateNewFont - resource factory return \
-							Null pointer...", MEM_ERROR);
-
-	fontp->SetFontParam(library, height, ttffile, coord_grid);
-	mResourceBuildQueue.AddToQueue(fontp.GetPtr());
-	nova::nstringstream str;
-	str << "Font Factory: font object name: " << name << " group: " << group << " async created...";
-	LOG_MESSAGE(str.str().c_str());
-
-	return fontp;
-}
-
-void CFontManager::UnloadAllManagerResources()
-{
-	UnloadResourceFromHash(this);
-}
-
-
-}
+    // Р

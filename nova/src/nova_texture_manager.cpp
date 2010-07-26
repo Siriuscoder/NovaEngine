@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+п»ї/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -76,7 +76,7 @@ CTexturePtr CTextureManager::CreateNewTexture
 	texp->SetMagFilters(magf);
 	texp->SetMinFilters(minf);
 
-	// Выделяем место в видео памяти под текстуру...
+	// Р’С‹РґРµР»СЏРµРј РјРµСЃС‚Рѕ РІ РІРёРґРµРѕ РїР°РјСЏС‚Рё РїРѕРґ С‚РµРєСЃС‚СѓСЂСѓ...
 	TImageList templ;
 	templ.push_back(image);
 
@@ -114,7 +114,7 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 	texp->SetMagFilters(magf);
 	texp->SetMinFilters(minf);
 
-	// Выделяем место в видео памяти под текстуру...
+	// Р’С‹РґРµР»СЏРµРј РјРµСЃС‚Рѕ РІ РІРёРґРµРѕ РїР°РјСЏС‚Рё РїРѕРґ С‚РµРєСЃС‚СѓСЂСѓ...
 
 	texp->SetImageList(list);
 	texp->PrepareResource();

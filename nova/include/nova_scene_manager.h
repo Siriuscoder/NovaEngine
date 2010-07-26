@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+п»ї/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -115,7 +115,7 @@ protected:
 
 	virtual void RenderSceneImpl(void) = 0;
 
-	int RenderСompoundObjects(void);
+	int RenderРЎompoundObjects(void);
 
 public:
 

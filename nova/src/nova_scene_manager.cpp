@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+п»ї/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -90,7 +90,7 @@ void CSceneManager::ClearObjects(void)
 
 }
 
-int CSceneManager::RenderСompoundObjects(void)
+int CSceneManager::RenderРЎompoundObjects(void)
 {
 // to do render effects here
 
@@ -125,7 +125,7 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 
 	RenderSceneImpl();
 
-	RenderСompoundObjects();
+	RenderРЎompoundObjects();
 
 	for(nova::uint i = 0; i < GetListenersCount(); i++)
 	{
