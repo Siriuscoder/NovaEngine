@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+п»ї/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -138,7 +138,7 @@ void CRenderSystem::InitializeFromConfigFile()
 					mType = RS_XGL;
 				else if(!xmlStrcmp(temp, (xmlChar *) "RS_GLUT"))
 				{
-					// wtf ??? нету этого у меня ))
+					// wtf ??? РЅРµС‚Сѓ СЌС‚РѕРіРѕ Сѓ РјРµРЅСЏ ))
 					mType = RS_GLUT;
 				}
 				else ren = false;
@@ -256,7 +256,7 @@ void CRenderSystem::StartUp(StartUpFlags flags)
 		break;
 	case RS_GLUT:
 		{
-			//Шутка
+			//РЁСѓС‚РєР°
 			throw NOVA_EXP("CRenderSystem::StartUp - Can not \
 				create GLUT SubSystem: not supported!", BAD_OPERATION);
 		}

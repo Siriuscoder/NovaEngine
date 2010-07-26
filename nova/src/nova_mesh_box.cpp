@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+п»ї/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -115,7 +115,7 @@ void CMeshBox::QSortFaces(TIndexes &index, TFacesInfo &faces)
 	TIndexes tmp;
 	tmp.resize(index.size());
 	std::copy(index.begin(), index.end(), tmp.begin());
-// переставляем элементы в массиве индексов
+// РїРµСЂРµСЃС‚Р°РІР»СЏРµРј СЌР»РµРјРµРЅС‚С‹ РІ РјР°СЃСЃРёРІРµ РёРЅРґРµРєСЃРѕРІ
 	for(nova::uint i = 0; i < faces.size(); i++)
 	{
 		index[i] = tmp[faces[i].tri_id];
@@ -239,13 +239,13 @@ void CMeshBox::PrepareResource(void)
 		throw NOVA_EXP("CMeshBox::BuildResource - detected incorrect \
 		mesh size.. do not resolved the conflict((", BAD_OPERATION);
 
-	// Вычисляем нормальное положение объекта в мировой системе координат
+	// Р’С‹С‡РёСЃР»СЏРµРј РЅРѕСЂРјР°Р»СЊРЅРѕРµ РїРѕР»РѕР¶РµРЅРёРµ РѕР±СЉРµРєС‚Р° РІ РјРёСЂРѕРІРѕР№ СЃРёСЃС‚РµРјРµ РєРѕРѕСЂРґРёРЅР°С‚
 	//ToWorldCoord();
-	// Вычисляем индексы и нормали к граням
+	// Р’С‹С‡РёСЃР»СЏРµРј РёРЅРґРµРєСЃС‹ Рё РЅРѕСЂРјР°Р»Рё Рє РіСЂР°РЅСЏРј
 	//CreateInfo();
-	// Вычисляем нормали к вершинам
+	// Р’С‹С‡РёСЃР»СЏРµРј РЅРѕСЂРјР°Р»Рё Рє РІРµСЂС€РёРЅР°Рј
 	//CalculateNormals();
-	// Сортируем вершины по материалам
+	// РЎРѕСЂС‚РёСЂСѓРµРј РІРµСЂС€РёРЅС‹ РїРѕ РјР°С‚РµСЂРёР°Р»Р°Рј
 
 	CResource::PrepareResource();
 }

@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+п»ї/***************************************************************************
  *   Copyright (C) 2009 by SIRIUS										   *
  *   SiriusStarNick@yandex.ru											   *
  *                                                                         *
@@ -93,11 +93,11 @@ protected:
 	GLuint mTexture;
 	CTextureSurfaceList::MipMapTagertType mMipMap;
 
-	real mSOffset;         //смещение по оси s
-	real mTOffset;         //смещение по оси t
-	real mSTiling;         //масштабирование по оси s
-	real mTTiling;         //масштабирование по оси t
-	real mAngle;            //угол поворота вокруг оси r (градусов)
+	real mSOffset;         //СЃРјРµС‰РµРЅРёРµ РїРѕ РѕСЃРё s
+	real mTOffset;         //СЃРјРµС‰РµРЅРёРµ РїРѕ РѕСЃРё t
+	real mSTiling;         //РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ РїРѕ РѕСЃРё s
+	real mTTiling;         //РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ РїРѕ РѕСЃРё t
+	real mAngle;            //СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р° РІРѕРєСЂСѓРі РѕСЃРё r (РіСЂР°РґСѓСЃРѕРІ)
 
 	stl<CTextureSurfaceListPtr>::vector mSurfaceList;
 

@@ -46,7 +46,7 @@ void prError(nova::nstringstream & mes)
 	CLog & log = CLog::GetInstance();
 
 	log.PrintMessage(mes.str().c_str(), CLog::LG_WITH_TIME_ERROR);
-//-------- Таблица распределения памяти -----------
+//-------- РўР°Р±Р»РёС†Р° СЂР°СЃРїСЂРµРґРµР»РµРЅРёСЏ РїР°РјСЏС‚Рё -----------
 #ifdef USE_WINNI_FAST_ALLOCATOR
 	winnie_allocator::Statistic stat;
 	winnie_allocator::GetAllocInfo(stat);

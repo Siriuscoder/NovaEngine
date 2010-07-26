@@ -84,7 +84,7 @@ public:
 	CMemoryBuffer Lock(THardwareBufferLock opt);
 
 	void Unlock(CMemoryBuffer & buf);
-// Другие возможные типы блокировок //
+// Р”СЂСѓРіРёРµ РІРѕР·РјРѕР¶РЅС‹Рµ С‚РёРїС‹ Р±Р»РѕРєРёСЂРѕРІРѕРє //
 };
 
 }

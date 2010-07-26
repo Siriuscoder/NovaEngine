@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="SimpleParser" />
+		<Option title="ResourcePacker" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug Win32">
-				<Option output="Parser" prefix_auto="1" extension_auto="1" />
+				<Option output="ResourcePacker" prefix_auto="1" extension_auto="1" />
 				<Option object_output="Debug Win32" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -38,7 +38,7 @@
 				</Linker>
 			</Target>
 			<Target title="Release Win32">
-				<Option output="Parser" prefix_auto="1" extension_auto="1" />
+				<Option output="ResourcePacker" prefix_auto="1" extension_auto="1" />
 				<Option object_output="Release Win32" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -68,7 +68,7 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="src/parser_example_main.cpp" />
+		<Unit filename="src/resource_packer.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

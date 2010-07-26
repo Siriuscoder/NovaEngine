@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
- *	 Vdov Nikita Sergeevich	(c)		ƀ									   *
+ *	 Vdov Nikita Sergeevich	(c)		ЖЂ									   *
  *	 siriusnick@gmail.com												   *
  *																		   *
  *	 This source file is part of NovaEngine								   *
