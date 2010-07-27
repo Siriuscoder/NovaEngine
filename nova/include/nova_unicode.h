@@ -1,4 +1,4 @@
-п»ї/*
+﻿/*
 * Unicode Conversion library
 * Based on library from Unicode, Inc.
 * Written by Shibalov Nikolay (Net@Worm)

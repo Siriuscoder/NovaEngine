@@ -37,14 +37,14 @@ void * __in__thread(void *data)
 {
 	if(data)
 	{
-		// РѕС‚РєР»СЋС‡Р°РµРј РєР°РЅСЃРµР»
+		// отключаем кансел
 		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
 
 		_in_data * pdata = static_cast<_in_data *>(data);
 
 		_in_data threadset;
 		memcpy(&threadset, pdata, sizeof(_in_data));
-		// РћСЃРІРѕР±РѕР¶РґР°РµРј РїРѕС‚РѕС‡РЅСѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ
+		// Освобождаем поточную структуру
 		delete pdata;
 
 		if(threadset.pth->threadfunc)
@@ -57,10 +57,10 @@ void * __in__thread(void *data)
 				threadset.pth->mState = TH_PLAY;
 				threadset.pth->UnLockStateMutex();
 
-				// Р’РєР»СЋС‡Р°РµРј РєР°РЅСЃРµР»
+				// Включаем кансел
 				pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 
-				// Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕС‡РЅСѓСЋ С„СѓРЅРєС†РёСЋ
+				// Запускаем поточную функцию
 				(threadset.pth->*func)(threadset.buffer);
 			} 
 			catch(nova::NovaExp & exp)
@@ -68,13 +68,13 @@ void * __in__thread(void *data)
 				exp.FixError(threadset.pth);
 			}
 
-			// РїРµСЂРµРІРѕРґРёРј СЃРѕСЃС‚РѕСЏРЅРёРµ РІ СЂРµР¶РёРј Р·Р°РІРµСЂС€РµРЅРѕ ))
+			// переводим состояние в режим завершено ))
 			threadset.pth->LockStateMutex();
 			threadset.pth->mState = TH_KILLED;
 			threadset.pth->UnLockStateMutex();
 		}
 	}
-	// РѕС‚СЃРѕРµРґРёРЅСЏРµРј РїРѕС‚РѕРє
+	// отсоединяем поток
 	pthread_detach(pthread_self());
 
 	return NULL;

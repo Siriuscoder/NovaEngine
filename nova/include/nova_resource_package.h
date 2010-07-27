@@ -19,7 +19,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program;					                           *
  ***************************************************************************/
-// Success doesn't come to youâ€¦you go to it.
+// Success doesn't come to you…you go to it.
 #pragma once 
 
 #include "nova_error.h"

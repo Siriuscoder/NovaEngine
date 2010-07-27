@@ -16,7 +16,7 @@
  *   along with this program;					                           *
  ***************************************************************************/
 #include "nova_stable_precompiled_headers.h"
-// Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РІСЃРµС… РєР»Р°СЃСЃРѕРІ РёРіСЂС‹
+// Базовый класс для всех классов игры
 
 #include "nova_base.h"
 #include "nova_threads.h"

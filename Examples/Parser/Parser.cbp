@@ -64,7 +64,7 @@
 				<Linker>
 					<Add library="Nova" />
 					<Add directory="../../nova/lib" />
-					<Add directory="../../bin/release" />
+					<Add directory="../../bin/debug" />
 				</Linker>
 			</Target>
 		</Build>

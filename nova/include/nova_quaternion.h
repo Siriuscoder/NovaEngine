@@ -1,4 +1,4 @@
-п»ї/***************************************************************************
+﻿/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -306,9 +306,9 @@ public:
         const Constraints& rkZCon) const;
 
     // special values
-	// РЅРµС‚ РІСЂР°С‰РµРЅРёСЏ 
+	// нет вращения 
     NOVA_EXPORT static const CQuaternion IDENTITY;
-	// РЅСѓР»РµРІРѕР№
+	// нулевой
     NOVA_EXPORT static const CQuaternion ZERO;
 
 private:

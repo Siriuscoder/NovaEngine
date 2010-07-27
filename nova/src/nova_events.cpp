@@ -278,7 +278,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, L
 
 	switch(msg)
 	{
-// РїРµСЂРµСЂРµСЃРѕРІРєР°
+// перересовка
 	case WM_PAINT:
 		{
 			message.eventid = EV_REPAINT;
@@ -289,21 +289,21 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, L
 			ValidateRect(hwnd, &rect);
 		}
 	break;
-// СЃРѕР·РґР°РЅРёРµ РѕРєРЅР°
+// создание окна
 	case WM_CREATE:
 		{
 			message.eventid = EV_BEGIN;
 			Generator->Generate(&message);
 		}
 	break;
-// СѓРЅРёС‡С‚РѕР¶РµРЅРёРµ РѕРєРЅР°
+// уничтожение окна
 	case WM_DESTROY:
 		{
 			message.eventid = EV_END;
 			Generator->Generate(&message);
 		}
 	break;
-// С‚Р°Р№РјРµСЂС‹
+// таймеры
 	case WM_TIMER:
 		{
 			message.eventid = EV_TIMER_TICK;
@@ -311,7 +311,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, L
 			Generator->Generate(&message);
 		}
 	break;
-// РґРІРёР¶РµРЅРёРµ РјС‹С€Рё
+// движение мыши
     case WM_MOUSEMOVE:
 		{
 			message.eventid = EV_MOUSEMOVE;
@@ -332,7 +332,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, L
 			Generator->Generate(&message);
 		}
 	break;
-// РїСЂР°РІР°СЏ РєРЅРѕРїРєР° РјС‹С€Рё
+// правая кнопка мыши
     case WM_RBUTTONUP:
 		{
 			message.eventid = EV_RBUTTONUP;
@@ -393,7 +393,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, L
 			Generator->Generate(&message);
 		}
 	break;
-// Р»РµРІР°СЏ РєРЅРѕРїРєР° РјС‹С€Рё
+// левая кнопка мыши
 	case WM_LBUTTONDBLCLK:
 		{
 			message.eventid = EV_LBUTTONDBLCLK;
@@ -454,7 +454,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, L
 			Generator->Generate(&message);
 		}
 	break;
-// СЃСЂРµРґРЅСЏСЏ РєРЅРѕРїРєР° РјС‹С€Рё
+// средняя кнопка мыши
 	case WM_MBUTTONDOWN:
 		{
 			message.eventid = EV_MBUTTONDOWN;
@@ -515,7 +515,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, L
 			Generator->Generate(&message);
 		}
 	break;
-// РЅР°Р¶Р°С‚РёРµ РєР»Р°РІРёС€
+// нажатие клавиш
     case WM_KEYDOWN:
 		{
 			message.eventid = EV_KEYDOWN;

@@ -69,7 +69,7 @@ odbccp32.lib
 #define YEAR					"2009"
 
 #ifdef _WINDLL
-// Р‘РёР»РґРёРј РґР»Р»-РєСѓ
+// Билдим длл-ку
 #define NOVA_MAKING_DLL
 #endif
 

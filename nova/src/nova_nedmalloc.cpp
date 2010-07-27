@@ -1,4 +1,4 @@
-п»ї/* Alternative malloc implementation for multiple threads without
+﻿/* Alternative malloc implementation for multiple threads without
 lock contention based on dlmalloc. (C) 2005-2006 Niall Douglas
 
 Boost Software License - Version 1.0 - August 17th, 2003

@@ -1,4 +1,4 @@
-п»ї/***************************************************************************
+﻿/***************************************************************************
  *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
@@ -86,7 +86,7 @@ void CSDLWorkspace::CreateRenderWindow(nova::WindowInitialTarget &init)
 
 	mMetrics.color_bits = color_bits;
 
-// Р‘РµСЂРµРј РІРёРґРµРѕ РёРЅС„Сѓ РґР»СЏ РЅР°С‡Р°Р»Р°
+// Берем видео инфу для начала
 	mVideo = const_cast<SDL_VideoInfo *>(SDL_GetVideoInfo());
 
     if(!mVideo)
@@ -132,7 +132,7 @@ void CSDLWorkspace::CreateRenderWindow(nova::WindowInitialTarget &init)
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
 
 
-// РЎРѕР·РґР°РµРј РѕРєРѕС€РєРѕ, СЃС‚Р°РІРёРј СЂР°Р·СЂРµС€РµРЅРёРµ Рё РІРёРґРµРѕ РјРѕРґ
+// Создаем окошко, ставим разрешение и видео мод
 	if((mScreen = SDL_SetVideoMode(init.width, init.height, mVideo->vfmt->BitsPerPixel, flags)) == NULL)
 		throw NOVA_EXP((nstring("CSDLWorkspace::CreateRenderWindow - Couldn't set video mode: ")+
 			nstring(SDL_GetError())).c_str(), BAD_OPERATION);

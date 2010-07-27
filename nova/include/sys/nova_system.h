@@ -1,4 +1,4 @@
-п»ї/***************************************************************************
+﻿/***************************************************************************
  *   Copyright (C) 2008 by SIRIUS										   *
  *   SiriusStarNick@yandex.ru											   *
  *                                                                         *
@@ -94,11 +94,11 @@
 #		undef max
 #	endif
 
-// РЅРµРєРѕС‚РѕСЂС‹Рµ РїРѕР»РµР·РЅС‹Рµ РЅР°Рј РѕРїСЂРµРґРµР»РµРЅРёСЏ Р·РґРµСЃСЊ
-#	define MAX_LOADSTRING 100 // СЃС‚СЂРѕРєР° СЂРµСЃСѓСЂСЃРѕРІ
-// РЅР°Р¶Р°С‚Р° Р»Рё РєР»Р°РІРёС€Р°?
+// некоторые полезные нам определения здесь
+#	define MAX_LOADSTRING 100 // строка ресурсов
+// нажата ли клавиша?
 #	define KEYDOWN(vk_code) ((GetAsyncKeyState(vk_code)& 0x80000000)? 1 : 0)
-// РѕС‚РїСѓС€РµРЅРЅР° Р»Рё РєР»Р°РІРёС€Р°?
+// отпушенна ли клавиша?
 #	define KEYUP(vk_code) ((GetAsyncKeyState(vk_code)& 0x80000000)? 0 : 1)
 
 #if defined(__x86_64__) || defined(_M_X64) || defined(__powerpc64__) || \
@@ -293,32 +293,32 @@ using namespace std;
 namespace nova 
 {
 
-/*//РјР°С‚СЂРёС†Р° РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ
+/*//матрица преобразования
 typedef float TTransform[M_BASIS_4D][M_BASIS_4D];
 
-  //РѕРґРЅРѕСЂРѕРґРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
+  //однородные координаты вершины
 typedef float TVertex[M_BASIS_4D];
 
-  //РѕРґРЅРѕСЂРѕРґРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµРєС‚РѕСЂР°
+  //однородные координаты вектора
 typedef float TVectorf[M_BASIS_4D];
 typedef float TVectord[M_BASIS_4D];
 
-  // РњР°СЃСЃРёРІ РіСЂР°РЅРµР№
+  // Массив граней
 typedef int TFaces[M_TRIANGLES];
 
-  // РњР°СЃСЃРёРІ РЅРѕСЂРјР°Р»РµР№ Рє РіСЂР°РЅСЏРј ( Рє РІРµСЂС€РёРЅР°Рј)
+  // Массив нормалей к граням ( к вершинам)
 typedef float TNormals[M_BASIS_3D];
 
 typedef TNormals TMatfaces;
 
-  // РњР°СЃСЃРёРІ РїРѕРґРјР°С‚РµСЂРёР°Р»РѕРІ
+  // Массив подматериалов
 typedef int TSubmatmn[2];
 */
 
 ///////////////////////////////////////////////////
   /////////////////////////////////////////////////
   //
-// С‚РёРїС‹
+// типы
 
 // Figure out how to get large integer support on this system.  Suppress
 // refman documentation for these typedefs, as they're system-dependent.

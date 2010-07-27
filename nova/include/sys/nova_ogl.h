@@ -1,4 +1,4 @@
-п»ї// includes Open GL headers
+﻿// includes Open GL headers
 // Info about OpenGl --->>
 
 /*
@@ -32,7 +32,7 @@
  THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// РѕСЃРЅРѕРІР°
+// основа
 #ifdef HAVE_GL_GLEW_H
 #	include <GL/glew.h>
 #else
@@ -41,7 +41,7 @@
 
 #include <GL/glu.h>
 
-//	СЂР°СЃС€РёСЂРµРЅРёСЏ
+//	расширения
 #if defined(__WIN32__) || defined(_WINDOWS)
 #	ifdef HAVE_GL_GLEW_H
 #		include <GL/wglew.h>
