@@ -21,45 +21,45 @@
  ***************************************************************************/
 #include "nova_stable_precompiled_headers.h"
 
-#include "nova_tree_scene_node.h"
+#include "nova_octree_scene_node.h"
 
 namespace nova
 {
 
-CMeshSceneNode::CMeshSceneNode(CSceneManager *scene, NNodeType type) : CSceneNode(scene, type)
+COctreeSceneNode::COctreeSceneNode(CSceneManager *scene, NNodeType type) : CSceneNode(scene, type)
 {
 
 }
 
-CWorldObject* CMeshSceneNode::ConstractWorldObject(const nstring &name)
+CWorldObject* COctreeSceneNode::ConstractWorldObject(const nstring &name)
 {
 	if(!mParentSceneManager)
-		throw NOVA_EXP("CMeshSceneNode::ConstractWorldObject - mParentSceneManager is bad ptr!", MEM_ERROR); 
+		throw NOVA_EXP("COctreeSceneNode::ConstractWorldObject - mParentSceneManager is bad ptr!", MEM_ERROR); 
 
 	mChildObject = new CMovableObject(name, mParentSceneManager->GetSceneSlavesGroup());
 	
 	return mChildObject;
 }
 
-void CMeshSceneNode::SetMeshBox(CMeshBoxPtr &mesh)
+void COctreeSceneNode::SetMeshBox(CMeshBoxPtr &mesh)
 {
 	if(mesh.IsNull())
-		throw NOVA_EXP("CMeshSceneNode::SetMeshBox - mesh is null ptr!", MEM_ERROR); 
+		throw NOVA_EXP("COctreeSceneNode::SetMeshBox - mesh is null ptr!", MEM_ERROR); 
 	mMeshBox = mesh;
 }
 
-void CMeshSceneNode::SetMeshBoxFromResource(const nstring &name)
+void COctreeSceneNode::SetMeshBoxFromResource(const nstring &name)
 {
 	CMeshBoxPtr mesh = CMeshManager::GetSingelton().GetResourceFromHash(name);
 
 	if(mesh.IsNull())
-		throw NOVA_EXP("CMeshSceneNode::SetMeshBoxFromResource - resource manager return null prt, possibly resource not found..", MEM_ERROR);
+		throw NOVA_EXP("COctreeSceneNode::SetMeshBoxFromResource - resource manager return null prt, possibly resource not found..", MEM_ERROR);
 
 	mMeshBox = mesh;
 }
 
 
-bool CMeshSceneNode::TestingMeshBox(void)
+bool COctreeSceneNode::TestingMeshBox(void)
 {
 	if(mMeshBox->GetVertexesLen() == 0)
 		return false;
@@ -73,10 +73,10 @@ bool CMeshSceneNode::TestingMeshBox(void)
 	return true;
 }
 
-void CMeshSceneNode::PrepareNode(void)
+void COctreeSceneNode::PrepareNode(void)
 {
 	if(!TestingMeshBox())
-		throw NOVA_EXP("CMeshSceneNode::PrepareNode - testing mesh box faled..", BAD_OPERATION);
+		throw NOVA_EXP("COctreeSceneNode::PrepareNode - testing mesh box faled..", BAD_OPERATION);
 
 	// Preparing mesh
 	// Generating normals to faces and sub mats info
@@ -95,7 +95,7 @@ void CMeshSceneNode::PrepareNode(void)
 	PreparingBatchList();
 }
 
-void CMeshSceneNode::PreparingBatchList()
+void COctreeSceneNode::PreparingBatchList()
 {
 /*
 Задача разрубить целиковый объект на конечное число кусков,

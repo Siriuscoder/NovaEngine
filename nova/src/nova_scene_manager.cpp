@@ -22,7 +22,7 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_scene_manager.h"
-#include "nova_tree_scene_node.h"
+#include "nova_octree_scene_node.h"
 
 namespace nova
 {

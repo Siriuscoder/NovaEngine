@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="Nova"
 	ProjectGUID="{26C0FEBA-9218-4C94-991C-30BB7FE130E4}"
 	RootNamespace="GE"
@@ -527,14 +527,14 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="BasicSceneManager"
+				Name="OctreeSceneManager"
 				>
 				<File
-					RelativePath=".\src\nova_basic_tree_scene_manager.cpp"
+					RelativePath=".\src\nova_octree_scene_manager.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\nova_tree_scene_node.cpp"
+					RelativePath=".\src\nova_octree_scene_node.cpp"
 					>
 				</File>
 			</Filter>
@@ -555,14 +555,6 @@
 				</File>
 				<File
 					RelativePath=".\src\nova_winnie_allocator.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="OtreeSceneManager"
-				>
-				<File
-					RelativePath=".\src\nova_octree_scene_manager.cpp"
 					>
 				</File>
 			</Filter>
@@ -913,14 +905,14 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="BasicSceneManager"
+				Name="OctreeSceneManager"
 				>
 				<File
-					RelativePath=".\include\nova_basic_tree_scene_manager.h"
+					RelativePath=".\include\nova_octree_scene_manager.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\nova_tree_scene_node.h"
+					RelativePath=".\include\nova_octree_scene_node.h"
 					>
 				</File>
 			</Filter>
@@ -937,14 +929,6 @@
 				</File>
 				<File
 					RelativePath=".\include\nova_winnie_allocator.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="OctreeSceneManager"
-				>
-				<File
-					RelativePath=".\include\nova_octree_scene_manager.h"
 					>
 				</File>
 			</Filter>

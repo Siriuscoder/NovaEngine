@@ -26,12 +26,25 @@
 namespace nova
 {
 
-	/*
+class COctreeSceneManager;
+
+class NOVA_EXPORT COctreeSceneManagerListener : public CSceneManagerListener
+{
+public:
+
+	virtual void PrepareSceneListener(COctreeSceneManager *scene) {}
+
+	virtual void PrepareSceneFrameListener(COctreeSceneManager *scene) {}
+
+	virtual void BuildSceneManager(COctreeSceneManager *scene) {}
+
+	virtual void DestroySceneListener(COctreeSceneManager *scene) {}
+};
+
+
 class NOVA_EXPORT COctreeSceneManager : public CSceneManager
 {
 protected:
-
-	CWorldObject *ConstructRenderableObject(const nstring & name);
 
 	void RenderSceneImpl(void);
 
@@ -39,15 +52,19 @@ public:
 
 	COctreeSceneManager(const nstring &scene_name, const nstring & factory_name) : CSceneManager(scene_name, factory_name) {}
 
-	//void RenderScene(CCamera * camera, CViewPort * view);
+	~COctreeSceneManager();
 
-	void PrepareScene(void) {}
+	void PrepareScene(void);
 
-	void BuildScene(void) {}
+	void PrepareRenderQueue(void);
 
-	void DestroyScene(void) {}
+	void PrepareSceneFrame(void);
+
+	void BuildScene(void);
+
+	void DestroyScene(void);
 };
 
-*/
+
 
 }

@@ -22,7 +22,7 @@
 #pragma once
 
 #include "nova_scene_manager.h"
-#include "nova_basic_tree_scene_manager.h"
+#include "nova_octree_scene_manager.h"
 
 namespace nova
 {

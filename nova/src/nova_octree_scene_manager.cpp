@@ -22,26 +22,10 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_octree_scene_manager.h"
-#include "nova_static_object.h"
 
 namespace nova
 {
 
 
-/*
-CWorldObject *COctreeSceneManager::ConstructRenderableObject(const nstring & name)
-{
-	CStaticObject *myobject = NULL;
-	myobject = new CStaticObject(name, mRegisterGroup);
-	return dynamic_cast<CWorldObject *>(myobject);
-}
-
-void COctreeSceneManager::RenderSceneImpl()
-{
-
-
-}
-
-*/
 
 }

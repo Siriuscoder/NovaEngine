@@ -34,7 +34,7 @@
 namespace nova
 {
 
-class NOVA_EXPORT CMeshSceneNode : public CSceneNode
+class NOVA_EXPORT COctreeSceneNode : public CSceneNode
 {
 public:
 
@@ -63,9 +63,9 @@ protected:
 
 public:
 
-	CMeshSceneNode(CSceneManager *scene, NNodeType type);
+	COctreeSceneNode(CSceneManager *scene, NNodeType type);
 
-	~CMeshSceneNode();
+	~COctreeSceneNode();
 
 	CWorldObject* ConstractWorldObject(const nstring &name);
 
