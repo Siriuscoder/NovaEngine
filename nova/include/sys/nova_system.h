@@ -19,6 +19,8 @@
 
 #if !defined(DOXYGEN_IGNORE)
 
+#define GIT_BASIC_SCENE_MAN_BRANCH
+
 #define USING_STL
 
 #define USE_XML
