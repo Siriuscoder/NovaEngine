@@ -57,9 +57,22 @@ int CScene::GetRenderedFaces(void)
 
 void CScene::RenderAllScene(CCamera * camera, CViewPort * view)
 {
+	if(!camera || !view)
+		return;
+
 	stl<CSceneScrap *>::vector::iterator it = mScraps.begin();
 	mRenderedBatches = 0;
 	mRenderedFaces = 0;
+
+	CRenderSystem * Renderer = NULL;
+
+	Renderer = CRenderSystem::GetSingeltonPtr();
+	Renderer->SetVeiwport((int)view->GetActualLeft(), 
+		(int)view->GetActualTop(), 
+		(int)view->GetActualWidth(), 
+		(int)view->GetActualHeight());
+
+	camera->Validate();
 
 	for(; it != mScraps.end(); ++it)
 	{

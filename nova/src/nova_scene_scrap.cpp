@@ -78,8 +78,8 @@ void CSceneScrap::RenderScrap(CCamera * camera, CViewPort * view)
 	{
 		mSceneManager->PrepareSceneFrame();
 		mSceneManager->RenderScene(camera, view);
-		CScene::GetSingelton().mRenderedFaces = mSceneManager->GetRenderedFaces();
-		CScene::GetSingelton().mRenderedBatches = mSceneManager->GetRenderedBatches();
+		CScene::GetSingelton().mRenderedFaces += mSceneManager->GetRenderedFaces();
+		CScene::GetSingelton().mRenderedBatches += mSceneManager->GetRenderedBatches();
 	}
 }
 

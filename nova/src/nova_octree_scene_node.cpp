@@ -26,7 +26,7 @@
 namespace nova
 {
 
-COctreeSceneNode::COctreeSceneNode(CSceneManager *scene, NNodeType type) : CSceneNode(scene, type)
+COctreeSceneNode::COctreeSceneNode(CSceneManager *scene) : CSceneNode(scene)
 {
 
 }

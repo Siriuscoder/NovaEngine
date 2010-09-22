@@ -27,11 +27,6 @@
 namespace nova
 {
 
-NNodeType CSceneNode::GetNodeType(void)
-{
-	return mNodeType;
-}
-
 void CSceneNode::ValidateNode(void)
 {
 	for(nova::uint i = 0; i < GetListenersCount(); i++)
@@ -45,6 +40,11 @@ void CSceneNode::ValidateNode(void)
 	isValidated = true;
 }
 
+bool CSceneNode::IsValidated(void)
+{
+	return isValidated;
+}
+
 void CSceneNode::InValidateNode(void)
 {
 	for(nova::uint i = 0; i < GetListenersCount(); i++)
@@ -54,13 +54,42 @@ void CSceneNode::InValidateNode(void)
 		lis->InValidateNodeListener(this);
 	}
 
+	InValidateNodeImpl();
 	isValidated = false;
 }
 
 void CSceneNode::ReleaseNode(void)
 {
-	if(mChildObject)
-		delete mChildObject;
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneNodeListener * lis = 
+			dynamic_cast<CSceneNodeListener *>(GetListener(i));
+		lis->ReleaseNodeListener(this);
+	}
+
+	InValidateNode();
+}
+
+CBoundingBox CSceneNode::GetBoundingBox(void)
+{
+	return mBoundingBox;
+}
+
+void CSceneNode::SetBoundingBox(const CBoundingBox &box)
+{
+	mBoundingBox = box;
+}
+
+void CSceneNode::PrepareNode(void)
+{
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneNodeListener * lis = 
+			dynamic_cast<CSceneNodeListener *>(GetListener(i));
+		lis->PrepareNodeListener(this);
+	}
+
+	PrepareNodeImpl();
 }
 
 CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
@@ -85,18 +114,6 @@ int CSceneManager::GetRenderedFaces(void)
 	return mRenderedFaces;
 }
 
-void CSceneManager::ClearObjects(void)
-{
-
-}
-
-int CSceneManager::RenderСompoundObjects(void)
-{
-// to do render effects here
-
-	return 0;
-}
-
 void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 {
 	if(!camera || !view)
@@ -113,15 +130,6 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	mRenderedBatches = 0;
 	mCurCamera = camera;
 	mCurView = view;
-	CRenderSystem * Renderer = NULL;
-
-	Renderer = CRenderSystem::GetSingeltonPtr();
-	Renderer->SetVeiwport((int)mCurView->GetActualLeft(), 
-		(int)mCurView->GetActualTop(), 
-		(int)mCurView->GetActualWidth(), 
-		(int)mCurView->GetActualHeight());
-
-	mCurCamera->Validate();
 
 	RenderSceneImpl();
 
@@ -135,17 +143,12 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	}
 }
 
-int CSceneManager::GetSceneType(void)
-{
-	return mSceneType;
-}
-
 nstring CSceneManager::GetSceneName(void)
 {
 	return mSceneName;
 }
 
-CTreeNode<CSceneNode*> *CSceneManager::ConstactSpecifiedNode(NNodeType type)
+CTreeNode<CSceneNode*> *CSceneManager::ConstactSpecifiedNode()
 {
 	return NULL;
 }
@@ -168,6 +171,64 @@ CTree<CSceneNode*> *CSceneManager::GetSceneTreePtr(void)
 nstring CSceneManager::GetSceneSlavesGroup(void)
 {
 	return mRegisterGroup;
+}
+
+void CSceneManager::PrepareScene(void)
+{
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneManagerListener * lis = 
+			dynamic_cast<CSceneManagerListener *>(GetListener(i));
+		lis->PrepareSceneListener(this);
+	}
+
+	PrepareSceneImpl();
+}
+
+void CSceneManager::PrepareRenderQueue(void)
+{
+	PrepareRenderQueueImpl();
+}
+
+void CSceneManager::PrepareSceneFrame(void)
+{
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneManagerListener * lis = 
+			dynamic_cast<CSceneManagerListener *>(GetListener(i));
+		lis->PrepareSceneFrameListener(this);
+	}
+
+	PrepareSceneFrameImpl();
+}
+
+void CSceneManager::BuildScene(void)
+{
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneManagerListener * lis = 
+			dynamic_cast<CSceneManagerListener *>(GetListener(i));
+		lis->BuildSceneListener(this);
+	}
+
+	BuildSceneImpl();
+}
+
+void CSceneManager::DestroyScene(void)
+{
+	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneManagerListener * lis = 
+			dynamic_cast<CSceneManagerListener *>(GetListener(i));
+		lis->DestroySceneListener(this);
+	}
+
+	DestroySceneImpl();
+}
+
+void CSceneManager::ClearObjects(void)
+{
+	ClearObjectsImpl();
 }
 
 }

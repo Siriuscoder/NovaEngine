@@ -50,7 +50,7 @@ protected:
 
 public:
 
-	COctreeSceneManager(const nstring &scene_name, const nstring & factory_name) : CSceneManager(scene_name, factory_name) {}
+	COctreeSceneManager(const nstring &scene_name, const nstring & factory_name);
 
 	~COctreeSceneManager();
 

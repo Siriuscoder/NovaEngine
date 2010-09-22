@@ -63,7 +63,7 @@ protected:
 
 public:
 
-	COctreeSceneNode(CSceneManager *scene, NNodeType type);
+	COctreeSceneNode(CSceneManager *scene);
 
 	~COctreeSceneNode();
 

@@ -32,20 +32,6 @@
 namespace nova
 {
 
-enum NNodeType
-{
-	NT_MESH_NODE,
-	NT_CAMERA_NODE,
-	NT_LIGHT_NODE,
-	NT_OCTREE_NODE
-};
-
-enum NSceneType
-{
-	NS_BASIC_SCENE,
-	NS_OCTREE_SCENE
-};
-
 class CSceneNode;
 class CSceneManager;
 
@@ -53,42 +39,50 @@ class NOVA_EXPORT CSceneNodeListener : public CEventListener
 {
 public:
 
-	virtual void ValidateNodeListener(CSceneNode * object) {}
+	virtual void ValidateNodeListener(CSceneNode *object) {}
 
-	virtual void InValidateNodeListener(CSceneNode * object) {}
+	virtual void InValidateNodeListener(CSceneNode *object) {}
+
+	virtual void PrepareNodeListener(CSceneNode *object) {}
+
+	virtual void ReleaseNodeListener(CSceneNode *object) {}
 };
 
 class NOVA_EXPORT CSceneNode : public CListenerInterface
 {
 protected:
 
-	NNodeType mNodeType;
 	bool isValidated;
-	CWorldObject *mChildObject;
 	CBoundingBox mBoundingBox;
 	CSceneManager *mParentSceneManager;
 
 	virtual void ValidateNodeImpl(void) = 0;
 
+	virtual void InValidateNodeImpl(void) = 0;
+
 	virtual void ReleaseNodeImpl(void) = 0;
+
+	virtual void PrepareNodeImpl(void) = 0;
 
 public:
 
-	CSceneNode(CSceneManager *scene, NNodeType type) : mParentSceneManager(scene), mNodeType(type), mChildObject(NULL), isValidated(false) {}
+	CSceneNode(CSceneManager *scene) : mParentSceneManager(scene), isValidated(false) {}
 
-	virtual CWorldObject* ConstractWorldObject(const nstring &name) = 0;
+	virtual ~CSceneNode() {}
 
-	virtual void PrepareNode(void) = 0;
-
-	CWorldObject *GetWorldObject(void);
-
-	NNodeType GetNodeType(void);
+	void PrepareNode(void);
 
 	void ValidateNode(void);
 
 	void InValidateNode(void);
 
 	void ReleaseNode(void);
+
+	bool IsValidated(void);
+
+	CBoundingBox GetBoundingBox(void);
+
+	void SetBoundingBox(const CBoundingBox &box);
 };
 
 class NOVA_EXPORT CSceneManagerListener : public CEventListener
@@ -98,6 +92,14 @@ public:
 	virtual void SceneRenderBeginListener(CSceneManager * object) {}
 
 	virtual void SceneRenderEndListener(CSceneManager * object) {}
+
+	virtual void PrepareSceneListener(CSceneManager *scene) {}
+
+	virtual void PrepareSceneFrameListener(CSceneManager *scene) {}
+
+	virtual void BuildSceneListener(CSceneManager *scene) {}
+
+	virtual void DestroySceneListener(CSceneManager *scene) {}
 };
 
 class NOVA_EXPORT CSceneManager : public CListenerInterface
@@ -106,7 +108,6 @@ protected:
 
 	int mRenderedBatches;
 	int mRenderedFaces;
-	int mSceneType;
 	nstring mRegisterGroup;
 	CCamera *mCurCamera; 
 	CViewPort *mCurView;
@@ -115,7 +116,19 @@ protected:
 
 	virtual void RenderSceneImpl(void) = 0;
 
-	int RenderСompoundObjects(void);
+	virtual int RenderСompoundObjects(void) {return 0;}
+
+	virtual void PrepareSceneImpl(void) = 0;
+
+	virtual void PrepareRenderQueueImpl(void) = 0;
+
+	virtual void PrepareSceneFrameImpl(void) = 0;
+
+	virtual void BuildSceneImpl(void) = 0;
+
+	virtual void DestroySceneImpl(void) = 0;
+
+	virtual void ClearObjectsImpl(void) = 0;
 
 public:
 
@@ -125,7 +138,7 @@ public:
 
 	void RenderScene(CCamera *camera, CViewPort *view);
 
-	CTreeNode<CSceneNode*> *ConstactSpecifiedNode(NNodeType type);
+	virtual CTreeNode<CSceneNode*> *ConstactSpecifiedNode();
 
 	CTreeNode<CSceneNode*> *GetRootElement(void);
 
@@ -133,23 +146,21 @@ public:
 
 	CTree<CSceneNode*> *GetSceneTreePtr(void);
 
-	virtual void PrepareScene(void) = 0;
+	void PrepareScene(void);
 
-	virtual void PrepareRenderQueue(void) = 0;
+	void PrepareRenderQueue(void);
 
-	virtual void PrepareSceneFrame(void) = 0;
+	void PrepareSceneFrame(void);
 
-	virtual void BuildScene(void) = 0;
+	void BuildScene(void);
 
-	virtual void DestroyScene(void) = 0;
+	void DestroyScene(void);
 
-	int GetSceneType(void); 
+	void ClearObjects(void);
 
 	nstring GetSceneName(void);
 
 	nstring GetSceneSlavesGroup(void);
-
-	void ClearObjects(void);
 
 	int GetRenderedBatches(void);
 
