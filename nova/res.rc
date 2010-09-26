@@ -50,7 +50,7 @@ VALUE "OriginalFilename", "Nova.exe"
 
 VALUE "ProductName", PACKAGE_NAME
 
-VALUE "ProductVersion", "0.1.1.0"
+VALUE "ProductVersion", "0.0.1.0"
 
 VALUE "SpecialBuild", VERSION_ST
 VALUE "PrivateBuild", "Built by Sirius\000"

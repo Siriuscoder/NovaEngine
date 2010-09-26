@@ -134,7 +134,7 @@ void CNovaEngine::StartRender()
 	{
 		mStats.rendered_triangles = 0;
 		mStats.rendered_batches = 0;
-		(mRenderer->MainLoopPump());
+		(mRenderer->MessageLoopPump());
 
 		if(mRenderer->BuildAllRenderTargets() < 0)
 			break;

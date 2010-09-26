@@ -97,6 +97,7 @@ CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
 	ClearObjects();
 	mRegisterGroup = group;
 	mSceneName = scene_name;
+	isEnabled = true;
 }
 
 CSceneManager::~CSceneManager()
@@ -185,9 +186,9 @@ void CSceneManager::PrepareScene(void)
 	PrepareSceneImpl();
 }
 
-void CSceneManager::PrepareRenderQueue(void)
+int CSceneManager::PrepareRenderQueue(void)
 {
-	PrepareRenderQueueImpl();
+	return PrepareRenderQueueImpl();
 }
 
 void CSceneManager::PrepareSceneFrame(void)

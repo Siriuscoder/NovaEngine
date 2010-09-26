@@ -60,7 +60,7 @@ void CRenderWindow::GetMetrics(int & xpos, int & ypos,
 	color_bits = this->mColourBits;
 }
 
-WindowInitialTarget CRenderWindow::GetMetrics()
+TWindowInitialTarget CRenderWindow::GetMetrics()
 {
 	return mMetrics;
 }

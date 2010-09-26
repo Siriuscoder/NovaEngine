@@ -79,10 +79,10 @@ void CRenderSystem::SetConfigPath(nstring & config)
 	mPrivateConfigFile = config;
 }
 
-void CRenderSystem::SetVideoSettings(RenderSysType type, WindowInitialTarget & config)
+void CRenderSystem::SetVideoSettings(RenderSysType type, TWindowInitialTarget & config)
 {
 	mType = type;
-	memcpy(&mVideoSettings, &config, sizeof(WindowInitialTarget));
+	memcpy(&mVideoSettings, &config, sizeof(TWindowInitialTarget));
 	mConfigIsReady = true;
 }
 
@@ -209,7 +209,7 @@ void CRenderSystem::InitializeFromConfigFile()
 	}
 }
 
-int CRenderSystem::MainLoopPump()
+int CRenderSystem::MessageLoopPump()
 {
 	if(!mRootWindow.IsNull())
 		return mRootWindow->MessagePump();

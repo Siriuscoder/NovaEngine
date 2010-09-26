@@ -467,4 +467,14 @@ void CAsyncLockingQueue::ClearQueue(void)
 	pthread_mutex_unlock(&mLockMutex);
 }
 
+int CResourceManager::LoadResourcesForce(const CFilesPackage &rPack)
+{
+	return 0;
+}
+
+int CResourceManager::LoadResourcesInBackgroundMode(const CFilesPackage &rPack)
+{
+	return 0;
+}
+
 }

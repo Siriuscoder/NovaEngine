@@ -22,6 +22,7 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_scene.h"
+#include "nova_resource_manager.h"
 
 namespace nova
 {
@@ -40,8 +41,11 @@ CScene::~CScene()
 
 void CScene::DeleteAllScraps(void)
 {
-	for(nova::uint i = 0; i < mScraps.size(); ++i)
-		delete mScraps[i];
+	stl<CSceneManager *>::list::iterator it = mScraps.begin();
+
+	for(; it != mScraps.end(); it++)
+		delete (*it);
+
 	mScraps.clear();
 }
 
@@ -60,7 +64,7 @@ void CScene::RenderAllScene(CCamera * camera, CViewPort * view)
 	if(!camera || !view)
 		return;
 
-	stl<CSceneScrap *>::vector::iterator it = mScraps.begin();
+	stl<CSceneManager *>::list::iterator it = mScraps.begin();
 	mRenderedBatches = 0;
 	mRenderedFaces = 0;
 
@@ -77,52 +81,58 @@ void CScene::RenderAllScene(CCamera * camera, CViewPort * view)
 	for(; it != mScraps.end(); ++it)
 	{
 		if((*it)->IsEnabled())
-			(*it)->RenderScrap(camera, view);
+		{
+			(*it)->PrepareSceneFrame();
+			(*it)->RenderScene(camera, view);
+			mRenderedFaces += (*it)->GetRenderedFaces();
+			mRenderedBatches += (*it)->GetRenderedBatches();
+		}
 	}
-}
-
-CSceneScrap & CScene::GetScrap(nova::uint id)
-{
-	if(id < mScraps.size())
-		return *(mScraps[id]);
-
-	throw NOVA_EXP("CScene::GetScrap: id out of range..", BAD_OPERATION);
-}
-
-int CScene::AddScrap(CSceneScrap *scrap)
-{
-	if(scrap != NULL)
-	{
-		mScraps.push_back(scrap);
-		return mScraps.size()-1;
-	}
-
-	return -1;
 }
 
 CSceneManager *CScene::FindScene(const nstring &name)
 {
-	for(uint i = 0; i < mScraps.size(); i++)
+	stl<CSceneManager *>::list::iterator it = mScraps.begin();
+
+	for(; it != mScraps.end(); it++)
 	{
-		if(mScraps[i]->GetSceneManager().GetSceneName() == name)
-			return &(mScraps[i]->GetSceneManager());
+		if((*it)->GetSceneName() == name)
+			return (*it);
 	}
 
 	return NULL;
 }
 
-
-void CScene::DeleteScrap(nova::uint id)
-{
-	if(id < mScraps.size())
-		delete mScraps[id];
-
-	throw NOVA_EXP("CScene::DeleteScrap: id out of range..", BAD_OPERATION);
-}
-
 int CScene::AddScrap(CSceneManager *manager)
 {
-	return AddScrap(new CSceneScrap(manager, true));
+	if(manager)
+	{
+		mScraps.push_back(manager);
+		return mScraps.size()-1;
+	}
+
+	throw NOVA_EXP("CScene::AddScrap: manager pointer refer to null ptr..", MEM_ERROR);
+}
+
+int CScene::LoadSceneForce(const CFilesPackage &rPack, bool withResorces)
+{
+
+	return 0;
+}
+
+int CScene::LoadSceneForce(const nstring &pckFile, bool withResorces)
+{
+	return 0;
+}
+
+int CScene::LoadSceneInBackgroundMode(const CFilesPackage &rPack, bool withResorces)
+{
+	return 0;
+}
+
+int CScene::LoadSceneInBackgroundMode(const nstring &pckFile, bool withResorces)
+{
+	return 0;
 }
 
 }

@@ -21,7 +21,7 @@
  ***************************************************************************/
 #pragma once
 
-#include "nova_scene_scrap.h"
+#include "nova_scene_manager.h"
 #include "nova_resource_package.h"
 
 namespace nova
@@ -30,7 +30,6 @@ namespace nova
 class NOVA_EXPORT CScene : public CBase, public CSingelton<CScene>
 {
 friend CSceneManager;
-friend CSceneScrap;
 /* 
 	Класс сцены является на самом деле лишь менеджером
 	скрапов. Скрап это кусок сцены, (набор объектов) на который 
@@ -40,7 +39,7 @@ friend CSceneScrap;
 */
 protected:
 
-	stl<CSceneScrap *>::vector mScraps;
+	stl<CSceneManager *>::list mScraps;
 	int mRenderedFaces;
 	int mRenderedBatches;
 
@@ -52,17 +51,9 @@ public:
 
 	void DeleteAllScraps(void);
 
-	int AddScrap(CSceneScrap *scrap);
-/*
-	void AddObjectToScrap(nova::uint id, CMovableObject *obj);
-
-	void AddObjectToScrap(nova::uint id, CStaticObject *obj);
-*/
 	int AddScrap(CSceneManager *manager);
 
 	CSceneManager *FindScene(const nstring &name);
-
-	void DeleteScrap(nova::uint id);
 
 	void RenderAllScene(CCamera * camera, CViewPort * view);
 
@@ -70,11 +61,13 @@ public:
 
 	int GetRenderedFaces(void);
 
-	CSceneScrap & GetScrap(nova::uint id);
+	int LoadSceneForce(const CFilesPackage &rPack, bool withResorces);
 
-	CSceneScrap * LoadSceneScrap(const StringList & models, CSceneManager * scene, CMeshLoader *loader, bool attach);
+	int LoadSceneForce(const nstring &pckFile, bool withResorces);
 
-	void LoadSceneScrapAsync(const StringList & models, CSceneManager * scene, CMeshLoader *loader);
+	int LoadSceneInBackgroundMode(const CFilesPackage &rPack, bool withResorces);
+
+	int LoadSceneInBackgroundMode(const nstring &pckFile, bool withResorces);
 };
 
 }

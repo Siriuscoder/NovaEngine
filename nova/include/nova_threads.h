@@ -46,7 +46,7 @@ class NOVA_EXPORT CThread;
 #endif
 
 ///////// Mutex Sections ///////////////////////////////////
-extern pthread_mutex_t ALLOCATOR_MUTEX_SECTION;
+extern pthread_mutex_t ALLOCATOR_MUTEX_SECTION; /* for winnie allocator */
 #define ALLOCATOR_MUTEX_SECTION_LOCK pthread_mutex_lock(&ALLOCATOR_MUTEX_SECTION)
 #define ALLOCATOR_MUTEX_SECTION_UNLOCK pthread_mutex_unlock(&ALLOCATOR_MUTEX_SECTION)
 

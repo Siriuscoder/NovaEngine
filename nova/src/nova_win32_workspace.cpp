@@ -97,7 +97,7 @@ void CWin32Workspace::PostUpdateAction()
 */
 }
 
-void CWin32Workspace::CreateRenderWindow(WindowInitialTarget & init)
+void CWin32Workspace::CreateRenderWindow(TWindowInitialTarget & init)
 {
 	if(mContext)
 		throw NOVA_EXP("CWin32Workspace::CreateRenderWindow - \

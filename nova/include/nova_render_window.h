@@ -28,7 +28,9 @@
 namespace nova
 {
 
-struct WindowInitialTarget
+#pragma pack(push, 1)
+
+typedef struct __WindowInitialTarget
 {
 	// Биты цвета
 	nova::byte color_bits;
@@ -57,13 +59,15 @@ struct WindowInitialTarget
 	bool DepthBuffered;
 
 	bool vsync;
-};
+} TWindowInitialTarget;
+
+#pragma pack(pop)
 
 
 class CRenderWindow;
 
 
-typedef int (*MainLoopUtility)(CRenderWindow * window);
+typedef int (*MessageLoopUtility)(CRenderWindow * window);
 
 class NOVA_EXPORT CRenderWindow : public CRenderTarget
 {
@@ -75,14 +79,14 @@ protected:
 	bool mFullScreen;
 	bool mClosed;
 
-	WindowInitialTarget mMetrics;
+	TWindowInitialTarget mMetrics;
 
 	CEventConveyor * mEventHandler;
 
 	CGLSupport * mSupport;
 	CGLContext * mContext;
 
-	MainLoopUtility mLoopFunc;
+	MessageLoopUtility mLoopFunc;
 
 public:
 
@@ -90,7 +94,7 @@ public:
 		mFullScreen(false), mClosed(false), mSupport(NULL), 
 		mContext(NULL), mEventHandler(NULL)
 	{
-		memset(&mMetrics, 0, sizeof(WindowInitialTarget));
+		memset(&mMetrics, 0, sizeof(TWindowInitialTarget));
 		mLoopFunc = NULL;
 	}
 
@@ -100,9 +104,9 @@ public:
 		nova::uint & height, nova::uint & width,
 		nova::uint & color_depth, nova::uint & color_bits);
 
-	WindowInitialTarget GetMetrics();
+	TWindowInitialTarget GetMetrics();
 
-	virtual void CreateRenderWindow(WindowInitialTarget & init) = 0;
+	virtual void CreateRenderWindow(TWindowInitialTarget & init) = 0;
 
 	void PrepareTarget() {}
 

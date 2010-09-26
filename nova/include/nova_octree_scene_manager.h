@@ -46,13 +46,13 @@ class NOVA_EXPORT COctreeSceneManager : public CSceneManager
 {
 protected:
 
-	void RenderSceneImpl(void);
+	void RenderSceneImpl(void) {}
 
 public:
 
 	COctreeSceneManager(const nstring &scene_name, const nstring & factory_name);
 
-	~COctreeSceneManager();
+	~COctreeSceneManager() {}
 
 	void PrepareScene(void);
 

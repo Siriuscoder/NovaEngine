@@ -56,6 +56,8 @@ protected:
 
 	void ValidateNodeImpl(void);
 	void ReleaseNodeImpl(void);
+	void PrepareNodeImpl(void);
+	void InValidateNodeImpl(void);
 
 	bool TestingMeshBox(void);
 
@@ -66,16 +68,6 @@ public:
 	COctreeSceneNode(CSceneManager *scene);
 
 	~COctreeSceneNode();
-
-	CWorldObject* ConstractWorldObject(const nstring &name);
-
-	void BuildWorldObjectFromMeshBox(void);
-
-	void PrepareNode(void);
-
-	void SetMeshBox(CMeshBoxPtr &mesh);
-
-	void SetMeshBoxFromResource(const nstring &name);
 
 };
 

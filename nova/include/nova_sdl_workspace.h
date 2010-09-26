@@ -45,7 +45,7 @@ public:
 
 	virtual void PostUpdateAction();
 
-	void CreateRenderWindow(WindowInitialTarget & init);
+	void CreateRenderWindow(TWindowInitialTarget & init);
 
 	void Destroy();
 

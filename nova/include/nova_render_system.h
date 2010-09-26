@@ -161,7 +161,7 @@ protected:
 
 	CRenderCapabilities mCapabilities;
 
-	WindowInitialTarget mVideoSettings;
+	TWindowInitialTarget mVideoSettings;
 	RenderSysType mType;
 
 	void SwitchToRootContext();
@@ -189,9 +189,9 @@ public:
 
 	void SetConfigPath(nstring & config);
 
-	void SetVideoSettings(RenderSysType type, WindowInitialTarget & config);
+	void SetVideoSettings(RenderSysType type, TWindowInitialTarget & config);
 
-	int MainLoopPump();
+	int MessageLoopPump();
 
 	void StartUp(StartUpFlags flags);
 

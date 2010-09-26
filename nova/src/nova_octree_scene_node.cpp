@@ -31,33 +31,10 @@ COctreeSceneNode::COctreeSceneNode(CSceneManager *scene) : CSceneNode(scene)
 
 }
 
-CWorldObject* COctreeSceneNode::ConstractWorldObject(const nstring &name)
+COctreeSceneNode::~COctreeSceneNode()
 {
-	if(!mParentSceneManager)
-		throw NOVA_EXP("COctreeSceneNode::ConstractWorldObject - mParentSceneManager is bad ptr!", MEM_ERROR); 
 
-	mChildObject = new CMovableObject(name, mParentSceneManager->GetSceneSlavesGroup());
-	
-	return mChildObject;
 }
-
-void COctreeSceneNode::SetMeshBox(CMeshBoxPtr &mesh)
-{
-	if(mesh.IsNull())
-		throw NOVA_EXP("COctreeSceneNode::SetMeshBox - mesh is null ptr!", MEM_ERROR); 
-	mMeshBox = mesh;
-}
-
-void COctreeSceneNode::SetMeshBoxFromResource(const nstring &name)
-{
-	CMeshBoxPtr mesh = CMeshManager::GetSingelton().GetResourceFromHash(name);
-
-	if(mesh.IsNull())
-		throw NOVA_EXP("COctreeSceneNode::SetMeshBoxFromResource - resource manager return null prt, possibly resource not found..", MEM_ERROR);
-
-	mMeshBox = mesh;
-}
-
 
 bool COctreeSceneNode::TestingMeshBox(void)
 {
@@ -73,7 +50,7 @@ bool COctreeSceneNode::TestingMeshBox(void)
 	return true;
 }
 
-void COctreeSceneNode::PrepareNode(void)
+void COctreeSceneNode::PrepareNodeImpl(void)
 {
 	if(!TestingMeshBox())
 		throw NOVA_EXP("COctreeSceneNode::PrepareNode - testing mesh box faled..", BAD_OPERATION);
@@ -115,6 +92,18 @@ void COctreeSceneNode::PreparingBatchList()
 5. Рисуем это дело
 
 */
+}
+
+void COctreeSceneNode::ValidateNodeImpl(void)
+{
+}
+
+void COctreeSceneNode::ReleaseNodeImpl(void)
+{
+}
+
+void COctreeSceneNode::InValidateNodeImpl(void)
+{
 }
 
 }

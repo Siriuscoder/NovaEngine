@@ -69,7 +69,7 @@ void CSDLWorkspace::SwapBuffers()
 	SDL_GL_SwapBuffers();
 }
 
-void CSDLWorkspace::CreateRenderWindow(nova::WindowInitialTarget &init)
+void CSDLWorkspace::CreateRenderWindow(nova::TWindowInitialTarget &init)
 {
 	LOG_MESSAGE("SDL(!): trying to create render window...");
 

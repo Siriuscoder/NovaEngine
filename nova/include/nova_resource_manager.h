@@ -24,6 +24,7 @@
 #include "nova_error.h"
 #include "nova_smart_ptr.h"
 #include "nova_event_listener.h"
+#include "nova_resource_package.h"
 
 namespace nova
 {
@@ -198,6 +199,10 @@ public:
 	virtual void UnloadAllManagerResources() = 0;
 
 	void BuildNextResource(const nstring & name);
+
+	int LoadResourcesForce(const CFilesPackage &rPack);
+
+	int LoadResourcesInBackgroundMode(const CFilesPackage &rPack);
 
 };
 

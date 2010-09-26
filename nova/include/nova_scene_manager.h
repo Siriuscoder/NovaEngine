@@ -114,13 +114,15 @@ protected:
 	nstring mSceneName;
 	CTree<CSceneNode*> mSceneTree;
 
+	bool isEnabled;
+
 	virtual void RenderSceneImpl(void) = 0;
 
 	virtual int RenderСompoundObjects(void) {return 0;}
 
 	virtual void PrepareSceneImpl(void) = 0;
 
-	virtual void PrepareRenderQueueImpl(void) = 0;
+	virtual int PrepareRenderQueueImpl(void) = 0;
 
 	virtual void PrepareSceneFrameImpl(void) = 0;
 
@@ -148,7 +150,7 @@ public:
 
 	void PrepareScene(void);
 
-	void PrepareRenderQueue(void);
+	int PrepareRenderQueue(void);
 
 	void PrepareSceneFrame(void);
 
@@ -165,6 +167,12 @@ public:
 	int GetRenderedBatches(void);
 
 	int GetRenderedFaces(void);
+
+	inline bool IsEnabled(void) { return isEnabled; }
+
+	inline void Enable(void) { isEnabled = true; }
+
+	inline void Disable(void) { isEnabled = false; }
 };
 
 }
