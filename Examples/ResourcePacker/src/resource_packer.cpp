@@ -73,7 +73,7 @@ public:
 	{
 		mPack.OpenPackage(package, false);
 		stl<nstring>::vector vf = mPack.GetFileList();
-		cout << endl << "File list unpacket successfully, begin saving files -> " << endl;
+		cout << endl << "File list unpacked successfully, begin saving files -> " << endl;
 
 		for(nova::uint i = 0; i < vf.size(); i++)
 		{

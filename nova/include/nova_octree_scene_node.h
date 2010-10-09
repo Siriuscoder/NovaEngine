@@ -42,6 +42,7 @@ public:
 	{
 		CHardwareVertexBufferPtr Vbo;
 		CHardwareIndexBufferPtr VboIndex;
+
 		CMaterialPtr Material;
 		int start_index;
 		int end_index;

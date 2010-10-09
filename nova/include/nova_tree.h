@@ -140,10 +140,6 @@ public:
 	void FreeAll();
 /// \brief Деструктор.
 	~CTree();
-
-/// \brief Итератор, тип структуры данных, что содержит дерево
-/// чтобы не забыли =)
-	typedef usertype iterator;
 };
 
 

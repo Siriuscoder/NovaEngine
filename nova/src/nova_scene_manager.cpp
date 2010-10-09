@@ -132,7 +132,7 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	mCurCamera = camera;
 	mCurView = view;
 
-	RenderSceneImpl();
+
 
 	RenderСompoundObjects();
 
@@ -224,7 +224,21 @@ void CSceneManager::DestroyScene(void)
 		lis->DestroySceneListener(this);
 	}
 
-	DestroySceneImpl();
+	
+	DestroySceneNode(GetRootElement());
+	mSceneTree.FreeAll();
+}
+
+void CSceneManager::DestroySceneNode(CTreeNode<CSceneNode*> *node)
+{
+	if(node)
+	{
+		for(int i = 0; i < node->GetChildrenLen(); i++)
+			DestroySceneNode(node->GetNode(i));
+
+		if(node->GetData())
+			delete node->GetData();
+	}
 }
 
 void CSceneManager::ClearObjects(void)

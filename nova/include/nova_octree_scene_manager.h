@@ -26,27 +26,20 @@
 namespace nova
 {
 
-class COctreeSceneManager;
-
-class NOVA_EXPORT COctreeSceneManagerListener : public CSceneManagerListener
-{
-public:
-
-	virtual void PrepareSceneListener(COctreeSceneManager *scene) {}
-
-	virtual void PrepareSceneFrameListener(COctreeSceneManager *scene) {}
-
-	virtual void BuildSceneManager(COctreeSceneManager *scene) {}
-
-	virtual void DestroySceneListener(COctreeSceneManager *scene) {}
-};
-
 
 class NOVA_EXPORT COctreeSceneManager : public CSceneManager
 {
 protected:
 
-	void RenderSceneImpl(void) {}
+	void PrepareSceneImpl(void);
+
+	int PrepareRenderQueueImpl(void);
+
+	void PrepareSceneFrameImpl(void);
+
+	void BuildSceneImpl(void);
+
+	void ClearObjectsImpl(void);
 
 public:
 
@@ -54,15 +47,9 @@ public:
 
 	~COctreeSceneManager() {}
 
-	void PrepareScene(void);
+	CTreeNode<CSceneNode*> *ConstactSpecifiedNode();
 
-	void PrepareRenderQueue(void);
 
-	void PrepareSceneFrame(void);
-
-	void BuildScene(void);
-
-	void DestroyScene(void);
 };
 
 

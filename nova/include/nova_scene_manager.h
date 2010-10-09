@@ -116,8 +116,6 @@ protected:
 
 	bool isEnabled;
 
-	virtual void RenderSceneImpl(void) = 0;
-
 	virtual int RenderСompoundObjects(void) {return 0;}
 
 	virtual void PrepareSceneImpl(void) = 0;
@@ -128,9 +126,9 @@ protected:
 
 	virtual void BuildSceneImpl(void) = 0;
 
-	virtual void DestroySceneImpl(void) = 0;
-
 	virtual void ClearObjectsImpl(void) = 0;
+
+	void DestroySceneNode(CTreeNode<CSceneNode*> *node);
 
 public:
 
