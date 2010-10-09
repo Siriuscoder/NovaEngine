@@ -43,6 +43,8 @@ protected:
 
 	void ClearObjectsImpl(void);
 
+	void RenderNode(CTreeNode<CSceneNode*> *node);
+
 public:
 
 	COctreeSceneManager(const nstring &scene_name, const nstring & factory_name);

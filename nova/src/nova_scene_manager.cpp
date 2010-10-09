@@ -70,7 +70,7 @@ void CSceneNode::ReleaseNode(void)
 	InValidateNode();
 }
 
-CBoundingBox CSceneNode::GetBoundingBox(void)
+CBoundingBox &CSceneNode::GetBoundingBox(void)
 {
 	return mBoundingBox;
 }

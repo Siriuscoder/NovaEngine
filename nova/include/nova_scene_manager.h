@@ -80,7 +80,7 @@ public:
 
 	bool IsValidated(void);
 
-	CBoundingBox GetBoundingBox(void);
+	CBoundingBox &GetBoundingBox(void);
 
 	void SetBoundingBox(const CBoundingBox &box);
 };

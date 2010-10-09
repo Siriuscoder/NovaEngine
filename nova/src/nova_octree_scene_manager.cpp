@@ -32,9 +32,25 @@ COctreeSceneManager::COctreeSceneManager(const nstring &scene_name, const nstrin
 	
 }
 
+void COctreeSceneManager::RenderNode(CTreeNode<CSceneNode*> *node)
+{
+	if(node && mCurCamera)
+	{
+		CSceneNode *pNode = node->GetData();
+		if(mCurCamera->BoxInFrustum(pNode->GetBoundingBox()))
+		{
+			if(!pNode->IsValidated())
+				pNode->ValidateNode();
+
+			for(int i = 0; i < node->GetChildrenLen(); i++)
+				RenderNode(node->GetNode(i));
+		}
+	}
+}
+
 int COctreeSceneManager::RenderSceneImpl()
 {
-
+	RenderNode(mSceneTree.GetRootElement());
 	return 0;
 }
 
