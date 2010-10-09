@@ -116,6 +116,8 @@ protected:
 
 	bool isEnabled;
 
+	virtual int RenderSceneImpl(void) = 0;
+
 	virtual int RenderСompoundObjects(void) {return 0;}
 
 	virtual void PrepareSceneImpl(void) = 0;

@@ -22,7 +22,7 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_octree_scene_manager.h"
-#include ""
+#include "nova_octree_scene_node.h"
 
 namespace nova
 {
@@ -30,6 +30,12 @@ namespace nova
 COctreeSceneManager::COctreeSceneManager(const nstring &scene_name, const nstring & factory_name) : CSceneManager(scene_name, factory_name)
 {
 	
+}
+
+int COctreeSceneManager::RenderSceneImpl()
+{
+
+	return 0;
 }
 
 void COctreeSceneManager::PrepareSceneImpl(void)

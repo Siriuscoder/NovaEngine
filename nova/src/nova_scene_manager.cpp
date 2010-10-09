@@ -132,8 +132,7 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	mCurCamera = camera;
 	mCurView = view;
 
-
-
+	RenderSceneImpl();
 	RenderСompoundObjects();
 
 	for(nova::uint i = 0; i < GetListenersCount(); i++)

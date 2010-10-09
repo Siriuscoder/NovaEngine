@@ -60,7 +60,7 @@ public:
 ///
 /// \param _data Информация которую мы хотим воткнуть в вершину
 /// практически любая структура данных.
-	CTreeNode(usertype & _data);
+	CTreeNode(usertype _data);
 
 /// \brief Взять инфу вершины.
 	usertype GetData();
@@ -161,7 +161,7 @@ template <class usertype> CTreeNode<usertype> * CTreeNode<usertype>::GetNode(int
 }
 
 
-template <class usertype> CTreeNode<usertype>::CTreeNode(usertype & _data)
+template <class usertype> CTreeNode<usertype>::CTreeNode(usertype _data)
 {
 	data = _data;
 	ch_nodes.clear();
