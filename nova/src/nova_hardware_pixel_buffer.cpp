@@ -436,6 +436,9 @@ void CTextureSurfaceList::BuildSurfaceList(const CMemoryBuffer & data, size_t wi
 		glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+		mMinFilter = GL_LINEAR;
+		mMagFilter = GL_LINEAR;
+
 		mMaxMipmaps = 1;
 
 		switch(mType)
@@ -465,6 +468,9 @@ void CTextureSurfaceList::BuildSurfaceList(const CMemoryBuffer & data, size_t wi
 		glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+		mMinFilter = GL_LINEAR_MIPMAP_LINEAR;
+		mMagFilter = GL_LINEAR;
+
 		switch(mType)
 		{
 		case CHardwarePixelBuffer::USE_TEXTURE_1D:
@@ -491,6 +497,9 @@ void CTextureSurfaceList::BuildSurfaceList(const CMemoryBuffer & data, size_t wi
 		glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		mMinFilter = GL_LINEAR_MIPMAP_LINEAR;
+		mMagFilter = GL_LINEAR;
 
 		glTexParameteri(type, GL_TEXTURE_MAX_LEVEL_SGIS, mMaxMipmaps);
 		glTexParameteri(type, GL_GENERATE_MIPMAP_SGIS, GL_TRUE );
@@ -568,6 +577,16 @@ CImageFormats::NovaPixelFormats CTextureSurfaceList::GetPixelFormat()
 int CTextureSurfaceList::GetMaxLevels(void)
 {
 	return mSurfaceList.size();
+}
+
+GLuint CTextureSurfaceList::GetRecomendedMagFilter(void)
+{
+	return mMinFilter;
+}
+
+GLuint CTextureSurfaceList::GetRecomendedMinFilter(void)
+{
+	return mMagFilter;
 }
 
 

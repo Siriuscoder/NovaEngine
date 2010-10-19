@@ -85,6 +85,8 @@ void CTexture::CreateTexture(void)
 	}
 
 	mTexture = mSurfaceList[0]->GetTargetId();
+	mMagFilter = (TMagFilters)mSurfaceList[0]->GetRecomendedMagFilter();
+	mMinFilter = (TMinFilters)mSurfaceList[0]->GetRecomendedMinFilter();
 }
 
 void CTexture::SetImageList(const TImageList & list)
@@ -125,8 +127,8 @@ void CTexture::ApplyTexture()
 	glEnable(CHardwarePixelBuffer::TextureTarget(mType));
 	glBindTexture(CHardwarePixelBuffer::TextureTarget(mType), mTexture);
 
-	glTexParameteri(CHardwarePixelBuffer::TextureTarget(mType), GL_TEXTURE_MIN_FILTER, mMinFilter);
-	glTexParameteri(CHardwarePixelBuffer::TextureTarget(mType), GL_TEXTURE_MAG_FILTER, mMagFilter);
+	//glTexParameteri(CHardwarePixelBuffer::TextureTarget(mType), GL_TEXTURE_MIN_FILTER, mMinFilter);
+	//glTexParameteri(CHardwarePixelBuffer::TextureTarget(mType), GL_TEXTURE_MAG_FILTER, mMagFilter);
 	glTexParameteri(CHardwarePixelBuffer::TextureTarget(mType), GL_TEXTURE_WRAP_S, mWrapTypeS);
 	glTexParameteri(CHardwarePixelBuffer::TextureTarget(mType), GL_TEXTURE_WRAP_T, mWrapTypeT);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mEnvType);

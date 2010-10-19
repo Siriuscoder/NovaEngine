@@ -203,17 +203,6 @@ public:
 		return mWrapTypeT;
 	}
 
-
-	inline void SetMagFilters(TMagFilters filter)
-	{
-		mMagFilter = filter;
-	}
-
-	inline void SetMinFilters(TMinFilters filter)
-	{
-		mMinFilter = filter;
-	}
-
 	inline TMagFilters GetMagFilters(void)
 	{
 		return mMagFilter;

@@ -51,8 +51,12 @@ public:
 
 	~COctreeSceneManager() {}
 
+
 	CTreeNode<CSceneNode*> *ConstactSpecifiedNode();
 
+	CRenderableObject *AddRenderableResourceToScene(CResource *resource);
+
+	void AddResourceToScene(CResource *resource);
 
 };
 

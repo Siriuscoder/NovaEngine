@@ -178,17 +178,7 @@ void CMaterial::ApplyMaterial(void)
 	glEnable(GL_COLOR_MATERIAL);
 
 	if(mTransparency > 0.0f)
-	{
 		CRenderSystem::GetSingelton().SetBlend(true);
-
-		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-		glColor4f(1.0f, 1.0f, 1.0f, mTransparency);
-	}
-	else
-	{
-		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	}
 
 
 	if(!mTexMapPtr.IsNull())
@@ -201,17 +191,17 @@ void CMaterial::ApplyMaterial(void)
 
 		mTexMapPtr->ApplyTexture();
 	}
-	else
-	{
-		glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-		glColor4f(mDiffuseColor.R(), mDiffuseColor.G(), mDiffuseColor.B(), mTransparency);
-	}
 
+	glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+	glColor4f(mDiffuseColor.R(), mDiffuseColor.G(), mDiffuseColor.B(), mTransparency);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
 	glColor3fv(mAmbientColor);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR);
 	glColor3fv(mSpecularColor);
 
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mShininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mAmbientColor);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mSpecularColor);
 
 	for(nova::uint i = 0; i < GetListenersCount(); i++)
 	{

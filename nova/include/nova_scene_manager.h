@@ -28,6 +28,7 @@
 #include "nova_mesh_loader.h"
 #include "nova_tree.h"
 #include "nova_bounding_box.h"
+#include "nova_resource_manager.h"
 
 namespace nova
 {
@@ -141,6 +142,10 @@ public:
 	void RenderScene(CCamera *camera, CViewPort *view);
 
 	virtual CTreeNode<CSceneNode*> *ConstactSpecifiedNode();
+
+	virtual CRenderableObject *AddRenderableResourceToScene(CResource *resource);
+
+	virtual void AddResourceToScene(CResource *resource);
 
 	CTreeNode<CSceneNode*> *GetRootElement(void);
 

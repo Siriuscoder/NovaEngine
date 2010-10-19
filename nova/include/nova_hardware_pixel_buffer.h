@@ -130,6 +130,8 @@ protected:
 	CHardwarePixelBuffer::TargetType mType;
 	MipMapTagertType mMipState;
 	GLuint  mTargetId;
+	GLuint	mMinFilter;
+	GLuint	mMagFilter;
 	CImageFormats::NovaPixelFormats mPixelFormat;
 
 public:
@@ -156,6 +158,10 @@ public:
 	CHardwarePixelBufferPtr operator[](int level);
 
 	int GetMaxLevels(void);
+
+	GLuint GetRecomendedMagFilter(void);
+
+	GLuint GetRecomendedMinFilter(void);
 
 };
 
