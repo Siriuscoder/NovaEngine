@@ -1,2 +1,2 @@
 SUBDIRS = src
-EXTRA_DIST = Parser.cbp Parser.layout Parser.vcproj
+EXTRA_DIST = ResourcePacker.vcproj

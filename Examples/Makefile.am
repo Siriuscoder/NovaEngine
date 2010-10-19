@@ -1,1 +1,1 @@
-SUBDIRS = include Parser SimpleWin
+SUBDIRS = include Parser SimpleWin ResourcePacker ImageSample 3dsSceneBuilder
