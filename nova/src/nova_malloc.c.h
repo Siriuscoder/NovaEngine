@@ -50,8 +50,8 @@
 
   Minimum overhead per allocated chunk:   4 or  8 bytes (if 4byte sizes)
                                           8 or 16 bytes (if 8byte sizes)
-       Each malloced chunk has a hidden word of overhead holding size
-       and status information, and additional cross-check word
+       Each malloced chunk has a hidden nUInt16 of overhead holding size
+       and status information, and additional cross-check nUInt16
        if FOOTERS is defined.
 
   Minimum allocated size: 4-byte ptrs:  16 bytes    (including overhead)
@@ -80,7 +80,7 @@
        cannot, detect all possible programming errors.
 
        If FOOTERS is defined nonzero, then each allocated chunk
-       carries an additional check word to verify that it was malloced
+       carries an additional check nUInt16 to verify that it was malloced
        from its space.  These check words are the same within each
        execution of a program using malloc, but differ across
        executions, so externally crafted fake chunks cannot be
@@ -2007,14 +2007,14 @@ static void init_malloc_global_mutex() {
   chunks are free, and if so, unlink them from the lists that they
   are on and merge them with the current chunk.
 
-  Chunks always begin on even word boundaries, so the mem portion
-  (which is returned to the user) is also on an even word boundary, and
-  thus at least double-word aligned.
+  Chunks always begin on even nUInt16 boundaries, so the mem portion
+  (which is returned to the user) is also on an even nUInt16 boundary, and
+  thus at least double-nUInt16 aligned.
 
   The P (PINUSE_BIT) bit, stored in the unused low-order bit of the
   chunk size (which is always a multiple of two words), is an in-use
   bit for the *previous* chunk.  If that bit is *clear*, then the
-  word before the current chunk size contains the previous chunk
+  nUInt16 before the current chunk size contains the previous chunk
   size, and can be used to find the front of the previous chunk.
   The very first chunk allocated always has this bit set, preventing
   access to non-existent (or non-owned) memory. If pinuse is set for
@@ -2089,7 +2089,7 @@ typedef unsigned int flag_t;           /* The type of various bit flag sets */
 #define CHUNK_OVERHEAD      (SIZE_T_SIZE)
 #endif /* FOOTERS */
 
-/* MMapped chunks need a second word of overhead ... */
+/* MMapped chunks need a second nUInt16 of overhead ... */
 #define MMAP_CHUNK_OVERHEAD (TWO_SIZE_T_SIZES)
 /* ... and additional padding for fake next-chunk at foot */
 #define MMAP_FOOT_PAD       (FOUR_SIZE_T_SIZES)
@@ -2407,7 +2407,7 @@ typedef struct malloc_segment* msegmentptr;
     clears the bit when empty.  Bit operations are then used to avoid
     bin-by-bin searching -- nearly all "search" is done without ever
     looking at bins that won't be selected.  The bit maps
-    conservatively use 32 bits per map word, even if on 64bit system.
+    conservatively use 32 bits per map nUInt16, even if on 64bit system.
     For a good description of some of the bit-based techniques used
     here, see Henry S. Warren Jr's book "Hacker's Delight" (and
     supplement at http://hackersdelight.org/). Many of these are
@@ -5644,7 +5644,7 @@ History:
       * Use ordered bins instead of best-fit threshhold
       * Eliminate block-local decls to simplify tracing and debugging.
       * Support another case of realloc via move into top
-      * Fix error occuring when initial sbrk_base not word-aligned.
+      * Fix error occuring when initial sbrk_base not nUInt16-aligned.
       * Rely on page size for units instead of SBRK_UNIT to
         avoid surprises about sbrk alignment conventions.
       * Add mallinfo, mallopt. Thanks to Raymond Nijssen

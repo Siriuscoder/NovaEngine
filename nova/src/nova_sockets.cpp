@@ -70,13 +70,13 @@ CSockEnviroment * CSockEnviroment::instance = NULL;
 
 CIPAddress::CIPAddress() : host(INADDR_ANY), port(0), CBase((char*)"CIPAddress") {}
 
-CIPAddress::CIPAddress(uint h, word p) : host(h), port(p), CBase((char*)"CIPAddress") {}
+CIPAddress::CIPAddress(uint h, nUInt16 p) : host(h), port(p), CBase((char*)"CIPAddress") {}
 
-CIPAddress::CIPAddress(byte h1, byte h2, byte h3, byte h4, word p) :
+CIPAddress::CIPAddress(byte h1, byte h2, byte h3, byte h4, nUInt16 p) :
 	host(uint(h1) + (uint(h2)<<8) + (uint(h3)<<16) + (uint(h4)<<24)), 
 		port(p), CBase((char*)"IPAddress") {}
 
-CIPAddress::CIPAddress(cchar * ip, word p) : 
+CIPAddress::CIPAddress(cchar * ip, nUInt16 p) : 
 	host(CIPAddress::ParseString(ip)), port(p), CBase((char*)"CIPAddress") {}
 
 bool CIPAddress::operator==(const CIPAddress & ip)
@@ -146,7 +146,7 @@ uint CIPAddress::ParseString(cchar * ip) throw(nova::NovaExp)
 void CSockEnviroment::InitSockets()	throw(nova::NovaExp)
 {
 #ifdef WIN_BUILD
-    WORD versionWanted = MAKEWORD(2,2);
+    nUInt16 versionWanted = MAKEWORD(2,2);
     WSADATA wsaData;
     if(WSAStartup(versionWanted, &wsaData) != 0 )
         throw NovaExp("InitSockets(): Winsock 2.2 initialization failed", BAD_OPERATION);
@@ -179,7 +179,7 @@ void CSockEnviroment::DeinitSockets()
 #endif
 }
 
-CIPAddress CSockEnviroment::GetHostByName(cchar * hostName, word port)
+CIPAddress CSockEnviroment::GetHostByName(cchar * hostName, nUInt16 port)
 {
     if(!hostName)
         throw NovaExp("Sockets::GetHostByName(): pointer passed as argument is 0", MEM_ERROR);
@@ -419,12 +419,12 @@ CTCPServerSocket & CTCPServerSocket::operator=(const CTCPServerSocket & s)
 	return *this;
 }
 
-CTCPServerSocket::CTCPServerSocket(word port, bool disableNaggle) : CSocket((char*)"CTCPServerSocket")
+CTCPServerSocket::CTCPServerSocket(nUInt16 port, bool disableNaggle) : CSocket((char*)"CTCPServerSocket")
 {
     this->Open(port, disableNaggle);
 }
 
-void CTCPServerSocket::Open(word port, bool disableNaggle) 
+void CTCPServerSocket::Open(nUInt16 port, bool disableNaggle) 
 {
     if(this->IsValid())
 		throw NOVA_EXP("TCPServerSocket::Open(): socket already opened", BAD_OPERATION);
@@ -532,7 +532,7 @@ CUDPSocket::~CUDPSocket()
 	this->Close();
 }
 
-void CUDPSocket::Open(word port)
+void CUDPSocket::Open(nUInt16 port)
 {
 	if(this->IsValid())
         throw NOVA_EXP("UDPSocket::Open(): the socket is already opened", BAD_OPERATION);
@@ -574,7 +574,7 @@ void CUDPSocket::Open()
 	this->Open(0);
 }
 
-uint CUDPSocket::Send(const byte * buf, word size, CIPAddress destinationIP) 
+uint CUDPSocket::Send(const byte * buf, nUInt16 size, CIPAddress destinationIP) 
 {
     sockaddr_in sockAddr;
     int sockLen = sizeof(sockAddr);
@@ -587,7 +587,7 @@ uint CUDPSocket::Send(const byte * buf, word size, CIPAddress destinationIP)
     return res;
 }
 
-uint CUDPSocket::Recv(byte * buf, word maxSize, CIPAddress & out_SenderIP)
+uint CUDPSocket::Recv(byte * buf, nUInt16 maxSize, CIPAddress & out_SenderIP)
 {
     sockaddr_in sockAddr;
     int sockLen = sizeof(sockAddr);

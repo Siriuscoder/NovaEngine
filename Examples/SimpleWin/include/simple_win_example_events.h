@@ -31,7 +31,7 @@ public:
 	void OnQuit(void);
 	void OnRender(void);
 	void OnTimer(int);
-	void OnChar(nova::word s, int m);
+	void OnChar(nova::nUInt16 s, int m);
 	void OnMouseMove(int x, int y, int code);
 
 };

@@ -127,7 +127,7 @@ C3DSChunk::C3DSChunk() : mID(0), mStart(0), mEnd(0)
 
 }
 
-void C3DSChunk::SetID(nova::word id)
+void C3DSChunk::SetID(nova::nUInt16 id)
 {
 	mID = id;
 }
@@ -142,7 +142,7 @@ void C3DSChunk::SetEnd(nova::uint end)
 	mEnd = end;
 }
 
-nova::word C3DSChunk::GetID(void) const
+nova::nUInt16 C3DSChunk::GetID(void) const
 {
 	return mID;
 }
@@ -174,10 +174,10 @@ C3DSChunk C3DSLoader::ReadChunk()
 {
 	C3DSChunk chunk;
 
-	chunk.SetID(mp3dsStream->ReadMemOfType<nova::word>());
+	chunk.SetID(mp3dsStream->ReadMemOfType<nova::nUInt16>());
 	nova::uint len = mp3dsStream->ReadMemOfType<nova::uint>();
 	chunk.SetStart(mp3dsStream->Tell());
-	chunk.SetEnd(chunk.GetStart() + (len-sizeof(nova::word)-sizeof(nova::uint)));
+	chunk.SetEnd(chunk.GetStart() + (len-sizeof(nova::nUInt16)-sizeof(nova::uint)));
 
 	return chunk;
 }
@@ -264,7 +264,7 @@ float C3DSLoader::ReadPercentage(const C3DSChunk &chunk)
 	switch (chunk.GetID())
     {
     case T3DS_INT_PERCENTAGE:
-        return mp3dsStream->ReadMemOfType<nova::word>() / 100.0f;
+        return mp3dsStream->ReadMemOfType<nova::nUInt16>() / 100.0f;
     case T3DS_FLOAT_PERCENTAGE:
         return mp3dsStream->ReadMemOfTypeInSize<float>(4);
     }
@@ -298,7 +298,7 @@ CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_nam
 		{
 		case T3DS_TRI_VERTEXLIST:
 			{
-				count = mp3dsStream->ReadMemOfType<nova::word>();
+				count = mp3dsStream->ReadMemOfType<nova::nUInt16>();
 				vertexes.AllocBuffer(count * sizeof(TVertex4d));
 
 				mp3dsStream->Read(vertexes);
@@ -306,7 +306,7 @@ CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_nam
 			break;
 		case T3DS_TRI_FACEMAPPING:
 			{
-				count = mp3dsStream->ReadMemOfType<nova::word>();
+				count = mp3dsStream->ReadMemOfType<nova::nUInt16>();
 				mat_coords.AllocBuffer(count * sizeof(TTexCoord2d));
 
 				mp3dsStream->Read(mat_coords);
@@ -368,18 +368,18 @@ CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_nam
 void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
 	CMeshBox::TFacesInfo & mat_groups, stl<nstring>::vector & mat_names)
 {
-	nova::word count;
+	nova::nUInt16 count;
 	GotoChunk(chunk);
 
-	count = mp3dsStream->ReadMemOfType<nova::word>();
+	count = mp3dsStream->ReadMemOfType<nova::nUInt16>();
 
 	indexes.AllocBuffer(count * sizeof(TTriIndex));
 	TTriIndex *tri = static_cast<TTriIndex *>(indexes.GetBegin());
 	for(int i = 0; i < count; ++i)
 	{
-		tri->a = mp3dsStream->ReadMemOfType<nova::word>();
-		tri->b = mp3dsStream->ReadMemOfType<nova::word>();
-		tri->c = mp3dsStream->ReadMemOfType<nova::word>();
+		tri->a = mp3dsStream->ReadMemOfType<nova::nUInt16>();
+		tri->b = mp3dsStream->ReadMemOfType<nova::nUInt16>();
+		tri->c = mp3dsStream->ReadMemOfType<nova::nUInt16>();
 
 		//memcpy(indexes.GetWritePtr(), &tri, sizeof(TTriIndex));
 		//indexes.SetWritePos(indexes.GetWritePos() + sizeof(TTriIndex));
@@ -402,11 +402,11 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
 				mat_names.push_back(nstring(str));
 				mat_id = mat_names.size() -1;
 
-				count = mp3dsStream->ReadMemOfType<nova::word>();
-				for (nova::word i = 0; i < count; i++)
+				count = mp3dsStream->ReadMemOfType<nova::nUInt16>();
+				for (nova::nUInt16 i = 0; i < count; i++)
 				{
 					TTriangleInfo info;
-					nova::word index = mp3dsStream->ReadMemOfType<nova::word>();
+					nova::nUInt16 index = mp3dsStream->ReadMemOfType<nova::nUInt16>();
 
 					info.mat_id = mat_id;
 					info.tri_id = index;

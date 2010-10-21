@@ -133,9 +133,9 @@ void CFreeFont::BuildFont()
 
 	letters_map.clear();
 
-	for(word ch = base_plane_begin; ch <= base_plane_end; ++ch)
+	for(nUInt16 ch = base_plane_begin; ch <= base_plane_end; ++ch)
 		MakeLetter(ch);
-	for(word ch = rus_begin; ch <= rus_end; ++ch)
+	for(nUInt16 ch = rus_begin; ch <= rus_end; ++ch)
 		MakeLetter(ch);
 
 	// Уничтожим шрифт.

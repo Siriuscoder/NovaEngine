@@ -58,7 +58,7 @@ namespace nova
 namespace unicode
 {
     typedef uint   utf32_char; /* at least 32 bits */
-    typedef word  utf16_char; /* at least 16 bits */
+    typedef nUInt16  utf16_char; /* at least 16 bits */
     typedef byte   utf8_char;  /* typically 8 bits */
     typedef size_t   size_type;
 

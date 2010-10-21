@@ -75,7 +75,7 @@ public:
 /// \brief Порт
 ///
 /// Хранится в целочисленной переменной 2 байта. 
-    word port;
+    nUInt16 port;
     
 /// \brief Конструктор
     CIPAddress();
@@ -85,21 +85,21 @@ public:
 /// Создает некий (узел сети) по 
 /// \param h Ай пи адрес 
 /// \param p порт
-    CIPAddress(uint h, word p);
+    CIPAddress(uint h, nUInt16 p);
     
 /// \brief Конструктор
 ///
 /// Создает некий (узел сети) по 
 /// \param h1, h2, h3, h4 Байтовые составляющие ай пи адреса 
 /// \param p порт
-    CIPAddress(byte h1, byte h2, byte h3, byte h4, word p);
+    CIPAddress(byte h1, byte h2, byte h3, byte h4, nUInt16 p);
     
 /// \brief Конструктор
 ///
 /// Создает некий (узел сети) по 
 /// \param ip Ай пи адрес в строковой записи "127.0.0.1"
 /// \param p порт
-    CIPAddress(cchar* ip, word p);
+    CIPAddress(cchar* ip, nUInt16 p);
     
 /// \brief Оператор равенства
 ///
@@ -139,7 +139,7 @@ public:
 /// \param hostName имя хоста (ya.ru, google.ru)
 /// \param port нужный порт, он встанет в результат
 /// \return \see CIPAddress
-    CIPAddress GetHostByName(cchar * hostName, word port);
+    CIPAddress GetHostByName(cchar * hostName, nUInt16 port);
 };
 
 /// \class CSocket
@@ -281,7 +281,7 @@ public:
 /// и начинает прослушивание хоста.
 /// \param port Порт
 /// \param disableNaggle разрешить/запретить TCP_DELAY (Naggle algorithm)
-    CTCPServerSocket(word port, bool disableNaggle = false);
+    CTCPServerSocket(nUInt16 port, bool disableNaggle = false);
     
 /// \brief Создание сервера.
 ///
@@ -289,7 +289,7 @@ public:
 /// и начинает прослушивание хоста.
 /// \param port Порт
 /// \param disableNaggle разрешить/запретить TCP_DELAY (Naggle algorithm)
-    void Open(word port, bool disableNaggle = false);
+    void Open(nUInt16 port, bool disableNaggle = false);
     
 /// \brief Создание соединения.
 ///
@@ -317,7 +317,7 @@ public:
 /// Открывает сокет для прослушки(процесс не стопит) на определенный порт
 /// текущей машины. Далее можно принимать данные.
 /// \param port Порт
-    void Open(word port); 
+    void Open(nUInt16 port); 
 
 /// \brief Открытие UDP клиент сокета
 ///
@@ -330,7 +330,7 @@ public:
 /// \param size размер буфера данных
 /// \param destinationIP цель.
 /// \return количество отосланных байт, если < 0, то ошибка передачи.
-    uint Send(const byte* buf, word size, CIPAddress destinationIP);
+    uint Send(const byte* buf, nUInt16 size, CIPAddress destinationIP);
     
 /// \brief Прием данных.
 ///
@@ -338,7 +338,7 @@ public:
 /// \param maxSize максимальный размер буффера
 /// \param out_SenderIP адрес с которого пришли данные.
 /// \return количество принятых байт, если < 0, то ошибка приема.
-    uint Recv(byte* buf, word maxSize, CIPAddress &out_SenderIP);
+    uint Recv(byte* buf, nUInt16 maxSize, CIPAddress &out_SenderIP);
 };
 
 

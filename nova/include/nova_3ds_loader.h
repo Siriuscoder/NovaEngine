@@ -30,7 +30,7 @@ class NOVA_EXPORT C3DSChunk : public CObjectConstructor
 {
 private:
 
-	nova::word mID;
+	nova::nUInt16 mID;
 	nova::uint mStart;
 	nova::uint mEnd;
 
@@ -38,13 +38,13 @@ public:
 
 	C3DSChunk();
 
-	void SetID(nova::word id);
+	void SetID(nova::nUInt16 id);
 
 	void SetStart(nova::uint start);
 
 	void SetEnd(nova::uint end);
 
-	nova::word GetID(void) const;
+	nova::nUInt16 GetID(void) const;
 
 	nova::uint GetStart(void) const;
 

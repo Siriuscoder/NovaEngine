@@ -89,10 +89,10 @@ namespace nova
 #define FT_COORD_NORMAL		0x01
 #define FT_COORD_LEFT_TOP	0x02
 
-const nova::word base_plane_begin = 0x0020;
-const nova::word base_plane_end = 0x007F;
-const nova::word rus_begin = 0x0410;
-const nova::word rus_end = 0x044F;
+const nova::nUInt16 base_plane_begin = 0x0020;
+const nova::nUInt16 base_plane_end = 0x007F;
+const nova::nUInt16 rus_begin = 0x0410;
+const nova::nUInt16 rus_end = 0x044F;
 
 class CFreeFont;
 

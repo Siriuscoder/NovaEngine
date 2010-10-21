@@ -24,7 +24,7 @@ namespace nova {
 
 class NOVA_EXPORT CEventConveyor;
 
-typedef void(THISCALL__ CEventConveyor::*pfCHAR)(word, int);
+typedef void(THISCALL__ CEventConveyor::*pfCHAR)(nUInt16, int);
 typedef void(THISCALL__ CEventConveyor::*pfREPAINT)(void);
 typedef void(THISCALL__ CEventConveyor::*pfBEGIN)(void);
 typedef void(THISCALL__ CEventConveyor::*pfTIMER_TICK)(int);
@@ -90,7 +90,7 @@ typedef struct __msg
 	int timerid;
 
 	union {
-		nova::word chCharCode;
+		nova::nUInt16 chCharCode;
 		int nVirtKey;
 	} chCode;
 } nv_ev_msg;

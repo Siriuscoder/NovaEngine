@@ -57,7 +57,7 @@ void CMyEventHandler::OnKeyUp(int key, int mode)
 */
 }
 
-void CMyEventHandler::OnChar(nova::word s, int m)
+void CMyEventHandler::OnChar(nova::nUInt16 s, int m)
 {
 
 }

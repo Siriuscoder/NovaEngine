@@ -327,12 +327,12 @@ typedef int TSubmatmn[2];
 typedef unsigned __int64 nUInt64;
 typedef __int64 nInt64;
 
-typedef unsigned __int16 word; // (16 bit word)
+typedef unsigned __int16 nUInt16; // (16 bit nUInt16)
 
 /// \brief Contraction for 'const char*'
 typedef const __int8 cchar;
 
-typedef unsigned __int8 byte; // (8 bit word)
+typedef unsigned __int8 byte; // (8 bit nUInt16)
 
 typedef unsigned __int32 uint; // (32 bit uint)
 /// \brief Contraction for 'unsigned long'
@@ -348,12 +348,12 @@ typedef nova::ulong ulong_ptr, *pulong_ptr;
 typedef uint64_t nUInt64;
 typedef int64_t nInt64;
 
-typedef uint16_t word; // (16 bit word)
+typedef uint16_t nUInt16; // (16 bit nUInt16)
 
 /// \brief Contraction for 'const char*'
 typedef const char cchar;
 
-typedef uint8_t byte; // (8 bit word)
+typedef uint8_t byte; // (8 bit nUInt16)
 
 typedef uint32_t uint; // (32 bit uint)
 /// \brief Contraction for 'unsigned long'
@@ -377,10 +377,10 @@ typedef double nReal;
 
 #ifdef NOVA_UNIX_BUILD
 
-#define MAKEWORD(a, b)      ((nova::word)(((nova::byte)(((nova::ulong_ptr)(a)) & 0xff)) | ((nova::word)((nova::byte)(((nova::ulong_ptr)(b)) & 0xff))) << 8))
-#define MAKELONG(a, b)      ((nova::long)(((nova::word)(((nova::ulong_ptr)(a)) & 0xffff)) | ((nova::ulong)((nova::word)(((nova::ulong_ptr)(b)) & 0xffff))) << 16))
-#define LOWORD(l)           ((nova::word)(((nova::ulong_ptr)(l)) & 0xffff))
-#define HIWORD(l)           ((nova::word)((((nova::ulong_ptr)(l)) >> 16) & 0xffff))
+#define MAKEWORD(a, b)      ((nova::nUInt16)(((nova::byte)(((nova::ulong_ptr)(a)) & 0xff)) | ((nova::nUInt16)((nova::byte)(((nova::ulong_ptr)(b)) & 0xff))) << 8))
+#define MAKELONG(a, b)      ((nova::long)(((nova::nUInt16)(((nova::ulong_ptr)(a)) & 0xffff)) | ((nova::ulong)((nova::nUInt16)(((nova::ulong_ptr)(b)) & 0xffff))) << 16))
+#define LOWORD(l)           ((nova::nUInt16)(((nova::ulong_ptr)(l)) & 0xffff))
+#define HIWORD(l)           ((nova::nUInt16)((((nova::ulong_ptr)(l)) >> 16) & 0xffff))
 #define LOBYTE(w)           ((nova::byte)(((nova::ulong_ptr)(w)) & 0xff))
 #define HIBYTE(w)           ((nova::byte)((((nova::ulong_ptr)(w)) >> 8) & 0xff))
 
