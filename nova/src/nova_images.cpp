@@ -241,7 +241,7 @@ void CImage::Blurring(int iter)
 	ilDeleteImages(1, &image);
 }
 
-void CImage::Contrast(real level)
+void CImage::Contrast(nReal level)
 {
 	ILuint image;
 	CDevILFormats informat;
@@ -285,7 +285,7 @@ void CImage::Equalization()
 	ilDeleteImages(1, &image);
 }
 
-void CImage::Gamma(real correct)
+void CImage::Gamma(nReal correct)
 {
 	ILuint image;
 	CDevILFormats informat;
@@ -330,7 +330,7 @@ void CImage::Negativity()
 	ilDeleteImages(1, &image);
 }
 
-void CImage::Noise(real tolerance)
+void CImage::Noise(nReal tolerance)
 {
 	ILuint image;
 	CDevILFormats informat;
@@ -374,7 +374,7 @@ void CImage::Pixelization(nova::uint pix_size)
 	ilDeleteImages(1, &image);
 }
 
-void CImage::Sharpering(real factor, int iter)
+void CImage::Sharpering(nReal factor, int iter)
 {
 	ILuint image;
 	CDevILFormats informat;

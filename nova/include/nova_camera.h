@@ -73,16 +73,16 @@ protected:
 
 	nova::Vector3f mDirection;
 
-	nova::real mZFar;
-	nova::real mZNear;
-	nova::real mLeft; 
-	nova::real mRight; 
-	nova::real mBottom;
-	nova::real mTop;
+	nova::nReal mZFar;
+	nova::nReal mZNear;
+	nova::nReal mLeft; 
+	nova::nReal mRight; 
+	nova::nReal mBottom;
+	nova::nReal mTop;
 
-	nova::real mFOV;
+	nova::nReal mFOV;
 
-	nova::real mAspect;
+	nova::nReal mAspect;
 
 	CViewPort * mParentView;
 
@@ -94,11 +94,11 @@ public:
 
 	CCamera();
 
-	CCamera(nova::real Left, nova::real Right, nova::real Bottom, nova::real Top,
-			nova::real ZFar, nova::real ZNear, CViewPort * mParentView);
+	CCamera(nova::nReal Left, nova::nReal Right, nova::nReal Bottom, nova::nReal Top,
+			nova::nReal ZFar, nova::nReal ZNear, CViewPort * mParentView);
 
-	CCamera(nova::real FOV, nova::real ZFar, 
-		nova::real ZNear, CViewPort * mParentView);
+	CCamera(nova::nReal FOV, nova::nReal ZFar, 
+		nova::nReal ZNear, CViewPort * mParentView);
 
 	~CCamera();
 
@@ -108,43 +108,43 @@ public:
 
 	void InValidateProjection(void);
 
-	void SetZFar(nova::real zfar);
+	void SetZFar(nova::nReal zfar);
 
-	void SetZNear(nova::real znear);
+	void SetZNear(nova::nReal znear);
 
-	void SetFOV(nova::real fov);
+	void SetFOV(nova::nReal fov);
 
-	void SetAspect(nova::real aspect);
+	void SetAspect(nova::nReal aspect);
 
 	void SetType(ProjectionType type);
 
 	CViewPort * GetParentView(void);
 
-	nova::real GetZFar(void);
+	nova::nReal GetZFar(void);
 
-	nova::real GetZNear(void);
+	nova::nReal GetZNear(void);
 
-	nova::real GetFOV(void);
+	nova::nReal GetFOV(void);
 
-	nova::real GetAspect(void);
+	nova::nReal GetAspect(void);
 
 	ProjectionType GetProjectionType(void);
 
-	nova::real GetLeft(void); 
+	nova::nReal GetLeft(void); 
 
-	nova::real GetRight(void); 
+	nova::nReal GetRight(void); 
 
-	nova::real GetBottom(void);
+	nova::nReal GetBottom(void);
 
-	nova::real GetTop(void);
+	nova::nReal GetTop(void);
 
-	void SetLeft(nova::real left);
+	void SetLeft(nova::nReal left);
 
-	void SetRight(nova::real right);
+	void SetRight(nova::nReal right);
 
-	void SetBottom(nova::real bottom);
+	void SetBottom(nova::nReal bottom);
 
-	void SetTop(nova::real top);
+	void SetTop(nova::nReal top);
 
 	PolygonMode GetPolygonMode(void);
 
@@ -156,7 +156,7 @@ public:
 
 	void RotateTo(const Vector3f vec);
 
-	void LookAt(const real x, const real y, const real z);
+	void LookAt(const nReal x, const nReal y, const nReal z);
 
 	void LookAt(const Vector3f & direction);
 
@@ -164,11 +164,11 @@ public:
 
 	Vector3f GetRightDirection(void);
 
-	void Roll(const nova::real radian);
+	void Roll(const nova::nReal radian);
 
-	void Yaw(const nova::real radian);
+	void Yaw(const nova::nReal radian);
 
-	void Pitch(const nova::real radian);
+	void Pitch(const nova::nReal radian);
 };
 
 typedef CSmartPtr<CCamera> CCameraPtr;

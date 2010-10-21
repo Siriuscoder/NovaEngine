@@ -36,8 +36,8 @@ CCamera::CCamera() : mProjectionChanged(false),
 	LOG_MESSAGE("Creating perspective camera...");
 }
 
-CCamera::CCamera(nova::real Left, nova::real Right, nova::real Bottom, nova::real Top,
-				 nova::real ZFar, nova::real ZNear, CViewPort * mParentView) : 
+CCamera::CCamera(nova::nReal Left, nova::nReal Right, nova::nReal Bottom, nova::nReal Top,
+				 nova::nReal ZFar, nova::nReal ZNear, CViewPort * mParentView) : 
 	mProjectionChanged(false), mParentView(mParentView), 
 	mAspect(1.3333333f), mFOV(90), mZFar(ZFar), mZNear(ZNear),
 	mLeft(Left), mRight(Right), mBottom(Bottom), mTop(Top), mPolygonMode(PM_SOLID),
@@ -51,8 +51,8 @@ CCamera::CCamera(nova::real Left, nova::real Right, nova::real Bottom, nova::rea
 	LOG_MESSAGE("Creating ORTHO camera...");
 }
 
-CCamera::CCamera(nova::real FOV, nova::real ZFar, 
-				 nova::real ZNear, CViewPort * mParentView) :
+CCamera::CCamera(nova::nReal FOV, nova::nReal ZFar, 
+				 nova::nReal ZNear, CViewPort * mParentView) :
 	mProjectionChanged(false), mParentView(mParentView), 
 	mFOV(FOV), mZFar(ZFar), mZNear(ZNear),
 	mLeft(0), mRight(0), mBottom(0), mTop(0), mPolygonMode(PM_SOLID),
@@ -60,7 +60,7 @@ CCamera::CCamera(nova::real FOV, nova::real ZFar,
 {
 	mOrientation = nova::Quaternionf::IDENTITY;
 	mType = PT_PERSPECTIVE;
-	mAspect = (nova::real)mParentView->GetActualWidth() / (nova::real)mParentView->GetActualHeight();
+	mAspect = (nova::nReal)mParentView->GetActualWidth() / (nova::nReal)mParentView->GetActualHeight();
 	mProjectionChanged = true;
 
 	LOG_MESSAGE("Creating perspective camera...");
@@ -144,25 +144,25 @@ void CCamera::InValidateProjection(void)
 	mProjectionChanged = true;
 }
 
-void CCamera::SetZFar(nova::real zfar)
+void CCamera::SetZFar(nova::nReal zfar)
 {
 	mZFar = zfar;
 	InValidateProjection();
 }
 
-void CCamera::SetZNear(nova::real znear)
+void CCamera::SetZNear(nova::nReal znear)
 {
 	mZNear = znear;
 	InValidateProjection();
 }
 
-void CCamera::SetFOV(nova::real fov)
+void CCamera::SetFOV(nova::nReal fov)
 {
 	mFOV = fov;
 	InValidateProjection();
 }
 
-void CCamera::SetAspect(nova::real aspect)
+void CCamera::SetAspect(nova::nReal aspect)
 {
 	mAspect = aspect;
 	InValidateProjection();
@@ -179,22 +179,22 @@ CViewPort * CCamera::GetParentView(void)
 	return mParentView;
 }
 
-nova::real CCamera::GetZFar(void)
+nova::nReal CCamera::GetZFar(void)
 {
 	return mZFar;
 }
 
-nova::real CCamera::GetZNear(void)
+nova::nReal CCamera::GetZNear(void)
 {
 	return mZNear;
 }
 
-nova::real CCamera::GetFOV(void)
+nova::nReal CCamera::GetFOV(void)
 {
 	return mFOV;
 }
 
-nova::real CCamera::GetAspect(void)
+nova::nReal CCamera::GetAspect(void)
 {
 	return mAspect;
 }
@@ -204,45 +204,45 @@ CCamera::ProjectionType CCamera::GetProjectionType(void)
 	return mType;
 }
 
-nova::real CCamera::GetLeft(void)
+nova::nReal CCamera::GetLeft(void)
 {
 	return mLeft;
 }
 
-nova::real CCamera::GetRight(void)
+nova::nReal CCamera::GetRight(void)
 {
 	return mRight;
 }
 
-nova::real CCamera::GetBottom(void)
+nova::nReal CCamera::GetBottom(void)
 {
 	return mBottom;
 }
 
-nova::real CCamera::GetTop(void)
+nova::nReal CCamera::GetTop(void)
 {
 	return mTop;
 }
 
-void CCamera::SetLeft(nova::real left)
+void CCamera::SetLeft(nova::nReal left)
 {
 	mLeft = left;
 	InValidateProjection();
 }
 
-void CCamera::SetRight(nova::real right)
+void CCamera::SetRight(nova::nReal right)
 {
 	mRight = right;
 	InValidateProjection();
 }
 
-void CCamera::SetBottom(nova::real bottom)
+void CCamera::SetBottom(nova::nReal bottom)
 {
 	mBottom = bottom;
 	InValidateProjection();
 }
 
-void CCamera::SetTop(nova::real top)
+void CCamera::SetTop(nova::nReal top)
 {
 	mTop = top;
 	InValidateProjection();
@@ -297,7 +297,7 @@ void CCamera::RotateTo(const Vector3f vec)
 	Rotate(temp);
 }
 
-void CCamera::LookAt(const real x, const real y, const real z)
+void CCamera::LookAt(const nReal x, const nReal y, const nReal z)
 {
 	LookAt(Vector3f(x, y, z));
 }
@@ -307,7 +307,7 @@ void CCamera::LookAt(const Vector3f & direction)
 	SetDirection(direction - mPosition);
 }
 
-void CCamera::Roll(const nova::real radian)
+void CCamera::Roll(const nova::nReal radian)
 {
 	Vector3f axis = mOrientation.Rotate(Vector3f::UNIT_Z);
 	Quaternionf zrot;
@@ -316,7 +316,7 @@ void CCamera::Roll(const nova::real radian)
 	Rotate(zrot);
 }
 
-void CCamera::Yaw(const nova::real radian)
+void CCamera::Yaw(const nova::nReal radian)
 {
 	Vector3f axis = mOrientation.Rotate(Vector3f::UNIT_Y);
 	Quaternionf yrot;
@@ -325,7 +325,7 @@ void CCamera::Yaw(const nova::real radian)
 	Rotate(yrot);
 }
 
-void CCamera::Pitch(const nova::real radian)
+void CCamera::Pitch(const nova::nReal radian)
 {
 	Vector3f axis = mOrientation.Rotate(Vector3f::UNIT_X);
 	Quaternionf xrot;

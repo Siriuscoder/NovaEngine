@@ -50,9 +50,9 @@ public:
 
 	static double StringToDouble(const char * str);
 
-	static nstring FloatToString(float real);
+	static nstring FloatToString(float nReal);
 
-	static nstring DoubleToString(double real);
+	static nstring DoubleToString(double nReal);
 
 	static nstring ToUpperCase(const nstring &str);
 

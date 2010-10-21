@@ -93,11 +93,11 @@ protected:
 	GLuint mTexture;
 	CTextureSurfaceList::MipMapTagertType mMipMap;
 
-	real mSOffset;         //смещение по оси s
-	real mTOffset;         //смещение по оси t
-	real mSTiling;         //масштабирование по оси s
-	real mTTiling;         //масштабирование по оси t
-	real mAngle;            //угол поворота вокруг оси r (градусов)
+	nReal mSOffset;         //смещение по оси s
+	nReal mTOffset;         //смещение по оси t
+	nReal mSTiling;         //масштабирование по оси s
+	nReal mTTiling;         //масштабирование по оси t
+	nReal mAngle;            //угол поворота вокруг оси r (градусов)
 
 	stl<CTextureSurfaceListPtr>::vector mSurfaceList;
 
@@ -123,27 +123,27 @@ public:
 		return mType;
 	}
 
-	inline void SetSOffset(real s)
+	inline void SetSOffset(nReal s)
 	{
 		mSOffset = s;
 	}
 
-	inline void SetTOffset(real t)
+	inline void SetTOffset(nReal t)
 	{
 		mTOffset = t;
 	}
 
-	inline void SetSTiling(real s)
+	inline void SetSTiling(nReal s)
 	{
 		mSTiling = s;
 	}
 
-	inline void SetTTiling(real t)
+	inline void SetTTiling(nReal t)
 	{
 		mTTiling = t;
 	}
 
-	inline void SetAngle(real a)
+	inline void SetAngle(nReal a)
 	{
 		mAngle = a;
 	}
@@ -153,27 +153,27 @@ public:
 		mEnvType = a;
 	}
 
-	inline real GetSOffset()
+	inline nReal GetSOffset()
 	{
 		return mSOffset;
 	}
 
-	inline real GetTOffset()
+	inline nReal GetTOffset()
 	{
 		return mTOffset;
 	}
 
-	inline real GetSTiling()
+	inline nReal GetSTiling()
 	{
 		return mSTiling;
 	}
 
-	inline real GetTTiling()
+	inline nReal GetTTiling()
 	{
 		return mTTiling;
 	}
 
-	inline real GetAngle()
+	inline nReal GetAngle()
 	{
 		return mAngle;
 	}

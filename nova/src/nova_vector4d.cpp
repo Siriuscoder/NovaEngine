@@ -39,12 +39,12 @@ namespace nova
 {
 
 
-template<> const CVector4<real> CVector4<real>::ZERO(0.0f,0.0f,0.0f,0.0f);
-template<> const CVector4<real> CVector4<real>::UNIT_X(1.0f,0.0f,0.0f,0.0f);
-template<> const CVector4<real> CVector4<real>::UNIT_Y(0.0f,1.0f,0.0f,0.0f);
-template<> const CVector4<real> CVector4<real>::UNIT_Z(0.0f,0.0f,1.0f,0.0f);
-template<> const CVector4<real> CVector4<real>::UNIT_W(0.0f,0.0f,0.0f,1.0f);
-template<> const CVector4<real> CVector4<real>::ONE(1.0f,1.0f,1.0f,1.0f);
+template<> const CVector4<nReal> CVector4<nReal>::ZERO(0.0f,0.0f,0.0f,0.0f);
+template<> const CVector4<nReal> CVector4<nReal>::UNIT_X(1.0f,0.0f,0.0f,0.0f);
+template<> const CVector4<nReal> CVector4<nReal>::UNIT_Y(0.0f,1.0f,0.0f,0.0f);
+template<> const CVector4<nReal> CVector4<nReal>::UNIT_Z(0.0f,0.0f,1.0f,0.0f);
+template<> const CVector4<nReal> CVector4<nReal>::UNIT_W(0.0f,0.0f,0.0f,1.0f);
+template<> const CVector4<nReal> CVector4<nReal>::ONE(1.0f,1.0f,1.0f,1.0f);
 
 
 }

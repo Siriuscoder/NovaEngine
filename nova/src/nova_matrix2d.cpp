@@ -38,10 +38,10 @@
 namespace nova
 {
 
-template<> const CMatrix2<real> CMatrix2<real>::ZERO(
+template<> const CMatrix2<nReal> CMatrix2<nReal>::ZERO(
     0.0f,0.0f,
     0.0f,0.0f);
-template<> const CMatrix2<real> CMatrix2<real>::IDENTITY(
+template<> const CMatrix2<nReal> CMatrix2<nReal>::IDENTITY(
     1.0f,0.0f,
     0.0f,1.0f);
 

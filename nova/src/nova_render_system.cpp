@@ -569,7 +569,7 @@ CRenderCapabilities & CRenderSystem::GetCapabilities()
 	return mCapabilities;
 }
 
-void CRenderSystem::SetPerspectiveProjection(nova::real fovy, nova::real aspect, nova::real zNear, nova::real zFar)
+void CRenderSystem::SetPerspectiveProjection(nova::nReal fovy, nova::nReal aspect, nova::nReal zNear, nova::nReal zFar)
 {
 	glPushAttrib(GL_TRANSFORM_BIT);
 
@@ -657,8 +657,8 @@ void CRenderSystem::SetProjection(nova::Matrix4f & matrix)
 	glPopAttrib();
 }
 
-void CRenderSystem::SetOrthoProjection(nova::real left, nova::real right,
-		nova::real bottom, nova::real top, nova::real znear, nova::real zfar)
+void CRenderSystem::SetOrthoProjection(nova::nReal left, nova::nReal right,
+		nova::nReal bottom, nova::nReal top, nova::nReal znear, nova::nReal zfar)
 {
 	glPushAttrib(GL_TRANSFORM_BIT);
 

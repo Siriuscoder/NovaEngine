@@ -122,19 +122,19 @@ public:
 
 	void Blurring(int iter);
 
-	void Contrast(real level);
+	void Contrast(nReal level);
 
 	void Equalization();
 
-	void Gamma(real correct);
+	void Gamma(nReal correct);
 
 	void Negativity();
 
-	void Noise(real tolerance);
+	void Noise(nReal tolerance);
 
 	void Pixelization(nova::uint pix_size);
 
-	void Sharpering(real factor, int iter);
+	void Sharpering(nReal factor, int iter);
 #endif
 
 	void BackWidth();

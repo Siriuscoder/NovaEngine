@@ -57,12 +57,12 @@ nova::CColorRGB CMaterial::GetSpecularColor(void)
 	return mSpecularColor;
 }
 
-real CMaterial::GetShininess(void)
+nReal CMaterial::GetShininess(void)
 {
 	return mShininess;
 }
 
-real CMaterial::GetTransparency(void)
+nReal CMaterial::GetTransparency(void)
 {
 	return mTransparency;
 }
@@ -108,12 +108,12 @@ void CMaterial::SetSpecularColor(CColorRGB & nmap)
 	mSpecularColor = nmap;
 }
 
-void CMaterial::SetShininess(real val)
+void CMaterial::SetShininess(nReal val)
 {
 	mShininess = val;
 }
 
-void CMaterial::SetTransparency(real val)
+void CMaterial::SetTransparency(nReal val)
 {
 	mTransparency = val;
 }
@@ -240,8 +240,8 @@ CMaterialPtr CMaterialManager::CreateMaterial(nstring & name, nstring & group,
 	nova::CColorRGB AmbientColor,
 	nova::CColorRGB DiffuseColor,
 	nova::CColorRGB SpecularColor,
-	real Shininess,
-	real Transparency,
+	nReal Shininess,
+	nReal Transparency,
 	nstring TexMap,
 	nstring MultiTexMap,
 	nstring SpecMap,
@@ -280,8 +280,8 @@ CMaterialPtr CMaterialManager::CreateMaterialAsync(nstring & name, nstring & gro
 	nova::CColorRGB AmbientColor,
 	nova::CColorRGB DiffuseColor,
 	nova::CColorRGB SpecularColor,
-	real Shininess,
-	real Transparency,
+	nReal Shininess,
+	nReal Transparency,
 	nstring TexMap,
 	nstring MultiTexMap,
 	nstring SpecMap,

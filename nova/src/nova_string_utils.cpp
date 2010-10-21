@@ -97,19 +97,19 @@ double CStringUtils::StringToDouble(const nstring & str)
 	return StringToDouble(str.c_str());
 }
 
-nstring CStringUtils::FloatToString(float real)
+nstring CStringUtils::FloatToString(float nReal)
 {
 	nova::nstringstream stream;
 
-	stream << real;
+	stream << nReal;
 	return stream.str();
 }
 
-nstring CStringUtils::DoubleToString(double real)
+nstring CStringUtils::DoubleToString(double nReal)
 {
 	nova::nstringstream stream;
 
-	stream << real;
+	stream << nReal;
 	return stream.str();
 }
 

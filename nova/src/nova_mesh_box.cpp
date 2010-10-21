@@ -161,7 +161,7 @@ CBoundingBox CMeshBox::GenerateBoundingBox(void)
 {
 	CBoundingBox testbox;
 
-	nova::real xmax = mVertexes[0].x,
+	nova::nReal xmax = mVertexes[0].x,
 		xmin = mVertexes[0].x,
 		ymax = mVertexes[0].y,
 		ymin = mVertexes[0].y,
@@ -229,7 +229,7 @@ void CMeshBox::ToWorldCoord()
 		vec = vec * mRotationMatrix;
 		vec = vec - Vector3f(mRealPosition.X(), mRealPosition.Y(), mRealPosition.Z());
 
-		memcpy(&(mVertexes[i]), vec, sizeof(4 * sizeof(nova::real)));
+		memcpy(&(mVertexes[i]), vec, sizeof(4 * sizeof(nova::nReal)));
 	}
 }
 

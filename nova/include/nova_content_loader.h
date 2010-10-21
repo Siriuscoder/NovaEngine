@@ -57,13 +57,13 @@ public:
 		nova::CColorRGB nAmbientColor;
 		nova::CColorRGB nDiffuseColor;
 		nova::CColorRGB nSpecularColor;
-		real nShininess;
-		real nShinStrength;
-		real nTransparency;
-		real nFalloff;
-		real nSelfIllum;
-		real nBlur;
-		real nShading;
+		nReal nShininess;
+		nReal nShinStrength;
+		nReal nTransparency;
+		nReal nFalloff;
+		nReal nSelfIllum;
+		nReal nBlur;
+		nReal nShading;
 
 		bool nSelfIllumFlag;
 		bool nTwoSided;
@@ -100,15 +100,15 @@ public:
 	{
 		nstring nName;
 		nstring nBitMap;
-		real nPercent;
-		real nRotation;
-		real nBlur;
-		real nUScale;
-		real nVScale;
-		real nUOffset;
-		real nVOffset;
-		real nNoiseSize;
-		real nNoiseLevel;
+		nReal nPercent;
+		nReal nRotation;
+		nReal nBlur;
+		nReal nUScale;
+		nReal nVScale;
+		nReal nUOffset;
+		nReal nVOffset;
+		nReal nNoiseSize;
+		nReal nNoiseLevel;
 
 	} TTextureContainer;
 

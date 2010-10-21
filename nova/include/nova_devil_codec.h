@@ -47,7 +47,7 @@ typedef struct TDevILEffects
 	EDevILEffects effect;
 	union TVal
 	{
-		nova::real r;
+		nova::nReal r;
 		nova::uint ui;
 	};
 

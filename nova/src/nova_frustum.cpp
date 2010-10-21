@@ -38,7 +38,7 @@ void CFrustum::ExtractFrustum()
 		return;
 
 	Matrix4f clip = Matrix4f::IDENTITY;
-	nova::real len;
+	nova::nReal len;
 
 	clip = mProjection * mLocalMatrix;
 
@@ -138,12 +138,12 @@ bool CFrustum::SphereInFrustum(CSpheref & sphere)
 	return true;
 }
 
-nova::real CFrustum::DistanceInFrustumSphere(CSpheref & sphere)
+nova::nReal CFrustum::DistanceInFrustumSphere(CSpheref & sphere)
 {
 	if(!mActive)
 		return true;
 
-	nova::real dist;
+	nova::nReal dist;
 
 	for(int face = 0; face < 6; face++)
 	{

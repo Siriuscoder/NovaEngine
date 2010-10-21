@@ -44,11 +44,11 @@ public:
 
 	virtual ~CMovableObject();
 
-	void SetLocation(real x, real y, real z);
+	void SetLocation(nReal x, nReal y, nReal z);
 
 	void SetOrientation(const nova::Quaternionf & quat);
 
-	void SetScale(real x, real y, real z);
+	void SetScale(nReal x, nReal y, nReal z);
 
 	Vector3f & GetLocation(void) const;
 
@@ -56,11 +56,11 @@ public:
 
 	Vector3f & SetScale(void) const;
 
-	void Move(real x, real y, real z);
+	void Move(nReal x, nReal y, nReal z);
 
 	void Rotate(Quaternionf & quat);
 
-	void Scale(real x, real y, real z);
+	void Scale(nReal x, nReal y, nReal z);
 
 	Matrix4f ComputeLocalMatrix(void);
 };

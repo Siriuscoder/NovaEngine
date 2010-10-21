@@ -257,8 +257,8 @@ void CFreeFont::MakeLetter(wchar_t code)
 // информацию в переменных x и y, затем, когда мы рисуем четырехугольник,
 // мы будем только ссылаться на ту часть текстуры, в которой непосредственно
 // содержится символ.
-	real x = static_cast<real>(letter.GetBitmapw()) / static_cast<real>(letter.GetWidth()),
-		y = static_cast<real>(letter.GetBitmapr()) / static_cast<real>(letter.GetHeight());
+	nReal x = static_cast<nReal>(letter.GetBitmapw()) / static_cast<nReal>(letter.GetWidth()),
+		y = static_cast<nReal>(letter.GetBitmapr()) / static_cast<nReal>(letter.GetHeight());
 
 	//glBindTexture(GL_TEXTURE_2D, let.GetTex());
 
@@ -306,13 +306,13 @@ void CFreeFont::Draw(POINT & pos, const CColorRGB & pc, const wchar_t code)
 
 	if(coord_grid == FT_COORD_NORMAL)
 	{
-		glTranslatef(static_cast<real>(pos.x), static_cast<real>(pos.y), 0);
-		glTranslatef(static_cast<real>(let.GetBearingX()), static_cast<real>(let.GetBearingY() - let.GetBitmapr()), 0);
+		glTranslatef(static_cast<nReal>(pos.x), static_cast<nReal>(pos.y), 0);
+		glTranslatef(static_cast<nReal>(let.GetBearingX()), static_cast<nReal>(let.GetBearingY() - let.GetBitmapr()), 0);
 	}
 	else if(coord_grid == FT_COORD_LEFT_TOP)
 	{
-		glTranslatef(static_cast<real>(pos.x), static_cast<real>(pos.y-let.GetBitmapr()), 0);
-		glTranslatef(static_cast<real>(let.GetBearingX()), static_cast<real>(let.GetBitmapr() - let.GetBearingY()), 0);
+		glTranslatef(static_cast<nReal>(pos.x), static_cast<nReal>(pos.y-let.GetBitmapr()), 0);
+		glTranslatef(static_cast<nReal>(let.GetBearingX()), static_cast<nReal>(let.GetBitmapr() - let.GetBearingY()), 0);
 	}
 
 	// вызываем созданный список ----

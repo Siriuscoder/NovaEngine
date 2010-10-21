@@ -38,27 +38,27 @@
 namespace nova
 {
 
-template <class Real>
+template <class nReal>
 class CVector3 : public CObjectConstructor
 {
 public:
     // construction
     CVector3 ();  // uninitialized
-    CVector3 (Real fX, Real fY, Real fZ);
-    CVector3 (const Real* afTuple);
+    CVector3 (nReal fX, nReal fY, nReal fZ);
+    CVector3 (const nReal* afTuple);
     CVector3 (const CVector3& rkV);
 
     // coordinate access
-    inline operator const Real* () const;
-    inline operator Real* ();
-    inline Real operator[] (int i) const;
-    inline Real& operator[] (int i);
-    inline Real X () const;
-    inline Real& X ();
-    inline Real Y () const;
-    inline Real& Y ();
-    inline Real Z () const;
-    inline Real& Z ();
+    inline operator const nReal* () const;
+    inline operator nReal* ();
+    inline nReal operator[] (int i) const;
+    inline nReal& operator[] (int i);
+    inline nReal X () const;
+    inline nReal& X ();
+    inline nReal Y () const;
+    inline nReal& Y ();
+    inline nReal Z () const;
+    inline nReal& Z ();
 
     // assignment
     inline CVector3& operator= (const CVector3& rkV);
@@ -74,21 +74,21 @@ public:
     // arithmetic operations
     inline CVector3 operator+ (const CVector3& rkV) const;
     inline CVector3 operator- (const CVector3& rkV) const;
-    inline CVector3 operator* (Real fScalar) const;
-    inline CVector3 operator/ (Real fScalar) const;
+    inline CVector3 operator* (nReal fScalar) const;
+    inline CVector3 operator/ (nReal fScalar) const;
     inline CVector3 operator- () const;
 
     // arithmetic updates
     inline CVector3& operator+= (const CVector3& rkV);
     inline CVector3& operator-= (const CVector3& rkV);
-    inline CVector3& operator*= (Real fScalar);
-    inline CVector3& operator/= (Real fScalar);
+    inline CVector3& operator*= (nReal fScalar);
+    inline CVector3& operator/= (nReal fScalar);
 
     // vector operations
-    inline Real Length () const;
-    inline Real SquaredLength () const;
-    inline Real Dot (const CVector3& rkV) const;
-    inline Real Normalize ();
+    inline nReal Length () const;
+    inline nReal SquaredLength () const;
+    inline nReal Dot (const CVector3& rkV) const;
+    inline nReal Normalize ();
 
     // The cross products are computed using the right-handed rule.  Be aware
     // that some graphics APIs use a left-handed rule.  If you have to compute
@@ -102,7 +102,7 @@ public:
     // tetrahedron <V0,V1,V2,V3>, P = b0*V0 + b1*V1 + b2*V2 + b3*V3, where
     // b0 + b1 + b2 + b3 = 1.
     void GetBarycentrics (const CVector3& rkV0, const CVector3& rkV1,
-        const CVector3& rkV2, const CVector3& rkV3, Real afBary[4]) const;
+        const CVector3& rkV2, const CVector3& rkV3, nReal afBary[4]) const;
 
     // Gram-Schmidt orthonormalization.  Take linearly independent vectors
     // U, V, and W and compute an orthonormal set (unit length, mutually
@@ -138,109 +138,109 @@ private:
     // support for comparisons
     int CompareArrays (const CVector3& rkV) const;
 
-    Real m_afTuple[3];
+    nReal m_afTuple[3];
 };
 
 // arithmetic operations
-template <class Real>
-CVector3<Real> operator* (Real fScalar, const CVector3<Real>& rkV);
+template <class nReal>
+CVector3<nReal> operator* (nReal fScalar, const CVector3<nReal>& rkV);
 
 // debugging output
-template <class Real>
-std::ostream& operator<< (std::ostream& rkOStr, const CVector3<Real>& rkV);
+template <class nReal>
+std::ostream& operator<< (std::ostream& rkOStr, const CVector3<nReal>& rkV);
 
-template <class Real>
-CVector3<Real>::CVector3 ()
+template <class nReal>
+CVector3<nReal>::CVector3 ()
 {
     // uninitialized for performance in array construction
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector3<Real>::CVector3 (Real fX, Real fY, Real fZ)
+template <class nReal>
+CVector3<nReal>::CVector3 (nReal fX, nReal fY, nReal fZ)
 {
     m_afTuple[0] = fX;
     m_afTuple[1] = fY;
     m_afTuple[2] = fZ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector3<Real>::CVector3 (const Real* afTuple)
+template <class nReal>
+CVector3<nReal>::CVector3 (const nReal* afTuple)
 {
     m_afTuple[0] = afTuple[0];
     m_afTuple[1] = afTuple[1];
     m_afTuple[2] = afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector3<Real>::CVector3 (const CVector3& rkV)
+template <class nReal>
+CVector3<nReal>::CVector3 (const CVector3& rkV)
 {
     m_afTuple[0] = rkV.m_afTuple[0];
     m_afTuple[1] = rkV.m_afTuple[1];
     m_afTuple[2] = rkV.m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real>::operator const Real* () const
+template <class nReal>
+inline CVector3<nReal>::operator const nReal* () const
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real>::operator Real* ()
+template <class nReal>
+inline CVector3<nReal>::operator nReal* ()
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector3<Real>::operator[] (int i) const
+template <class nReal>
+inline nReal CVector3<nReal>::operator[] (int i) const
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector3<Real>::operator[] (int i)
+template <class nReal>
+inline nReal& CVector3<nReal>::operator[] (int i)
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector3<Real>::X () const
+template <class nReal>
+inline nReal CVector3<nReal>::X () const
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector3<Real>::X ()
+template <class nReal>
+inline nReal& CVector3<nReal>::X ()
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector3<Real>::Y () const
+template <class nReal>
+inline nReal CVector3<nReal>::Y () const
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector3<Real>::Y ()
+template <class nReal>
+inline nReal& CVector3<nReal>::Y ()
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector3<Real>::Z () const
+template <class nReal>
+inline nReal CVector3<nReal>::Z () const
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector3<Real>::Z ()
+template <class nReal>
+inline nReal& CVector3<nReal>::Z ()
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real>& CVector3<Real>::operator= (const CVector3& rkV)
+template <class nReal>
+inline CVector3<nReal>& CVector3<nReal>::operator= (const CVector3& rkV)
 {
     m_afTuple[0] = rkV.m_afTuple[0];
     m_afTuple[1] = rkV.m_afTuple[1];
@@ -248,50 +248,50 @@ inline CVector3<Real>& CVector3<Real>::operator= (const CVector3& rkV)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-int CVector3<Real>::CompareArrays (const CVector3& rkV) const
+template <class nReal>
+int CVector3<nReal>::CompareArrays (const CVector3& rkV) const
 {
-    return memcmp(m_afTuple,rkV.m_afTuple,3*sizeof(Real));
+    return memcmp(m_afTuple,rkV.m_afTuple,3*sizeof(nReal));
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector3<Real>::operator== (const CVector3& rkV) const
+template <class nReal>
+bool CVector3<nReal>::operator== (const CVector3& rkV) const
 {
     return CompareArrays(rkV) == 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector3<Real>::operator!= (const CVector3& rkV) const
+template <class nReal>
+bool CVector3<nReal>::operator!= (const CVector3& rkV) const
 {
     return CompareArrays(rkV) != 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector3<Real>::operator< (const CVector3& rkV) const
+template <class nReal>
+bool CVector3<nReal>::operator< (const CVector3& rkV) const
 {
     return CompareArrays(rkV) < 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector3<Real>::operator<= (const CVector3& rkV) const
+template <class nReal>
+bool CVector3<nReal>::operator<= (const CVector3& rkV) const
 {
     return CompareArrays(rkV) <= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector3<Real>::operator> (const CVector3& rkV) const
+template <class nReal>
+bool CVector3<nReal>::operator> (const CVector3& rkV) const
 {
     return CompareArrays(rkV) > 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector3<Real>::operator>= (const CVector3& rkV) const
+template <class nReal>
+bool CVector3<nReal>::operator>= (const CVector3& rkV) const
 {
     return CompareArrays(rkV) >= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real> CVector3<Real>::operator+ (const CVector3& rkV) const
+template <class nReal>
+inline CVector3<nReal> CVector3<nReal>::operator+ (const CVector3& rkV) const
 {
     return CVector3(
         m_afTuple[0]+rkV.m_afTuple[0],
@@ -299,8 +299,8 @@ inline CVector3<Real> CVector3<Real>::operator+ (const CVector3& rkV) const
         m_afTuple[2]+rkV.m_afTuple[2]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real> CVector3<Real>::operator- (const CVector3& rkV) const
+template <class nReal>
+inline CVector3<nReal> CVector3<nReal>::operator- (const CVector3& rkV) const
 {
     return CVector3(
         m_afTuple[0]-rkV.m_afTuple[0],
@@ -308,8 +308,8 @@ inline CVector3<Real> CVector3<Real>::operator- (const CVector3& rkV) const
         m_afTuple[2]-rkV.m_afTuple[2]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real> CVector3<Real>::operator* (Real fScalar) const
+template <class nReal>
+inline CVector3<nReal> CVector3<nReal>::operator* (nReal fScalar) const
 {
     return CVector3(
         fScalar*m_afTuple[0],
@@ -317,30 +317,30 @@ inline CVector3<Real> CVector3<Real>::operator* (Real fScalar) const
         fScalar*m_afTuple[2]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real> CVector3<Real>::operator/ (Real fScalar) const
+template <class nReal>
+inline CVector3<nReal> CVector3<nReal>::operator/ (nReal fScalar) const
 {
     CVector3 kQuot;
 
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
         kQuot.m_afTuple[0] = fInvScalar*m_afTuple[0];
         kQuot.m_afTuple[1] = fInvScalar*m_afTuple[1];
         kQuot.m_afTuple[2] = fInvScalar*m_afTuple[2];
     }
     else
     {
-        kQuot.m_afTuple[0] = CMath<Real>::MAX_REAL;
-        kQuot.m_afTuple[1] = CMath<Real>::MAX_REAL;
-        kQuot.m_afTuple[2] = CMath<Real>::MAX_REAL;
+        kQuot.m_afTuple[0] = CMath<nReal>::MAX_REAL;
+        kQuot.m_afTuple[1] = CMath<nReal>::MAX_REAL;
+        kQuot.m_afTuple[2] = CMath<nReal>::MAX_REAL;
     }
 
     return kQuot;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real> CVector3<Real>::operator- () const
+template <class nReal>
+inline CVector3<nReal> CVector3<nReal>::operator- () const
 {
     return CVector3(
         -m_afTuple[0],
@@ -348,17 +348,17 @@ inline CVector3<Real> CVector3<Real>::operator- () const
         -m_afTuple[2]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real> operator* (Real fScalar, const CVector3<Real>& rkV)
+template <class nReal>
+inline CVector3<nReal> operator* (nReal fScalar, const CVector3<nReal>& rkV)
 {
-    return CVector3<Real>(
+    return CVector3<nReal>(
         fScalar*rkV[0],
         fScalar*rkV[1],
         fScalar*rkV[2]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real>& CVector3<Real>::operator+= (const CVector3& rkV)
+template <class nReal>
+inline CVector3<nReal>& CVector3<nReal>::operator+= (const CVector3& rkV)
 {
     m_afTuple[0] += rkV.m_afTuple[0];
     m_afTuple[1] += rkV.m_afTuple[1];
@@ -366,8 +366,8 @@ inline CVector3<Real>& CVector3<Real>::operator+= (const CVector3& rkV)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real>& CVector3<Real>::operator-= (const CVector3& rkV)
+template <class nReal>
+inline CVector3<nReal>& CVector3<nReal>::operator-= (const CVector3& rkV)
 {
     m_afTuple[0] -= rkV.m_afTuple[0];
     m_afTuple[1] -= rkV.m_afTuple[1];
@@ -375,8 +375,8 @@ inline CVector3<Real>& CVector3<Real>::operator-= (const CVector3& rkV)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real>& CVector3<Real>::operator*= (Real fScalar)
+template <class nReal>
+inline CVector3<nReal>& CVector3<nReal>::operator*= (nReal fScalar)
 {
     m_afTuple[0] *= fScalar;
     m_afTuple[1] *= fScalar;
@@ -384,37 +384,37 @@ inline CVector3<Real>& CVector3<Real>::operator*= (Real fScalar)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real>& CVector3<Real>::operator/= (Real fScalar)
+template <class nReal>
+inline CVector3<nReal>& CVector3<nReal>::operator/= (nReal fScalar)
 {
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
         m_afTuple[0] *= fInvScalar;
         m_afTuple[1] *= fInvScalar;
         m_afTuple[2] *= fInvScalar;
     }
     else
     {
-        m_afTuple[0] = CMath<Real>::MAX_REAL;
-        m_afTuple[1] = CMath<Real>::MAX_REAL;
-        m_afTuple[2] = CMath<Real>::MAX_REAL;
+        m_afTuple[0] = CMath<nReal>::MAX_REAL;
+        m_afTuple[1] = CMath<nReal>::MAX_REAL;
+        m_afTuple[2] = CMath<nReal>::MAX_REAL;
     }
 
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector3<Real>::Length () const
+template <class nReal>
+inline nReal CVector3<nReal>::Length () const
 {
-    return CMath<Real>::Sqrt(
+    return CMath<nReal>::Sqrt(
         m_afTuple[0]*m_afTuple[0] +
         m_afTuple[1]*m_afTuple[1] +
         m_afTuple[2]*m_afTuple[2]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector3<Real>::SquaredLength () const
+template <class nReal>
+inline nReal CVector3<nReal>::SquaredLength () const
 {
     return
         m_afTuple[0]*m_afTuple[0] +
@@ -422,8 +422,8 @@ inline Real CVector3<Real>::SquaredLength () const
         m_afTuple[2]*m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector3<Real>::Dot (const CVector3& rkV) const
+template <class nReal>
+inline nReal CVector3<nReal>::Dot (const CVector3& rkV) const
 {
     return
         m_afTuple[0]*rkV.m_afTuple[0] +
@@ -431,31 +431,31 @@ inline Real CVector3<Real>::Dot (const CVector3& rkV) const
         m_afTuple[2]*rkV.m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector3<Real>::Normalize ()
+template <class nReal>
+inline nReal CVector3<nReal>::Normalize ()
 {
-    Real fLength = Length();
+    nReal fLength = Length();
 
-    if (fLength > CMath<Real>::ZERO_TOLERANCE)
+    if (fLength > CMath<nReal>::ZERO_TOLERANCE)
     {
-        Real fInvLength = ((Real)1.0)/fLength;
+        nReal fInvLength = ((nReal)1.0)/fLength;
         m_afTuple[0] *= fInvLength;
         m_afTuple[1] *= fInvLength;
         m_afTuple[2] *= fInvLength;
     }
     else
     {
-        fLength = (Real)0.0;
-        m_afTuple[0] = (Real)0.0;
-        m_afTuple[1] = (Real)0.0;
-        m_afTuple[2] = (Real)0.0;
+        fLength = (nReal)0.0;
+        m_afTuple[0] = (nReal)0.0;
+        m_afTuple[1] = (nReal)0.0;
+        m_afTuple[2] = (nReal)0.0;
     }
 
     return fLength;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real> CVector3<Real>::Cross (const CVector3& rkV) const
+template <class nReal>
+inline CVector3<nReal> CVector3<nReal>::Cross (const CVector3& rkV) const
 {
     return CVector3(
         m_afTuple[1]*rkV.m_afTuple[2] - m_afTuple[2]*rkV.m_afTuple[1],
@@ -463,8 +463,8 @@ inline CVector3<Real> CVector3<Real>::Cross (const CVector3& rkV) const
         m_afTuple[0]*rkV.m_afTuple[1] - m_afTuple[1]*rkV.m_afTuple[0]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector3<Real> CVector3<Real>::UnitCross (const CVector3& rkV) const
+template <class nReal>
+inline CVector3<nReal> CVector3<nReal>::UnitCross (const CVector3& rkV) const
 {
     CVector3 kCross(
         m_afTuple[1]*rkV.m_afTuple[2] - m_afTuple[2]*rkV.m_afTuple[1],
@@ -474,13 +474,13 @@ inline CVector3<Real> CVector3<Real>::UnitCross (const CVector3& rkV) const
     return kCross;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
-    const CVector3<Real>& rkV1, const CVector3<Real>& rkV2,
-    const CVector3<Real>& rkV3, Real afBary[4]) const
+template <class nReal>
+void CVector3<nReal>::GetBarycentrics (const CVector3<nReal>& rkV0,
+    const CVector3<nReal>& rkV1, const CVector3<nReal>& rkV2,
+    const CVector3<nReal>& rkV3, nReal afBary[4]) const
 {
     // Compute the vectors relative to V3 of the tetrahedron.
-    CVector3<Real> akDiff[4] =
+    CVector3<nReal> akDiff[4] =
     {
         rkV0 - rkV3,
         rkV1 - rkV3,
@@ -493,13 +493,13 @@ void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
     // ill-conditioned.  To avoid this, uniformly scale the tetrahedron
     // edges to be of order 1.  The scaling of all differences does not
     // change the barycentric coordinates.
-    Real fMax = (Real)0.0;
+    nReal fMax = (nReal)0.0;
     int i;
     for (i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            Real fValue = CMath<Real>::FAbs(akDiff[i][j]);
+            nReal fValue = CMath<nReal>::FAbs(akDiff[i][j]);
             if (fValue > fMax)
             {
                 fMax = fValue;
@@ -508,45 +508,45 @@ void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
     }
 
     // Scale down only large data.
-    Real fInvMax = (Real)0.0;
-    if (fMax > (Real)1.0)
+    nReal fInvMax = (nReal)0.0;
+    if (fMax > (nReal)1.0)
     {
-        fInvMax = ((Real)1.0)/fMax;
+        fInvMax = ((nReal)1.0)/fMax;
         for (i = 0; i < 4; i++)
         {
             akDiff[i] *= fInvMax;
         }
     }
 
-    Real fDet = akDiff[0].Dot(akDiff[1].Cross(akDiff[2]));
-    CVector3<Real> kE1cE2 = akDiff[1].Cross(akDiff[2]);
-    CVector3<Real> kE2cE0 = akDiff[2].Cross(akDiff[0]);
-    CVector3<Real> kE0cE1 = akDiff[0].Cross(akDiff[1]);
-    if (CMath<Real>::FAbs(fDet) > CMath<Real>::ZERO_TOLERANCE)
+    nReal fDet = akDiff[0].Dot(akDiff[1].Cross(akDiff[2]));
+    CVector3<nReal> kE1cE2 = akDiff[1].Cross(akDiff[2]);
+    CVector3<nReal> kE2cE0 = akDiff[2].Cross(akDiff[0]);
+    CVector3<nReal> kE0cE1 = akDiff[0].Cross(akDiff[1]);
+    if (CMath<nReal>::FAbs(fDet) > CMath<nReal>::ZERO_TOLERANCE)
     {
-        Real fInvDet = ((Real)1.0)/fDet;
+        nReal fInvDet = ((nReal)1.0)/fDet;
         afBary[0] = akDiff[3].Dot(kE1cE2)*fInvDet;
         afBary[1] = akDiff[3].Dot(kE2cE0)*fInvDet;
         afBary[2] = akDiff[3].Dot(kE0cE1)*fInvDet;
-        afBary[3] = (Real)1.0 - afBary[0] - afBary[1] - afBary[2];
+        afBary[3] = (nReal)1.0 - afBary[0] - afBary[1] - afBary[2];
     }
     else
     {
         // The tetrahedron is potentially flat.  Determine the face of
         // maximum area and compute barycentric coordinates with respect
         // to that face.
-        CVector3<Real> kE02 = rkV0 - rkV2;
-        CVector3<Real> kE12 = rkV1 - rkV2;
-        if (fInvMax != (Real)0.0)
+        CVector3<nReal> kE02 = rkV0 - rkV2;
+        CVector3<nReal> kE12 = rkV1 - rkV2;
+        if (fInvMax != (nReal)0.0)
         {
             kE02 *= fInvMax;
             kE12 *= fInvMax;
         }
 
-        CVector3<Real> kE02cE12 = kE02.Cross(kE12);
-        Real fMaxSqrArea = kE02cE12.SquaredLength();
+        CVector3<nReal> kE02cE12 = kE02.Cross(kE12);
+        nReal fMaxSqrArea = kE02cE12.SquaredLength();
         int iMaxIndex = 3;
-        Real fSqrArea = kE0cE1.SquaredLength();
+        nReal fSqrArea = kE0cE1.SquaredLength();
         if (fSqrArea > fMaxSqrArea)
         {
             iMaxIndex = 0;
@@ -565,41 +565,41 @@ void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
             fMaxSqrArea = fSqrArea;
         }
 
-        if (fMaxSqrArea > CMath<Real>::ZERO_TOLERANCE)
+        if (fMaxSqrArea > CMath<nReal>::ZERO_TOLERANCE)
         {
-            Real fInvSqrArea = ((Real)1.0)/fMaxSqrArea;
-            CVector3<Real> kTmp;
+            nReal fInvSqrArea = ((nReal)1.0)/fMaxSqrArea;
+            CVector3<nReal> kTmp;
             if (iMaxIndex == 0)
             {
                 kTmp = akDiff[3].Cross(akDiff[1]);
                 afBary[0] = kE0cE1.Dot(kTmp)*fInvSqrArea;
                 kTmp = akDiff[0].Cross(akDiff[3]);
                 afBary[1] = kE0cE1.Dot(kTmp)*fInvSqrArea;
-                afBary[2] = (Real)0.0;
-                afBary[3] = (Real)1.0 - afBary[0] - afBary[1];
+                afBary[2] = (nReal)0.0;
+                afBary[3] = (nReal)1.0 - afBary[0] - afBary[1];
             }
             else if (iMaxIndex == 1)
             {
-                afBary[0] = (Real)0.0;
+                afBary[0] = (nReal)0.0;
                 kTmp = akDiff[3].Cross(akDiff[2]);
                 afBary[1] = kE1cE2.Dot(kTmp)*fInvSqrArea;
                 kTmp = akDiff[1].Cross(akDiff[3]);
                 afBary[2] = kE1cE2.Dot(kTmp)*fInvSqrArea;
-                afBary[3] = (Real)1.0 - afBary[1] - afBary[2];
+                afBary[3] = (nReal)1.0 - afBary[1] - afBary[2];
             }
             else if (iMaxIndex == 2)
             {
                 kTmp = akDiff[2].Cross(akDiff[3]);
                 afBary[0] = kE2cE0.Dot(kTmp)*fInvSqrArea;
-                afBary[1] = (Real)0.0;
+                afBary[1] = (nReal)0.0;
                 kTmp = akDiff[3].Cross(akDiff[0]);
                 afBary[2] = kE2cE0.Dot(kTmp)*fInvSqrArea;
-                afBary[3] = (Real)1.0 - afBary[0] - afBary[2];
+                afBary[3] = (nReal)1.0 - afBary[0] - afBary[2];
             }
             else
             {
                 akDiff[3] = *this - rkV2;
-                if (fInvMax != (Real)0.0)
+                if (fInvMax != (nReal)0.0)
                 {
                     akDiff[3] *= fInvMax;
                 }
@@ -608,8 +608,8 @@ void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
                 afBary[0] = kE02cE12.Dot(kTmp)*fInvSqrArea;
                 kTmp = kE02.Cross(akDiff[3]);
                 afBary[1] = kE02cE12.Dot(kTmp)*fInvSqrArea;
-                afBary[2] = (Real)1.0 - afBary[0] - afBary[1];
-                afBary[3] = (Real)0.0;
+                afBary[2] = (nReal)1.0 - afBary[0] - afBary[1];
+                afBary[3] = (nReal)0.0;
             }
         }
         else
@@ -617,9 +617,9 @@ void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
             // The tetrahedron is potentially a sliver.  Determine the edge of
             // maximum length and compute barycentric coordinates with respect
             // to that edge.
-            Real fMaxSqrLength = akDiff[0].SquaredLength();
+            nReal fMaxSqrLength = akDiff[0].SquaredLength();
             iMaxIndex = 0;  // <V0,V3>
-            Real fSqrLength = akDiff[1].SquaredLength();
+            nReal fSqrLength = akDiff[1].SquaredLength();
             if (fSqrLength > fMaxSqrLength)
             {
                 iMaxIndex = 1;  // <V1,V3>
@@ -643,7 +643,7 @@ void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
                 iMaxIndex = 4;  // <V1,V2>
                 fMaxSqrLength = fSqrLength;
             }
-            CVector3<Real> kE01 = rkV0 - rkV1;
+            CVector3<nReal> kE01 = rkV0 - rkV1;
             fSqrLength = kE01.SquaredLength();
             if (fSqrLength > fMaxSqrLength)
             {
@@ -651,81 +651,81 @@ void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
                 fMaxSqrLength = fSqrLength;
             }
 
-            if (fMaxSqrLength > CMath<Real>::ZERO_TOLERANCE)
+            if (fMaxSqrLength > CMath<nReal>::ZERO_TOLERANCE)
             {
-                Real fInvSqrLength = ((Real)1.0)/fMaxSqrLength;
+                nReal fInvSqrLength = ((nReal)1.0)/fMaxSqrLength;
                 if (iMaxIndex == 0)
                 {
                     // P-V3 = t*(V0-V3)
                     afBary[0] = akDiff[3].Dot(akDiff[0])*fInvSqrLength;
-                    afBary[1] = (Real)0.0;
-                    afBary[2] = (Real)0.0;
-                    afBary[3] = (Real)1.0 - afBary[0];
+                    afBary[1] = (nReal)0.0;
+                    afBary[2] = (nReal)0.0;
+                    afBary[3] = (nReal)1.0 - afBary[0];
                 }
                 else if (iMaxIndex == 1)
                 {
                     // P-V3 = t*(V1-V3)
-                    afBary[0] = (Real)0.0;
+                    afBary[0] = (nReal)0.0;
                     afBary[1] = akDiff[3].Dot(akDiff[1])*fInvSqrLength;
-                    afBary[2] = (Real)0.0;
-                    afBary[3] = (Real)1.0 - afBary[1];
+                    afBary[2] = (nReal)0.0;
+                    afBary[3] = (nReal)1.0 - afBary[1];
                 }
                 else if (iMaxIndex == 2)
                 {
                     // P-V3 = t*(V2-V3)
-                    afBary[0] = (Real)0.0;
-                    afBary[1] = (Real)0.0;
+                    afBary[0] = (nReal)0.0;
+                    afBary[1] = (nReal)0.0;
                     afBary[2] = akDiff[3].Dot(akDiff[2])*fInvSqrLength;
-                    afBary[3] = (Real)1.0 - afBary[2];
+                    afBary[3] = (nReal)1.0 - afBary[2];
                 }
                 else if (iMaxIndex == 3)
                 {
                     // P-V2 = t*(V0-V2)
                     akDiff[3] = *this - rkV2;
-                    if (fInvMax != (Real)0.0)
+                    if (fInvMax != (nReal)0.0)
                     {
                         akDiff[3] *= fInvMax;
                     }
 
                     afBary[0] = akDiff[3].Dot(kE02)*fInvSqrLength;
-                    afBary[1] = (Real)0.0;
-                    afBary[2] = (Real)1.0 - afBary[0];
-                    afBary[3] = (Real)0.0;
+                    afBary[1] = (nReal)0.0;
+                    afBary[2] = (nReal)1.0 - afBary[0];
+                    afBary[3] = (nReal)0.0;
                 }
                 else if (iMaxIndex == 4)
                 {
                     // P-V2 = t*(V1-V2)
                     akDiff[3] = *this - rkV2;
-                    if (fInvMax != (Real)0.0)
+                    if (fInvMax != (nReal)0.0)
                     {
                         akDiff[3] *= fInvMax;
                     }
 
-                    afBary[0] = (Real)0.0;
+                    afBary[0] = (nReal)0.0;
                     afBary[1] = akDiff[3].Dot(kE12)*fInvSqrLength;
-                    afBary[2] = (Real)1.0 - afBary[1];
-                    afBary[3] = (Real)0.0;
+                    afBary[2] = (nReal)1.0 - afBary[1];
+                    afBary[3] = (nReal)0.0;
                 }
                 else
                 {
                     // P-V1 = t*(V0-V1)
                     akDiff[3] = *this - rkV1;
-                    if (fInvMax != (Real)0.0)
+                    if (fInvMax != (nReal)0.0)
                     {
                         akDiff[3] *= fInvMax;
                     }
 
                     afBary[0] = akDiff[3].Dot(kE01)*fInvSqrLength;
-                    afBary[1] = (Real)1.0 - afBary[0];
-                    afBary[2] = (Real)0.0;
-                    afBary[3] = (Real)0.0;
+                    afBary[1] = (nReal)1.0 - afBary[0];
+                    afBary[2] = (nReal)0.0;
+                    afBary[3] = (nReal)0.0;
                 }
             }
             else
             {
                 // The tetrahedron is a nearly a point, just return equal
                 // weights.
-                afBary[0] = (Real)0.25;
+                afBary[0] = (nReal)0.25;
                 afBary[1] = afBary[0];
                 afBary[2] = afBary[0];
                 afBary[3] = afBary[0];
@@ -734,8 +734,8 @@ void CVector3<Real>::GetBarycentrics (const CVector3<Real>& rkV0,
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CVector3<Real>::Orthonormalize (CVector3& rkU, CVector3& rkV, CVector3& rkW)
+template <class nReal>
+void CVector3<nReal>::Orthonormalize (CVector3& rkU, CVector3& rkV, CVector3& rkW)
 {
     // If the input vectors are v0, v1, and v2, then the Gram-Schmidt
     // orthonormalization produces vectors u0, u1, and u2 as follows,
@@ -751,45 +751,45 @@ void CVector3<Real>::Orthonormalize (CVector3& rkU, CVector3& rkV, CVector3& rkW
     rkU.Normalize();
 
     // compute u1
-    Real fDot0 = rkU.Dot(rkV); 
+    nReal fDot0 = rkU.Dot(rkV); 
     rkV -= fDot0*rkU;
     rkV.Normalize();
 
     // compute u2
-    Real fDot1 = rkV.Dot(rkW);
+    nReal fDot1 = rkV.Dot(rkW);
     fDot0 = rkU.Dot(rkW);
     rkW -= fDot0*rkU + fDot1*rkV;
     rkW.Normalize();
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CVector3<Real>::Orthonormalize (CVector3* akV)
+template <class nReal>
+void CVector3<nReal>::Orthonormalize (CVector3* akV)
 {
     Orthonormalize(akV[0],akV[1],akV[2]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CVector3<Real>::GenerateOrthonormalBasis (CVector3& rkU, CVector3& rkV,
+template <class nReal>
+void CVector3<nReal>::GenerateOrthonormalBasis (CVector3& rkU, CVector3& rkV,
     CVector3& rkW)
 {
     rkW.Normalize();
     GenerateComplementBasis(rkU,rkV,rkW);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CVector3<Real>::GenerateComplementBasis (CVector3& rkU, CVector3& rkV,
+template <class nReal>
+void CVector3<nReal>::GenerateComplementBasis (CVector3& rkU, CVector3& rkV,
     const CVector3& rkW)
 {
-    Real fInvLength;
+    nReal fInvLength;
 
-    if (CMath<Real>::FAbs(rkW.m_afTuple[0]) >=
-        CMath<Real>::FAbs(rkW.m_afTuple[1]) )
+    if (CMath<nReal>::FAbs(rkW.m_afTuple[0]) >=
+        CMath<nReal>::FAbs(rkW.m_afTuple[1]) )
     {
         // W.x or W.z is the largest magnitude component, swap them
-        fInvLength = CMath<Real>::InvSqrt(rkW.m_afTuple[0]*rkW.m_afTuple[0] +
+        fInvLength = CMath<nReal>::InvSqrt(rkW.m_afTuple[0]*rkW.m_afTuple[0] +
             rkW.m_afTuple[2]*rkW.m_afTuple[2]);
         rkU.m_afTuple[0] = -rkW.m_afTuple[2]*fInvLength;
-        rkU.m_afTuple[1] = (Real)0.0;
+        rkU.m_afTuple[1] = (nReal)0.0;
         rkU.m_afTuple[2] = +rkW.m_afTuple[0]*fInvLength;
         rkV.m_afTuple[0] = rkW.m_afTuple[1]*rkU.m_afTuple[2];
         rkV.m_afTuple[1] = rkW.m_afTuple[2]*rkU.m_afTuple[0] -
@@ -799,9 +799,9 @@ void CVector3<Real>::GenerateComplementBasis (CVector3& rkU, CVector3& rkV,
     else
     {
         // W.y or W.z is the largest magnitude component, swap them
-        fInvLength = CMath<Real>::InvSqrt(rkW.m_afTuple[1]*rkW.m_afTuple[1] +
+        fInvLength = CMath<nReal>::InvSqrt(rkW.m_afTuple[1]*rkW.m_afTuple[1] +
             rkW.m_afTuple[2]*rkW.m_afTuple[2]);
-        rkU.m_afTuple[0] = (Real)0.0;
+        rkU.m_afTuple[0] = (nReal)0.0;
         rkU.m_afTuple[1] = +rkW.m_afTuple[2]*fInvLength;
         rkU.m_afTuple[2] = -rkW.m_afTuple[1]*fInvLength;
         rkV.m_afTuple[0] = rkW.m_afTuple[1]*rkU.m_afTuple[2] -
@@ -811,8 +811,8 @@ void CVector3<Real>::GenerateComplementBasis (CVector3& rkU, CVector3& rkV,
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CVector3<Real>::ComputeExtremes (int iVQuantity, const CVector3* akPoint,
+template <class nReal>
+void CVector3<nReal>::ComputeExtremes (int iVQuantity, const CVector3* akPoint,
     CVector3& rkMin, CVector3& rkMax)
 {
     assert(iVQuantity > 0 && akPoint);
@@ -821,7 +821,7 @@ void CVector3<Real>::ComputeExtremes (int iVQuantity, const CVector3* akPoint,
     rkMax = rkMin;
     for (int i = 1; i < iVQuantity; i++)
     {
-        const CVector3<Real>& rkPoint = akPoint[i];
+        const CVector3<nReal>& rkPoint = akPoint[i];
         for (int j = 0; j < 3; j++)
         {
             if (rkPoint[j] < rkMin[j])
@@ -836,13 +836,13 @@ void CVector3<Real>::ComputeExtremes (int iVQuantity, const CVector3* akPoint,
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-std::ostream& operator<< (std::ostream& rkOStr, const CVector3<Real>& rkV)
+template <class nReal>
+std::ostream& operator<< (std::ostream& rkOStr, const CVector3<nReal>& rkV)
 {
      return rkOStr << rkV.X() << ' ' << rkV.Y() << ' ' << rkV.Z();
 }
 
 
-typedef CVector3<real> Vector3f;
+typedef CVector3<nReal> Vector3f;
 
 }

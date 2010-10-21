@@ -40,7 +40,7 @@
 namespace nova
 {
 
-template <class Real>
+template <class nReal>
 class CSphere: public CObjectConstructor
 {
 public:
@@ -48,46 +48,46 @@ public:
     // the radius.
 
     CSphere ();  // uninitialized
-    CSphere (const CVector3<Real>& rkCenter, Real fRadius);
+    CSphere (const CVector3<nReal>& rkCenter, nReal fRadius);
     CSphere (const CSphere& rkSphere);
 
     // assignment
     CSphere& operator= (const CSphere& rkSphere);
 
-    CVector3<Real> Center;
-    Real Radius;
+    CVector3<nReal> Center;
+    nReal Radius;
 };
 
-template <class Real>
-CSphere<Real>::CSphere ()
+template <class nReal>
+CSphere<nReal>::CSphere ()
 {
     // uninitialized
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CSphere<Real>::CSphere (const CVector3<Real>& rkCenter, Real fRadius)
+template <class nReal>
+CSphere<nReal>::CSphere (const CVector3<nReal>& rkCenter, nReal fRadius)
     :
     Center(rkCenter),
     Radius(fRadius)
 {
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CSphere<Real>::CSphere (const CSphere& rkSphere)
+template <class nReal>
+CSphere<nReal>::CSphere (const CSphere& rkSphere)
     :
     Center(rkSphere.Center),
     Radius(rkSphere.Radius)
 {
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CSphere<Real>& CSphere<Real>::operator= (const CSphere& rkSphere)
+template <class nReal>
+CSphere<nReal>& CSphere<nReal>::operator= (const CSphere& rkSphere)
 {
     Center = rkSphere.Center;
     Radius = rkSphere.Radius;
     return *this;
 }
 
-typedef CSphere<nova::real> CSpheref;
+typedef CSphere<nova::nReal> CSpheref;
 
 }

@@ -476,8 +476,8 @@ CMaterialPtr C3DSLoader::ReadMaterial(const C3DSChunk &parent)
 	nova::CColorRGB AmbientColor = CColorRGB::BLACK;
 	nova::CColorRGB DiffuseColor = CColorRGB::BLACK;
 	nova::CColorRGB SpecularColor = CColorRGB::BLACK;
-	real Shininess;
-	real Transparency;
+	nReal Shininess;
+	nReal Transparency;
 	nstring TexMap;
 	nstring MultiTexMap;
 	nstring SpecMap;
@@ -626,11 +626,11 @@ CTexturePtr C3DSLoader::ReadMap(const C3DSChunk &chunk)
 	GotoChunk(chunk);
     child = ReadChunk();
 
-	nova::real uScale;
-	nova::real vScale;
-	nova::real uOffset;
-	nova::real vOffset;
-	nova::real Angle;
+	nova::nReal uScale;
+	nova::nReal vScale;
+	nova::nReal uOffset;
+	nova::nReal vOffset;
+	nova::nReal Angle;
 
 	while (child.GetEnd() <= chunk.GetEnd())
     {

@@ -196,12 +196,12 @@ void CNovaEngine::ResetStats()
 
 	mStats.average_rendered_frames = 0.0f;
 	mStats.average_frame_time = 0.0f;
-	mStats.best_frame_time = std::numeric_limits<nova::real>::max();
+	mStats.best_frame_time = std::numeric_limits<nova::nReal>::max();
 	mStats.best_rendered_frames = 0.0f;
 	mStats.last_rendered_frames = 0.0f;
 	mStats.rendered_triangles = 0;
 	mStats.worst_frame_time = 0.0f;
-	mStats.worst_rendered_frames = std::numeric_limits<nova::real>::max();
+	mStats.worst_rendered_frames = std::numeric_limits<nova::nReal>::max();
 	mStats.last_frame_time = 0;
 
 	mCPUTimer.Reset();
@@ -211,7 +211,7 @@ void CNovaEngine::ResetStats()
 void CNovaEngine::UpdateStatistic()
 {
 	mFrameCount++;
-	nova::real ps = (nova::real)mFrameTimer.GetKernelMicroseconds() * 0.001f;
+	nova::nReal ps = (nova::nReal)mFrameTimer.GetKernelMicroseconds() * 0.001f;
 	nova::ulong sec = mCPUTimer.GetMilliseconds();
 
 	mStats.best_frame_time = std::min(mStats.best_frame_time, ps);
@@ -219,8 +219,8 @@ void CNovaEngine::UpdateStatistic()
 
 	if(sec > 1000)
 	{
-		mStats.last_rendered_frames	= (nova::real)mFrameCount * ((nova::real)sec / 1000.0f);
-		mStats.last_frame_time = (nova::real)sec / (nova::real)mFrameCount;
+		mStats.last_rendered_frames	= (nova::nReal)mFrameCount * ((nova::nReal)sec / 1000.0f);
+		mStats.last_frame_time = (nova::nReal)sec / (nova::nReal)mFrameCount;
 		mFrameCount = 0;
 
 		mStats.best_rendered_frames = std::max(mStats.best_rendered_frames, mStats.last_rendered_frames);
@@ -244,22 +244,22 @@ void CNovaEngine::UpdateStatistic()
 	mFrameTimer.Reset();
 }
 
-nova::real CNovaEngine::GetLastFPS() const
+nova::nReal CNovaEngine::GetLastFPS() const
 {
 	return mStats.last_rendered_frames;
 }
 
-nova::real CNovaEngine::GetAverageFPS() const
+nova::nReal CNovaEngine::GetAverageFPS() const
 {
 	return mStats.average_rendered_frames;
 }
 
-nova::real CNovaEngine::GetBestFPS() const
+nova::nReal CNovaEngine::GetBestFPS() const
 {
 	return mStats.best_rendered_frames;
 }
 
-nova::real CNovaEngine::GetWorstFPS() const
+nova::nReal CNovaEngine::GetWorstFPS() const
 {
 	return mStats.worst_rendered_frames;
 }

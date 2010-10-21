@@ -43,8 +43,8 @@ protected:
 	nova::CColorRGB mAmbientColor;
 	nova::CColorRGB mDiffuseColor;
 	nova::CColorRGB mSpecularColor;
-	real mShininess;
-	real mTransparency;
+	nReal mShininess;
+	nReal mTransparency;
 	nstring mTexMap;
 	nstring mMultiTexMap;
 	nstring mSpecMap;
@@ -75,9 +75,9 @@ public:
 
 	nova::CColorRGB GetSpecularColor(void);
 
-	real GetShininess(void);
+	nReal GetShininess(void);
 
-	real GetTransparency(void);
+	nReal GetTransparency(void);
 
 	nstring GetTexMap(void);
 
@@ -96,9 +96,9 @@ public:
 	
 	void SetSpecularColor(CColorRGB & nmap);
 
-	void SetShininess(real val);
+	void SetShininess(nReal val);
 
-	void SetTransparency(real val);
+	void SetTransparency(nReal val);
 
 	void SetTexMap(nstring & nmap);
 
@@ -132,8 +132,8 @@ public:
 		nova::CColorRGB AmbientColor,
 		nova::CColorRGB DiffuseColor,
 		nova::CColorRGB SpecularColor,
-		real Shininess,
-		real Transparency,
+		nReal Shininess,
+		nReal Transparency,
 		nstring TexMap,
 		nstring MultiTexMap,
 		nstring SpecMap,
@@ -145,8 +145,8 @@ public:
 		nova::CColorRGB AmbientColor,
 		nova::CColorRGB DiffuseColor,
 		nova::CColorRGB SpecularColor,
-		real Shininess,
-		real Transparency,
+		nReal Shininess,
+		nReal Transparency,
 		nstring TexMap,
 		nstring MultiTexMap,
 		nstring SpecMap,

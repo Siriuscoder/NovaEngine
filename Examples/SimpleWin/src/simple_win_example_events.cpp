@@ -17,8 +17,8 @@
  ***************************************************************************/
 #include "simple_win_example_events.h"
 
-nova::real rtri = 0;
-nova::real rquad = 0;
+nova::nReal rtri = 0;
+nova::nReal rquad = 0;
 
 CMyEventHandler::CMyEventHandler() : CEventConveyor()
 {
@@ -97,7 +97,7 @@ void CMyEventHandler::OnRender()
 /*
 glMatrixMode(GL_PROJECTION);// Выбор матрицы проекции
 glLoadIdentity();		// Сброс матрицы проекции
-gluPerspective(45.0f,(real)800/(real)600,0.1f,100.0f);
+gluPerspective(45.0f,(nReal)800/(nReal)600,0.1f,100.0f);
 							// Вычислить соотношение геометрических размеров для окна
 glMatrixMode(GL_MODELVIEW);// Выбор матрицы просмотра модели
 glLoadIdentity();				// Сброс просмотра

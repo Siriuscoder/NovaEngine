@@ -57,7 +57,7 @@ public:
 
 	bool SphereInFrustum(CSpheref & sphere);
 
-	nova::real DistanceInFrustumSphere(CSpheref & sphere);
+	nova::nReal DistanceInFrustumSphere(CSpheref & sphere);
 
 	bool BoxInFrustum(CBoundingBox & box);
 

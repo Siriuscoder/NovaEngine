@@ -22,7 +22,7 @@
 namespace nova
 {
 
-void PanelBase::SetLocation(real x, real y)
+void PanelBase::SetLocation(nReal x, nReal y)
 {
 	location.x = x;
 	location.y = y;
@@ -38,22 +38,22 @@ Point PanelBase::GetLocation()
 	return location;
 }
 
-void PanelBase::SetWidth(real w)
+void PanelBase::SetWidth(nReal w)
 {
 	this->width = w;
 }
 
-void PanelBase::SetHeight(real h)
+void PanelBase::SetHeight(nReal h)
 {
 	this->height = h;
 }
 
-real PanelBase::GetWidth()
+nReal PanelBase::GetWidth()
 {
 	return width;
 }
 
-real PanelBase::GetHeight()
+nReal PanelBase::GetHeight()
 {
 	return height;
 }
@@ -70,7 +70,7 @@ void PanelBase::Move(Point p)
 	location.y += p.y;
 }
 
-void PanelBase::Move(real x, real y)
+void PanelBase::Move(nReal x, nReal y)
 {
 	location.x += x;
 	location.y += y;

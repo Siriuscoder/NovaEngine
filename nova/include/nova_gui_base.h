@@ -25,8 +25,8 @@ namespace nova
 
 typedef struct _Point
 {
-	nova::real x;
-	nova::real y;
+	nova::nReal x;
+	nova::nReal y;
 } *pPoint, Point;
 
 class NOVA_EXPORT PanelBase : public nova::CBase
@@ -34,8 +34,8 @@ class NOVA_EXPORT PanelBase : public nova::CBase
 protected:
 	Point location;
 
-	real width;
-	real height;
+	nReal width;
+	nReal height;
 
 // Указатель на текстурный менеджер
 ///
@@ -61,19 +61,19 @@ public:
 	virtual void Init( void ) = 0;
 	virtual void Release( void ) = 0;
 
-	void SetLocation(real x, real y);
+	void SetLocation(nReal x, nReal y);
 	void SetLocation(Point p);
 	Point GetLocation();
 
-	void SetWidth(real w);
-	void SetHeight(real h);
-	real GetWidth();
-	real GetHeight();
+	void SetWidth(nReal w);
+	void SetHeight(nReal h);
+	nReal GetWidth();
+	nReal GetHeight();
 
 	void SetTransparency(nova::uint tr);
 
 	void Move(Point p);
-	void Move(real x, real y);
+	void Move(nReal x, nReal y);
 };
 
 

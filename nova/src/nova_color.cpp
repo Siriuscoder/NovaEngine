@@ -50,7 +50,7 @@ CColorRGB::CColorRGB () : CBase("CColorRGB")
     m_afTuple[2] = 0.0f;
 }
 //----------------------------------------------------------------------------
-CColorRGB::CColorRGB (real fR, real fG, real fB) : CBase("CColorRGB")
+CColorRGB::CColorRGB (nReal fR, nReal fG, nReal fB) : CBase("CColorRGB")
 {
     m_afTuple[0] = fR;
     m_afTuple[1] = fG;
@@ -59,12 +59,12 @@ CColorRGB::CColorRGB (real fR, real fG, real fB) : CBase("CColorRGB")
 
 CColorRGB::CColorRGB (nova::byte bR, nova::byte bG, nova::byte bB) : CBase("CColorRGB")
 {
-    m_afTuple[0] = (real)bR / 255;
-    m_afTuple[1] = (real)bG / 255;
-    m_afTuple[2] = (real)bB / 255;
+    m_afTuple[0] = (nReal)bR / 255;
+    m_afTuple[1] = (nReal)bG / 255;
+    m_afTuple[2] = (nReal)bB / 255;
 }
 //----------------------------------------------------------------------------
-CColorRGB::CColorRGB (const real* afTuple) : CBase("CColorRGB")
+CColorRGB::CColorRGB (const nReal* afTuple) : CBase("CColorRGB")
 {
     m_afTuple[0] = afTuple[0];
     m_afTuple[1] = afTuple[1];
@@ -104,7 +104,7 @@ bool CColorRGB::operator!= (const CColorRGB& rkC) const
 //----------------------------------------------------------------------------
 int CColorRGB::CompareArrays (const CColorRGB& rkC) const
 {
-    return memcmp(m_afTuple,rkC.m_afTuple,3*sizeof(real));
+    return memcmp(m_afTuple,rkC.m_afTuple,3*sizeof(nReal));
 }
 //----------------------------------------------------------------------------
 bool CColorRGB::operator< (const CColorRGB& rkC) const
@@ -151,7 +151,7 @@ CColorRGB CColorRGB::operator* (const CColorRGB& rkC) const
         m_afTuple[2]*rkC.m_afTuple[2]);
 }
 //----------------------------------------------------------------------------
-CColorRGB CColorRGB::operator* (real fScalar) const
+CColorRGB CColorRGB::operator* (nReal fScalar) const
 {
     return CColorRGB(
         fScalar*m_afTuple[0],
@@ -159,7 +159,7 @@ CColorRGB CColorRGB::operator* (real fScalar) const
         fScalar*m_afTuple[2]);
 }
 //----------------------------------------------------------------------------
-CColorRGB operator* (real fScalar, const CColorRGB& rkC)
+CColorRGB operator* (nReal fScalar, const CColorRGB& rkC)
 {
     return CColorRGB(fScalar*rkC[0],fScalar*rkC[1],fScalar*rkC[2]);
 }
@@ -188,7 +188,7 @@ CColorRGB& CColorRGB::operator*= (const CColorRGB& rkC)
     return *this;
 }
 //----------------------------------------------------------------------------
-CColorRGB& CColorRGB::operator*= (real fScalar)
+CColorRGB& CColorRGB::operator*= (nReal fScalar)
 {
     m_afTuple[0] *= fScalar;
     m_afTuple[1] *= fScalar;
@@ -213,7 +213,7 @@ void CColorRGB::Clamp ()
 //----------------------------------------------------------------------------
 void CColorRGB::ScaleByMax ()
 {
-    real fMax = m_afTuple[0];
+    nReal fMax = m_afTuple[0];
     if (m_afTuple[1] > fMax)
     {
         fMax = m_afTuple[1];
@@ -225,7 +225,7 @@ void CColorRGB::ScaleByMax ()
 
     if (fMax > 1.0f)
     {
-        real fInvMax = 1.0f/fMax;
+        nReal fInvMax = 1.0f/fMax;
         for (int i = 0; i < 3; i++)
         {
             m_afTuple[i] *= fInvMax;
@@ -246,7 +246,7 @@ CColorRGBA::CColorRGBA () : CBase("CColorRGBA")
     m_afTuple[3] = 0.0f;
 }
 //----------------------------------------------------------------------------
-CColorRGBA::CColorRGBA (real fR, real fG, real fB, real fA) : CBase("CColorRGBA")
+CColorRGBA::CColorRGBA (nReal fR, nReal fG, nReal fB, nReal fA) : CBase("CColorRGBA")
 {
     m_afTuple[0] = fR;
     m_afTuple[1] = fG;
@@ -256,13 +256,13 @@ CColorRGBA::CColorRGBA (real fR, real fG, real fB, real fA) : CBase("CColorRGBA"
 
 CColorRGBA::CColorRGBA (nova::byte bR, nova::byte bG, nova::byte bB, nova::byte bA) : CBase("CColorRGB")
 {
-    m_afTuple[0] = (real)bR / 255;
-    m_afTuple[1] = (real)bG / 255;
-    m_afTuple[2] = (real)bB / 255;
-	m_afTuple[3] = (real)bA / 255;
+    m_afTuple[0] = (nReal)bR / 255;
+    m_afTuple[1] = (nReal)bG / 255;
+    m_afTuple[2] = (nReal)bB / 255;
+	m_afTuple[3] = (nReal)bA / 255;
 }
 //----------------------------------------------------------------------------
-CColorRGBA::CColorRGBA (const real* afTuple) : CBase("CColorRGBA")
+CColorRGBA::CColorRGBA (const nReal* afTuple) : CBase("CColorRGBA")
 {
     m_afTuple[0] = afTuple[0];
     m_afTuple[1] = afTuple[1];
@@ -307,7 +307,7 @@ bool CColorRGBA::operator!= (const CColorRGBA& rkC) const
 //----------------------------------------------------------------------------
 int CColorRGBA::CompareArrays (const CColorRGBA& rkC) const
 {
-    return memcmp(m_afTuple,rkC.m_afTuple,4*sizeof(real));
+    return memcmp(m_afTuple,rkC.m_afTuple,4*sizeof(nReal));
 }
 //----------------------------------------------------------------------------
 bool CColorRGBA::operator< (const CColorRGBA& rkC) const
@@ -357,7 +357,7 @@ CColorRGBA CColorRGBA::operator* (const CColorRGBA& rkC) const
         m_afTuple[3]*rkC.m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-CColorRGBA CColorRGBA::operator* (real fScalar) const
+CColorRGBA CColorRGBA::operator* (nReal fScalar) const
 {
     return CColorRGBA(
         fScalar*m_afTuple[0],
@@ -366,7 +366,7 @@ CColorRGBA CColorRGBA::operator* (real fScalar) const
         fScalar*m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-CColorRGBA operator* (real fScalar, const CColorRGBA& rkC)
+CColorRGBA operator* (nReal fScalar, const CColorRGBA& rkC)
 {
     return CColorRGBA(
         fScalar*rkC[0],
@@ -402,7 +402,7 @@ CColorRGBA& CColorRGBA::operator*= (const CColorRGBA& rkC)
     return *this;
 }
 //----------------------------------------------------------------------------
-CColorRGBA& CColorRGBA::operator*= (real fScalar)
+CColorRGBA& CColorRGBA::operator*= (nReal fScalar)
 {
     m_afTuple[0] *= fScalar;
     m_afTuple[1] *= fScalar;
@@ -429,7 +429,7 @@ void CColorRGBA::Clamp ()
 void CColorRGBA::ScaleByMax ()
 {
     // Use max of color channels, not alpha channel.
-    real fMax = m_afTuple[0];
+    nReal fMax = m_afTuple[0];
     if (m_afTuple[1] > fMax)
     {
         fMax = m_afTuple[1];
@@ -441,7 +441,7 @@ void CColorRGBA::ScaleByMax ()
 
     if (fMax > 1.0f)
     {
-        real fInvMax = 1.0f/fMax;
+        nReal fInvMax = 1.0f/fMax;
         for (int i = 0; i < 3; i++)
         {
             m_afTuple[i] *= fInvMax;

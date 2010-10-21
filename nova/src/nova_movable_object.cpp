@@ -46,7 +46,7 @@ CMovableObject::~CMovableObject()
 
 }
 
-void CMovableObject::SetLocation(real x, real y, real z)
+void CMovableObject::SetLocation(nReal x, nReal y, nReal z)
 {
 	mPosition = nova::Vector3f(x, y, z);
 
@@ -60,7 +60,7 @@ void CMovableObject::SetOrientation(const nova::Quaternionf & quat)
 	OrientationChanged();
 }
 
-void CMovableObject::SetScale(real x, real y, real z)
+void CMovableObject::SetScale(nReal x, nReal y, nReal z)
 {
 	mScale = nova::Vector3f(x, y, z);
 
@@ -82,7 +82,7 @@ Vector3f & CMovableObject::SetScale(void) const
 	return mScale;
 }
 
-void CMovableObject::Move(real x, real y, real z)
+void CMovableObject::Move(nReal x, nReal y, nReal z)
 {
 	mPosition += Vector3f(x, y, z);
 
@@ -97,7 +97,7 @@ void CMovableObject::Rotate(Quaternionf & quat)
 	OrientationChanged();
 }
 
-void CMovableObject::Scale(real x, real y, real z)
+void CMovableObject::Scale(nReal x, nReal y, nReal z)
 {
 	mScale = Vector3f(x, y, z);
 

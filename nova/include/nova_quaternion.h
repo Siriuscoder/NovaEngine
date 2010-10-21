@@ -38,7 +38,7 @@
 namespace nova
 {
 
-template <class Real>
+template <class nReal>
 class CQuaternion: public CObjectConstructor
 {
 public:
@@ -47,31 +47,31 @@ public:
 
     // construction
     CQuaternion ();  // uninitialized
-    CQuaternion (Real fW, Real fX, Real fY, Real fZ);
+    CQuaternion (nReal fW, nReal fX, nReal fY, nReal fZ);
     CQuaternion (const CQuaternion& rkQ);
 
     // CQuaternion for the input rotation matrix
-    CQuaternion (const CMatrix3<Real>& rkRot);
+    CQuaternion (const CMatrix3<nReal>& rkRot);
 
     // CQuaternion for the rotation of the axis-angle pair
-    CQuaternion (const CVector3<Real>& rkAxis, Real fAngle);
+    CQuaternion (const CVector3<nReal>& rkAxis, nReal fAngle);
 
     // CQuaternion for the rotation matrix with specified columns
-    CQuaternion (const CVector3<Real> akRotColumn[3]);
+    CQuaternion (const CVector3<nReal> akRotColumn[3]);
 
     // member access:  0 = w, 1 = x, 2 = y, 3 = z
-    inline operator const Real* () const;
-    inline operator Real* ();
-    inline Real operator[] (int i) const;
-    inline Real& operator[] (int i);
-    inline Real W () const;
-    inline Real& W ();
-    inline Real X () const;
-    inline Real& X ();
-    inline Real Y () const;
-    inline Real& Y ();
-    inline Real Z () const;
-    inline Real& Z ();
+    inline operator const nReal* () const;
+    inline operator nReal* ();
+    inline nReal operator[] (int i) const;
+    inline nReal& operator[] (int i);
+    inline nReal W () const;
+    inline nReal& W ();
+    inline nReal X () const;
+    inline nReal& X ();
+    inline nReal Y () const;
+    inline nReal& Y ();
+    inline nReal Z () const;
+    inline nReal& Z ();
 
     // assignment
     inline CQuaternion& operator= (const CQuaternion& rkQ);
@@ -88,41 +88,41 @@ public:
     inline CQuaternion operator+ (const CQuaternion& rkQ) const;
     inline CQuaternion operator- (const CQuaternion& rkQ) const;
     inline CQuaternion operator* (const CQuaternion& rkQ) const;
-    inline CQuaternion operator* (Real fScalar) const;
-    inline CQuaternion operator/ (Real fScalar) const;
+    inline CQuaternion operator* (nReal fScalar) const;
+    inline CQuaternion operator/ (nReal fScalar) const;
     inline CQuaternion operator- () const;
 
     // arithmetic updates
     inline CQuaternion& operator+= (const CQuaternion& rkQ);
     inline CQuaternion& operator-= (const CQuaternion& rkQ);
-    inline CQuaternion& operator*= (Real fScalar);
-    inline CQuaternion& operator/= (Real fScalar);
+    inline CQuaternion& operator*= (nReal fScalar);
+    inline CQuaternion& operator/= (nReal fScalar);
 
     // conversion between quaternions, matrices, and axis-angle
-    CQuaternion& FromRotationMatrix (const CMatrix3<Real>& rkRot);
-    void ToRotationMatrix (CMatrix3<Real>& rkRot) const;
-    CQuaternion& FromRotationMatrix (const CVector3<Real> akRotColumn[3]);
-    void ToRotationMatrix (CVector3<Real> akRotColumn[3]) const;
-    CQuaternion& FromAxisAngle (const CVector3<Real>& rkAxis, Real fAngle);
-    void ToAxisAngle (CVector3<Real>& rkAxis, Real& rfAngle) const;
+    CQuaternion& FromRotationMatrix (const CMatrix3<nReal>& rkRot);
+    void ToRotationMatrix (CMatrix3<nReal>& rkRot) const;
+    CQuaternion& FromRotationMatrix (const CVector3<nReal> akRotColumn[3]);
+    void ToRotationMatrix (CVector3<nReal> akRotColumn[3]) const;
+    CQuaternion& FromAxisAngle (const CVector3<nReal>& rkAxis, nReal fAngle);
+    void ToAxisAngle (CVector3<nReal>& rkAxis, nReal& rfAngle) const;
 
     // functions of a CQuaternion
-    inline Real Length () const;  // length of 4-tuple
-    inline Real SquaredLength () const;  // squared length of 4-tuple
-    inline Real Dot (const CQuaternion& rkQ) const;  // dot product of 4-tuples
-    inline Real Normalize ();  // make the 4-tuple unit length
+    inline nReal Length () const;  // length of 4-tuple
+    inline nReal SquaredLength () const;  // squared length of 4-tuple
+    inline nReal Dot (const CQuaternion& rkQ) const;  // dot product of 4-tuples
+    inline nReal Normalize ();  // make the 4-tuple unit length
     CQuaternion Inverse () const;  // apply to non-zero CQuaternion
     CQuaternion Conjugate () const;
     CQuaternion Exp () const;  // apply to CQuaternion with w = 0
     CQuaternion Log () const;  // apply to unit-length CQuaternion
 
     // rotation of a vector by a CQuaternion
-    CVector3<Real> Rotate (const CVector3<Real>& rkVector) const;
+    CVector3<nReal> Rotate (const CVector3<nReal>& rkVector) const;
 
     // spherical linear interpolation
-    CQuaternion& Slerp (Real fT, const CQuaternion& rkP, const CQuaternion& rkQ);
+    CQuaternion& Slerp (nReal fT, const CQuaternion& rkP, const CQuaternion& rkQ);
 
-    CQuaternion& SlerpExtraSpins (Real fT, const CQuaternion& rkP,
+    CQuaternion& SlerpExtraSpins (nReal fT, const CQuaternion& rkP,
         const CQuaternion& rkQ, int iExtraSpins);
 
     // intermediate terms for spherical quadratic interpolation
@@ -130,7 +130,7 @@ public:
         const CQuaternion& rkQ1, const CQuaternion& rkQ2);
 
     // spherical quadratic interpolation
-    CQuaternion& Squad (Real fT, const CQuaternion& rkQ0,
+    CQuaternion& Squad (nReal fT, const CQuaternion& rkQ0,
         const CQuaternion& rkA0, const CQuaternion& rkA1,
         const CQuaternion& rkQ1);
 
@@ -139,20 +139,20 @@ public:
     // V2, with angle of that between V1 and V2.  If V1 and V2 are parallel,
     // any axis of rotation will do, such as the permutation (z2,x2,y2), where
     // V2 = (x2,y2,z2).
-    CQuaternion& Align (const CVector3<Real>& rkV1, const CVector3<Real>& rkV2);
+    CQuaternion& Align (const CVector3<nReal>& rkV1, const CVector3<nReal>& rkV2);
 
     // Decompose a CQuaternion into q = q_twist * q_swing, where q is 'this'
     // CQuaternion.  If V1 is the input axis and V2 is the rotation of V1 by
     // q, q_swing represents the rotation about the axis perpendicular to
     // V1 and V2 (see CQuaternion::Align), and q_twist is a rotation about V1.
-    void DecomposeTwistTimesSwing (const CVector3<Real>& rkV1,
+    void DecomposeTwistTimesSwing (const CVector3<nReal>& rkV1,
         CQuaternion& rkTwist, CQuaternion& rkSwing);
 
     // Decompose a CQuaternion into q = q_swing * q_twist, where q is 'this'
     // CQuaternion.  If V1 is the input axis and V2 is the rotation of V1 by
     // q, q_swing represents the rotation about the axis perpendicular to
     // V1 and V2 (see CQuaternion::Align), and q_twist is a rotation about V1.
-    void DecomposeSwingTimesTwist (const CVector3<Real>& rkV1,
+    void DecomposeSwingTimesTwist (const CVector3<nReal>& rkV1,
         CQuaternion& rkSwing, CQuaternion& rkTwist);
 
     // *** Find closest quaternions with unconstrained angles.
@@ -185,28 +185,28 @@ public:
     CQuaternion GetClosestZY () const;
 
     // Factor to (cx + sx*i)*(cy + sy*j)*(cz + sz*k).
-    void FactorXYZ (Real& rfCx, Real& rfSx, Real& rfCy, Real& rfSy,
-        Real& rfCz, Real& rfSz);
+    void FactorXYZ (nReal& rfCx, nReal& rfSx, nReal& rfCy, nReal& rfSy,
+        nReal& rfCz, nReal& rfSz);
 
     // Factor to (cx + sx*i)*(cz + sz*k)*(cy + sy*j).
-    void FactorXZY (Real& rfCx, Real& rfSx, Real& rfCz, Real& rfSz,
-        Real& rfCy, Real& rfSy);
+    void FactorXZY (nReal& rfCx, nReal& rfSx, nReal& rfCz, nReal& rfSz,
+        nReal& rfCy, nReal& rfSy);
 
     // Factor to (cy + sy*j)*(cz + sz*k)*(cx + sx*i).
-    void FactorYZX (Real& rfCy, Real& rfSy, Real& rfCz, Real& rfSz,
-        Real& rfCx, Real& rfSx);
+    void FactorYZX (nReal& rfCy, nReal& rfSy, nReal& rfCz, nReal& rfSz,
+        nReal& rfCx, nReal& rfSx);
 
     // Factor to (cy + sy*j)*(cx + sx*i)*(cz + sz*k).
-    void FactorYXZ (Real& rfCy, Real& rfSy, Real& rfCx, Real& rfSx,
-        Real& rfCz, Real& rfSz);
+    void FactorYXZ (nReal& rfCy, nReal& rfSy, nReal& rfCx, nReal& rfSx,
+        nReal& rfCz, nReal& rfSz);
 
     // Factor to (cz + sz*k)*(cx + sx*i)*(cy + sy*j).
-    void FactorZXY (Real& rfCz, Real& rfSz, Real& rfCx, Real& rfSx,
-        Real& rfCy, Real& rfSy);
+    void FactorZXY (nReal& rfCz, nReal& rfSz, nReal& rfCx, nReal& rfSx,
+        nReal& rfCy, nReal& rfSy);
 
     // Factor to (cz + sz*k)*(cy + sy*j)*(cx + sx*i).
-    void FactorZYX (Real& rfCz, Real& rfSz, Real& rfCy, Real& rfSy,
-        Real& rfCx, Real& rfSx);
+    void FactorZYX (nReal& rfCz, nReal& rfSz, nReal& rfCy, nReal& rfSy,
+        nReal& rfCx, nReal& rfSx);
 
     // *** Find closest quaternions with constrained angles.
     class Constraints
@@ -217,41 +217,41 @@ public:
             // Members are uninitialized.
         }
 
-        Constraints (Real fMinAngle, Real fMaxAngle)
+        Constraints (nReal fMinAngle, nReal fMaxAngle)
         {
             SetAngles(fMinAngle,fMaxAngle);
         }
 
-        void SetAngles (Real fMinAngle, Real fMaxAngle)
+        void SetAngles (nReal fMinAngle, nReal fMaxAngle)
         {
             m_fMinAngle = fMinAngle;
             m_fMaxAngle = fMaxAngle;
-            m_fCosMinAngle = CMath<Real>::Cos(m_fMinAngle);
-            m_fSinMinAngle = CMath<Real>::Sin(m_fMinAngle);
-            m_fCosMaxAngle = CMath<Real>::Cos(m_fMaxAngle);
-            m_fSinMaxAngle = CMath<Real>::Sin(m_fMaxAngle);
+            m_fCosMinAngle = CMath<nReal>::Cos(m_fMinAngle);
+            m_fSinMinAngle = CMath<nReal>::Sin(m_fMinAngle);
+            m_fCosMaxAngle = CMath<nReal>::Cos(m_fMaxAngle);
+            m_fSinMaxAngle = CMath<nReal>::Sin(m_fMaxAngle);
             m_fDiffCosMaxMin = m_fCosMaxAngle - m_fCosMinAngle;
             m_fDiffSinMaxMin = m_fSinMaxAngle - m_fSinMinAngle;
-            Real fAvrAngle = ((Real)0.5)*(m_fMinAngle + m_fMaxAngle);
-            m_fCosAvrAngle = CMath<Real>::Cos(fAvrAngle);
-            m_fSinAvrAngle = CMath<Real>::Sin(fAvrAngle);
+            nReal fAvrAngle = ((nReal)0.5)*(m_fMinAngle + m_fMaxAngle);
+            m_fCosAvrAngle = CMath<nReal>::Cos(fAvrAngle);
+            m_fSinAvrAngle = CMath<nReal>::Sin(fAvrAngle);
         }
 
-        bool IsValid (Real fX, Real fY) const
+        bool IsValid (nReal fX, nReal fY) const
         {
             // (x,y) must be unit-length.
 
             // Test whether (x,y) satisfies the constraints.
-            Real fXm = fX - m_fCosMinAngle;
-            Real fYm = fY - m_fSinMinAngle;
+            nReal fXm = fX - m_fCosMinAngle;
+            nReal fYm = fY - m_fSinMinAngle;
             if (fXm*m_fDiffSinMaxMin >= fYm*m_fDiffCosMaxMin)
             {
                 return true;
             }
 
             // Test whether (-x,-y) satisfies the constraints.
-            Real fXp = fX + m_fCosMinAngle;
-            Real fYp = fY + m_fSinMinAngle;
+            nReal fXp = fX + m_fCosMinAngle;
+            nReal fYp = fY + m_fSinMinAngle;
             if (fXp*m_fDiffSinMaxMin <= fYp*m_fDiffCosMaxMin)
             {
                 return true;
@@ -260,16 +260,16 @@ public:
             return false;
         }
 
-        Real m_fMinAngle;       // in [-PI/2,PI/2]
-        Real m_fMaxAngle;       // in [m_fMinAngle/2,PI/2]
-        Real m_fCosMinAngle;    // = cos(m_fMinAngle)
-        Real m_fSinMinAngle;    // = sin(m_fMinAngle)
-        Real m_fCosMaxAngle;    // = cos(m_fMaxAngle)
-        Real m_fSinMaxAngle;    // = sin(m_fMaxAngle)
-        Real m_fDiffCosMaxMin;  // = cos(m_fMaxAngle) - cos(m_fMinAngle)
-        Real m_fDiffSinMaxMin;  // = sin(m_fMaxAngle) - sin(m_fMinAngle)
-        Real m_fCosAvrAngle;    // = cos((m_fMinAngle + m_fMaxAngle)/2)
-        Real m_fSinAvrAngle;    // = sin((m_fMinAngle + mM_faxAngle)/2)
+        nReal m_fMinAngle;       // in [-PI/2,PI/2]
+        nReal m_fMaxAngle;       // in [m_fMinAngle/2,PI/2]
+        nReal m_fCosMinAngle;    // = cos(m_fMinAngle)
+        nReal m_fSinMinAngle;    // = sin(m_fMinAngle)
+        nReal m_fCosMaxAngle;    // = cos(m_fMaxAngle)
+        nReal m_fSinMaxAngle;    // = sin(m_fMaxAngle)
+        nReal m_fDiffCosMaxMin;  // = cos(m_fMaxAngle) - cos(m_fMinAngle)
+        nReal m_fDiffSinMaxMin;  // = sin(m_fMaxAngle) - sin(m_fMinAngle)
+        nReal m_fCosAvrAngle;    // = cos((m_fMinAngle + m_fMaxAngle)/2)
+        nReal m_fSinAvrAngle;    // = sin((m_fMinAngle + mM_faxAngle)/2)
     };
 
     // Closest constrained CQuaternion of the form (cx + sx*i).
@@ -331,24 +331,24 @@ private:
     NOVA_EXPORT static int ms_iNext[3];
 
     // support for closest quaternions
-    NOVA_EXPORT static Real ms_fTolerance;
-    NOVA_EXPORT static Real ms_fRootTwo;
-    NOVA_EXPORT static Real ms_fRootHalf;
+    NOVA_EXPORT static nReal ms_fTolerance;
+    NOVA_EXPORT static nReal ms_fRootTwo;
+    NOVA_EXPORT static nReal ms_fRootHalf;
 
-    Real m_afTuple[4];
+    nReal m_afTuple[4];
 };
 
-template <class Real>
-inline CQuaternion<Real> operator* (Real fScalar, const CQuaternion<Real>& rkQ);
+template <class nReal>
+inline CQuaternion<nReal> operator* (nReal fScalar, const CQuaternion<nReal>& rkQ);
 
-template <class Real>
-CQuaternion<Real>::CQuaternion ()
+template <class nReal>
+CQuaternion<nReal>::CQuaternion ()
 {
     // uninitialized for performance in array construction
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>::CQuaternion (Real fW, Real fX, Real fY, Real fZ)
+template <class nReal>
+CQuaternion<nReal>::CQuaternion (nReal fW, nReal fX, nReal fY, nReal fZ)
 {
     m_afTuple[0] = fW;
     m_afTuple[1] = fX;
@@ -356,8 +356,8 @@ CQuaternion<Real>::CQuaternion (Real fW, Real fX, Real fY, Real fZ)
     m_afTuple[3] = fZ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>::CQuaternion (const CQuaternion& rkQ)
+template <class nReal>
+CQuaternion<nReal>::CQuaternion (const CQuaternion& rkQ)
 {
     m_afTuple[0] = rkQ.m_afTuple[0];
     m_afTuple[1] = rkQ.m_afTuple[1];
@@ -365,98 +365,98 @@ CQuaternion<Real>::CQuaternion (const CQuaternion& rkQ)
     m_afTuple[3] = rkQ.m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>::CQuaternion (const CMatrix3<Real>& rkRot)
+template <class nReal>
+CQuaternion<nReal>::CQuaternion (const CMatrix3<nReal>& rkRot)
 {
     FromRotationMatrix(rkRot);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>::CQuaternion (const CVector3<Real>& rkAxis, Real fAngle)
+template <class nReal>
+CQuaternion<nReal>::CQuaternion (const CVector3<nReal>& rkAxis, nReal fAngle)
 {
     FromAxisAngle(rkAxis,fAngle);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>::CQuaternion (const CVector3<Real> akRotColumn[3])
+template <class nReal>
+CQuaternion<nReal>::CQuaternion (const CVector3<nReal> akRotColumn[3])
 {
     FromRotationMatrix(akRotColumn);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real>::operator const Real* () const
+template <class nReal>
+inline CQuaternion<nReal>::operator const nReal* () const
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real>::operator Real* ()
+template <class nReal>
+inline CQuaternion<nReal>::operator nReal* ()
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::operator[] (int i) const
+template <class nReal>
+inline nReal CQuaternion<nReal>::operator[] (int i) const
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CQuaternion<Real>::operator[] (int i)
+template <class nReal>
+inline nReal& CQuaternion<nReal>::operator[] (int i)
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::W () const
+template <class nReal>
+inline nReal CQuaternion<nReal>::W () const
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CQuaternion<Real>::W ()
+template <class nReal>
+inline nReal& CQuaternion<nReal>::W ()
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::X () const
+template <class nReal>
+inline nReal CQuaternion<nReal>::X () const
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CQuaternion<Real>::X ()
+template <class nReal>
+inline nReal& CQuaternion<nReal>::X ()
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::Y () const
+template <class nReal>
+inline nReal CQuaternion<nReal>::Y () const
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CQuaternion<Real>::Y ()
+template <class nReal>
+inline nReal& CQuaternion<nReal>::Y ()
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::Z () const
+template <class nReal>
+inline nReal CQuaternion<nReal>::Z () const
 {
     return m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CQuaternion<Real>::Z ()
+template <class nReal>
+inline nReal& CQuaternion<nReal>::Z ()
 {
     return m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real>& CQuaternion<Real>::operator= (const CQuaternion& rkQ)
+template <class nReal>
+inline CQuaternion<nReal>& CQuaternion<nReal>::operator= (const CQuaternion& rkQ)
 {
     m_afTuple[0] = rkQ.m_afTuple[0];
     m_afTuple[1] = rkQ.m_afTuple[1];
@@ -465,50 +465,50 @@ inline CQuaternion<Real>& CQuaternion<Real>::operator= (const CQuaternion& rkQ)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-int CQuaternion<Real>::CompareArrays (const CQuaternion& rkQ) const
+template <class nReal>
+int CQuaternion<nReal>::CompareArrays (const CQuaternion& rkQ) const
 {
-    return memcmp(m_afTuple,rkQ.m_afTuple,4*sizeof(Real));
+    return memcmp(m_afTuple,rkQ.m_afTuple,4*sizeof(nReal));
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CQuaternion<Real>::operator== (const CQuaternion& rkQ) const
+template <class nReal>
+bool CQuaternion<nReal>::operator== (const CQuaternion& rkQ) const
 {
     return CompareArrays(rkQ) == 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CQuaternion<Real>::operator!= (const CQuaternion& rkQ) const
+template <class nReal>
+bool CQuaternion<nReal>::operator!= (const CQuaternion& rkQ) const
 {
     return CompareArrays(rkQ) != 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CQuaternion<Real>::operator< (const CQuaternion& rkQ) const
+template <class nReal>
+bool CQuaternion<nReal>::operator< (const CQuaternion& rkQ) const
 {
     return CompareArrays(rkQ) < 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CQuaternion<Real>::operator<= (const CQuaternion& rkQ) const
+template <class nReal>
+bool CQuaternion<nReal>::operator<= (const CQuaternion& rkQ) const
 {
     return CompareArrays(rkQ) <= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CQuaternion<Real>::operator> (const CQuaternion& rkQ) const
+template <class nReal>
+bool CQuaternion<nReal>::operator> (const CQuaternion& rkQ) const
 {
     return CompareArrays(rkQ) > 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CQuaternion<Real>::operator>= (const CQuaternion& rkQ) const
+template <class nReal>
+bool CQuaternion<nReal>::operator>= (const CQuaternion& rkQ) const
 {
     return CompareArrays(rkQ) >= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real> CQuaternion<Real>::operator+ (
+template <class nReal>
+inline CQuaternion<nReal> CQuaternion<nReal>::operator+ (
     const CQuaternion& rkQ) const
 {
     CQuaternion kSum;
@@ -519,8 +519,8 @@ inline CQuaternion<Real> CQuaternion<Real>::operator+ (
     return kSum;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real> CQuaternion<Real>::operator- (
+template <class nReal>
+inline CQuaternion<nReal> CQuaternion<nReal>::operator- (
     const CQuaternion& rkQ) const
 {
     CQuaternion kDiff;
@@ -531,8 +531,8 @@ inline CQuaternion<Real> CQuaternion<Real>::operator- (
     return kDiff;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real> CQuaternion<Real>::operator* (
+template <class nReal>
+inline CQuaternion<nReal> CQuaternion<nReal>::operator* (
     const CQuaternion& rkQ) const
 {
     // NOTE:  Multiplication is not generally commutative, so in most
@@ -567,8 +567,8 @@ inline CQuaternion<Real> CQuaternion<Real>::operator* (
     return kProd;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real> CQuaternion<Real>::operator* (Real fScalar) const
+template <class nReal>
+inline CQuaternion<nReal> CQuaternion<nReal>::operator* (nReal fScalar) const
 {
     CQuaternion kProd;
     for (int i = 0; i < 4; i++)
@@ -578,15 +578,15 @@ inline CQuaternion<Real> CQuaternion<Real>::operator* (Real fScalar) const
     return kProd;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real> CQuaternion<Real>::operator/ (Real fScalar) const
+template <class nReal>
+inline CQuaternion<nReal> CQuaternion<nReal>::operator/ (nReal fScalar) const
 {
     CQuaternion kQuot;
     int i;
 
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
         for (i = 0; i < 4; i++)
         {
             kQuot.m_afTuple[i] = fInvScalar*m_afTuple[i];
@@ -596,15 +596,15 @@ inline CQuaternion<Real> CQuaternion<Real>::operator/ (Real fScalar) const
     {
         for (i = 0; i < 4; i++)
         {
-            kQuot.m_afTuple[i] = CMath<Real>::MAX_REAL;
+            kQuot.m_afTuple[i] = CMath<nReal>::MAX_REAL;
         }
     }
 
     return kQuot;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real> CQuaternion<Real>::operator- () const
+template <class nReal>
+inline CQuaternion<nReal> CQuaternion<nReal>::operator- () const
 {
     CQuaternion kNeg;
     for (int i = 0; i < 4; i++)
@@ -614,10 +614,10 @@ inline CQuaternion<Real> CQuaternion<Real>::operator- () const
     return kNeg;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real> operator* (Real fScalar, const CQuaternion<Real>& rkQ)
+template <class nReal>
+inline CQuaternion<nReal> operator* (nReal fScalar, const CQuaternion<nReal>& rkQ)
 {
-    CQuaternion<Real> kProd;
+    CQuaternion<nReal> kProd;
     for (int i = 0; i < 4; i++)
     {
         kProd[i] = fScalar*rkQ[i];
@@ -625,8 +625,8 @@ inline CQuaternion<Real> operator* (Real fScalar, const CQuaternion<Real>& rkQ)
     return kProd;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real>& CQuaternion<Real>::operator+= (const CQuaternion& rkQ)
+template <class nReal>
+inline CQuaternion<nReal>& CQuaternion<nReal>::operator+= (const CQuaternion& rkQ)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -635,8 +635,8 @@ inline CQuaternion<Real>& CQuaternion<Real>::operator+= (const CQuaternion& rkQ)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real>& CQuaternion<Real>::operator-= (const CQuaternion& rkQ)
+template <class nReal>
+inline CQuaternion<nReal>& CQuaternion<nReal>::operator-= (const CQuaternion& rkQ)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -645,8 +645,8 @@ inline CQuaternion<Real>& CQuaternion<Real>::operator-= (const CQuaternion& rkQ)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real>& CQuaternion<Real>::operator*= (Real fScalar)
+template <class nReal>
+inline CQuaternion<nReal>& CQuaternion<nReal>::operator*= (nReal fScalar)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -655,14 +655,14 @@ inline CQuaternion<Real>& CQuaternion<Real>::operator*= (Real fScalar)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CQuaternion<Real>& CQuaternion<Real>::operator/= (Real fScalar)
+template <class nReal>
+inline CQuaternion<nReal>& CQuaternion<nReal>::operator/= (nReal fScalar)
 {
     int i;
 
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
         for (i = 0; i < 4; i++)
         {
             m_afTuple[i] *= fInvScalar;
@@ -672,29 +672,29 @@ inline CQuaternion<Real>& CQuaternion<Real>::operator/= (Real fScalar)
     {
         for (i = 0; i < 4; i++)
         {
-            m_afTuple[i] = CMath<Real>::MAX_REAL;
+            m_afTuple[i] = CMath<nReal>::MAX_REAL;
         }
     }
 
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>& CQuaternion<Real>::FromRotationMatrix (
-    const CMatrix3<Real>& rkRot)
+template <class nReal>
+CQuaternion<nReal>& CQuaternion<nReal>::FromRotationMatrix (
+    const CMatrix3<nReal>& rkRot)
 {
     // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
     // article "CQuaternion Calculus and Fast Animation".
 
-    Real fTrace = rkRot(0,0) + rkRot(1,1) + rkRot(2,2);
-    Real fRoot;
+    nReal fTrace = rkRot(0,0) + rkRot(1,1) + rkRot(2,2);
+    nReal fRoot;
 
-    if (fTrace > (Real)0.0)
+    if (fTrace > (nReal)0.0)
     {
         // |w| > 1/2, may as well choose w > 1/2
-        fRoot = CMath<Real>::Sqrt(fTrace + (Real)1.0);  // 2w
-        m_afTuple[0] = ((Real)0.5)*fRoot;
-        fRoot = ((Real)0.5)/fRoot;  // 1/(4w)
+        fRoot = CMath<nReal>::Sqrt(fTrace + (nReal)1.0);  // 2w
+        m_afTuple[0] = ((nReal)0.5)*fRoot;
+        fRoot = ((nReal)0.5)/fRoot;  // 1/(4w)
         m_afTuple[1] = (rkRot(2,1)-rkRot(1,2))*fRoot;
         m_afTuple[2] = (rkRot(0,2)-rkRot(2,0))*fRoot;
         m_afTuple[3] = (rkRot(1,0)-rkRot(0,1))*fRoot;
@@ -714,10 +714,10 @@ CQuaternion<Real>& CQuaternion<Real>::FromRotationMatrix (
         int j = ms_iNext[i];
         int k = ms_iNext[j];
 
-        fRoot = CMath<Real>::Sqrt(rkRot(i,i)-rkRot(j,j)-rkRot(k,k)+(Real)1.0);
-        Real* apfQuat[3] = { &m_afTuple[1], &m_afTuple[2], &m_afTuple[3] };
-        *apfQuat[i] = ((Real)0.5)*fRoot;
-        fRoot = ((Real)0.5)/fRoot;
+        fRoot = CMath<nReal>::Sqrt(rkRot(i,i)-rkRot(j,j)-rkRot(k,k)+(nReal)1.0);
+        nReal* apfQuat[3] = { &m_afTuple[1], &m_afTuple[2], &m_afTuple[3] };
+        *apfQuat[i] = ((nReal)0.5)*fRoot;
+        fRoot = ((nReal)0.5)/fRoot;
         m_afTuple[0] = (rkRot(k,j)-rkRot(j,k))*fRoot;
         *apfQuat[j] = (rkRot(j,i)+rkRot(i,j))*fRoot;
         *apfQuat[k] = (rkRot(k,i)+rkRot(i,k))*fRoot;
@@ -726,38 +726,38 @@ CQuaternion<Real>& CQuaternion<Real>::FromRotationMatrix (
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::ToRotationMatrix (CMatrix3<Real>& rkRot) const
+template <class nReal>
+void CQuaternion<nReal>::ToRotationMatrix (CMatrix3<nReal>& rkRot) const
 {
-    Real fTx  = ((Real)2.0)*m_afTuple[1];
-    Real fTy  = ((Real)2.0)*m_afTuple[2];
-    Real fTz  = ((Real)2.0)*m_afTuple[3];
-    Real fTwx = fTx*m_afTuple[0];
-    Real fTwy = fTy*m_afTuple[0];
-    Real fTwz = fTz*m_afTuple[0];
-    Real fTxx = fTx*m_afTuple[1];
-    Real fTxy = fTy*m_afTuple[1];
-    Real fTxz = fTz*m_afTuple[1];
-    Real fTyy = fTy*m_afTuple[2];
-    Real fTyz = fTz*m_afTuple[2];
-    Real fTzz = fTz*m_afTuple[3];
+    nReal fTx  = ((nReal)2.0)*m_afTuple[1];
+    nReal fTy  = ((nReal)2.0)*m_afTuple[2];
+    nReal fTz  = ((nReal)2.0)*m_afTuple[3];
+    nReal fTwx = fTx*m_afTuple[0];
+    nReal fTwy = fTy*m_afTuple[0];
+    nReal fTwz = fTz*m_afTuple[0];
+    nReal fTxx = fTx*m_afTuple[1];
+    nReal fTxy = fTy*m_afTuple[1];
+    nReal fTxz = fTz*m_afTuple[1];
+    nReal fTyy = fTy*m_afTuple[2];
+    nReal fTyz = fTz*m_afTuple[2];
+    nReal fTzz = fTz*m_afTuple[3];
 
-    rkRot(0,0) = (Real)1.0-(fTyy+fTzz);
+    rkRot(0,0) = (nReal)1.0-(fTyy+fTzz);
     rkRot(0,1) = fTxy-fTwz;
     rkRot(0,2) = fTxz+fTwy;
     rkRot(1,0) = fTxy+fTwz;
-    rkRot(1,1) = (Real)1.0-(fTxx+fTzz);
+    rkRot(1,1) = (nReal)1.0-(fTxx+fTzz);
     rkRot(1,2) = fTyz-fTwx;
     rkRot(2,0) = fTxz-fTwy;
     rkRot(2,1) = fTyz+fTwx;
-    rkRot(2,2) = (Real)1.0-(fTxx+fTyy);
+    rkRot(2,2) = (nReal)1.0-(fTxx+fTyy);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>& CQuaternion<Real>::FromRotationMatrix (
-    const CVector3<Real> akRotColumn[3])
+template <class nReal>
+CQuaternion<nReal>& CQuaternion<nReal>::FromRotationMatrix (
+    const CVector3<nReal> akRotColumn[3])
 {
-    CMatrix3<Real> kRot;
+    CMatrix3<nReal> kRot;
     for (int iCol = 0; iCol < 3; iCol++)
     {
         kRot(0,iCol) = akRotColumn[iCol][0];
@@ -767,10 +767,10 @@ CQuaternion<Real>& CQuaternion<Real>::FromRotationMatrix (
     return FromRotationMatrix(kRot);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::ToRotationMatrix (CVector3<Real> akRotColumn[3]) const
+template <class nReal>
+void CQuaternion<nReal>::ToRotationMatrix (CVector3<nReal> akRotColumn[3]) const
 {
-    CMatrix3<Real> kRot;
+    CMatrix3<nReal> kRot;
     ToRotationMatrix(kRot);
     for (int iCol = 0; iCol < 3; iCol++)
     {
@@ -780,18 +780,18 @@ void CQuaternion<Real>::ToRotationMatrix (CVector3<Real> akRotColumn[3]) const
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>& CQuaternion<Real>::FromAxisAngle (
-    const CVector3<Real>& rkAxis, Real fAngle)
+template <class nReal>
+CQuaternion<nReal>& CQuaternion<nReal>::FromAxisAngle (
+    const CVector3<nReal>& rkAxis, nReal fAngle)
 {
     // assert:  axis[] is unit length
     //
     // The CQuaternion representing the rotation is
     //   q = cos(A/2)+sin(A/2)*(x*i+y*j+z*k)
 
-    Real fHalfAngle = ((Real)0.5)*fAngle;
-    Real fSin = CMath<Real>::Sin(fHalfAngle);
-    m_afTuple[0] = CMath<Real>::Cos(fHalfAngle);
+    nReal fHalfAngle = ((nReal)0.5)*fAngle;
+    nReal fSin = CMath<nReal>::Sin(fHalfAngle);
+    m_afTuple[0] = CMath<nReal>::Cos(fHalfAngle);
     m_afTuple[1] = fSin*rkAxis[0];
     m_afTuple[2] = fSin*rkAxis[1];
     m_afTuple[3] = fSin*rkAxis[2];
@@ -799,20 +799,20 @@ CQuaternion<Real>& CQuaternion<Real>::FromAxisAngle (
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::ToAxisAngle (CVector3<Real>& rkAxis, Real& rfAngle)
+template <class nReal>
+void CQuaternion<nReal>::ToAxisAngle (CVector3<nReal>& rkAxis, nReal& rfAngle)
     const
 {
     // The CQuaternion representing the rotation is
     //   q = cos(A/2)+sin(A/2)*(x*i+y*j+z*k)
 
-    Real fSqrLength = m_afTuple[1]*m_afTuple[1] + m_afTuple[2]*m_afTuple[2]
+    nReal fSqrLength = m_afTuple[1]*m_afTuple[1] + m_afTuple[2]*m_afTuple[2]
         + m_afTuple[3]*m_afTuple[3];
 
-    if (fSqrLength > CMath<Real>::ZERO_TOLERANCE)
+    if (fSqrLength > CMath<nReal>::ZERO_TOLERANCE)
     {
-        rfAngle = ((Real)2.0)*CMath<Real>::ACos(m_afTuple[0]);
-        Real fInvLength = CMath<Real>::InvSqrt(fSqrLength);
+        rfAngle = ((nReal)2.0)*CMath<nReal>::ACos(m_afTuple[0]);
+        nReal fInvLength = CMath<nReal>::InvSqrt(fSqrLength);
         rkAxis[0] = m_afTuple[1]*fInvLength;
         rkAxis[1] = m_afTuple[2]*fInvLength;
         rkAxis[2] = m_afTuple[3]*fInvLength;
@@ -820,25 +820,25 @@ void CQuaternion<Real>::ToAxisAngle (CVector3<Real>& rkAxis, Real& rfAngle)
     else
     {
         // angle is 0 (mod 2*pi), so any axis will do
-        rfAngle = (Real)0.0;
-        rkAxis[0] = (Real)1.0;
-        rkAxis[1] = (Real)0.0;
-        rkAxis[2] = (Real)0.0;
+        rfAngle = (nReal)0.0;
+        rkAxis[0] = (nReal)1.0;
+        rkAxis[1] = (nReal)0.0;
+        rkAxis[2] = (nReal)0.0;
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::Length () const
+template <class nReal>
+inline nReal CQuaternion<nReal>::Length () const
 {
-    return CMath<Real>::Sqrt(
+    return CMath<nReal>::Sqrt(
         m_afTuple[0]*m_afTuple[0] +
         m_afTuple[1]*m_afTuple[1] +
         m_afTuple[2]*m_afTuple[2] +
         m_afTuple[3]*m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::SquaredLength () const
+template <class nReal>
+inline nReal CQuaternion<nReal>::SquaredLength () const
 {
     return
         m_afTuple[0]*m_afTuple[0] +
@@ -847,10 +847,10 @@ inline Real CQuaternion<Real>::SquaredLength () const
         m_afTuple[3]*m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::Dot (const CQuaternion& rkQ) const
+template <class nReal>
+inline nReal CQuaternion<nReal>::Dot (const CQuaternion& rkQ) const
 {
-    Real fDot = (Real)0.0;
+    nReal fDot = (nReal)0.0;
     for (int i = 0; i < 4; i++)
     {
         fDot += m_afTuple[i]*rkQ.m_afTuple[i];
@@ -858,14 +858,14 @@ inline Real CQuaternion<Real>::Dot (const CQuaternion& rkQ) const
     return fDot;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CQuaternion<Real>::Normalize ()
+template <class nReal>
+inline nReal CQuaternion<nReal>::Normalize ()
 {
-    Real fLength = Length();
+    nReal fLength = Length();
 
-    if (fLength > CMath<Real>::ZERO_TOLERANCE)
+    if (fLength > CMath<nReal>::ZERO_TOLERANCE)
     {
-        Real fInvLength = ((Real)1.0)/fLength;
+        nReal fInvLength = ((nReal)1.0)/fLength;
         m_afTuple[0] *= fInvLength;
         m_afTuple[1] *= fInvLength;
         m_afTuple[2] *= fInvLength;
@@ -873,31 +873,31 @@ inline Real CQuaternion<Real>::Normalize ()
     }
     else
     {
-        fLength = (Real)0.0;
-        m_afTuple[0] = (Real)0.0;
-        m_afTuple[1] = (Real)0.0;
-        m_afTuple[2] = (Real)0.0;
-        m_afTuple[3] = (Real)0.0;
+        fLength = (nReal)0.0;
+        m_afTuple[0] = (nReal)0.0;
+        m_afTuple[1] = (nReal)0.0;
+        m_afTuple[2] = (nReal)0.0;
+        m_afTuple[3] = (nReal)0.0;
     }
 
     return fLength;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::Inverse () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::Inverse () const
 {
     CQuaternion kInverse;
 
-    Real fNorm = (Real)0.0;
+    nReal fNorm = (nReal)0.0;
     int i;
     for (i = 0; i < 4; i++)
     {
         fNorm += m_afTuple[i]*m_afTuple[i];
     }
 
-    if (fNorm > (Real)0.0)
+    if (fNorm > (nReal)0.0)
     {
-        Real fInvNorm = ((Real)1.0)/fNorm;
+        nReal fInvNorm = ((nReal)1.0)/fNorm;
         kInverse.m_afTuple[0] = m_afTuple[0]*fInvNorm;
         kInverse.m_afTuple[1] = -m_afTuple[1]*fInvNorm;
         kInverse.m_afTuple[2] = -m_afTuple[2]*fInvNorm;
@@ -908,22 +908,22 @@ CQuaternion<Real> CQuaternion<Real>::Inverse () const
         // return an invalid result to flag the error
         for (i = 0; i < 4; i++)
         {
-            kInverse.m_afTuple[i] = (Real)0.0;
+            kInverse.m_afTuple[i] = (nReal)0.0;
         }
     }
 
     return kInverse;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::Conjugate () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::Conjugate () const
 {
     return CQuaternion(m_afTuple[0],-m_afTuple[1],-m_afTuple[2],
         -m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::Exp () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::Exp () const
 {
     // If q = A*(x*i+y*j+z*k) where (x,y,z) is unit length, then
     // exp(q) = cos(A)+sin(A)*(x*i+y*j+z*k).  If sin(A) is near zero,
@@ -931,17 +931,17 @@ CQuaternion<Real> CQuaternion<Real>::Exp () const
 
     CQuaternion kResult;
 
-    Real fAngle = CMath<Real>::Sqrt(m_afTuple[1]*m_afTuple[1] +
+    nReal fAngle = CMath<nReal>::Sqrt(m_afTuple[1]*m_afTuple[1] +
         m_afTuple[2]*m_afTuple[2] + m_afTuple[3]*m_afTuple[3]);
 
-    Real fSin = CMath<Real>::Sin(fAngle);
-    kResult.m_afTuple[0] = CMath<Real>::Cos(fAngle);
+    nReal fSin = CMath<nReal>::Sin(fAngle);
+    kResult.m_afTuple[0] = CMath<nReal>::Cos(fAngle);
 
     int i;
 
-    if (CMath<Real>::FAbs(fSin) >= CMath<Real>::ZERO_TOLERANCE)
+    if (CMath<nReal>::FAbs(fSin) >= CMath<nReal>::ZERO_TOLERANCE)
     {
-        Real fCoeff = fSin/fAngle;
+        nReal fCoeff = fSin/fAngle;
         for (i = 1; i <= 3; i++)
         {
             kResult.m_afTuple[i] = fCoeff*m_afTuple[i];
@@ -958,25 +958,25 @@ CQuaternion<Real> CQuaternion<Real>::Exp () const
     return kResult;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::Log () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::Log () const
 {
     // If q = cos(A)+sin(A)*(x*i+y*j+z*k) where (x,y,z) is unit length, then
     // log(q) = A*(x*i+y*j+z*k).  If sin(A) is near zero, use log(q) =
     // sin(A)*(x*i+y*j+z*k) since sin(A)/A has limit 1.
 
     CQuaternion kResult;
-    kResult.m_afTuple[0] = (Real)0.0;
+    kResult.m_afTuple[0] = (nReal)0.0;
 
     int i;
 
-    if (CMath<Real>::FAbs(m_afTuple[0]) < (Real)1.0)
+    if (CMath<nReal>::FAbs(m_afTuple[0]) < (nReal)1.0)
     {
-        Real fAngle = CMath<Real>::ACos(m_afTuple[0]);
-        Real fSin = CMath<Real>::Sin(fAngle);
-        if (CMath<Real>::FAbs(fSin) >= CMath<Real>::ZERO_TOLERANCE)
+        nReal fAngle = CMath<nReal>::ACos(m_afTuple[0]);
+        nReal fSin = CMath<nReal>::Sin(fAngle);
+        if (CMath<nReal>::FAbs(fSin) >= CMath<nReal>::ZERO_TOLERANCE)
         {
-            Real fCoeff = fAngle/fSin;
+            nReal fCoeff = fAngle/fSin;
             for (i = 1; i <= 3; i++)
             {
                 kResult.m_afTuple[i] = fCoeff*m_afTuple[i];
@@ -992,15 +992,15 @@ CQuaternion<Real> CQuaternion<Real>::Log () const
     return kResult;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector3<Real> CQuaternion<Real>::Rotate (const CVector3<Real>& rkVector)
+template <class nReal>
+CVector3<nReal> CQuaternion<nReal>::Rotate (const CVector3<nReal>& rkVector)
     const
 {
     // Given a vector u = (x0,y0,z0) and a unit length CQuaternion
     // q = <w,x,y,z>, the vector v = (x1,y1,z1) which represents the
     // rotation of u by q is v = q*u*q^{-1} where * indicates CQuaternion
     // multiplication and where u is treated as the CQuaternion <0,x0,y0,z0>.
-    // Note that q^{-1} = <w,-x,-y,-z>, so no real work is required to
+    // Note that q^{-1} = <w,-x,-y,-z>, so no nReal work is required to
     // invert q.  Now
     //
     //   q*u*q^{-1} = q*<0,x0,y0,z0>*q^{-1}
@@ -1008,31 +1008,31 @@ CVector3<Real> CQuaternion<Real>::Rotate (const CVector3<Real>& rkVector)
     //     = x0*(q*i*q^{-1})+y0*(q*j*q^{-1})+z0*(q*k*q^{-1})
     //
     // As 3-vectors, q*i*q^{-1}, q*j*q^{-1}, and 2*k*q^{-1} are the columns
-    // of the rotation matrix computed in CQuaternion<Real>::ToRotationMatrix.
+    // of the rotation matrix computed in CQuaternion<nReal>::ToRotationMatrix.
     // The vector v is obtained as the product of that rotation matrix with
     // vector u.  As such, the CQuaternion representation of a rotation
     // matrix requires less space than the matrix and more time to compute
     // the rotated vector.  Typical space-time tradeoff...
 
-    CMatrix3<Real> kRot;
+    CMatrix3<nReal> kRot;
     ToRotationMatrix(kRot);
     return kRot*rkVector;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>& CQuaternion<Real>::Slerp (Real fT, const CQuaternion& rkP,
+template <class nReal>
+CQuaternion<nReal>& CQuaternion<nReal>::Slerp (nReal fT, const CQuaternion& rkP,
     const CQuaternion& rkQ)
 {
-    Real fCos = rkP.Dot(rkQ);
-    Real fAngle = CMath<Real>::ACos(fCos);
+    nReal fCos = rkP.Dot(rkQ);
+    nReal fAngle = CMath<nReal>::ACos(fCos);
 
-    if (CMath<Real>::FAbs(fAngle) >= CMath<Real>::ZERO_TOLERANCE)
+    if (CMath<nReal>::FAbs(fAngle) >= CMath<nReal>::ZERO_TOLERANCE)
     {
-        Real fSin = CMath<Real>::Sin(fAngle);
-        Real fInvSin = ((Real)1.0)/fSin;
-        Real fTAngle = fT*fAngle;
-        Real fCoeff0 = CMath<Real>::Sin(fAngle - fTAngle)*fInvSin;
-        Real fCoeff1 = CMath<Real>::Sin(fTAngle)*fInvSin;
+        nReal fSin = CMath<nReal>::Sin(fAngle);
+        nReal fInvSin = ((nReal)1.0)/fSin;
+        nReal fTAngle = fT*fAngle;
+        nReal fCoeff0 = CMath<nReal>::Sin(fAngle - fTAngle)*fInvSin;
+        nReal fCoeff1 = CMath<nReal>::Sin(fTAngle)*fInvSin;
 
         // Profiling showed that the old line of code,
         //   *this = fCoeff0*rkP + fCoeff1*rkQ;
@@ -1057,20 +1057,20 @@ CQuaternion<Real>& CQuaternion<Real>::Slerp (Real fT, const CQuaternion& rkP,
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>& CQuaternion<Real>::SlerpExtraSpins (Real fT,
+template <class nReal>
+CQuaternion<nReal>& CQuaternion<nReal>::SlerpExtraSpins (nReal fT,
     const CQuaternion& rkP, const CQuaternion& rkQ, int iExtraSpins)
 {
-    Real fCos = rkP.Dot(rkQ);
-    Real fAngle = CMath<Real>::ACos(fCos);
+    nReal fCos = rkP.Dot(rkQ);
+    nReal fAngle = CMath<nReal>::ACos(fCos);
 
-    if (CMath<Real>::FAbs(fAngle) >= CMath<Real>::ZERO_TOLERANCE)
+    if (CMath<nReal>::FAbs(fAngle) >= CMath<nReal>::ZERO_TOLERANCE)
     {
-        Real fSin = CMath<Real>::Sin(fAngle);
-        Real fPhase = CMath<Real>::PI*iExtraSpins*fT;
-        Real fInvSin = ((Real)1.0)/fSin;
-        Real fCoeff0 = CMath<Real>::Sin(((Real)1.0-fT)*fAngle-fPhase)*fInvSin;
-        Real fCoeff1 = CMath<Real>::Sin(fT*fAngle + fPhase)*fInvSin;
+        nReal fSin = CMath<nReal>::Sin(fAngle);
+        nReal fPhase = CMath<nReal>::PI*iExtraSpins*fT;
+        nReal fInvSin = ((nReal)1.0)/fSin;
+        nReal fCoeff0 = CMath<nReal>::Sin(((nReal)1.0-fT)*fAngle-fPhase)*fInvSin;
+        nReal fCoeff1 = CMath<nReal>::Sin(fT*fAngle + fPhase)*fInvSin;
         *this = fCoeff0*rkP + fCoeff1*rkQ;
     }
     else
@@ -1081,34 +1081,34 @@ CQuaternion<Real>& CQuaternion<Real>::SlerpExtraSpins (Real fT,
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>& CQuaternion<Real>::Intermediate (const CQuaternion& rkQ0,
+template <class nReal>
+CQuaternion<nReal>& CQuaternion<nReal>::Intermediate (const CQuaternion& rkQ0,
     const CQuaternion& rkQ1, const CQuaternion& rkQ2)
 {
     // assert:  Q0, Q1, Q2 all unit-length
     CQuaternion kQ1Inv = rkQ1.Conjugate();
     CQuaternion kP0 = kQ1Inv*rkQ0;
     CQuaternion kP2 = kQ1Inv*rkQ2;
-    CQuaternion kArg = -((Real)0.25)*(kP0.Log()+kP2.Log());
+    CQuaternion kArg = -((nReal)0.25)*(kP0.Log()+kP2.Log());
     CQuaternion kA = rkQ1*kArg.Exp();
     *this = kA;
 
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>& CQuaternion<Real>::Squad (Real fT, const CQuaternion& rkQ0,
+template <class nReal>
+CQuaternion<nReal>& CQuaternion<nReal>::Squad (nReal fT, const CQuaternion& rkQ0,
     const CQuaternion& rkA0, const CQuaternion& rkA1, const CQuaternion& rkQ1)
 {
-    Real fSlerpT = ((Real)2.0)*fT*((Real)1.0-fT);
+    nReal fSlerpT = ((nReal)2.0)*fT*((nReal)1.0-fT);
     CQuaternion kSlerpP = Slerp(fT,rkQ0,rkQ1);
     CQuaternion kSlerpQ = Slerp(fT,rkA0,rkA1);
     return Slerp(fSlerpT,kSlerpP,kSlerpQ);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real>& CQuaternion<Real>::Align (const CVector3<Real>& rkV1,
-    const CVector3<Real>& rkV2)
+template <class nReal>
+CQuaternion<nReal>& CQuaternion<nReal>::Align (const CVector3<nReal>& rkV1,
+    const CVector3<nReal>& rkV2)
 {
     // If V1 and V2 are not parallel, the axis of rotation is the unit-length
     // vector U = Cross(V1,V2)/Length(Cross(V1,V2)).  The angle of rotation,
@@ -1134,15 +1134,15 @@ CQuaternion<Real>& CQuaternion<Real>::Align (const CVector3<Real>& rkV1,
     // the comparison is robust.  In this case, the A = pi and any axis
     // perpendicular to V1 may be used as the rotation axis.
 
-    CVector3<Real> kBisector = rkV1 + rkV2;
+    CVector3<nReal> kBisector = rkV1 + rkV2;
     kBisector.Normalize();
 
-    Real fCosHalfAngle = rkV1.Dot(kBisector);
-    CVector3<Real> kCross;
+    nReal fCosHalfAngle = rkV1.Dot(kBisector);
+    CVector3<nReal> kCross;
 
     m_afTuple[0] = fCosHalfAngle;
 
-    if (fCosHalfAngle != (Real)0.0)
+    if (fCosHalfAngle != (nReal)0.0)
     {
         kCross = rkV1.Cross(kBisector);
         m_afTuple[1] = kCross.X();
@@ -1151,24 +1151,24 @@ CQuaternion<Real>& CQuaternion<Real>::Align (const CVector3<Real>& rkV1,
     }
     else
     {
-        Real fInvLength;
-        if (CMath<Real>::FAbs(rkV1[0]) >= CMath<Real>::FAbs(rkV1[1]))
+        nReal fInvLength;
+        if (CMath<nReal>::FAbs(rkV1[0]) >= CMath<nReal>::FAbs(rkV1[1]))
         {
             // V1.x or V1.z is the largest magnitude component
-            fInvLength = CMath<Real>::InvSqrt(rkV1[0]*rkV1[0] +
+            fInvLength = CMath<nReal>::InvSqrt(rkV1[0]*rkV1[0] +
                 rkV1[2]*rkV1[2]);
 
             m_afTuple[1] = -rkV1[2]*fInvLength;
-            m_afTuple[2] = (Real)0.0;
+            m_afTuple[2] = (nReal)0.0;
             m_afTuple[3] = +rkV1[0]*fInvLength;
         }
         else
         {
             // V1.y or V1.z is the largest magnitude component
-            fInvLength = CMath<Real>::InvSqrt(rkV1[1]*rkV1[1] +
+            fInvLength = CMath<nReal>::InvSqrt(rkV1[1]*rkV1[1] +
                 rkV1[2]*rkV1[2]);
 
-            m_afTuple[1] = (Real)0.0;
+            m_afTuple[1] = (nReal)0.0;
             m_afTuple[2] = +rkV1[2]*fInvLength;
             m_afTuple[3] = -rkV1[1]*fInvLength;
         }
@@ -1177,99 +1177,99 @@ CQuaternion<Real>& CQuaternion<Real>::Align (const CVector3<Real>& rkV1,
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::DecomposeTwistTimesSwing (
-    const CVector3<Real>& rkV1, CQuaternion& rkTwist, CQuaternion& rkSwing)
+template <class nReal>
+void CQuaternion<nReal>::DecomposeTwistTimesSwing (
+    const CVector3<nReal>& rkV1, CQuaternion& rkTwist, CQuaternion& rkSwing)
 {
-    CVector3<Real> kV2 = Rotate(rkV1);
+    CVector3<nReal> kV2 = Rotate(rkV1);
     rkSwing = Align(rkV1,kV2);
     rkTwist = (*this)*rkSwing.Conjugate();
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::DecomposeSwingTimesTwist (
-    const CVector3<Real>& rkV1, CQuaternion& rkSwing, CQuaternion& rkTwist)
+template <class nReal>
+void CQuaternion<nReal>::DecomposeSwingTimesTwist (
+    const CVector3<nReal>& rkV1, CQuaternion& rkSwing, CQuaternion& rkTwist)
 {
-    CVector3<Real> kV2 = Rotate(rkV1);
+    CVector3<nReal> kV2 = Rotate(rkV1);
     rkSwing = Align(rkV1,kV2);
     rkTwist = rkSwing.Conjugate()*(*this);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosest (int iAxis) const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosest (int iAxis) const
 {
     // The appropriate nonzero components will be set later.
-    CQuaternion kQ((Real)0,(Real)0,(Real)0,(Real)0);
-    Real fP0 = m_afTuple[0];
-    Real fP1 = m_afTuple[iAxis];
-    Real fSqrLength = fP0*fP0 + fP1*fP1;
+    CQuaternion kQ((nReal)0,(nReal)0,(nReal)0,(nReal)0);
+    nReal fP0 = m_afTuple[0];
+    nReal fP1 = m_afTuple[iAxis];
+    nReal fSqrLength = fP0*fP0 + fP1*fP1;
     if (fSqrLength > ms_fTolerance)
     {
         // A unique closest point.
-        Real fInvLength = CMath<Real>::InvSqrt(fSqrLength);
+        nReal fInvLength = CMath<nReal>::InvSqrt(fSqrLength);
         kQ[0] = fP0*fInvLength;
         kQ[iAxis] = fP1*fInvLength;
     }
     else
     {
         // Infinitely many solutions, choose the one for theta = 0.
-        kQ[0] = (Real)1;
-        kQ[iAxis] = (Real)0;
+        kQ[0] = (nReal)1;
+        kQ[iAxis] = (nReal)0;
     }
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestX () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestX () const
 {
     return GetClosest(1);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestY () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestY () const
 {
     return GetClosest(2);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestZ () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestZ () const
 {
     return GetClosest(3);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestXY () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestXY () const
 {
     CQuaternion kQ;
 
-    Real fDet = m_afTuple[0]*m_afTuple[3] - m_afTuple[1]*m_afTuple[2];
-    if(CMath<Real>::FAbs(fDet) < (Real)0.5 - ms_fTolerance)
+    nReal fDet = m_afTuple[0]*m_afTuple[3] - m_afTuple[1]*m_afTuple[2];
+    if(CMath<nReal>::FAbs(fDet) < (nReal)0.5 - ms_fTolerance)
     {
-        Real fDiscr = (Real)1 - ((Real)4)*fDet*fDet;
-        fDiscr = CMath<Real>::Sqrt(CMath<Real>::FAbs(fDiscr));
-        Real fA = m_afTuple[0]*m_afTuple[1] + m_afTuple[2]*m_afTuple[3];
-        Real fB = m_afTuple[0]*m_afTuple[0] - m_afTuple[1]*m_afTuple[1] +
+        nReal fDiscr = (nReal)1 - ((nReal)4)*fDet*fDet;
+        fDiscr = CMath<nReal>::Sqrt(CMath<nReal>::FAbs(fDiscr));
+        nReal fA = m_afTuple[0]*m_afTuple[1] + m_afTuple[2]*m_afTuple[3];
+        nReal fB = m_afTuple[0]*m_afTuple[0] - m_afTuple[1]*m_afTuple[1] +
             m_afTuple[2]*m_afTuple[2] - m_afTuple[3]*m_afTuple[3];
 
-        Real fC0, fS0, fC1, fS1, fInvLength;
+        nReal fC0, fS0, fC1, fS1, fInvLength;
 
-        if (fB >= (Real)0)
+        if (fB >= (nReal)0)
         {
-            fC0 = ((Real)0.5)*(fDiscr + fB);
+            fC0 = ((nReal)0.5)*(fDiscr + fB);
             fS0 = fA;
         }
         else
         {
             fC0 = fA;
-            fS0 = ((Real)0.5)*(fDiscr - fB);
+            fS0 = ((nReal)0.5)*(fDiscr - fB);
         }
-        fInvLength = CMath<Real>::InvSqrt(fC0*fC0 + fS0*fS0);
+        fInvLength = CMath<nReal>::InvSqrt(fC0*fC0 + fS0*fS0);
         fC0 *= fInvLength;
         fS0 *= fInvLength;
 
         fC1 = m_afTuple[0]*fC0 + m_afTuple[1]*fS0;
         fS1 = m_afTuple[2]*fC0 + m_afTuple[3]*fS0;
-        fInvLength = CMath<Real>::InvSqrt(fC1*fC1 + fS1*fS1);
+        fInvLength = CMath<nReal>::InvSqrt(fC1*fC1 + fS1*fS1);
         fC1 *= fInvLength;
         fS1 *= fInvLength;
 
@@ -1280,18 +1280,18 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY () const
     }
     else
     {
-        Real fInvLength = CMath<Real>::InvSqrt(CMath<Real>::FAbs(fDet));
+        nReal fInvLength = CMath<nReal>::InvSqrt(CMath<nReal>::FAbs(fDet));
         kQ[0] = m_afTuple[0]*fInvLength;
         kQ[1] = m_afTuple[1]*fInvLength;
-        kQ[2] = (Real)0;
-        kQ[3] = (Real)0;
+        kQ[2] = (nReal)0;
+        kQ[3] = (nReal)0;
     }
 
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestYX () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestYX () const
 {
     CQuaternion kAlt(m_afTuple[0],m_afTuple[1],m_afTuple[2],-m_afTuple[3]);
     CQuaternion kQ = kAlt.GetClosestXY();
@@ -1299,95 +1299,95 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestYX () const
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestZX () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestZX () const
 {
     CQuaternion kAlt(m_afTuple[0],m_afTuple[1],m_afTuple[3],m_afTuple[2]);
     CQuaternion kQ = kAlt.GetClosestXY();
-    Real fSave = kQ[2];
+    nReal fSave = kQ[2];
     kQ[2] = kQ[3];
     kQ[3] = fSave;
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestXZ () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestXZ () const
 {
     CQuaternion kAlt(m_afTuple[0],m_afTuple[1],-m_afTuple[3],m_afTuple[2]);
     CQuaternion kQ = kAlt.GetClosestXY();
-    Real fSave = kQ[2];
+    nReal fSave = kQ[2];
     kQ[2] = kQ[3];
     kQ[3] = -fSave;
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestYZ () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestYZ () const
 {
     CQuaternion kAlt(m_afTuple[0],m_afTuple[2],m_afTuple[3],m_afTuple[1]);
     CQuaternion kQ = kAlt.GetClosestXY();
-    Real fSave = kQ[3];
+    nReal fSave = kQ[3];
     kQ[3] = kQ[2];
     kQ[2] = kQ[1];
     kQ[1] = fSave;
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestZY () const
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestZY () const
 {
     CQuaternion kAlt(m_afTuple[0],m_afTuple[2],m_afTuple[3],-m_afTuple[1]);
     CQuaternion kQ = kAlt.GetClosestXY();
-    Real fSave = kQ[3];
+    nReal fSave = kQ[3];
     kQ[3] = kQ[2];
     kQ[2] = kQ[1];
     kQ[1] = -fSave;
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::FactorXYZ (Real& rfCx, Real& rfSx, Real& rfCy,
-    Real& rfSy, Real& rfCz, Real& rfSz)
+template <class nReal>
+void CQuaternion<nReal>::FactorXYZ (nReal& rfCx, nReal& rfSx, nReal& rfCy,
+    nReal& rfSy, nReal& rfCz, nReal& rfSz)
 {
-    Real fA = m_afTuple[0]*m_afTuple[1] - m_afTuple[2]*m_afTuple[3];
-    Real fB = ((Real)0.5)*(
+    nReal fA = m_afTuple[0]*m_afTuple[1] - m_afTuple[2]*m_afTuple[3];
+    nReal fB = ((nReal)0.5)*(
           m_afTuple[0]*m_afTuple[0]
         - m_afTuple[1]*m_afTuple[1]
         - m_afTuple[2]*m_afTuple[2]
         + m_afTuple[3]*m_afTuple[3]);
 
-    Real fLength = CMath<Real>::Sqrt(fA*fA + fB*fB);
+    nReal fLength = CMath<nReal>::Sqrt(fA*fA + fB*fB);
     if (fLength > ms_fTolerance)
     {
-        Real fInvLength = ((Real)1)/fLength;
-        Real fSigma0 = fA * fInvLength;
-        Real fGamma0 = fB * fInvLength;
-        if (fGamma0 >= (Real)0)
+        nReal fInvLength = ((nReal)1)/fLength;
+        nReal fSigma0 = fA * fInvLength;
+        nReal fGamma0 = fB * fInvLength;
+        if (fGamma0 >= (nReal)0)
         {
-            rfCx = CMath<Real>::Sqrt(((Real)0.5)*((Real)1 + fGamma0));
-            rfSx = ((Real)0.5)*fSigma0/rfCx;
+            rfCx = CMath<nReal>::Sqrt(((nReal)0.5)*((nReal)1 + fGamma0));
+            rfSx = ((nReal)0.5)*fSigma0/rfCx;
         }
         else
         {
-            rfSx = CMath<Real>::Sqrt(((Real)0.5)*((Real)1 - fGamma0));
-            rfCx = ((Real)0.5)*fSigma0/rfSx;
+            rfSx = CMath<nReal>::Sqrt(((nReal)0.5)*((nReal)1 - fGamma0));
+            rfCx = ((nReal)0.5)*fSigma0/rfSx;
         }
 
-        Real fTmp0 = rfCx*m_afTuple[0] + rfSx*m_afTuple[1];
-        Real fTmp1 = rfCx*m_afTuple[3] - rfSx*m_afTuple[2];
-        fInvLength = CMath<Real>::InvSqrt(fTmp0*fTmp0 + fTmp1*fTmp1);
+        nReal fTmp0 = rfCx*m_afTuple[0] + rfSx*m_afTuple[1];
+        nReal fTmp1 = rfCx*m_afTuple[3] - rfSx*m_afTuple[2];
+        fInvLength = CMath<nReal>::InvSqrt(fTmp0*fTmp0 + fTmp1*fTmp1);
         rfCz = fTmp0 * fInvLength;
         rfSz = fTmp1 * fInvLength;
 
-        if(CMath<Real>::FAbs(rfCz) >= CMath<Real>::FAbs(rfSz))
+        if(CMath<nReal>::FAbs(rfCz) >= CMath<nReal>::FAbs(rfSz))
         {
-            fInvLength = ((Real)1)/rfCz;
+            fInvLength = ((nReal)1)/rfCz;
             rfCy = fTmp0 * fInvLength;
             rfSy = (rfCx*m_afTuple[2] + rfSx*m_afTuple[3]) * fInvLength;
         }
         else
         {
-            fInvLength = ((Real)1)/rfSz;
+            fInvLength = ((nReal)1)/rfSz;
             rfCy = fTmp1 * fInvLength;
             rfSy = (rfCx*m_afTuple[1] - rfSx*m_afTuple[0]) * fInvLength;
         }
@@ -1395,11 +1395,11 @@ void CQuaternion<Real>::FactorXYZ (Real& rfCx, Real& rfSx, Real& rfCy,
     else
     {
         // Infinitely many solutions.  Choose one of them.
-        if(m_afTuple[0]*m_afTuple[2] + m_afTuple[1]*m_afTuple[3] > (Real)0)
+        if(m_afTuple[0]*m_afTuple[2] + m_afTuple[1]*m_afTuple[3] > (nReal)0)
         {
             // p = (p0,p1,p0,p1)
-            rfCx = (Real)1;
-            rfSx = (Real)0;
+            rfCx = (nReal)1;
+            rfSx = (nReal)0;
             rfCy = ms_fRootHalf;
             rfSy = ms_fRootHalf;
             rfCz = ms_fRootTwo * m_afTuple[0];
@@ -1408,8 +1408,8 @@ void CQuaternion<Real>::FactorXYZ (Real& rfCx, Real& rfSx, Real& rfCy,
         else
         {
             // p = (p0,p1,-p0,-p1)
-            rfCx = (Real)1;
-            rfSx = (Real)0;
+            rfCx = (nReal)1;
+            rfSx = (nReal)0;
             rfCy = ms_fRootHalf;
             rfSy = -ms_fRootHalf;
             rfCz = ms_fRootTwo * m_afTuple[0];
@@ -1418,18 +1418,18 @@ void CQuaternion<Real>::FactorXYZ (Real& rfCx, Real& rfSx, Real& rfCy,
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::FactorXZY (Real& rfCx, Real& rfSx, Real& rfCz,
-    Real& rfSz, Real& rfCy, Real& rfSy)
+template <class nReal>
+void CQuaternion<nReal>::FactorXZY (nReal& rfCx, nReal& rfSx, nReal& rfCz,
+    nReal& rfSz, nReal& rfCy, nReal& rfSy)
 {
     CQuaternion pkAlt(m_afTuple[0],m_afTuple[1],m_afTuple[3],-m_afTuple[2]);
     pkAlt.FactorXYZ(rfCx,rfSx,rfCz,rfSz,rfCy,rfSy);
     rfSy = -rfSy;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::FactorYZX (Real& rfCy, Real& rfSy, Real& rfCz,
-    Real& rfSz, Real& rfCx, Real& rfSx)
+template <class nReal>
+void CQuaternion<nReal>::FactorYZX (nReal& rfCy, nReal& rfSy, nReal& rfCz,
+    nReal& rfSz, nReal& rfCx, nReal& rfSx)
 {
     CQuaternion pkAlt(m_afTuple[0],-m_afTuple[2],m_afTuple[3],-m_afTuple[1]);
     pkAlt.FactorXYZ(rfCy,rfSy,rfCz,rfSz,rfCx,rfSx);
@@ -1437,18 +1437,18 @@ void CQuaternion<Real>::FactorYZX (Real& rfCy, Real& rfSy, Real& rfCz,
     rfSy = -rfSy;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::FactorYXZ (Real& rfCy, Real& rfSy, Real& rfCx,
-    Real& rfSx, Real& rfCz, Real& rfSz)
+template <class nReal>
+void CQuaternion<nReal>::FactorYXZ (nReal& rfCy, nReal& rfSy, nReal& rfCx,
+    nReal& rfSx, nReal& rfCz, nReal& rfSz)
 {
     CQuaternion pkAlt(m_afTuple[0],-m_afTuple[2],m_afTuple[1],m_afTuple[3]);
     pkAlt.FactorXYZ(rfCy,rfSy,rfCx,rfSx,rfCz,rfSz);
     rfSy = -rfSy;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::FactorZXY (Real& rfCz, Real& rfSz, Real& rfCx,
-    Real& rfSx, Real& rfCy, Real& rfSy)
+template <class nReal>
+void CQuaternion<nReal>::FactorZXY (nReal& rfCz, nReal& rfSz, nReal& rfCx,
+    nReal& rfSx, nReal& rfCy, nReal& rfSy)
 {
     CQuaternion pkAlt(m_afTuple[0],-m_afTuple[3],m_afTuple[1],-m_afTuple[2]);
     pkAlt.FactorXYZ(rfCz,rfSz,rfCx,rfSx,rfCy,rfSy);
@@ -1456,27 +1456,27 @@ void CQuaternion<Real>::FactorZXY (Real& rfCz, Real& rfSz, Real& rfCx,
     rfSz = -rfSz;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CQuaternion<Real>::FactorZYX (Real& rfCz, Real& rfSz, Real& rfCy,
-    Real& rfSy, Real& rfCx, Real& rfSx)
+template <class nReal>
+void CQuaternion<nReal>::FactorZYX (nReal& rfCz, nReal& rfSz, nReal& rfCy,
+    nReal& rfSy, nReal& rfCx, nReal& rfSx)
 {
     CQuaternion pkAlt(m_afTuple[0],m_afTuple[3],-m_afTuple[2],m_afTuple[1]);
     pkAlt.FactorXYZ(rfCz,rfSz,rfCy,rfSy,rfCx,rfSx);
     rfSy = -rfSy;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosest (int iAxis,
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosest (int iAxis,
     const Constraints& rkCon) const
 {
-    CQuaternion kQ((Real)0,(Real)0,(Real)0,(Real)0);
+    CQuaternion kQ((nReal)0,(nReal)0,(nReal)0,(nReal)0);
 
-    Real fP0 = m_afTuple[0];
-    Real fP1 = m_afTuple[iAxis];
-    Real fSqrLength = fP0*fP0 + fP1*fP1;
+    nReal fP0 = m_afTuple[0];
+    nReal fP1 = m_afTuple[iAxis];
+    nReal fSqrLength = fP0*fP0 + fP1*fP1;
     if (fSqrLength > ms_fTolerance)
     {
-        Real fInvLength = CMath<Real>::InvSqrt(fSqrLength);
+        nReal fInvLength = CMath<nReal>::InvSqrt(fSqrLength);
         fP0 *= fInvLength;
         fP1 *= fInvLength;
         if (rkCon.IsValid(fP0,fP1))
@@ -1488,20 +1488,20 @@ CQuaternion<Real> CQuaternion<Real>::GetClosest (int iAxis,
         else
         {
             // The maximum occurs at a boundary point.
-            Real fCsMin = rkCon.m_fCosMinAngle;
-            Real fSnMin = rkCon.m_fSinMinAngle;
-            Real fDotMinAngle = fP0*fCsMin + fP1*fSnMin;
-            if (fDotMinAngle < (Real)0)
+            nReal fCsMin = rkCon.m_fCosMinAngle;
+            nReal fSnMin = rkCon.m_fSinMinAngle;
+            nReal fDotMinAngle = fP0*fCsMin + fP1*fSnMin;
+            if (fDotMinAngle < (nReal)0)
             {
                 fCsMin = -fCsMin;
                 fSnMin = -fSnMin;
                 fDotMinAngle = -fDotMinAngle;
             }
 
-            Real fCsMax = rkCon.m_fCosMaxAngle;
-            Real fSnMax = rkCon.m_fSinMaxAngle;
-            Real fDotMaxAngle = fP0*fCsMax + fP1*fSnMax;
-            if (fDotMaxAngle < (Real)0)
+            nReal fCsMax = rkCon.m_fCosMaxAngle;
+            nReal fSnMax = rkCon.m_fSinMaxAngle;
+            nReal fDotMaxAngle = fP0*fCsMax + fP1*fSnMax;
+            if (fDotMaxAngle < (nReal)0)
             {
                 fCsMax = -fCsMax;
                 fSnMax = -fSnMax;
@@ -1531,60 +1531,60 @@ CQuaternion<Real> CQuaternion<Real>::GetClosest (int iAxis,
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestX (const Constraints& rkXCon)
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestX (const Constraints& rkXCon)
     const
 {
     return GetClosest(1,rkXCon);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestY (const Constraints& rkYCon)
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestY (const Constraints& rkYCon)
     const
 {
     return GetClosest(2,rkYCon);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestZ (const Constraints& rkZCon)
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestZ (const Constraints& rkZCon)
     const
 {
     return GetClosest(3,rkZCon);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestXY (const Constraints& rkXCon,
     const Constraints& rkYCon) const
 {
     CQuaternion kQ, kTmp;
-    Real fC0, fS0, fC1, fS1, fInvLength;
+    nReal fC0, fS0, fC1, fS1, fInvLength;
 
-    Real fDet = m_afTuple[0]*m_afTuple[3] - m_afTuple[1]*m_afTuple[2];
-    if (CMath<Real>::FAbs(fDet) < (Real)0.5 - ms_fTolerance)
+    nReal fDet = m_afTuple[0]*m_afTuple[3] - m_afTuple[1]*m_afTuple[2];
+    if (CMath<nReal>::FAbs(fDet) < (nReal)0.5 - ms_fTolerance)
     {
-        Real fDiscr = CMath<Real>::Sqrt(CMath<Real>::FAbs((Real)1 -
-            ((Real)4)*fDet*fDet));
-        Real fA = m_afTuple[0]*m_afTuple[1] + m_afTuple[2]*m_afTuple[3];
-        Real fB = m_afTuple[0]*m_afTuple[0] - m_afTuple[1]*m_afTuple[1]
+        nReal fDiscr = CMath<nReal>::Sqrt(CMath<nReal>::FAbs((nReal)1 -
+            ((nReal)4)*fDet*fDet));
+        nReal fA = m_afTuple[0]*m_afTuple[1] + m_afTuple[2]*m_afTuple[3];
+        nReal fB = m_afTuple[0]*m_afTuple[0] - m_afTuple[1]*m_afTuple[1]
             + m_afTuple[2]*m_afTuple[2] - m_afTuple[3]*m_afTuple[3];
 
-        if (fB >= (Real)0)
+        if (fB >= (nReal)0)
         {
-            fC0 = ((Real)0.5)*(fDiscr + fB);
+            fC0 = ((nReal)0.5)*(fDiscr + fB);
             fS0 = fA;
         }
         else
         {
             fC0 = fA;
-            fS0 = ((Real)0.5)*(fDiscr - fB);
+            fS0 = ((nReal)0.5)*(fDiscr - fB);
         }
-        fInvLength = CMath<Real>::InvSqrt(fC0*fC0 + fS0*fS0);
+        fInvLength = CMath<nReal>::InvSqrt(fC0*fC0 + fS0*fS0);
         fC0 *= fInvLength;
         fS0 *= fInvLength;
 
         fC1 = m_afTuple[0]*fC0 + m_afTuple[1]*fS0;
         fS1 = m_afTuple[2]*fC0 + m_afTuple[3]*fS0;
-        fInvLength = CMath<Real>::InvSqrt(fC1*fC1 + fS1*fS1);
+        fInvLength = CMath<nReal>::InvSqrt(fC1*fC1 + fS1*fS1);
         fC1 *= fInvLength;
         fS1 *= fInvLength;
 
@@ -1600,31 +1600,31 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
         {
             // The maximum occurs at a boundary point.
             CQuaternion kR(rkXCon.m_fCosMinAngle,rkXCon.m_fSinMinAngle,
-                (Real)0,(Real)0);
+                (nReal)0,(nReal)0);
             CQuaternion kRInv(rkXCon.m_fCosMinAngle,-rkXCon.m_fSinMinAngle,
-                (Real)0,(Real)0);
+                (nReal)0,(nReal)0);
             CQuaternion kProd = kRInv*(*this);
             kTmp = kProd.GetClosest(2,rkYCon);
-            Real fDotOptAngle = kProd.Dot(kTmp);
+            nReal fDotOptAngle = kProd.Dot(kTmp);
             kQ = kR*kTmp;
 
             kR = CQuaternion(rkXCon.m_fCosMaxAngle,rkXCon.m_fSinMaxAngle,
-                (Real)0,(Real)0);
+                (nReal)0,(nReal)0);
             kRInv = CQuaternion(rkXCon.m_fCosMaxAngle,-rkXCon.m_fSinMaxAngle,
-                (Real)0,(Real)0);
+                (nReal)0,(nReal)0);
             kProd = kRInv*(*this);
             kTmp = kProd.GetClosest(2,rkYCon);
-            Real fDotAngle = kProd.Dot(kTmp);
+            nReal fDotAngle = kProd.Dot(kTmp);
             if (fDotAngle > fDotOptAngle)
             {
                 kQ = kR*kTmp;
                 fDotOptAngle = fDotAngle;
             }
 
-            kR = CQuaternion(rkYCon.m_fCosMinAngle,(Real)0,
-                rkYCon.m_fSinMinAngle,(Real)0);
-            kRInv = CQuaternion(rkYCon.m_fCosMinAngle,(Real)0,
-                -rkYCon.m_fSinMinAngle,(Real)0);
+            kR = CQuaternion(rkYCon.m_fCosMinAngle,(nReal)0,
+                rkYCon.m_fSinMinAngle,(nReal)0);
+            kRInv = CQuaternion(rkYCon.m_fCosMinAngle,(nReal)0,
+                -rkYCon.m_fSinMinAngle,(nReal)0);
             kProd = (*this)*kRInv;
             kTmp = kProd.GetClosest(1,rkXCon);
             fDotAngle = kProd.Dot(kTmp);
@@ -1634,10 +1634,10 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
                 fDotOptAngle = fDotAngle;
             }
 
-            kR = CQuaternion(rkYCon.m_fCosMaxAngle,(Real)0,
-                rkYCon.m_fSinMaxAngle,(Real)0);
-            kRInv = CQuaternion(rkYCon.m_fCosMaxAngle,(Real)0,
-                -rkYCon.m_fSinMaxAngle,(Real)0);
+            kR = CQuaternion(rkYCon.m_fCosMaxAngle,(nReal)0,
+                rkYCon.m_fSinMaxAngle,(nReal)0);
+            kRInv = CQuaternion(rkYCon.m_fCosMaxAngle,(nReal)0,
+                -rkYCon.m_fSinMaxAngle,(nReal)0);
             kProd = (*this)*kRInv;
             kTmp = kProd.GetClosest(1,rkXCon);
             fDotAngle = kProd.Dot(kTmp);
@@ -1652,10 +1652,10 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
     {
         // Infinitely many solutions, choose one that satisfies the angle
         // constraints.
-        Real fMinAngle, fMaxAngle, fAngle;
+        nReal fMinAngle, fMaxAngle, fAngle;
         Constraints kCon;
 
-        if (fDet > (Real)0)
+        if (fDet > (nReal)0)
         {
             fMinAngle = rkXCon.m_fMinAngle - rkYCon.m_fMaxAngle;
             fMaxAngle = rkXCon.m_fMaxAngle - rkYCon.m_fMinAngle;
@@ -1663,11 +1663,11 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
 
             kTmp = GetClosest(1,kCon);
 
-            fAngle = CMath<Real>::ATan2(kTmp[1],kTmp[0]);
+            fAngle = CMath<nReal>::ATan2(kTmp[1],kTmp[0]);
             if (fAngle < fMinAngle || fAngle > fMaxAngle)
             {
                 fAngle -= 
-                    (kTmp[1] >= (Real)0 ? CMath<Real>::PI : -CMath<Real>::PI);
+                    (kTmp[1] >= (nReal)0 ? CMath<nReal>::PI : -CMath<nReal>::PI);
                 // assert(fMinAngle <= fAngle && fAngle <= fMaxAngle);
             }
 
@@ -1676,16 +1676,16 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
                 fC1 = rkYCon.m_fCosMaxAngle;
                 fS1 = rkYCon.m_fSinMaxAngle;
                 fAngle = rkYCon.m_fMaxAngle + fAngle;
-                fC0 = CMath<Real>::Cos(fAngle);
-                fS0 = CMath<Real>::Sin(fAngle);
+                fC0 = CMath<nReal>::Cos(fAngle);
+                fS0 = CMath<nReal>::Sin(fAngle);
             }
             else
             {
                 fC0 = rkXCon.m_fCosMaxAngle;
                 fS0 = rkXCon.m_fSinMaxAngle;
                 fAngle = rkXCon.m_fMaxAngle - fAngle;
-                fC1 = CMath<Real>::Cos(fAngle);
-                fS1 = CMath<Real>::Sin(fAngle);
+                fC1 = CMath<nReal>::Cos(fAngle);
+                fS1 = CMath<nReal>::Sin(fAngle);
             }
         }
         else
@@ -1696,11 +1696,11 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
 
             kTmp = GetClosest(1,kCon);
 
-            fAngle = CMath<Real>::ATan2(kTmp[1],kTmp[0]);
+            fAngle = CMath<nReal>::ATan2(kTmp[1],kTmp[0]);
             if (fAngle < fMinAngle || fAngle > fMaxAngle)
             {
                 fAngle -=
-                    (kTmp[1] >= (Real)0 ? CMath<Real>::PI : -CMath<Real>::PI);
+                    (kTmp[1] >= (nReal)0 ? CMath<nReal>::PI : -CMath<nReal>::PI);
                 // assert(fMinAngle <= fAngle && fAngle <= fMaxAngle);
             }
 
@@ -1709,16 +1709,16 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
                 fC1 = rkYCon.m_fCosMaxAngle;
                 fS1 = rkYCon.m_fSinMaxAngle;
                 fAngle = fAngle - rkYCon.m_fMaxAngle;
-                fC0 = CMath<Real>::Cos(fAngle);
-                fS0 = CMath<Real>::Sin(fAngle);
+                fC0 = CMath<nReal>::Cos(fAngle);
+                fS0 = CMath<nReal>::Sin(fAngle);
             }
             else
             {
                 fC0 = rkXCon.m_fCosMaxAngle;
                 fS0 = rkXCon.m_fSinMaxAngle;
                 fAngle = fAngle - rkXCon.m_fMaxAngle;
-                fC1 = CMath<Real>::Cos(fAngle);
-                fS1 = CMath<Real>::Sin(fAngle);
+                fC1 = CMath<nReal>::Cos(fAngle);
+                fS1 = CMath<nReal>::Sin(fAngle);
             }
         }
 
@@ -1726,7 +1726,7 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
         kQ[1] = fS0*fC1;
         kQ[2] = fC0*fS1;
         kQ[3] = fS0*fS1;
-        if (Dot(kQ) < (Real)0)
+        if (Dot(kQ) < (nReal)0)
         {
             kQ = -kQ;
         }
@@ -1735,8 +1735,8 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXY (const Constraints& rkXCon,
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestYX (const Constraints& rkYCon,
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestYX (const Constraints& rkYCon,
     const Constraints& rkXCon) const
 {
     CQuaternion pkAlt(m_afTuple[0],m_afTuple[1],m_afTuple[2],-m_afTuple[3]);
@@ -1745,39 +1745,39 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestYX (const Constraints& rkYCon,
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestZX (const Constraints& rkZCon,
     const Constraints& rkXCon) const
 {
     CQuaternion kQ, kTmp;
-    Real fC2, fS2, fC0, fS0, fInvLength;
+    nReal fC2, fS2, fC0, fS0, fInvLength;
 
-    Real fDet = m_afTuple[0]*m_afTuple[2] - m_afTuple[1]*m_afTuple[3];
-    if (CMath<Real>::FAbs(fDet) < (Real)0.5 - ms_fTolerance)
+    nReal fDet = m_afTuple[0]*m_afTuple[2] - m_afTuple[1]*m_afTuple[3];
+    if (CMath<nReal>::FAbs(fDet) < (nReal)0.5 - ms_fTolerance)
     {
-        Real fDiscr = CMath<Real>::Sqrt(CMath<Real>::FAbs((Real)1 -
-            ((Real)4)*fDet*fDet));
-        Real fA = m_afTuple[0]*m_afTuple[3] + m_afTuple[1]*m_afTuple[2];
-        Real fB = m_afTuple[0]*m_afTuple[0] + m_afTuple[1]*m_afTuple[1]
+        nReal fDiscr = CMath<nReal>::Sqrt(CMath<nReal>::FAbs((nReal)1 -
+            ((nReal)4)*fDet*fDet));
+        nReal fA = m_afTuple[0]*m_afTuple[3] + m_afTuple[1]*m_afTuple[2];
+        nReal fB = m_afTuple[0]*m_afTuple[0] + m_afTuple[1]*m_afTuple[1]
             - m_afTuple[2]*m_afTuple[2] - m_afTuple[3]*m_afTuple[3];
 
-        if (fB >= (Real)0)
+        if (fB >= (nReal)0)
         {
-            fC2 = ((Real)0.5)*(fDiscr + fB);
+            fC2 = ((nReal)0.5)*(fDiscr + fB);
             fS2 = fA;
         }
         else
         {
             fC2 = fA;
-            fS2 = ((Real)0.5)*(fDiscr - fB);
+            fS2 = ((nReal)0.5)*(fDiscr - fB);
         }
-        fInvLength = CMath<Real>::InvSqrt(fC2*fC2 + fS2*fS2);
+        fInvLength = CMath<nReal>::InvSqrt(fC2*fC2 + fS2*fS2);
         fC2 *= fInvLength;
         fS2 *= fInvLength;
 
         fC0 = m_afTuple[0]*fC2 + m_afTuple[3]*fS2;
         fS0 = m_afTuple[1]*fC2 + m_afTuple[2]*fS2;
-        fInvLength = CMath<Real>::InvSqrt(fC0*fC0 + fS0*fS0);
+        fInvLength = CMath<nReal>::InvSqrt(fC0*fC0 + fS0*fS0);
         fC0 *= fInvLength;
         fS0 *= fInvLength;
 
@@ -1792,22 +1792,22 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
         else
         {
             // The maximum occurs at a boundary point.
-            CQuaternion kR(rkZCon.m_fCosMinAngle,(Real)0,(Real)0,
+            CQuaternion kR(rkZCon.m_fCosMinAngle,(nReal)0,(nReal)0,
                 rkZCon.m_fSinMinAngle);
-            CQuaternion kRInv(rkZCon.m_fCosMinAngle,(Real)0,(Real)0,
+            CQuaternion kRInv(rkZCon.m_fCosMinAngle,(nReal)0,(nReal)0,
                 -rkZCon.m_fSinMinAngle);
             CQuaternion kProd = kRInv*(*this);
             kTmp = kProd.GetClosest(1,rkXCon);
-            Real fDotOptAngle = kProd.Dot(kTmp);
+            nReal fDotOptAngle = kProd.Dot(kTmp);
             kQ = kR*kTmp;
 
-            kR = CQuaternion(rkZCon.m_fCosMaxAngle,(Real)0,(Real)0,
+            kR = CQuaternion(rkZCon.m_fCosMaxAngle,(nReal)0,(nReal)0,
                 rkZCon.m_fSinMaxAngle);
-            kRInv = CQuaternion(rkZCon.m_fCosMaxAngle,(Real)0,(Real)0,
+            kRInv = CQuaternion(rkZCon.m_fCosMaxAngle,(nReal)0,(nReal)0,
                 -rkZCon.m_fSinMaxAngle);
             kProd = kRInv*(*this);
             kTmp = kProd.GetClosest(1,rkXCon);
-            Real fDotAngle = kProd.Dot(kTmp);
+            nReal fDotAngle = kProd.Dot(kTmp);
             if (fDotAngle > fDotOptAngle)
             {
                 kQ = kR*kTmp;
@@ -1815,9 +1815,9 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
             }
 
             kR = CQuaternion(rkXCon.m_fCosMinAngle,rkXCon.m_fSinMinAngle,
-                (Real)0,(Real)0);
+                (nReal)0,(nReal)0);
             kRInv = CQuaternion(rkXCon.m_fCosMinAngle,-rkXCon.m_fSinMinAngle,
-                (Real)0,(Real)0);
+                (nReal)0,(nReal)0);
             kProd = (*this)*kRInv;
             kTmp = kProd.GetClosest(3,rkZCon);
             fDotAngle = kProd.Dot(kTmp);
@@ -1828,9 +1828,9 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
             }
 
             kR = CQuaternion(rkXCon.m_fCosMaxAngle,rkXCon.m_fSinMaxAngle,
-                (Real)0,(Real)0);
+                (nReal)0,(nReal)0);
             kRInv = CQuaternion(rkXCon.m_fCosMaxAngle,-rkXCon.m_fSinMaxAngle,
-                (Real)0,(Real)0);
+                (nReal)0,(nReal)0);
             kProd = (*this)*kRInv;
             kTmp = kProd.GetClosest(3,rkZCon);
             fDotAngle = kProd.Dot(kTmp);
@@ -1845,10 +1845,10 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
     {
         // Infinitely many solutions, choose one that satisfies the angle
         // constraints.
-        Real fMinAngle, fMaxAngle, fAngle;
+        nReal fMinAngle, fMaxAngle, fAngle;
         Constraints kCon;
 
-        if (fDet > (Real)0)
+        if (fDet > (nReal)0)
         {
             fMinAngle = rkXCon.m_fMinAngle - rkZCon.m_fMaxAngle;
             fMaxAngle = rkXCon.m_fMaxAngle - rkZCon.m_fMinAngle;
@@ -1856,11 +1856,11 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
 
             kTmp = GetClosest(1,kCon);
 
-            fAngle = CMath<Real>::ATan2(kTmp[1],kTmp[0]);
+            fAngle = CMath<nReal>::ATan2(kTmp[1],kTmp[0]);
             if (fAngle < fMinAngle || fAngle > fMaxAngle)
             {
                 fAngle -=
-                    (kTmp[1] >= (Real)0 ? CMath<Real>::PI : -CMath<Real>::PI);
+                    (kTmp[1] >= (nReal)0 ? CMath<nReal>::PI : -CMath<nReal>::PI);
                 // assert(fMinAngle <= fAngle && fAngle <= fMaxAngle);
             }
 
@@ -1869,16 +1869,16 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
                 fC2 = rkZCon.m_fCosMaxAngle;
                 fS2 = rkZCon.m_fSinMaxAngle;
                 fAngle = rkZCon.m_fMaxAngle + fAngle;
-                fC0 = CMath<Real>::Cos(fAngle);
-                fS0 = CMath<Real>::Sin(fAngle);
+                fC0 = CMath<nReal>::Cos(fAngle);
+                fS0 = CMath<nReal>::Sin(fAngle);
             }
             else
             {
                 fC0 = rkXCon.m_fCosMaxAngle;
                 fS0 = rkXCon.m_fSinMaxAngle;
                 fAngle = rkXCon.m_fMaxAngle - fAngle;
-                fC2 = CMath<Real>::Cos(fAngle);
-                fS2 = CMath<Real>::Sin(fAngle);
+                fC2 = CMath<nReal>::Cos(fAngle);
+                fS2 = CMath<nReal>::Sin(fAngle);
             }
         }
         else
@@ -1889,11 +1889,11 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
 
             kTmp = GetClosest(1,kCon);
 
-            fAngle = CMath<Real>::ATan2(kTmp[1],kTmp[0]);
+            fAngle = CMath<nReal>::ATan2(kTmp[1],kTmp[0]);
             if (fAngle < fMinAngle || fAngle > fMaxAngle)
             {
                 fAngle -=
-                    (kTmp[1] >= (Real)0 ? CMath<Real>::PI : -CMath<Real>::PI);
+                    (kTmp[1] >= (nReal)0 ? CMath<nReal>::PI : -CMath<nReal>::PI);
                 // assert(fMinAngle <= fAngle && fAngle <= fMaxAngle);
             }
 
@@ -1902,16 +1902,16 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
                 fC2 = rkZCon.m_fCosMaxAngle;
                 fS2 = rkZCon.m_fSinMaxAngle;
                 fAngle = fAngle - rkZCon.m_fMaxAngle;
-                fC0 = CMath<Real>::Cos(fAngle);
-                fS0 = CMath<Real>::Sin(fAngle);
+                fC0 = CMath<nReal>::Cos(fAngle);
+                fS0 = CMath<nReal>::Sin(fAngle);
             }
             else
             {
                 fC0 = rkXCon.m_fCosMaxAngle;
                 fS0 = rkXCon.m_fSinMaxAngle;
                 fAngle = fAngle - rkXCon.m_fMaxAngle;
-                fC2 = CMath<Real>::Cos(fAngle);
-                fS2 = CMath<Real>::Sin(fAngle);
+                fC2 = CMath<nReal>::Cos(fAngle);
+                fS2 = CMath<nReal>::Sin(fAngle);
             }
         }
 
@@ -1919,7 +1919,7 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
         kQ[1] = fC2*fS0;
         kQ[2] = fS2*fS0;
         kQ[3] = fS2*fC0;
-        if (Dot(kQ) < (Real)0)
+        if (Dot(kQ) < (nReal)0)
         {
             kQ = -kQ;
         }
@@ -1928,8 +1928,8 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZX (const Constraints& rkZCon,
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestXZ (const Constraints& rkXCon,
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestXZ (const Constraints& rkXCon,
     const Constraints& rkZCon) const
 {
     CQuaternion pkAlt(m_afTuple[0],m_afTuple[1],-m_afTuple[2],m_afTuple[3]);
@@ -1938,39 +1938,39 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestXZ (const Constraints& rkXCon,
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestZY (const Constraints& rkZCon,
     const Constraints& rkYCon) const
 {
     CQuaternion kQ, kTmp;
-    Real fC2, fS2, fC1, fS1, fInvLength;
+    nReal fC2, fS2, fC1, fS1, fInvLength;
 
-    Real fDet = m_afTuple[0]*m_afTuple[1] + m_afTuple[2]*m_afTuple[3];
-    if (CMath<Real>::FAbs(fDet) < (Real)0.5 - ms_fTolerance)
+    nReal fDet = m_afTuple[0]*m_afTuple[1] + m_afTuple[2]*m_afTuple[3];
+    if (CMath<nReal>::FAbs(fDet) < (nReal)0.5 - ms_fTolerance)
     {
-        Real fDiscr = CMath<Real>::Sqrt(CMath<Real>::FAbs((Real)1 -
-            ((Real)4)*fDet*fDet));
-        Real fA = m_afTuple[0]*m_afTuple[3] - m_afTuple[1]*m_afTuple[2];
-        Real fB = m_afTuple[0]*m_afTuple[0] - m_afTuple[1]*m_afTuple[1]
+        nReal fDiscr = CMath<nReal>::Sqrt(CMath<nReal>::FAbs((nReal)1 -
+            ((nReal)4)*fDet*fDet));
+        nReal fA = m_afTuple[0]*m_afTuple[3] - m_afTuple[1]*m_afTuple[2];
+        nReal fB = m_afTuple[0]*m_afTuple[0] - m_afTuple[1]*m_afTuple[1]
             + m_afTuple[2]*m_afTuple[2] - m_afTuple[3]*m_afTuple[3];
 
-        if (fB >= (Real)0)
+        if (fB >= (nReal)0)
         {
-            fC2 = ((Real)0.5)*(fDiscr + fB);
+            fC2 = ((nReal)0.5)*(fDiscr + fB);
             fS2 = fA;
         }
         else
         {
             fC2 = fA;
-            fS2 = ((Real)0.5)*(fDiscr - fB);
+            fS2 = ((nReal)0.5)*(fDiscr - fB);
         }
-        fInvLength = CMath<Real>::InvSqrt(fC2*fC2 + fS2*fS2);
+        fInvLength = CMath<nReal>::InvSqrt(fC2*fC2 + fS2*fS2);
         fC2 *= fInvLength;
         fS2 *= fInvLength;
 
         fC1 = m_afTuple[0]*fC2 + m_afTuple[3]*fS2;
         fS1 = m_afTuple[2]*fC2 - m_afTuple[1]*fS2;
-        fInvLength = CMath<Real>::InvSqrt(fC1*fC1 + fS1*fS1);
+        fInvLength = CMath<nReal>::InvSqrt(fC1*fC1 + fS1*fS1);
         fC1 *= fInvLength;
         fS1 *= fInvLength;
 
@@ -1985,32 +1985,32 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
         else
         {
             // The maximum occurs at a boundary point.
-            CQuaternion kR(rkZCon.m_fCosMinAngle,(Real)0,(Real)0,
+            CQuaternion kR(rkZCon.m_fCosMinAngle,(nReal)0,(nReal)0,
                 rkZCon.m_fSinMinAngle);
-            CQuaternion kRInv(rkZCon.m_fCosMinAngle,(Real)0,(Real)0,
+            CQuaternion kRInv(rkZCon.m_fCosMinAngle,(nReal)0,(nReal)0,
                 -rkZCon.m_fSinMinAngle);
             CQuaternion kProd = kRInv*(*this);
             kTmp = kProd.GetClosest(2,rkYCon);
-            Real fDotOptAngle = kProd.Dot(kTmp);
+            nReal fDotOptAngle = kProd.Dot(kTmp);
             kQ = kR*kTmp;
 
-            kR = CQuaternion(rkZCon.m_fCosMaxAngle,(Real)0,(Real)0,
+            kR = CQuaternion(rkZCon.m_fCosMaxAngle,(nReal)0,(nReal)0,
                 rkZCon.m_fSinMaxAngle);
-            kRInv = CQuaternion(rkZCon.m_fCosMaxAngle,(Real)0,(Real)0,
+            kRInv = CQuaternion(rkZCon.m_fCosMaxAngle,(nReal)0,(nReal)0,
                 -rkZCon.m_fSinMaxAngle);
             kProd = kRInv*(*this);
             kTmp = kProd.GetClosest(2,rkYCon);
-            Real fDotAngle = kProd.Dot(kTmp);
+            nReal fDotAngle = kProd.Dot(kTmp);
             if (fDotAngle > fDotOptAngle)
             {
                 kQ = kR*kTmp;
                 fDotOptAngle = fDotAngle;
             }
 
-            kR = CQuaternion(rkYCon.m_fCosMinAngle,(Real)0,
-                rkYCon.m_fSinMinAngle,(Real)0);
-            kRInv = CQuaternion(rkYCon.m_fCosMinAngle,(Real)0,
-                -rkYCon.m_fSinMinAngle,(Real)0);
+            kR = CQuaternion(rkYCon.m_fCosMinAngle,(nReal)0,
+                rkYCon.m_fSinMinAngle,(nReal)0);
+            kRInv = CQuaternion(rkYCon.m_fCosMinAngle,(nReal)0,
+                -rkYCon.m_fSinMinAngle,(nReal)0);
             kProd = (*this)*kRInv;
             kTmp = kProd.GetClosest(3,rkZCon);
             fDotAngle = kProd.Dot(kTmp);
@@ -2020,10 +2020,10 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
                 fDotOptAngle = fDotAngle;
             }
 
-            kR = CQuaternion(rkYCon.m_fCosMaxAngle,(Real)0,
-                rkYCon.m_fSinMaxAngle,(Real)0);
-            kRInv = CQuaternion(rkYCon.m_fCosMaxAngle,(Real)0,
-                -rkYCon.m_fSinMaxAngle,(Real)0);
+            kR = CQuaternion(rkYCon.m_fCosMaxAngle,(nReal)0,
+                rkYCon.m_fSinMaxAngle,(nReal)0);
+            kRInv = CQuaternion(rkYCon.m_fCosMaxAngle,(nReal)0,
+                -rkYCon.m_fSinMaxAngle,(nReal)0);
             kProd = (*this)*kRInv;
             kTmp = kProd.GetClosest(3,rkZCon);
             fDotAngle = kProd.Dot(kTmp);
@@ -2038,10 +2038,10 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
     {
         // Infinitely many solutions, choose one that satisfies the angle
         // constraints.
-        Real fMinAngle, fMaxAngle, fAngle;
+        nReal fMinAngle, fMaxAngle, fAngle;
         Constraints kCon;
 
-        if (fDet < (Real)0)
+        if (fDet < (nReal)0)
         {
             fMinAngle = rkYCon.m_fMinAngle - rkZCon.m_fMaxAngle;
             fMaxAngle = rkYCon.m_fMaxAngle - rkZCon.m_fMinAngle;
@@ -2049,11 +2049,11 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
 
             kTmp = GetClosest(2,kCon);
 
-            fAngle = CMath<Real>::ATan2(kTmp[2],kTmp[0]);
+            fAngle = CMath<nReal>::ATan2(kTmp[2],kTmp[0]);
             if (fAngle < fMinAngle || fAngle > fMaxAngle)
             {
                 fAngle -=
-                    (kTmp[2] >= (Real)0 ? CMath<Real>::PI : -CMath<Real>::PI);
+                    (kTmp[2] >= (nReal)0 ? CMath<nReal>::PI : -CMath<nReal>::PI);
                 // assert(fMinAngle <= fAngle && fAngle <= fMaxAngle);
             }
 
@@ -2062,16 +2062,16 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
                 fC2 = rkZCon.m_fCosMaxAngle;
                 fS2 = rkZCon.m_fSinMaxAngle;
                 fAngle = rkZCon.m_fMaxAngle + fAngle;
-                fC1 = CMath<Real>::Cos(fAngle);
-                fS1 = CMath<Real>::Sin(fAngle);
+                fC1 = CMath<nReal>::Cos(fAngle);
+                fS1 = CMath<nReal>::Sin(fAngle);
             }
             else
             {
                 fC1 = rkYCon.m_fCosMaxAngle;
                 fS1 = rkYCon.m_fSinMaxAngle;
                 fAngle = rkYCon.m_fMaxAngle - fAngle;
-                fC2 = CMath<Real>::Cos(fAngle);
-                fS2 = CMath<Real>::Sin(fAngle);
+                fC2 = CMath<nReal>::Cos(fAngle);
+                fS2 = CMath<nReal>::Sin(fAngle);
             }
         }
         else
@@ -2082,11 +2082,11 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
 
             kTmp = GetClosest(2,kCon);
 
-            fAngle = CMath<Real>::ATan2(kTmp[2],kTmp[0]);
+            fAngle = CMath<nReal>::ATan2(kTmp[2],kTmp[0]);
             if (fAngle < fMinAngle || fAngle > fMaxAngle)
             {
                 fAngle -=
-                    (kTmp[2] >= (Real)0 ? CMath<Real>::PI : -CMath<Real>::PI);
+                    (kTmp[2] >= (nReal)0 ? CMath<nReal>::PI : -CMath<nReal>::PI);
                 // assert(fMinAngle <= fAngle && fAngle <= fMaxAngle);
             }
 
@@ -2095,16 +2095,16 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
                 fC2 = rkZCon.m_fCosMaxAngle;
                 fS2 = rkZCon.m_fSinMaxAngle;
                 fAngle = fAngle - rkZCon.m_fMaxAngle;
-                fC1 = CMath<Real>::Cos(fAngle);
-                fS1 = CMath<Real>::Sin(fAngle);
+                fC1 = CMath<nReal>::Cos(fAngle);
+                fS1 = CMath<nReal>::Sin(fAngle);
             }
             else
             {
                 fC1 = rkYCon.m_fCosMaxAngle;
                 fS1 = rkYCon.m_fSinMaxAngle;
                 fAngle = fAngle - rkYCon.m_fMaxAngle;
-                fC2 = CMath<Real>::Cos(fAngle);
-                fS2 = CMath<Real>::Sin(fAngle);
+                fC2 = CMath<nReal>::Cos(fAngle);
+                fS2 = CMath<nReal>::Sin(fAngle);
             }
         }
 
@@ -2112,7 +2112,7 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
         kQ[1] = -fS2*fS1;
         kQ[2] = fC2*fS1;
         kQ[3] = fS2*fC1;
-        if (Dot(kQ) < (Real)0)
+        if (Dot(kQ) < (nReal)0)
         {
             kQ = -kQ;
         }
@@ -2121,8 +2121,8 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestZY (const Constraints& rkZCon,
     return kQ;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CQuaternion<Real> CQuaternion<Real>::GetClosestYZ (const Constraints& rkYCon,
+template <class nReal>
+CQuaternion<nReal> CQuaternion<nReal>::GetClosestYZ (const Constraints& rkYCon,
     const Constraints& rkZCon) const
 {
     CQuaternion pkAlt(m_afTuple[0],-m_afTuple[1],m_afTuple[2],m_afTuple[3]);
@@ -2131,7 +2131,7 @@ CQuaternion<Real> CQuaternion<Real>::GetClosestYZ (const Constraints& rkYCon,
     return kQ;
 }
 
-typedef CQuaternion<real> Quaternionf;
+typedef CQuaternion<nReal> Quaternionf;
 
 
 }

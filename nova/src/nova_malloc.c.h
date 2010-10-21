@@ -157,7 +157,7 @@
   a size_t, not counting any clearing in calloc or copying in realloc,
   or actions surrounding MORECORE and MMAP that have times
   proportional to the number of non-contiguous regions returned by
-  system allocation routines, which is often just 1. In real-time
+  system allocation routines, which is often just 1. In nReal-time
   applications, you can optionally suppress segment traversals using
   NO_SEGMENT_TRAVERSAL, which assures bounded execution even when
   system allocators return non-contiguous spaces, at the typical
@@ -2390,7 +2390,7 @@ typedef struct malloc_segment* msegmentptr;
     with sizes less than MIN_LARGE_SIZE bytes. Each bin contains
     chunks of all the same size, spaced 8 bytes apart.  To simplify
     use in double-linked lists, each bin header acts as a malloc_chunk
-    pointing to the real first node, if it exists (else pointing to
+    pointing to the nReal first node, if it exists (else pointing to
     itself).  This avoids special-casing for headers.  But to avoid
     waste, we allocate only the fd/bk pointers of bins, and then use
     repositioning tricks to treat these as the fields of a chunk.

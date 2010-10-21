@@ -97,8 +97,8 @@ CCameraPtr CViewPort::GetCameraByName(nstring & name)
 		throw NOVA_EXP("CViewPort::GetCameraByName - Can not find this camera..", BAD_OPERATION);
 }
 
-CCameraPtr CViewPort::CreateLinearCamera(nstring & name, nova::real Left, nova::real Right, 
-	nova::real Bottom, nova::real Top, nova::real ZFar, nova::real ZNear)
+CCameraPtr CViewPort::CreateLinearCamera(nstring & name, nova::nReal Left, nova::nReal Right, 
+	nova::nReal Bottom, nova::nReal Top, nova::nReal ZFar, nova::nReal ZNear)
 {
 	mActiveCamera = new CCamera(Left, Right, Bottom, Top, ZFar, ZNear, this);
 
@@ -114,8 +114,8 @@ CCameraPtr CViewPort::CreateLinearCamera(nstring & name, nova::real Left, nova::
 }
 
 
-CCameraPtr CViewPort::CreatePerspectiveCamera(nstring & name, nova::real FOV, nova::real ZFar, 
-	nova::real ZNear)
+CCameraPtr CViewPort::CreatePerspectiveCamera(nstring & name, nova::nReal FOV, nova::nReal ZFar, 
+	nova::nReal ZNear)
 {
 	mActiveCamera = new CCamera(FOV, ZFar, ZNear, this);
 

@@ -159,7 +159,7 @@ class NOVA_EXPORT CConsole : public CConsoleBase, public CParser
 	friend class CConsoleManager;
 private:
 	uint		position;
-	real		dy;
+	nReal		dy;
 	int			ypos;
 	CFontPtr	font;
 

@@ -38,9 +38,9 @@
 namespace nova
 {
 
-template<> const CVector2<real> CVector2<real>::ZERO(0.0f,0.0f);
-template<> const CVector2<real> CVector2<real>::UNIT_X(1.0f,0.0f);
-template<> const CVector2<real> CVector2<real>::UNIT_Y(0.0f,1.0f);
-template<> const CVector2<real> CVector2<real>::ONE(1.0f,1.0f);
+template<> const CVector2<nReal> CVector2<nReal>::ZERO(0.0f,0.0f);
+template<> const CVector2<nReal> CVector2<nReal>::UNIT_X(1.0f,0.0f);
+template<> const CVector2<nReal> CVector2<nReal>::UNIT_Y(0.0f,1.0f);
+template<> const CVector2<nReal> CVector2<nReal>::ONE(1.0f,1.0f);
 
 }

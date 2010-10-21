@@ -64,11 +64,11 @@ public:
 
 	Vector3f & GetP8(void) const;
 
-	real GetLength();
+	nReal GetLength();
 
-	real GetHeight();
+	nReal GetHeight();
 
-	real GetWidth();
+	nReal GetWidth();
 
 	void NullBox();
 

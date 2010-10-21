@@ -38,7 +38,7 @@
 namespace nova
 {
 
-template <class Real>
+template <class nReal>
 class CMatrix2: public CObjectConstructor
 {
 public:
@@ -50,50 +50,50 @@ public:
     CMatrix2 (const CMatrix2& rkM);
 
     // input Mrc is in row r, column c.
-    CMatrix2 (Real fM00, Real fM01, Real fM10, Real fM11);
+    CMatrix2 (nReal fM00, nReal fM01, nReal fM10, nReal fM11);
 
     // Create a matrix from an array of numbers.  The input array is
     // interpreted based on the Boolean input as
     //   true:  entry[0..3] = {m00,m01,m10,m11}  [row major]
     //   false: entry[0..3] = {m00,m10,m01,m11}  [column major]
-    CMatrix2 (const Real afEntry[4], bool bRowMajor);
+    CMatrix2 (const nReal afEntry[4], bool bRowMajor);
 
     // Create matrices based on vector input.  The Boolean is interpreted as
     //   true: vectors are columns of the matrix
     //   false: vectors are rows of the matrix
-    CMatrix2 (const CVector2<Real>& rkU, const CVector2<Real>& rkV,
+    CMatrix2 (const CVector2<nReal>& rkU, const CVector2<nReal>& rkV,
         bool bColumns);
-    CMatrix2 (const CVector2<Real>* akV, bool bColumns);
+    CMatrix2 (const CVector2<nReal>* akV, bool bColumns);
 
     // create a diagonal matrix
-    CMatrix2 (Real fM00, Real fM11);
+    CMatrix2 (nReal fM00, nReal fM11);
 
     // create a rotation matrix (positive angle - counterclockwise)
-    CMatrix2 (Real fAngle);
+    CMatrix2 (nReal fAngle);
 
     // create a tensor product U*V^T
-    CMatrix2 (const CVector2<Real>& rkU, const CVector2<Real>& rkV);
+    CMatrix2 (const CVector2<nReal>& rkU, const CVector2<nReal>& rkV);
 
     // create various matrices
     void MakeZero ();
     void MakeIdentity ();
-    void MakeDiagonal (Real fM00, Real fM11);
-    void FromAngle (Real fAngle);
-    void MakeTensorProduct (const CVector2<Real>& rkU,
-        const CVector2<Real>& rkV);
+    void MakeDiagonal (nReal fM00, nReal fM11);
+    void FromAngle (nReal fAngle);
+    void MakeTensorProduct (const CVector2<nReal>& rkU,
+        const CVector2<nReal>& rkV);
 
     // member access
-    inline operator const Real* () const;
-    inline operator Real* ();
-    inline const Real* operator[] (int iRow) const;
-    inline Real* operator[] (int iRow);
-    inline Real operator() (int iRow, int iCol) const;
-    inline Real& operator() (int iRow, int iCol);
-    void SetRow (int iRow, const CVector2<Real>& rkV);
-    CVector2<Real> GetRow (int iRow) const;
-    void SetColumn (int iCol, const CVector2<Real>& rkV);
-    CVector2<Real> GetColumn (int iCol) const;
-    void GetColumnMajor (Real* afCMajor) const;
+    inline operator const nReal* () const;
+    inline operator nReal* ();
+    inline const nReal* operator[] (int iRow) const;
+    inline nReal* operator[] (int iRow);
+    inline nReal operator() (int iRow, int iCol) const;
+    inline nReal& operator() (int iRow, int iCol);
+    void SetRow (int iRow, const CVector2<nReal>& rkV);
+    CVector2<nReal> GetRow (int iRow) const;
+    void SetColumn (int iCol, const CVector2<nReal>& rkV);
+    CVector2<nReal> GetColumn (int iCol) const;
+    void GetColumnMajor (nReal* afCMajor) const;
 
     // assignment
     inline CMatrix2& operator= (const CMatrix2& rkM);
@@ -110,18 +110,18 @@ public:
     inline CMatrix2 operator+ (const CMatrix2& rkM) const;
     inline CMatrix2 operator- (const CMatrix2& rkM) const;
     inline CMatrix2 operator* (const CMatrix2& rkM) const;
-    inline CMatrix2 operator* (Real fScalar) const;
-    inline CMatrix2 operator/ (Real fScalar) const;
+    inline CMatrix2 operator* (nReal fScalar) const;
+    inline CMatrix2 operator/ (nReal fScalar) const;
     inline CMatrix2 operator- () const;
 
     // arithmetic updates
     inline CMatrix2& operator+= (const CMatrix2& rkM);
     inline CMatrix2& operator-= (const CMatrix2& rkM);
-    inline CMatrix2& operator*= (Real fScalar);
-    inline CMatrix2& operator/= (Real fScalar);
+    inline CMatrix2& operator*= (nReal fScalar);
+    inline CMatrix2& operator/= (nReal fScalar);
 
     // matrix times vector
-    inline CVector2<Real> operator* (const CVector2<Real>& rkV) const;  // M * v
+    inline CVector2<nReal> operator* (const CVector2<nReal>& rkV) const;  // M * v
 
     // other operations
     CMatrix2 Transpose () const;  // M^T
@@ -129,15 +129,15 @@ public:
     CMatrix2 TimesTranspose (const CMatrix2& rkM) const;  // this * M^T
     CMatrix2 Inverse () const;
     CMatrix2 Adjoint () const;
-    Real Determinant () const;
-    Real QForm (const CVector2<Real>& rkU,
-        const CVector2<Real>& rkV) const;  // u^T*M*v
+    nReal Determinant () const;
+    nReal QForm (const CVector2<nReal>& rkU,
+        const CVector2<nReal>& rkV) const;  // u^T*M*v
 
     // The matrix must be a rotation for these functions to be valid.  The
     // last function uses Gram-Schmidt orthonormalization applied to the
     // columns of the rotation matrix.  The angle must be in radians, not
     // degrees.
-    void ToAngle (Real& rfAngle) const;
+    void ToAngle (nReal& rfAngle) const;
     void Orthonormalize ();
 
     // The matrix must be symmetric.  Factor M = R * D * R^T where
@@ -155,20 +155,20 @@ private:
     int CompareArrays (const CMatrix2& rkM) const;
 
     // matrix stored in row-major order
-    Real m_afEntry[4];
+    nReal m_afEntry[4];
 };
 
 // c * M
-template <class Real>
-inline CMatrix2<Real> operator* (Real fScalar, const CMatrix2<Real>& rkM);
+template <class nReal>
+inline CMatrix2<nReal> operator* (nReal fScalar, const CMatrix2<nReal>& rkM);
 
 // v^T * M
-template <class Real>
-inline CVector2<Real> operator* (const CVector2<Real>& rkV,
-    const CMatrix2<Real>& rkM);
+template <class nReal>
+inline CVector2<nReal> operator* (const CVector2<nReal>& rkV,
+    const CMatrix2<nReal>& rkM);
 
-template <class Real>
-CMatrix2<Real>::CMatrix2 (bool bZero)
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (bool bZero)
 {
     if (bZero)
     {
@@ -180,8 +180,8 @@ CMatrix2<Real>::CMatrix2 (bool bZero)
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real>::CMatrix2 (const CMatrix2& rkM)
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (const CMatrix2& rkM)
 {
     m_afEntry[0] = rkM.m_afEntry[0];
     m_afEntry[1] = rkM.m_afEntry[1];
@@ -189,8 +189,8 @@ CMatrix2<Real>::CMatrix2 (const CMatrix2& rkM)
     m_afEntry[3] = rkM.m_afEntry[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real>::CMatrix2 (Real fM00, Real fM01, Real fM10, Real fM11)
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (nReal fM00, nReal fM01, nReal fM10, nReal fM11)
 {
     m_afEntry[0] = fM00;
     m_afEntry[1] = fM01;
@@ -198,8 +198,8 @@ CMatrix2<Real>::CMatrix2 (Real fM00, Real fM01, Real fM10, Real fM11)
     m_afEntry[3] = fM11;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real>::CMatrix2 (const Real afEntry[4], bool bRowMajor)
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (const nReal afEntry[4], bool bRowMajor)
 {
     if (bRowMajor)
     {
@@ -217,8 +217,8 @@ CMatrix2<Real>::CMatrix2 (const Real afEntry[4], bool bRowMajor)
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real>::CMatrix2 (const CVector2<Real>& rkU, const CVector2<Real>& rkV,
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (const CVector2<nReal>& rkU, const CVector2<nReal>& rkV,
     bool bColumns)
 {
     if (bColumns)
@@ -237,8 +237,8 @@ CMatrix2<Real>::CMatrix2 (const CVector2<Real>& rkU, const CVector2<Real>& rkV,
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real>::CMatrix2 (const CVector2<Real>* akV, bool bColumns)
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (const CVector2<nReal>* akV, bool bColumns)
 {
     if (bColumns)
     {
@@ -256,99 +256,99 @@ CMatrix2<Real>::CMatrix2 (const CVector2<Real>* akV, bool bColumns)
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real>::CMatrix2 (Real fM00, Real fM11)
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (nReal fM00, nReal fM11)
 {
     MakeDiagonal(fM00,fM11);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real>::CMatrix2 (Real fAngle)
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (nReal fAngle)
 {
     FromAngle(fAngle);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real>::CMatrix2 (const CVector2<Real>& rkU, const CVector2<Real>& rkV)
+template <class nReal>
+CMatrix2<nReal>::CMatrix2 (const CVector2<nReal>& rkU, const CVector2<nReal>& rkV)
 {
     MakeTensorProduct(rkU,rkV);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real>::operator const Real* () const
+template <class nReal>
+inline CMatrix2<nReal>::operator const nReal* () const
 {
     return m_afEntry;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real>::operator Real* ()
+template <class nReal>
+inline CMatrix2<nReal>::operator nReal* ()
 {
     return m_afEntry;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline const Real* CMatrix2<Real>::operator[] (int iRow) const
+template <class nReal>
+inline const nReal* CMatrix2<nReal>::operator[] (int iRow) const
 {
     return &m_afEntry[2*iRow];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real* CMatrix2<Real>::operator[] (int iRow)
+template <class nReal>
+inline nReal* CMatrix2<nReal>::operator[] (int iRow)
 {
     return &m_afEntry[2*iRow];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CMatrix2<Real>::operator() (int iRow, int iCol) const
+template <class nReal>
+inline nReal CMatrix2<nReal>::operator() (int iRow, int iCol) const
 {
     return m_afEntry[iCol + 2*iRow];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CMatrix2<Real>::operator() (int iRow, int iCol)
+template <class nReal>
+inline nReal& CMatrix2<nReal>::operator() (int iRow, int iCol)
 {
     return m_afEntry[iCol + 2*iRow];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::MakeZero ()
+template <class nReal>
+void CMatrix2<nReal>::MakeZero ()
 {
-    m_afEntry[0] = (Real)0.0;
-    m_afEntry[1] = (Real)0.0;
-    m_afEntry[2] = (Real)0.0;
-    m_afEntry[3] = (Real)0.0;
+    m_afEntry[0] = (nReal)0.0;
+    m_afEntry[1] = (nReal)0.0;
+    m_afEntry[2] = (nReal)0.0;
+    m_afEntry[3] = (nReal)0.0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::MakeIdentity ()
+template <class nReal>
+void CMatrix2<nReal>::MakeIdentity ()
 {
-    m_afEntry[0] = (Real)1.0;
-    m_afEntry[1] = (Real)0.0;
-    m_afEntry[2] = (Real)0.0;
-    m_afEntry[3] = (Real)1.0;
+    m_afEntry[0] = (nReal)1.0;
+    m_afEntry[1] = (nReal)0.0;
+    m_afEntry[2] = (nReal)0.0;
+    m_afEntry[3] = (nReal)1.0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::MakeDiagonal (Real fM00, Real fM11)
+template <class nReal>
+void CMatrix2<nReal>::MakeDiagonal (nReal fM00, nReal fM11)
 {
     m_afEntry[0] = fM00;
-    m_afEntry[1] = (Real)0.0;
-    m_afEntry[2] = (Real)0.0;
+    m_afEntry[1] = (nReal)0.0;
+    m_afEntry[2] = (nReal)0.0;
     m_afEntry[3] = fM11;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::FromAngle (Real fAngle)
+template <class nReal>
+void CMatrix2<nReal>::FromAngle (nReal fAngle)
 {
-    m_afEntry[0] = CMath<Real>::Cos(fAngle);
-    m_afEntry[2] = CMath<Real>::Sin(fAngle);
+    m_afEntry[0] = CMath<nReal>::Cos(fAngle);
+    m_afEntry[2] = CMath<nReal>::Sin(fAngle);
     m_afEntry[1] = -m_afEntry[2];
     m_afEntry[3] =  m_afEntry[0];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::MakeTensorProduct (const CVector2<Real>& rkU,
-    const CVector2<Real>& rkV)
+template <class nReal>
+void CMatrix2<nReal>::MakeTensorProduct (const CVector2<nReal>& rkU,
+    const CVector2<nReal>& rkV)
 {
     m_afEntry[0] = rkU[0]*rkV[0];
     m_afEntry[1] = rkU[0]*rkV[1];
@@ -356,36 +356,36 @@ void CMatrix2<Real>::MakeTensorProduct (const CVector2<Real>& rkU,
     m_afEntry[3] = rkU[1]*rkV[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::SetRow (int iRow, const CVector2<Real>& rkV)
+template <class nReal>
+void CMatrix2<nReal>::SetRow (int iRow, const CVector2<nReal>& rkV)
 {
     int i0 = 2*iRow ,i1 = i0+1;
     m_afEntry[i0] = rkV[0];
     m_afEntry[i1] = rkV[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector2<Real> CMatrix2<Real>::GetRow (int iRow) const
+template <class nReal>
+CVector2<nReal> CMatrix2<nReal>::GetRow (int iRow) const
 {
     int i0 = 2*iRow ,i1 = i0+1;
-    return CVector2<Real>(m_afEntry[i0],m_afEntry[i1]);
+    return CVector2<nReal>(m_afEntry[i0],m_afEntry[i1]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::SetColumn (int iCol, const CVector2<Real>& rkV)
+template <class nReal>
+void CMatrix2<nReal>::SetColumn (int iCol, const CVector2<nReal>& rkV)
 {
     m_afEntry[iCol] = rkV[0];
     m_afEntry[iCol+2] = rkV[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector2<Real> CMatrix2<Real>::GetColumn (int iCol) const
+template <class nReal>
+CVector2<nReal> CMatrix2<nReal>::GetColumn (int iCol) const
 {
-    return CVector2<Real>(m_afEntry[iCol],m_afEntry[iCol+2]);
+    return CVector2<nReal>(m_afEntry[iCol],m_afEntry[iCol+2]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::GetColumnMajor (Real* afCMajor) const
+template <class nReal>
+void CMatrix2<nReal>::GetColumnMajor (nReal* afCMajor) const
 {
     afCMajor[0] = m_afEntry[0];
     afCMajor[1] = m_afEntry[2];
@@ -393,8 +393,8 @@ void CMatrix2<Real>::GetColumnMajor (Real* afCMajor) const
     afCMajor[3] = m_afEntry[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real>& CMatrix2<Real>::operator= (const CMatrix2& rkM)
+template <class nReal>
+inline CMatrix2<nReal>& CMatrix2<nReal>::operator= (const CMatrix2& rkM)
 {
     m_afEntry[0] = rkM.m_afEntry[0];
     m_afEntry[1] = rkM.m_afEntry[1];
@@ -403,120 +403,120 @@ inline CMatrix2<Real>& CMatrix2<Real>::operator= (const CMatrix2& rkM)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-int CMatrix2<Real>::CompareArrays (const CMatrix2& rkM) const
+template <class nReal>
+int CMatrix2<nReal>::CompareArrays (const CMatrix2& rkM) const
 {
-    return memcmp(m_afEntry,rkM.m_afEntry,4*sizeof(Real));
+    return memcmp(m_afEntry,rkM.m_afEntry,4*sizeof(nReal));
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix2<Real>::operator== (const CMatrix2& rkM) const
+template <class nReal>
+bool CMatrix2<nReal>::operator== (const CMatrix2& rkM) const
 {
     return CompareArrays(rkM) == 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix2<Real>::operator!= (const CMatrix2& rkM) const
+template <class nReal>
+bool CMatrix2<nReal>::operator!= (const CMatrix2& rkM) const
 {
     return CompareArrays(rkM) != 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix2<Real>::operator<  (const CMatrix2& rkM) const
+template <class nReal>
+bool CMatrix2<nReal>::operator<  (const CMatrix2& rkM) const
 {
     return CompareArrays(rkM) < 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix2<Real>::operator<= (const CMatrix2& rkM) const
+template <class nReal>
+bool CMatrix2<nReal>::operator<= (const CMatrix2& rkM) const
 {
     return CompareArrays(rkM) <= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix2<Real>::operator>  (const CMatrix2& rkM) const
+template <class nReal>
+bool CMatrix2<nReal>::operator>  (const CMatrix2& rkM) const
 {
     return CompareArrays(rkM) > 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix2<Real>::operator>= (const CMatrix2& rkM) const
+template <class nReal>
+bool CMatrix2<nReal>::operator>= (const CMatrix2& rkM) const
 {
     return CompareArrays(rkM) >= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real> CMatrix2<Real>::operator+ (const CMatrix2& rkM) const
+template <class nReal>
+inline CMatrix2<nReal> CMatrix2<nReal>::operator+ (const CMatrix2& rkM) const
 {
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         m_afEntry[0] + rkM.m_afEntry[0],
         m_afEntry[1] + rkM.m_afEntry[1],
         m_afEntry[2] + rkM.m_afEntry[2],
         m_afEntry[3] + rkM.m_afEntry[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real> CMatrix2<Real>::operator- (const CMatrix2& rkM) const
+template <class nReal>
+inline CMatrix2<nReal> CMatrix2<nReal>::operator- (const CMatrix2& rkM) const
 {
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         m_afEntry[0] - rkM.m_afEntry[0],
         m_afEntry[1] - rkM.m_afEntry[1],
         m_afEntry[2] - rkM.m_afEntry[2],
         m_afEntry[3] - rkM.m_afEntry[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real> CMatrix2<Real>::operator* (const CMatrix2& rkM) const
+template <class nReal>
+inline CMatrix2<nReal> CMatrix2<nReal>::operator* (const CMatrix2& rkM) const
 {
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         m_afEntry[0]*rkM.m_afEntry[0] + m_afEntry[1]*rkM.m_afEntry[2],
         m_afEntry[0]*rkM.m_afEntry[1] + m_afEntry[1]*rkM.m_afEntry[3],
         m_afEntry[2]*rkM.m_afEntry[0] + m_afEntry[3]*rkM.m_afEntry[2],
         m_afEntry[2]*rkM.m_afEntry[1] + m_afEntry[3]*rkM.m_afEntry[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real> CMatrix2<Real>::operator* (Real fScalar) const
+template <class nReal>
+inline CMatrix2<nReal> CMatrix2<nReal>::operator* (nReal fScalar) const
 {
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         fScalar*m_afEntry[0],
         fScalar*m_afEntry[1],
         fScalar*m_afEntry[2],
         fScalar*m_afEntry[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real> CMatrix2<Real>::operator/ (Real fScalar) const
+template <class nReal>
+inline CMatrix2<nReal> CMatrix2<nReal>::operator/ (nReal fScalar) const
 {
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
-        return CMatrix2<Real>(
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
+        return CMatrix2<nReal>(
             fInvScalar*m_afEntry[0],
             fInvScalar*m_afEntry[1],
             fInvScalar*m_afEntry[2],
             fInvScalar*m_afEntry[3]);
     }
 
-    return CMatrix2<Real>(
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL);
+    return CMatrix2<nReal>(
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real> CMatrix2<Real>::operator- () const
+template <class nReal>
+inline CMatrix2<nReal> CMatrix2<nReal>::operator- () const
 {
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         -m_afEntry[0],
         -m_afEntry[1],
         -m_afEntry[2],
         -m_afEntry[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real>& CMatrix2<Real>::operator+= (const CMatrix2& rkM)
+template <class nReal>
+inline CMatrix2<nReal>& CMatrix2<nReal>::operator+= (const CMatrix2& rkM)
 {
     m_afEntry[0] += rkM.m_afEntry[0];
     m_afEntry[1] += rkM.m_afEntry[1];
@@ -525,8 +525,8 @@ inline CMatrix2<Real>& CMatrix2<Real>::operator+= (const CMatrix2& rkM)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real>& CMatrix2<Real>::operator-= (const CMatrix2& rkM)
+template <class nReal>
+inline CMatrix2<nReal>& CMatrix2<nReal>::operator-= (const CMatrix2& rkM)
 {
     m_afEntry[0] -= rkM.m_afEntry[0];
     m_afEntry[1] -= rkM.m_afEntry[1];
@@ -535,8 +535,8 @@ inline CMatrix2<Real>& CMatrix2<Real>::operator-= (const CMatrix2& rkM)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real>& CMatrix2<Real>::operator*= (Real fScalar)
+template <class nReal>
+inline CMatrix2<nReal>& CMatrix2<nReal>::operator*= (nReal fScalar)
 {
     m_afEntry[0] *= fScalar;
     m_afEntry[1] *= fScalar;
@@ -545,12 +545,12 @@ inline CMatrix2<Real>& CMatrix2<Real>::operator*= (Real fScalar)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real>& CMatrix2<Real>::operator/= (Real fScalar)
+template <class nReal>
+inline CMatrix2<nReal>& CMatrix2<nReal>::operator/= (nReal fScalar)
 {
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
         m_afEntry[0] *= fInvScalar;
         m_afEntry[1] *= fInvScalar;
         m_afEntry[2] *= fInvScalar;
@@ -558,64 +558,64 @@ inline CMatrix2<Real>& CMatrix2<Real>::operator/= (Real fScalar)
     }
     else
     {
-        m_afEntry[0] = CMath<Real>::MAX_REAL;
-        m_afEntry[1] = CMath<Real>::MAX_REAL;
-        m_afEntry[2] = CMath<Real>::MAX_REAL;
-        m_afEntry[3] = CMath<Real>::MAX_REAL;
+        m_afEntry[0] = CMath<nReal>::MAX_REAL;
+        m_afEntry[1] = CMath<nReal>::MAX_REAL;
+        m_afEntry[2] = CMath<nReal>::MAX_REAL;
+        m_afEntry[3] = CMath<nReal>::MAX_REAL;
     }
 
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector2<Real> CMatrix2<Real>::operator* (const CVector2<Real>& rkV) const
+template <class nReal>
+inline CVector2<nReal> CMatrix2<nReal>::operator* (const CVector2<nReal>& rkV) const
 {
-    return CVector2<Real>(
+    return CVector2<nReal>(
         m_afEntry[0]*rkV[0] + m_afEntry[1]*rkV[1],
         m_afEntry[2]*rkV[0] + m_afEntry[3]*rkV[1]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real> CMatrix2<Real>::Transpose () const
+template <class nReal>
+CMatrix2<nReal> CMatrix2<nReal>::Transpose () const
 {
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         m_afEntry[0],
         m_afEntry[2],
         m_afEntry[1],
         m_afEntry[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real> CMatrix2<Real>::TransposeTimes (const CMatrix2& rkM) const
+template <class nReal>
+CMatrix2<nReal> CMatrix2<nReal>::TransposeTimes (const CMatrix2& rkM) const
 {
     // P = A^T*B
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         m_afEntry[0]*rkM.m_afEntry[0] + m_afEntry[2]*rkM.m_afEntry[2],
         m_afEntry[0]*rkM.m_afEntry[1] + m_afEntry[2]*rkM.m_afEntry[3],
         m_afEntry[1]*rkM.m_afEntry[0] + m_afEntry[3]*rkM.m_afEntry[2],
         m_afEntry[1]*rkM.m_afEntry[1] + m_afEntry[3]*rkM.m_afEntry[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real> CMatrix2<Real>::TimesTranspose (const CMatrix2& rkM) const
+template <class nReal>
+CMatrix2<nReal> CMatrix2<nReal>::TimesTranspose (const CMatrix2& rkM) const
 {
     // P = A*B^T
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         m_afEntry[0]*rkM.m_afEntry[0] + m_afEntry[1]*rkM.m_afEntry[1],
         m_afEntry[0]*rkM.m_afEntry[2] + m_afEntry[1]*rkM.m_afEntry[3],
         m_afEntry[2]*rkM.m_afEntry[0] + m_afEntry[3]*rkM.m_afEntry[1],
         m_afEntry[2]*rkM.m_afEntry[2] + m_afEntry[3]*rkM.m_afEntry[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real> CMatrix2<Real>::Inverse () const
+template <class nReal>
+CMatrix2<nReal> CMatrix2<nReal>::Inverse () const
 {
-    CMatrix2<Real> kInverse;
+    CMatrix2<nReal> kInverse;
 
-    Real fDet = m_afEntry[0]*m_afEntry[3] - m_afEntry[1]*m_afEntry[2];
-    if (CMath<Real>::FAbs(fDet) > CMath<Real>::ZERO_TOLERANCE)
+    nReal fDet = m_afEntry[0]*m_afEntry[3] - m_afEntry[1]*m_afEntry[2];
+    if (CMath<nReal>::FAbs(fDet) > CMath<nReal>::ZERO_TOLERANCE)
     {
-        Real fInvDet = ((Real)1.0)/fDet;
+        nReal fInvDet = ((nReal)1.0)/fDet;
         kInverse.m_afEntry[0] =  m_afEntry[3]*fInvDet;
         kInverse.m_afEntry[1] = -m_afEntry[1]*fInvDet;
         kInverse.m_afEntry[2] = -m_afEntry[2]*fInvDet;
@@ -623,47 +623,47 @@ CMatrix2<Real> CMatrix2<Real>::Inverse () const
     }
     else
     {
-        kInverse.m_afEntry[0] = (Real)0.0;
-        kInverse.m_afEntry[1] = (Real)0.0;
-        kInverse.m_afEntry[2] = (Real)0.0;
-        kInverse.m_afEntry[3] = (Real)0.0;
+        kInverse.m_afEntry[0] = (nReal)0.0;
+        kInverse.m_afEntry[1] = (nReal)0.0;
+        kInverse.m_afEntry[2] = (nReal)0.0;
+        kInverse.m_afEntry[3] = (nReal)0.0;
     }
 
     return kInverse;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix2<Real> CMatrix2<Real>::Adjoint () const
+template <class nReal>
+CMatrix2<nReal> CMatrix2<nReal>::Adjoint () const
 {
-    return CMatrix2<Real>(
+    return CMatrix2<nReal>(
         m_afEntry[3],
         -m_afEntry[1],
         -m_afEntry[2],
         m_afEntry[0]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-Real CMatrix2<Real>::Determinant () const
+template <class nReal>
+nReal CMatrix2<nReal>::Determinant () const
 {
     return m_afEntry[0]*m_afEntry[3] - m_afEntry[1]*m_afEntry[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-Real CMatrix2<Real>::QForm (const CVector2<Real>& rkU,
-    const CVector2<Real>& rkV) const
+template <class nReal>
+nReal CMatrix2<nReal>::QForm (const CVector2<nReal>& rkU,
+    const CVector2<nReal>& rkV) const
 {
     return rkU.Dot((*this)*rkV);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::ToAngle (Real& rfAngle) const
+template <class nReal>
+void CMatrix2<nReal>::ToAngle (nReal& rfAngle) const
 {
     // assert:  matrix is a rotation
-    rfAngle = CMath<Real>::ATan2(m_afEntry[2],m_afEntry[0]);
+    rfAngle = CMath<nReal>::ATan2(m_afEntry[2],m_afEntry[0]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::Orthonormalize ()
+template <class nReal>
+void CMatrix2<nReal>::Orthonormalize ()
 {
     // Algorithm uses Gram-Schmidt orthogonalization.  If 'this' matrix is
     // M = [m0|m1], then orthonormal output matrix is Q = [q0|q1],
@@ -675,37 +675,37 @@ void CMatrix2<Real>::Orthonormalize ()
     // product of vectors A and B.
 
     // compute q0
-    Real fInvLength = CMath<Real>::InvSqrt(m_afEntry[0]*m_afEntry[0] +
+    nReal fInvLength = CMath<nReal>::InvSqrt(m_afEntry[0]*m_afEntry[0] +
         m_afEntry[2]*m_afEntry[2]);
 
     m_afEntry[0] *= fInvLength;
     m_afEntry[2] *= fInvLength;
 
     // compute q1
-    Real fDot0 = m_afEntry[0]*m_afEntry[1] + m_afEntry[2]*m_afEntry[3];
+    nReal fDot0 = m_afEntry[0]*m_afEntry[1] + m_afEntry[2]*m_afEntry[3];
     m_afEntry[1] -= fDot0*m_afEntry[0];
     m_afEntry[3] -= fDot0*m_afEntry[2];
 
-    fInvLength = CMath<Real>::InvSqrt(m_afEntry[1]*m_afEntry[1] +
+    fInvLength = CMath<nReal>::InvSqrt(m_afEntry[1]*m_afEntry[1] +
         m_afEntry[3]*m_afEntry[3]);
 
     m_afEntry[1] *= fInvLength;
     m_afEntry[3] *= fInvLength;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix2<Real>::EigenDecomposition (CMatrix2& rkRot, CMatrix2& rkDiag) const
+template <class nReal>
+void CMatrix2<nReal>::EigenDecomposition (CMatrix2& rkRot, CMatrix2& rkDiag) const
 {
-    Real fTrace = m_afEntry[0] + m_afEntry[3];
-    Real fDiff = m_afEntry[0] - m_afEntry[3];
-    Real fDiscr = CMath<Real>::Sqrt(fDiff*fDiff +
-        ((Real)4.0)*m_afEntry[1]*m_afEntry[1]);
-    Real fEVal0 = ((Real)0.5)*(fTrace-fDiscr);
-    Real fEVal1 = ((Real)0.5)*(fTrace+fDiscr);
+    nReal fTrace = m_afEntry[0] + m_afEntry[3];
+    nReal fDiff = m_afEntry[0] - m_afEntry[3];
+    nReal fDiscr = CMath<nReal>::Sqrt(fDiff*fDiff +
+        ((nReal)4.0)*m_afEntry[1]*m_afEntry[1]);
+    nReal fEVal0 = ((nReal)0.5)*(fTrace-fDiscr);
+    nReal fEVal1 = ((nReal)0.5)*(fTrace+fDiscr);
     rkDiag.MakeDiagonal(fEVal0,fEVal1);
 
-    Real fCos, fSin;
-    if (fDiff >= (Real)0.0)
+    nReal fCos, fSin;
+    if (fDiff >= (nReal)0.0)
     {
         fCos = m_afEntry[1];
         fSin = fEVal0 - m_afEntry[0];
@@ -715,7 +715,7 @@ void CMatrix2<Real>::EigenDecomposition (CMatrix2& rkRot, CMatrix2& rkDiag) cons
         fCos = fEVal0 - m_afEntry[3];
         fSin = m_afEntry[1];
     }
-    Real fTmp = CMath<Real>::InvSqrt(fCos*fCos + fSin*fSin);
+    nReal fTmp = CMath<nReal>::InvSqrt(fCos*fCos + fSin*fSin);
     fCos *= fTmp;
     fSin *= fTmp;
 
@@ -725,22 +725,22 @@ void CMatrix2<Real>::EigenDecomposition (CMatrix2& rkRot, CMatrix2& rkDiag) cons
     rkRot.m_afEntry[3] = fCos;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix2<Real> operator* (Real fScalar, const CMatrix2<Real>& rkM)
+template <class nReal>
+inline CMatrix2<nReal> operator* (nReal fScalar, const CMatrix2<nReal>& rkM)
 {
     return rkM*fScalar;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector2<Real> operator* (const CVector2<Real>& rkV,
-    const CMatrix2<Real>& rkM)
+template <class nReal>
+inline CVector2<nReal> operator* (const CVector2<nReal>& rkV,
+    const CMatrix2<nReal>& rkM)
 {
-    return CVector2<Real>(
+    return CVector2<nReal>(
         rkV[0]*rkM[0][0] + rkV[1]*rkM[1][0],
         rkV[0]*rkM[0][1] + rkV[1]*rkM[1][1]);
 }
 
-typedef CMatrix2<real> Matrix2f;
+typedef CMatrix2<nReal> Matrix2f;
 
 
 }

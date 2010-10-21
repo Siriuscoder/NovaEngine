@@ -40,7 +40,7 @@
 namespace nova
 {
 
-template <class Real>
+template <class nReal>
 class CPlane: public CObjectConstructor
 {
 public:
@@ -53,15 +53,15 @@ public:
     CPlane (const CPlane& rkPlane);
 
     // specify N and c directly
-    CPlane (const CVector3<Real>& rkNormal, Real fConstant);
+    CPlane (const CVector3<nReal>& rkNormal, nReal fConstant);
 
     // N is specified, c = Dot(N,P) where P is on the plane
-    CPlane (const CVector3<Real>& rkNormal, const CVector3<Real>& rkP);
+    CPlane (const CVector3<nReal>& rkNormal, const CVector3<nReal>& rkP);
 
     // N = Cross(P1-P0,P2-P0)/Length(Cross(P1-P0,P2-P0)), c = Dot(N,P0) where
     // P0, P1, P2 are points on the plane.
-    CPlane (const CVector3<Real>& rkP0, const CVector3<Real>& rkP1,
-        const CVector3<Real>& rkP2);
+    CPlane (const CVector3<nReal>& rkP0, const CVector3<nReal>& rkP1,
+        const CVector3<nReal>& rkP2);
 
     // assignment
     CPlane& operator= (const CPlane& rkPlane);
@@ -70,86 +70,86 @@ public:
     // normal points.  The "negative side" is the other half space.  The
     // function returns +1 for the positive side, -1 for the negative side,
     // and 0 for the point being on the plane.
-    int WhichSide (const CVector3<Real>& rkP) const;
+    int WhichSide (const CVector3<nReal>& rkP) const;
 
     // Compute d = Dot(N,Q)-c where N is the plane normal and c is the plane
     // constant.  This is a signed distance.  The sign of the return value is
     // positive if the point is on the positive side of the plane, negative if
     // the point is on the negative side, and zero if the point is on the
     // plane.
-    Real DistanceTo (const CVector3<Real>& rkQ) const;
+    nReal DistanceTo (const CVector3<nReal>& rkQ) const;
 
-    CVector3<Real> Normal;
-    Real Constant;
+    CVector3<nReal> Normal;
+    nReal Constant;
 };
 
-typedef CPlane<nova::real> CPlanef;
+typedef CPlane<nova::nReal> CPlanef;
 
-template <class Real>
-CPlane<Real>::CPlane ()
+template <class nReal>
+CPlane<nReal>::CPlane ()
 {
     // uninitialized
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CPlane<Real>::CPlane (const CPlane& rkPlane)
+template <class nReal>
+CPlane<nReal>::CPlane (const CPlane& rkPlane)
     :
     Normal(rkPlane.Normal)
 {
     Constant = rkPlane.Constant;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CPlane<Real>::CPlane (const CVector3<Real>& rkNormal, Real fConstant)
+template <class nReal>
+CPlane<nReal>::CPlane (const CVector3<nReal>& rkNormal, nReal fConstant)
     :
     Normal(rkNormal)
 {
     Constant = fConstant;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CPlane<Real>::CPlane (const CVector3<Real>& rkNormal, const CVector3<Real>& rkP)
+template <class nReal>
+CPlane<nReal>::CPlane (const CVector3<nReal>& rkNormal, const CVector3<nReal>& rkP)
     :
     Normal(rkNormal)
 {
     Constant = rkNormal.Dot(rkP);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CPlane<Real>::CPlane (const CVector3<Real>& rkP0, const CVector3<Real>& rkP1,
-    const CVector3<Real>& rkP2)
+template <class nReal>
+CPlane<nReal>::CPlane (const CVector3<nReal>& rkP0, const CVector3<nReal>& rkP1,
+    const CVector3<nReal>& rkP2)
 {
-    CVector3<Real> kEdge1 = rkP1 - rkP0;
-    CVector3<Real> kEdge2 = rkP2 - rkP0;
+    CVector3<nReal> kEdge1 = rkP1 - rkP0;
+    CVector3<nReal> kEdge2 = rkP2 - rkP0;
     Normal = kEdge1.UnitCross(kEdge2);
     Constant = Normal.Dot(rkP0);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CPlane<Real>& CPlane<Real>::operator= (const CPlane& rkPlane)
+template <class nReal>
+CPlane<nReal>& CPlane<nReal>::operator= (const CPlane& rkPlane)
 {
     Normal = rkPlane.Normal;
     Constant = rkPlane.Constant;
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-Real CPlane<Real>::DistanceTo (const CVector3<Real>& rkP) const
+template <class nReal>
+nReal CPlane<nReal>::DistanceTo (const CVector3<nReal>& rkP) const
 {
     return Normal.Dot(rkP) - Constant;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-int CPlane<Real>::WhichSide (const CVector3<Real>& rkQ) const
+template <class nReal>
+int CPlane<nReal>::WhichSide (const CVector3<nReal>& rkQ) const
 {
-    Real fDistance = DistanceTo(rkQ);
+    nReal fDistance = DistanceTo(rkQ);
 
-    if (fDistance < (Real)0.0)
+    if (fDistance < (nReal)0.0)
     {
         return -1;
     }
 
-    if (fDistance > (Real)0.0)
+    if (fDistance > (nReal)0.0)
     {
         return +1;
     }

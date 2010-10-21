@@ -71,17 +71,17 @@ Vector3f & CBoundingBox::GetP8(void) const
 	return mP8;
 }
 
-real CBoundingBox::GetLength()
+nReal CBoundingBox::GetLength()
 {
 	return mP7.X() - mP1.X();
 }
 
-real CBoundingBox::GetHeight()
+nReal CBoundingBox::GetHeight()
 {
 	return mP7.Z() - mP1.Z();
 }
 
-real CBoundingBox::GetWidth()
+nReal CBoundingBox::GetWidth()
 {
 	return mP7.Y() - mP1.Y();
 }
@@ -103,9 +103,9 @@ void CBoundingBox::CalcSides(Vector3f & xyzmin, Vector3f & xyzmax)
 	mP1 = xyzmin;
 	mP7 = xyzmax;
 
-	nova::real len = GetLength();
-	nova::real wid = GetWidth();
-	nova::real he = GetHeight();
+	nova::nReal len = GetLength();
+	nova::nReal wid = GetWidth();
+	nova::nReal he = GetHeight();
 
 	mP2.X() = mP1.X();
 	mP2.Y() = mP1.Y();

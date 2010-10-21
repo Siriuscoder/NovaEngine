@@ -38,29 +38,29 @@
 namespace nova
 {
 
-template <class Real>
+template <class nReal>
 class CVector4 : public CObjectConstructor
 {
 public:
     // construction
     CVector4 ();  // uninitialized
-    CVector4 (Real fX, Real fY, Real fZ, Real fW);
-    CVector4 (const Real* afTuple);
+    CVector4 (nReal fX, nReal fY, nReal fZ, nReal fW);
+    CVector4 (const nReal* afTuple);
     CVector4 (const CVector4& rkV);
 
     // coordinate access
-    inline operator const Real* () const;
-    inline operator Real* ();
-    inline Real operator[] (int i) const;
-    inline Real& operator[] (int i);
-    inline Real X () const;
-    inline Real& X ();
-    inline Real Y () const;
-    inline Real& Y ();
-    inline Real Z () const;
-    inline Real& Z ();
-    inline Real W () const;
-    inline Real& W ();
+    inline operator const nReal* () const;
+    inline operator nReal* ();
+    inline nReal operator[] (int i) const;
+    inline nReal& operator[] (int i);
+    inline nReal X () const;
+    inline nReal& X ();
+    inline nReal Y () const;
+    inline nReal& Y ();
+    inline nReal Z () const;
+    inline nReal& Z ();
+    inline nReal W () const;
+    inline nReal& W ();
 
     // assignment
     inline CVector4& operator= (const CVector4& rkV);
@@ -76,21 +76,21 @@ public:
     // arithmetic operations
     inline CVector4 operator+ (const CVector4& rkV) const;
     inline CVector4 operator- (const CVector4& rkV) const;
-    inline CVector4 operator* (Real fScalar) const;
-    inline CVector4 operator/ (Real fScalar) const;
+    inline CVector4 operator* (nReal fScalar) const;
+    inline CVector4 operator/ (nReal fScalar) const;
     inline CVector4 operator- () const;
 
     // arithmetic updates
     inline CVector4& operator+= (const CVector4& rkV);
     inline CVector4& operator-= (const CVector4& rkV);
-    inline CVector4& operator*= (Real fScalar);
-    inline CVector4& operator/= (Real fScalar);
+    inline CVector4& operator*= (nReal fScalar);
+    inline CVector4& operator/= (nReal fScalar);
 
     // vector operations
-    inline Real Length () const;
-    inline Real SquaredLength () const;
-    inline Real Dot (const CVector4& rkV) const;
-    inline Real Normalize ();
+    inline nReal Length () const;
+    inline nReal SquaredLength () const;
+    inline nReal Dot (const CVector4& rkV) const;
+    inline nReal Normalize ();
 
     // special vectors
     NOVA_EXPORT static const CVector4 ZERO;
@@ -104,25 +104,25 @@ private:
     // support for comparisons
     int CompareArrays (const CVector4& rkV) const;
 
-    Real m_afTuple[4];
+    nReal m_afTuple[4];
 };
 
 // arithmetic operations
-template <class Real>
-CVector4<Real> operator* (Real fScalar, const CVector4<Real>& rkV);
+template <class nReal>
+CVector4<nReal> operator* (nReal fScalar, const CVector4<nReal>& rkV);
 
 // debugging output
-template <class Real>
-std::ostream& operator<< (std::ostream& rkOStr, const CVector4<Real>& rkV);
+template <class nReal>
+std::ostream& operator<< (std::ostream& rkOStr, const CVector4<nReal>& rkV);
 
-template <class Real>
-CVector4<Real>::CVector4 ()
+template <class nReal>
+CVector4<nReal>::CVector4 ()
 {
     // uninitialized for performance in array construction
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector4<Real>::CVector4 (Real fX, Real fY, Real fZ, Real fW)
+template <class nReal>
+CVector4<nReal>::CVector4 (nReal fX, nReal fY, nReal fZ, nReal fW)
 {
     m_afTuple[0] = fX;
     m_afTuple[1] = fY;
@@ -130,8 +130,8 @@ CVector4<Real>::CVector4 (Real fX, Real fY, Real fZ, Real fW)
     m_afTuple[3] = fW;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector4<Real>::CVector4 (const Real* afTuple)
+template <class nReal>
+CVector4<nReal>::CVector4 (const nReal* afTuple)
 {
     m_afTuple[0] = afTuple[0];
     m_afTuple[1] = afTuple[1];
@@ -139,8 +139,8 @@ CVector4<Real>::CVector4 (const Real* afTuple)
     m_afTuple[3] = afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector4<Real>::CVector4 (const CVector4& rkV)
+template <class nReal>
+CVector4<nReal>::CVector4 (const CVector4& rkV)
 {
     m_afTuple[0] = rkV.m_afTuple[0];
     m_afTuple[1] = rkV.m_afTuple[1];
@@ -148,80 +148,80 @@ CVector4<Real>::CVector4 (const CVector4& rkV)
     m_afTuple[3] = rkV.m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real>::operator const Real* () const
+template <class nReal>
+inline CVector4<nReal>::operator const nReal* () const
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real>::operator Real* ()
+template <class nReal>
+inline CVector4<nReal>::operator nReal* ()
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::operator[] (int i) const
+template <class nReal>
+inline nReal CVector4<nReal>::operator[] (int i) const
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector4<Real>::operator[] (int i)
+template <class nReal>
+inline nReal& CVector4<nReal>::operator[] (int i)
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::X () const
+template <class nReal>
+inline nReal CVector4<nReal>::X () const
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector4<Real>::X ()
+template <class nReal>
+inline nReal& CVector4<nReal>::X ()
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::Y () const
+template <class nReal>
+inline nReal CVector4<nReal>::Y () const
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector4<Real>::Y ()
+template <class nReal>
+inline nReal& CVector4<nReal>::Y ()
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::Z () const
+template <class nReal>
+inline nReal CVector4<nReal>::Z () const
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector4<Real>::Z ()
+template <class nReal>
+inline nReal& CVector4<nReal>::Z ()
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::W () const
+template <class nReal>
+inline nReal CVector4<nReal>::W () const
 {
     return m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CVector4<Real>::W ()
+template <class nReal>
+inline nReal& CVector4<nReal>::W ()
 {
     return m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real>& CVector4<Real>::operator= (const CVector4& rkV)
+template <class nReal>
+inline CVector4<nReal>& CVector4<nReal>::operator= (const CVector4& rkV)
 {
     m_afTuple[0] = rkV.m_afTuple[0];
     m_afTuple[1] = rkV.m_afTuple[1];
@@ -230,50 +230,50 @@ inline CVector4<Real>& CVector4<Real>::operator= (const CVector4& rkV)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-int CVector4<Real>::CompareArrays (const CVector4& rkV) const
+template <class nReal>
+int CVector4<nReal>::CompareArrays (const CVector4& rkV) const
 {
-    return memcmp(m_afTuple,rkV.m_afTuple,4*sizeof(Real));
+    return memcmp(m_afTuple,rkV.m_afTuple,4*sizeof(nReal));
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector4<Real>::operator== (const CVector4& rkV) const
+template <class nReal>
+bool CVector4<nReal>::operator== (const CVector4& rkV) const
 {
     return CompareArrays(rkV) == 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector4<Real>::operator!= (const CVector4& rkV) const
+template <class nReal>
+bool CVector4<nReal>::operator!= (const CVector4& rkV) const
 {
     return CompareArrays(rkV) != 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector4<Real>::operator< (const CVector4& rkV) const
+template <class nReal>
+bool CVector4<nReal>::operator< (const CVector4& rkV) const
 {
     return CompareArrays(rkV) < 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector4<Real>::operator<= (const CVector4& rkV) const
+template <class nReal>
+bool CVector4<nReal>::operator<= (const CVector4& rkV) const
 {
     return CompareArrays(rkV) <= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector4<Real>::operator> (const CVector4& rkV) const
+template <class nReal>
+bool CVector4<nReal>::operator> (const CVector4& rkV) const
 {
     return CompareArrays(rkV) > 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CVector4<Real>::operator>= (const CVector4& rkV) const
+template <class nReal>
+bool CVector4<nReal>::operator>= (const CVector4& rkV) const
 {
     return CompareArrays(rkV) >= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real> CVector4<Real>::operator+ (const CVector4& rkV) const
+template <class nReal>
+inline CVector4<nReal> CVector4<nReal>::operator+ (const CVector4& rkV) const
 {
     return CVector4(
         m_afTuple[0]+rkV.m_afTuple[0],
@@ -282,8 +282,8 @@ inline CVector4<Real> CVector4<Real>::operator+ (const CVector4& rkV) const
         m_afTuple[3]+rkV.m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real> CVector4<Real>::operator- (const CVector4& rkV) const
+template <class nReal>
+inline CVector4<nReal> CVector4<nReal>::operator- (const CVector4& rkV) const
 {
     return CVector4(
         m_afTuple[0]-rkV.m_afTuple[0],
@@ -292,8 +292,8 @@ inline CVector4<Real> CVector4<Real>::operator- (const CVector4& rkV) const
         m_afTuple[3]-rkV.m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real> CVector4<Real>::operator* (Real fScalar) const
+template <class nReal>
+inline CVector4<nReal> CVector4<nReal>::operator* (nReal fScalar) const
 {
     return CVector4(
         fScalar*m_afTuple[0],
@@ -302,14 +302,14 @@ inline CVector4<Real> CVector4<Real>::operator* (Real fScalar) const
         fScalar*m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real> CVector4<Real>::operator/ (Real fScalar) const
+template <class nReal>
+inline CVector4<nReal> CVector4<nReal>::operator/ (nReal fScalar) const
 {
     CVector4 kQuot;
 
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
         kQuot.m_afTuple[0] = fInvScalar*m_afTuple[0];
         kQuot.m_afTuple[1] = fInvScalar*m_afTuple[1];
         kQuot.m_afTuple[2] = fInvScalar*m_afTuple[2];
@@ -317,17 +317,17 @@ inline CVector4<Real> CVector4<Real>::operator/ (Real fScalar) const
     }
     else
     {
-        kQuot.m_afTuple[0] = CMath<Real>::MAX_REAL;
-        kQuot.m_afTuple[1] = CMath<Real>::MAX_REAL;
-        kQuot.m_afTuple[2] = CMath<Real>::MAX_REAL;
-        kQuot.m_afTuple[3] = CMath<Real>::MAX_REAL;
+        kQuot.m_afTuple[0] = CMath<nReal>::MAX_REAL;
+        kQuot.m_afTuple[1] = CMath<nReal>::MAX_REAL;
+        kQuot.m_afTuple[2] = CMath<nReal>::MAX_REAL;
+        kQuot.m_afTuple[3] = CMath<nReal>::MAX_REAL;
     }
 
     return kQuot;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real> CVector4<Real>::operator- () const
+template <class nReal>
+inline CVector4<nReal> CVector4<nReal>::operator- () const
 {
     return CVector4(
         -m_afTuple[0],
@@ -336,18 +336,18 @@ inline CVector4<Real> CVector4<Real>::operator- () const
         -m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real> operator* (Real fScalar, const CVector4<Real>& rkV)
+template <class nReal>
+inline CVector4<nReal> operator* (nReal fScalar, const CVector4<nReal>& rkV)
 {
-    return CVector4<Real>(
+    return CVector4<nReal>(
         fScalar*rkV[0],
         fScalar*rkV[1],
         fScalar*rkV[2],
         fScalar*rkV[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real>& CVector4<Real>::operator+= (const CVector4& rkV)
+template <class nReal>
+inline CVector4<nReal>& CVector4<nReal>::operator+= (const CVector4& rkV)
 {
     m_afTuple[0] += rkV.m_afTuple[0];
     m_afTuple[1] += rkV.m_afTuple[1];
@@ -356,8 +356,8 @@ inline CVector4<Real>& CVector4<Real>::operator+= (const CVector4& rkV)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real>& CVector4<Real>::operator-= (const CVector4& rkV)
+template <class nReal>
+inline CVector4<nReal>& CVector4<nReal>::operator-= (const CVector4& rkV)
 {
     m_afTuple[0] -= rkV.m_afTuple[0];
     m_afTuple[1] -= rkV.m_afTuple[1];
@@ -366,8 +366,8 @@ inline CVector4<Real>& CVector4<Real>::operator-= (const CVector4& rkV)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real>& CVector4<Real>::operator*= (Real fScalar)
+template <class nReal>
+inline CVector4<nReal>& CVector4<nReal>::operator*= (nReal fScalar)
 {
     m_afTuple[0] *= fScalar;
     m_afTuple[1] *= fScalar;
@@ -376,12 +376,12 @@ inline CVector4<Real>& CVector4<Real>::operator*= (Real fScalar)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real>& CVector4<Real>::operator/= (Real fScalar)
+template <class nReal>
+inline CVector4<nReal>& CVector4<nReal>::operator/= (nReal fScalar)
 {
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
         m_afTuple[0] *= fInvScalar;
         m_afTuple[1] *= fInvScalar;
         m_afTuple[2] *= fInvScalar;
@@ -389,27 +389,27 @@ inline CVector4<Real>& CVector4<Real>::operator/= (Real fScalar)
     }
     else
     {
-        m_afTuple[0] = CMath<Real>::MAX_REAL;
-        m_afTuple[1] = CMath<Real>::MAX_REAL;
-        m_afTuple[2] = CMath<Real>::MAX_REAL;
-        m_afTuple[3] = CMath<Real>::MAX_REAL;
+        m_afTuple[0] = CMath<nReal>::MAX_REAL;
+        m_afTuple[1] = CMath<nReal>::MAX_REAL;
+        m_afTuple[2] = CMath<nReal>::MAX_REAL;
+        m_afTuple[3] = CMath<nReal>::MAX_REAL;
     }
 
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::Length () const
+template <class nReal>
+inline nReal CVector4<nReal>::Length () const
 {
-    return CMath<Real>::Sqrt(
+    return CMath<nReal>::Sqrt(
         m_afTuple[0]*m_afTuple[0] +
         m_afTuple[1]*m_afTuple[1] +
         m_afTuple[2]*m_afTuple[2] +
         m_afTuple[3]*m_afTuple[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::SquaredLength () const
+template <class nReal>
+inline nReal CVector4<nReal>::SquaredLength () const
 {
     return
         m_afTuple[0]*m_afTuple[0] +
@@ -418,8 +418,8 @@ inline Real CVector4<Real>::SquaredLength () const
         m_afTuple[3]*m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::Dot (const CVector4& rkV) const
+template <class nReal>
+inline nReal CVector4<nReal>::Dot (const CVector4& rkV) const
 {
     return
         m_afTuple[0]*rkV.m_afTuple[0] +
@@ -428,14 +428,14 @@ inline Real CVector4<Real>::Dot (const CVector4& rkV) const
         m_afTuple[3]*rkV.m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CVector4<Real>::Normalize ()
+template <class nReal>
+inline nReal CVector4<nReal>::Normalize ()
 {
-    Real fLength = Length();
+    nReal fLength = Length();
 
-    if (fLength > CMath<Real>::ZERO_TOLERANCE)
+    if (fLength > CMath<nReal>::ZERO_TOLERANCE)
     {
-        Real fInvLength = ((Real)1.0)/fLength;
+        nReal fInvLength = ((nReal)1.0)/fLength;
         m_afTuple[0] *= fInvLength;
         m_afTuple[1] *= fInvLength;
         m_afTuple[2] *= fInvLength;
@@ -443,25 +443,25 @@ inline Real CVector4<Real>::Normalize ()
     }
     else
     {
-        fLength = (Real)0.0;
-        m_afTuple[0] = (Real)0.0;
-        m_afTuple[1] = (Real)0.0;
-        m_afTuple[2] = (Real)0.0;
-        m_afTuple[3] = (Real)0.0;
+        fLength = (nReal)0.0;
+        m_afTuple[0] = (nReal)0.0;
+        m_afTuple[1] = (nReal)0.0;
+        m_afTuple[2] = (nReal)0.0;
+        m_afTuple[3] = (nReal)0.0;
     }
 
     return fLength;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-std::ostream& operator<< (std::ostream& rkOStr, const CVector4<Real>& rkV)
+template <class nReal>
+std::ostream& operator<< (std::ostream& rkOStr, const CVector4<nReal>& rkV)
 {
      return rkOStr << rkV.X() << ' ' << rkV.Y() << ' ' << rkV.Z()
          << ' ' << rkV.W();
 }
 
 
-typedef CVector4<nova::real> Vector4f;
+typedef CVector4<nova::nReal> Vector4f;
 
 
 

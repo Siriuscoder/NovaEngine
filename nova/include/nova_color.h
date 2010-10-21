@@ -46,22 +46,22 @@ public:
     // For accessing of colors by array index, the map is 0 = red, 1 = green,
     // and 2 = blue.
     CColorRGB ();  // initial values (0,0,0)
-    CColorRGB (real fR, real fG, real fB);
+    CColorRGB (nReal fR, nReal fG, nReal fB);
 	CColorRGB (nova::byte bR, nova::byte bG, nova::byte bB);
-    CColorRGB (const real* afTuple);
+    CColorRGB (const nReal* afTuple);
     CColorRGB (const CColorRGB& rkC);
 
     // member access
-    operator const real* () const;
-    operator real* ();
-    real operator[] (int i) const;
-    real& operator[] (int i);
-    real R () const;
-    real& R ();
-    real G () const;
-    real& G ();
-    real B () const;
-    real& B ();
+    operator const nReal* () const;
+    operator nReal* ();
+    nReal operator[] (int i) const;
+    nReal& operator[] (int i);
+    nReal R () const;
+    nReal& R ();
+    nReal G () const;
+    nReal& G ();
+    nReal B () const;
+    nReal& B ();
 
     // assignment
     CColorRGB& operator= (const CColorRGB& rkC);
@@ -78,13 +78,13 @@ public:
     CColorRGB operator+ (const CColorRGB& rkC) const;
     CColorRGB operator- (const CColorRGB& rkC) const;
     CColorRGB operator* (const CColorRGB& rkC) const;
-    CColorRGB operator* (real fScalar) const;
+    CColorRGB operator* (nReal fScalar) const;
 
     // arithmetic updates
     CColorRGB& operator+= (const CColorRGB& rkC);
     CColorRGB& operator-= (const CColorRGB& rkC);
     CColorRGB& operator*= (const CColorRGB& rkC);
-    CColorRGB& operator*= (real fScalar);
+    CColorRGB& operator*= (nReal fScalar);
 
     // Transform the color channels to [0,1].  Clamp sets negative values to
     // zero and values larger than one to one.  ScaleByMax assumes the color
@@ -101,10 +101,10 @@ private:
     // support for comparisons
     int CompareArrays (const CColorRGB& rkC) const;
 
-    real m_afTuple[3];
+    nReal m_afTuple[3];
 };
 
-NOVA_EXPORT CColorRGB operator* (real fScalar, const CColorRGB& rkC);
+NOVA_EXPORT CColorRGB operator* (nReal fScalar, const CColorRGB& rkC);
 
 class NOVA_EXPORT CColorRGBA : public CBase
 {
@@ -113,24 +113,24 @@ public:
     // For accessing of colors by array index, the map is 0 = red, 1 = green,
     // 2 = blue, and 3 = alpha.
     CColorRGBA ();  // initial values (0,0,0,0)
-    CColorRGBA (real fR, real fG, real fB, real fA);
+    CColorRGBA (nReal fR, nReal fG, nReal fB, nReal fA);
 	CColorRGBA (nova::byte bR, nova::byte bG, nova::byte bB, nova::byte bA);
-    CColorRGBA (const real* afTuple);
+    CColorRGBA (const nReal* afTuple);
     CColorRGBA (const CColorRGBA& rkC);
 
     // member access
-    operator const real* () const;
-    operator real* ();
-    real operator[] (int i) const;
-    real& operator[] (int i);
-    real R () const;
-    real& R ();
-    real G () const;
-    real& G ();
-    real B () const;
-    real& B ();
-    real A () const;
-    real& A ();
+    operator const nReal* () const;
+    operator nReal* ();
+    nReal operator[] (int i) const;
+    nReal& operator[] (int i);
+    nReal R () const;
+    nReal& R ();
+    nReal G () const;
+    nReal& G ();
+    nReal B () const;
+    nReal& B ();
+    nReal A () const;
+    nReal& A ();
 
     // assignment
     CColorRGBA& operator= (const CColorRGBA& rkC);
@@ -147,13 +147,13 @@ public:
     CColorRGBA operator+ (const CColorRGBA& rkC) const;
     CColorRGBA operator- (const CColorRGBA& rkC) const;
     CColorRGBA operator* (const CColorRGBA& rkC) const;
-    CColorRGBA operator* (real fScalar) const;
+    CColorRGBA operator* (nReal fScalar) const;
 
     // arithmetic updates
     CColorRGBA& operator+= (const CColorRGBA& rkC);
     CColorRGBA& operator-= (const CColorRGBA& rkC);
     CColorRGBA& operator*= (const CColorRGBA& rkC);
-    CColorRGBA& operator*= (real fScalar);
+    CColorRGBA& operator*= (nReal fScalar);
 
     // Transform the color channels to [0,1].  Clamp sets negative values to
     // zero and values larger than one to one.  ScaleByMax assumes the color
@@ -170,22 +170,22 @@ private:
     // support for comparisons
     int CompareArrays (const CColorRGBA& rkC) const;
 
-    real m_afTuple[4];
+    nReal m_afTuple[4];
 };
 
-NOVA_EXPORT CColorRGBA operator* (real fScalar, const CColorRGBA& rkC);
+NOVA_EXPORT CColorRGBA operator* (nReal fScalar, const CColorRGBA& rkC);
 
-inline CColorRGB::operator const real* () const
+inline CColorRGB::operator const nReal* () const
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-inline CColorRGB::operator real* ()
+inline CColorRGB::operator nReal* ()
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-inline real CColorRGB::operator[] (int i) const
+inline nReal CColorRGB::operator[] (int i) const
 {
     assert(0 <= i && i <= 2);
     if (i < 0)
@@ -200,7 +200,7 @@ inline real CColorRGB::operator[] (int i) const
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGB::operator[] (int i)
+inline nReal& CColorRGB::operator[] (int i)
 {
     assert(0 <= i && i <= 2);
     if (i < 0)
@@ -215,47 +215,47 @@ inline real& CColorRGB::operator[] (int i)
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-inline real CColorRGB::R () const
+inline nReal CColorRGB::R () const
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGB::R ()
+inline nReal& CColorRGB::R ()
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-inline real CColorRGB::G () const
+inline nReal CColorRGB::G () const
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGB::G ()
+inline nReal& CColorRGB::G ()
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-inline real CColorRGB::B () const
+inline nReal CColorRGB::B () const
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGB::B ()
+inline nReal& CColorRGB::B ()
 {
     return m_afTuple[2];
 }
 
-inline CColorRGBA::operator const real* () const
+inline CColorRGBA::operator const nReal* () const
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-inline CColorRGBA::operator real* ()
+inline CColorRGBA::operator nReal* ()
 {
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-inline real CColorRGBA::operator[] (int i) const
+inline nReal CColorRGBA::operator[] (int i) const
 {
     assert(0 <= i && i <= 3);
     if (i < 0)
@@ -270,7 +270,7 @@ inline real CColorRGBA::operator[] (int i) const
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGBA::operator[] (int i)
+inline nReal& CColorRGBA::operator[] (int i)
 {
     assert(0 <= i && i <= 3);
     if (i < 0)
@@ -285,42 +285,42 @@ inline real& CColorRGBA::operator[] (int i)
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-inline real CColorRGBA::R () const
+inline nReal CColorRGBA::R () const
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGBA::R ()
+inline nReal& CColorRGBA::R ()
 {
     return m_afTuple[0];
 }
 //----------------------------------------------------------------------------
-inline real CColorRGBA::G () const
+inline nReal CColorRGBA::G () const
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGBA::G ()
+inline nReal& CColorRGBA::G ()
 {
     return m_afTuple[1];
 }
 //----------------------------------------------------------------------------
-inline real CColorRGBA::B () const
+inline nReal CColorRGBA::B () const
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGBA::B ()
+inline nReal& CColorRGBA::B ()
 {
     return m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-inline real CColorRGBA::A () const
+inline nReal CColorRGBA::A () const
 {
     return m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-inline real& CColorRGBA::A ()
+inline nReal& CColorRGBA::A ()
 {
     return m_afTuple[3];
 }

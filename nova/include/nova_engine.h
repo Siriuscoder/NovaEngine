@@ -110,14 +110,14 @@ public:
 
 	typedef struct _trender_stats
 	{
-		nova::real best_rendered_frames;
-		nova::real worst_rendered_frames;
-		nova::real average_rendered_frames;
-		nova::real last_rendered_frames;
-		nova::real last_frame_time;
-		nova::real best_frame_time;
-		nova::real worst_frame_time;
-		nova::real average_frame_time;
+		nova::nReal best_rendered_frames;
+		nova::nReal worst_rendered_frames;
+		nova::nReal average_rendered_frames;
+		nova::nReal last_rendered_frames;
+		nova::nReal last_frame_time;
+		nova::nReal best_frame_time;
+		nova::nReal worst_frame_time;
+		nova::nReal average_frame_time;
 		nova::uint rendered_triangles;
 		nova::uint rendered_batches;
 
@@ -195,13 +195,13 @@ public:
 
 	nstring GetPackageString();
 
-    nova::real GetLastFPS() const;
+    nova::nReal GetLastFPS() const;
 
-    nova::real GetAverageFPS() const;
+    nova::nReal GetAverageFPS() const;
 
-    nova::real GetBestFPS() const;
+    nova::nReal GetBestFPS() const;
 
-    nova::real GetWorstFPS() const;
+    nova::nReal GetWorstFPS() const;
 
 	TRenderStats & GetStatsPtr();
 

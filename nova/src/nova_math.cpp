@@ -38,19 +38,19 @@
 namespace nova
 {
 
-template<> const real CMath<real>::EPSILON = FLT_EPSILON;
-template<> const real CMath<real>::ZERO_TOLERANCE = 1e-06f;
-template<> const real CMath<real>::MAX_REAL = FLT_MAX;
-template<> const real CMath<real>::PI = (real)(4.0*atan(1.0));
-template<> const real CMath<real>::TWO_PI = 2.0f*CMath<real>::PI;
-template<> const real CMath<real>::HALF_PI = 0.5f*CMath<real>::PI;
-template<> const real CMath<real>::INV_PI = 1.0f/CMath<real>::PI;
-template<> const real CMath<real>::INV_TWO_PI = 1.0f/CMath<real>::TWO_PI;
-template<> const real CMath<real>::DEG_TO_RAD = CMath<real>::PI/180.0f;
-template<> const real CMath<real>::RAD_TO_DEG = 180.0f/CMath<real>::PI;
-template<> const real CMath<real>::LN_2 = CMath<real>::Log(2.0f);
-template<> const real CMath<real>::LN_10 = CMath<real>::Log(10.0f);
-template<> const real CMath<real>::INV_LN_2 = 1.0f/CMath<real>::LN_2;
-template<> const real CMath<real>::INV_LN_10 = 1.0f/CMath<real>::LN_10;
+template<> const nReal CMath<nReal>::EPSILON = FLT_EPSILON;
+template<> const nReal CMath<nReal>::ZERO_TOLERANCE = 1e-06f;
+template<> const nReal CMath<nReal>::MAX_REAL = FLT_MAX;
+template<> const nReal CMath<nReal>::PI = (nReal)(4.0*atan(1.0));
+template<> const nReal CMath<nReal>::TWO_PI = 2.0f*CMath<nReal>::PI;
+template<> const nReal CMath<nReal>::HALF_PI = 0.5f*CMath<nReal>::PI;
+template<> const nReal CMath<nReal>::INV_PI = 1.0f/CMath<nReal>::PI;
+template<> const nReal CMath<nReal>::INV_TWO_PI = 1.0f/CMath<nReal>::TWO_PI;
+template<> const nReal CMath<nReal>::DEG_TO_RAD = CMath<nReal>::PI/180.0f;
+template<> const nReal CMath<nReal>::RAD_TO_DEG = 180.0f/CMath<nReal>::PI;
+template<> const nReal CMath<nReal>::LN_2 = CMath<nReal>::Log(2.0f);
+template<> const nReal CMath<nReal>::LN_10 = CMath<nReal>::Log(10.0f);
+template<> const nReal CMath<nReal>::INV_LN_2 = 1.0f/CMath<nReal>::LN_2;
+template<> const nReal CMath<nReal>::INV_LN_10 = 1.0f/CMath<nReal>::LN_10;
 
 }

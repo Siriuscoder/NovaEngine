@@ -37,10 +37,10 @@ protected:
 
 //mCamera
 	CRenderTarget * 	mTarget;
-	real 	mRelLeft;
-	real  	mRelTop;
-	real  	mRelWidth;
-	real  	mRelHeight;
+	nReal 	mRelLeft;
+	nReal  	mRelTop;
+	nReal  	mRelWidth;
+	nReal  	mRelHeight;
 	int 	mActLeft;
 	int 	mActTop;
 	int 	mActWidth;
@@ -63,22 +63,22 @@ public:
 
 	void Update();
 
-	real 	GetLeft (void) const
+	nReal 	GetLeft (void) const
 	{
 		return mRelLeft;
 	}
 
-	real 	GetTop (void) const
+	nReal 	GetTop (void) const
 	{
 		return mRelTop;
 	}
 
-	real 	GetWidth (void) const
+	nReal 	GetWidth (void) const
 	{
 		return mRelWidth;
 	}
 
-	real 	GetHeight (void) const
+	nReal 	GetHeight (void) const
 	{
 		return mRelLeft;
 	}
@@ -129,11 +129,11 @@ public:
 
 	CCameraPtr GetCameraByName(nstring & name);
 
-	CCameraPtr CreateLinearCamera(nstring & name, nova::real Left, nova::real Right, nova::real Bottom, 
-		nova::real Top, nova::real ZFar, nova::real ZNear);
+	CCameraPtr CreateLinearCamera(nstring & name, nova::nReal Left, nova::nReal Right, nova::nReal Bottom, 
+		nova::nReal Top, nova::nReal ZFar, nova::nReal ZNear);
 
-	CCameraPtr CreatePerspectiveCamera(nstring & name, nova::real FOV, nova::real ZFar, 
-		nova::real ZNear);
+	CCameraPtr CreatePerspectiveCamera(nstring & name, nova::nReal FOV, nova::nReal ZFar, 
+		nova::nReal ZNear);
 
 	void RemoveCamera(nstring & name);
 

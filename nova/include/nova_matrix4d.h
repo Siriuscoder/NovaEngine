@@ -39,7 +39,7 @@
 namespace nova
 {
 
-template <class Real>
+template <class nReal>
 class CMatrix4 : public CObjectConstructor
 {
 public:
@@ -51,10 +51,10 @@ public:
     CMatrix4 (const CMatrix4& rkM);
 
     // input Mrc is in row r, column c.
-    CMatrix4 (Real fM00, Real fM01, Real fM02, Real fM03,
-             Real fM10, Real fM11, Real fM12, Real fM13,
-             Real fM20, Real fM21, Real fM22, Real fM23,
-             Real fM30, Real fM31, Real fM32, Real fM33);
+    CMatrix4 (nReal fM00, nReal fM01, nReal fM02, nReal fM03,
+             nReal fM10, nReal fM11, nReal fM12, nReal fM13,
+             nReal fM20, nReal fM21, nReal fM22, nReal fM23,
+             nReal fM30, nReal fM31, nReal fM32, nReal fM33);
 
     // Create a matrix from an array of numbers.  The input array is
     // interpreted based on the Boolean input as
@@ -62,23 +62,23 @@ public:
     //                        m23,m30,m31,m32,m33} [row major]
     //   false: entry[0..15]={m00,m10,m20,m30,m01,m11,m21,m31,m02,m12,m22,
     //                        m32,m03,m13,m23,m33} [col major]
-    CMatrix4 (const Real afEntry[16], bool bRowMajor);
+    CMatrix4 (const nReal afEntry[16], bool bRowMajor);
 
     void MakeZero ();
     void MakeIdentity ();
 
     // member access
-    inline operator const Real* () const;
-    inline operator Real* ();
-    inline const Real* operator[] (int iRow) const;
-    inline Real* operator[] (int iRow);
-    inline Real operator() (int iRow, int iCol) const;
-    inline Real& operator() (int iRow, int iCol);
-    void SetRow (int iRow, const CVector4<Real>& rkV);
-    CVector4<Real> GetRow (int iRow) const;
-    void SetColumn (int iCol, const CVector4<Real>& rkV);
-    CVector4<Real> GetColumn (int iCol) const;
-    void GetColumnMajor (Real* afCMajor) const;
+    inline operator const nReal* () const;
+    inline operator nReal* ();
+    inline const nReal* operator[] (int iRow) const;
+    inline nReal* operator[] (int iRow);
+    inline nReal operator() (int iRow, int iCol) const;
+    inline nReal& operator() (int iRow, int iCol);
+    void SetRow (int iRow, const CVector4<nReal>& rkV);
+    CVector4<nReal> GetRow (int iRow) const;
+    void SetColumn (int iCol, const CVector4<nReal>& rkV);
+    CVector4<nReal> GetColumn (int iCol) const;
+    void GetColumnMajor (nReal* afCMajor) const;
 
     // assignment
     inline CMatrix4& operator= (const CMatrix4& rkM);
@@ -95,18 +95,18 @@ public:
     inline CMatrix4 operator+ (const CMatrix4& rkM) const;
     inline CMatrix4 operator- (const CMatrix4& rkM) const;
     inline CMatrix4 operator* (const CMatrix4& rkM) const;
-    inline CMatrix4 operator* (Real fScalar) const;
-    inline CMatrix4 operator/ (Real fScalar) const;
+    inline CMatrix4 operator* (nReal fScalar) const;
+    inline CMatrix4 operator/ (nReal fScalar) const;
     inline CMatrix4 operator- () const;
 
     // arithmetic updates
     inline CMatrix4& operator+= (const CMatrix4& rkM);
     inline CMatrix4& operator-= (const CMatrix4& rkM);
-    inline CMatrix4& operator*= (Real fScalar);
-    inline CMatrix4& operator/= (Real fScalar);
+    inline CMatrix4& operator*= (nReal fScalar);
+    inline CMatrix4& operator/= (nReal fScalar);
 
     // matrix times vector
-    inline CVector4<Real> operator* (const CVector4<Real>& rkV) const;  // M * v
+    inline CVector4<nReal> operator* (const CVector4<nReal>& rkV) const;  // M * v
 
     // other operations
     CMatrix4 Transpose () const;  // M^T
@@ -114,19 +114,19 @@ public:
     CMatrix4 TimesTranspose (const CMatrix4& rkM) const;  // this * M^T
     CMatrix4 Inverse () const;
     CMatrix4 Adjoint () const;
-    Real Determinant () const;
-    Real QForm (const CVector4<Real>& rkU,
-        const CVector4<Real>& rkV) const;  // u^T*M*v
+    nReal Determinant () const;
+    nReal QForm (const CVector4<nReal>& rkU,
+        const CVector4<nReal>& rkV) const;  // u^T*M*v
 
     // projection matrices onto a specified plane
-    void MakeObliqueProjection (const CVector3<Real>& rkNormal,
-        const CVector3<Real>& rkPoint, const CVector3<Real>& rkDirection);
-    void MakePerspectiveProjection (const CVector3<Real>& rkNormal,
-        const CVector3<Real>& rkPoint, const CVector3<Real>& rkEye);
+    void MakeObliqueProjection (const CVector3<nReal>& rkNormal,
+        const CVector3<nReal>& rkPoint, const CVector3<nReal>& rkDirection);
+    void MakePerspectiveProjection (const CVector3<nReal>& rkNormal,
+        const CVector3<nReal>& rkPoint, const CVector3<nReal>& rkEye);
 
     // reflection matrix through a specified plane
-    void MakeReflection (const CVector3<Real>& rkNormal,
-        const CVector3<Real>& rkPoint);
+    void MakeReflection (const CVector3<nReal>& rkNormal,
+        const CVector3<nReal>& rkPoint);
 
     // special matrices
     NOVA_EXPORT static const CMatrix4 ZERO;
@@ -136,20 +136,20 @@ private:
     // support for comparisons
     int CompareArrays (const CMatrix4& rkM) const;
 
-    Real m_afEntry[16];
+    nReal m_afEntry[16];
 };
 
 // c * M
-template <class Real>
-inline CMatrix4<Real> operator* (Real fScalar, const CMatrix4<Real>& rkM);
+template <class nReal>
+inline CMatrix4<nReal> operator* (nReal fScalar, const CMatrix4<nReal>& rkM);
 
 // v^T * M
-template <class Real>
-inline CVector4<Real> operator* (const CVector4<Real>& rkV,
-    const CMatrix4<Real>& rkM);
+template <class nReal>
+inline CVector4<nReal> operator* (const CVector4<nReal>& rkV,
+    const CMatrix4<nReal>& rkM);
 
-template <class Real>
-CMatrix4<Real>::CMatrix4 (bool bZero)
+template <class nReal>
+CMatrix4<nReal>::CMatrix4 (bool bZero)
 {
     if (bZero)
     {
@@ -161,8 +161,8 @@ CMatrix4<Real>::CMatrix4 (bool bZero)
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix4<Real>::CMatrix4 (const CMatrix4& rkM)
+template <class nReal>
+CMatrix4<nReal>::CMatrix4 (const CMatrix4& rkM)
 {
     m_afEntry[ 0] = rkM.m_afEntry[ 0];
     m_afEntry[ 1] = rkM.m_afEntry[ 1];
@@ -182,10 +182,10 @@ CMatrix4<Real>::CMatrix4 (const CMatrix4& rkM)
     m_afEntry[15] = rkM.m_afEntry[15];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix4<Real>::CMatrix4 (Real fM00, Real fM01, Real fM02, Real fM03,
-    Real fM10, Real fM11, Real fM12, Real fM13, Real fM20, Real fM21,
-    Real fM22, Real fM23, Real fM30, Real fM31, Real fM32, Real fM33)
+template <class nReal>
+CMatrix4<nReal>::CMatrix4 (nReal fM00, nReal fM01, nReal fM02, nReal fM03,
+    nReal fM10, nReal fM11, nReal fM12, nReal fM13, nReal fM20, nReal fM21,
+    nReal fM22, nReal fM23, nReal fM30, nReal fM31, nReal fM32, nReal fM33)
 {
     m_afEntry[ 0] = fM00;
     m_afEntry[ 1] = fM01;
@@ -205,8 +205,8 @@ CMatrix4<Real>::CMatrix4 (Real fM00, Real fM01, Real fM02, Real fM03,
     m_afEntry[15] = fM33;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix4<Real>::CMatrix4 (const Real afEntry[16], bool bRowMajor)
+template <class nReal>
+CMatrix4<nReal>::CMatrix4 (const nReal afEntry[16], bool bRowMajor)
 {
     if (bRowMajor)
     {
@@ -248,86 +248,86 @@ CMatrix4<Real>::CMatrix4 (const Real afEntry[16], bool bRowMajor)
     }
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real>::operator const Real* () const
+template <class nReal>
+inline CMatrix4<nReal>::operator const nReal* () const
 {
     return m_afEntry;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real>::operator Real* ()
+template <class nReal>
+inline CMatrix4<nReal>::operator nReal* ()
 {
     return m_afEntry;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline const Real* CMatrix4<Real>::operator[] (int iRow) const
+template <class nReal>
+inline const nReal* CMatrix4<nReal>::operator[] (int iRow) const
 {
     return &m_afEntry[4*iRow];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real* CMatrix4<Real>::operator[] (int iRow)
+template <class nReal>
+inline nReal* CMatrix4<nReal>::operator[] (int iRow)
 {
     return &m_afEntry[4*iRow];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real CMatrix4<Real>::operator() (int iRow, int iCol) const
+template <class nReal>
+inline nReal CMatrix4<nReal>::operator() (int iRow, int iCol) const
 {
     return m_afEntry[iCol+4*iRow];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline Real& CMatrix4<Real>::operator() (int iRow, int iCol)
+template <class nReal>
+inline nReal& CMatrix4<nReal>::operator() (int iRow, int iCol)
 {
     return m_afEntry[iCol+4*iRow];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix4<Real>::MakeZero ()
+template <class nReal>
+void CMatrix4<nReal>::MakeZero ()
 {
-    m_afEntry[ 0] = (Real)0.0;
-    m_afEntry[ 1] = (Real)0.0;
-    m_afEntry[ 2] = (Real)0.0;
-    m_afEntry[ 3] = (Real)0.0;
-    m_afEntry[ 4] = (Real)0.0;
-    m_afEntry[ 5] = (Real)0.0;
-    m_afEntry[ 6] = (Real)0.0;
-    m_afEntry[ 7] = (Real)0.0;
-    m_afEntry[ 8] = (Real)0.0;
-    m_afEntry[ 9] = (Real)0.0;
-    m_afEntry[10] = (Real)0.0;
-    m_afEntry[11] = (Real)0.0;
-    m_afEntry[12] = (Real)0.0;
-    m_afEntry[13] = (Real)0.0;
-    m_afEntry[14] = (Real)0.0;
-    m_afEntry[15] = (Real)0.0;
+    m_afEntry[ 0] = (nReal)0.0;
+    m_afEntry[ 1] = (nReal)0.0;
+    m_afEntry[ 2] = (nReal)0.0;
+    m_afEntry[ 3] = (nReal)0.0;
+    m_afEntry[ 4] = (nReal)0.0;
+    m_afEntry[ 5] = (nReal)0.0;
+    m_afEntry[ 6] = (nReal)0.0;
+    m_afEntry[ 7] = (nReal)0.0;
+    m_afEntry[ 8] = (nReal)0.0;
+    m_afEntry[ 9] = (nReal)0.0;
+    m_afEntry[10] = (nReal)0.0;
+    m_afEntry[11] = (nReal)0.0;
+    m_afEntry[12] = (nReal)0.0;
+    m_afEntry[13] = (nReal)0.0;
+    m_afEntry[14] = (nReal)0.0;
+    m_afEntry[15] = (nReal)0.0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix4<Real>::MakeIdentity ()
+template <class nReal>
+void CMatrix4<nReal>::MakeIdentity ()
 {
-    m_afEntry[ 0] = (Real)1.0;
-    m_afEntry[ 1] = (Real)0.0;
-    m_afEntry[ 2] = (Real)0.0;
-    m_afEntry[ 3] = (Real)0.0;
-    m_afEntry[ 4] = (Real)0.0;
-    m_afEntry[ 5] = (Real)1.0;
-    m_afEntry[ 6] = (Real)0.0;
-    m_afEntry[ 7] = (Real)0.0;
-    m_afEntry[ 8] = (Real)0.0;
-    m_afEntry[ 9] = (Real)0.0;
-    m_afEntry[10] = (Real)1.0;
-    m_afEntry[11] = (Real)0.0;
-    m_afEntry[12] = (Real)0.0;
-    m_afEntry[13] = (Real)0.0;
-    m_afEntry[14] = (Real)0.0;
-    m_afEntry[15] = (Real)1.0;
+    m_afEntry[ 0] = (nReal)1.0;
+    m_afEntry[ 1] = (nReal)0.0;
+    m_afEntry[ 2] = (nReal)0.0;
+    m_afEntry[ 3] = (nReal)0.0;
+    m_afEntry[ 4] = (nReal)0.0;
+    m_afEntry[ 5] = (nReal)1.0;
+    m_afEntry[ 6] = (nReal)0.0;
+    m_afEntry[ 7] = (nReal)0.0;
+    m_afEntry[ 8] = (nReal)0.0;
+    m_afEntry[ 9] = (nReal)0.0;
+    m_afEntry[10] = (nReal)1.0;
+    m_afEntry[11] = (nReal)0.0;
+    m_afEntry[12] = (nReal)0.0;
+    m_afEntry[13] = (nReal)0.0;
+    m_afEntry[14] = (nReal)0.0;
+    m_afEntry[15] = (nReal)1.0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix4<Real>::SetRow (int iRow, const CVector4<Real>& rkV)
+template <class nReal>
+void CMatrix4<nReal>::SetRow (int iRow, const CVector4<nReal>& rkV)
 {
     int i0 = 4*iRow, i1 = i0+1, i2 = i1+1, i3 = i2+1;
     m_afEntry[i0] = rkV[0];
@@ -336,16 +336,16 @@ void CMatrix4<Real>::SetRow (int iRow, const CVector4<Real>& rkV)
     m_afEntry[i3] = rkV[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector4<Real> CMatrix4<Real>::GetRow (int iRow) const
+template <class nReal>
+CVector4<nReal> CMatrix4<nReal>::GetRow (int iRow) const
 {
     int i0 = 4*iRow, i1 = i0+1, i2 = i1+1, i3 = i2+1;
-    return CVector4<Real>(m_afEntry[i0],m_afEntry[i1],m_afEntry[i2],
+    return CVector4<nReal>(m_afEntry[i0],m_afEntry[i1],m_afEntry[i2],
         m_afEntry[i3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix4<Real>::SetColumn (int iCol, const CVector4<Real>& rkV)
+template <class nReal>
+void CMatrix4<nReal>::SetColumn (int iCol, const CVector4<nReal>& rkV)
 {
     m_afEntry[iCol] = rkV[0];
     m_afEntry[iCol+4] = rkV[1];
@@ -353,15 +353,15 @@ void CMatrix4<Real>::SetColumn (int iCol, const CVector4<Real>& rkV)
     m_afEntry[iCol+12] = rkV[3];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CVector4<Real> CMatrix4<Real>::GetColumn (int iCol) const
+template <class nReal>
+CVector4<nReal> CMatrix4<nReal>::GetColumn (int iCol) const
 {
-    return CVector4<Real>(m_afEntry[iCol],m_afEntry[iCol+4],m_afEntry[iCol+8],
+    return CVector4<nReal>(m_afEntry[iCol],m_afEntry[iCol+4],m_afEntry[iCol+8],
         m_afEntry[iCol+12]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix4<Real>::GetColumnMajor (Real* afCMajor) const
+template <class nReal>
+void CMatrix4<nReal>::GetColumnMajor (nReal* afCMajor) const
 {
     afCMajor[ 0] = m_afEntry[ 0];
     afCMajor[ 1] = m_afEntry[ 4];
@@ -381,8 +381,8 @@ void CMatrix4<Real>::GetColumnMajor (Real* afCMajor) const
     afCMajor[15] = m_afEntry[15];
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real>& CMatrix4<Real>::operator= (const CMatrix4& rkM)
+template <class nReal>
+inline CMatrix4<nReal>& CMatrix4<nReal>::operator= (const CMatrix4& rkM)
 {
     m_afEntry[ 0] = rkM.m_afEntry[ 0];
     m_afEntry[ 1] = rkM.m_afEntry[ 1];
@@ -403,52 +403,52 @@ inline CMatrix4<Real>& CMatrix4<Real>::operator= (const CMatrix4& rkM)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-int CMatrix4<Real>::CompareArrays (const CMatrix4& rkM) const
+template <class nReal>
+int CMatrix4<nReal>::CompareArrays (const CMatrix4& rkM) const
 {
-    return memcmp(m_afEntry,rkM.m_afEntry,16*sizeof(Real));
+    return memcmp(m_afEntry,rkM.m_afEntry,16*sizeof(nReal));
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix4<Real>::operator== (const CMatrix4& rkM) const
+template <class nReal>
+bool CMatrix4<nReal>::operator== (const CMatrix4& rkM) const
 {
     return CompareArrays(rkM) == 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix4<Real>::operator!= (const CMatrix4& rkM) const
+template <class nReal>
+bool CMatrix4<nReal>::operator!= (const CMatrix4& rkM) const
 {
     return CompareArrays(rkM) != 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix4<Real>::operator<  (const CMatrix4& rkM) const
+template <class nReal>
+bool CMatrix4<nReal>::operator<  (const CMatrix4& rkM) const
 {
     return CompareArrays(rkM) < 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix4<Real>::operator<= (const CMatrix4& rkM) const
+template <class nReal>
+bool CMatrix4<nReal>::operator<= (const CMatrix4& rkM) const
 {
     return CompareArrays(rkM) <= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix4<Real>::operator>  (const CMatrix4& rkM) const
+template <class nReal>
+bool CMatrix4<nReal>::operator>  (const CMatrix4& rkM) const
 {
     return CompareArrays(rkM) > 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-bool CMatrix4<Real>::operator>= (const CMatrix4& rkM) const
+template <class nReal>
+bool CMatrix4<nReal>::operator>= (const CMatrix4& rkM) const
 {
     return CompareArrays(rkM) >= 0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real> CMatrix4<Real>::operator+ (const CMatrix4& rkM) const
+template <class nReal>
+inline CMatrix4<nReal> CMatrix4<nReal>::operator+ (const CMatrix4& rkM) const
 {
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         m_afEntry[ 0] + rkM.m_afEntry[ 0],
         m_afEntry[ 1] + rkM.m_afEntry[ 1],
         m_afEntry[ 2] + rkM.m_afEntry[ 2],
@@ -467,10 +467,10 @@ inline CMatrix4<Real> CMatrix4<Real>::operator+ (const CMatrix4& rkM) const
         m_afEntry[15] + rkM.m_afEntry[15]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real> CMatrix4<Real>::operator- (const CMatrix4& rkM) const
+template <class nReal>
+inline CMatrix4<nReal> CMatrix4<nReal>::operator- (const CMatrix4& rkM) const
 {
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         m_afEntry[ 0] - rkM.m_afEntry[ 0],
         m_afEntry[ 1] - rkM.m_afEntry[ 1],
         m_afEntry[ 2] - rkM.m_afEntry[ 2],
@@ -489,10 +489,10 @@ inline CMatrix4<Real> CMatrix4<Real>::operator- (const CMatrix4& rkM) const
         m_afEntry[15] - rkM.m_afEntry[15]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real> CMatrix4<Real>::operator* (const CMatrix4& rkM) const
+template <class nReal>
+inline CMatrix4<nReal> CMatrix4<nReal>::operator* (const CMatrix4& rkM) const
 {
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         m_afEntry[ 0]*rkM.m_afEntry[ 0] +
         m_afEntry[ 1]*rkM.m_afEntry[ 4] +
         m_afEntry[ 2]*rkM.m_afEntry[ 8] +
@@ -574,10 +574,10 @@ inline CMatrix4<Real> CMatrix4<Real>::operator* (const CMatrix4& rkM) const
         m_afEntry[15]*rkM.m_afEntry[15]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real> CMatrix4<Real>::operator* (Real fScalar) const
+template <class nReal>
+inline CMatrix4<nReal> CMatrix4<nReal>::operator* (nReal fScalar) const
 {
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         fScalar*m_afEntry[ 0],
         fScalar*m_afEntry[ 1],
         fScalar*m_afEntry[ 2],
@@ -596,13 +596,13 @@ inline CMatrix4<Real> CMatrix4<Real>::operator* (Real fScalar) const
         fScalar*m_afEntry[15]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real> CMatrix4<Real>::operator/ (Real fScalar) const
+template <class nReal>
+inline CMatrix4<nReal> CMatrix4<nReal>::operator/ (nReal fScalar) const
 {
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
-        return CMatrix4<Real>(
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
+        return CMatrix4<nReal>(
             fInvScalar*m_afEntry[ 0],
             fInvScalar*m_afEntry[ 1],
             fInvScalar*m_afEntry[ 2],
@@ -621,29 +621,29 @@ inline CMatrix4<Real> CMatrix4<Real>::operator/ (Real fScalar) const
             fInvScalar*m_afEntry[15]);
     }
 
-    return CMatrix4<Real>(
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL,
-        CMath<Real>::MAX_REAL);
+    return CMatrix4<nReal>(
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL,
+        CMath<nReal>::MAX_REAL);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real> CMatrix4<Real>::operator- () const
+template <class nReal>
+inline CMatrix4<nReal> CMatrix4<nReal>::operator- () const
 {
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         -m_afEntry[ 0],
         -m_afEntry[ 1],
         -m_afEntry[ 2],
@@ -662,8 +662,8 @@ inline CMatrix4<Real> CMatrix4<Real>::operator- () const
         -m_afEntry[15]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real>& CMatrix4<Real>::operator+= (const CMatrix4& rkM)
+template <class nReal>
+inline CMatrix4<nReal>& CMatrix4<nReal>::operator+= (const CMatrix4& rkM)
 {
     m_afEntry[ 0] += rkM.m_afEntry[ 0];
     m_afEntry[ 1] += rkM.m_afEntry[ 1];
@@ -684,8 +684,8 @@ inline CMatrix4<Real>& CMatrix4<Real>::operator+= (const CMatrix4& rkM)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real>& CMatrix4<Real>::operator-= (const CMatrix4& rkM)
+template <class nReal>
+inline CMatrix4<nReal>& CMatrix4<nReal>::operator-= (const CMatrix4& rkM)
 {
     m_afEntry[ 0] -= rkM.m_afEntry[ 0];
     m_afEntry[ 1] -= rkM.m_afEntry[ 1];
@@ -706,8 +706,8 @@ inline CMatrix4<Real>& CMatrix4<Real>::operator-= (const CMatrix4& rkM)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real>& CMatrix4<Real>::operator*= (Real fScalar)
+template <class nReal>
+inline CMatrix4<nReal>& CMatrix4<nReal>::operator*= (nReal fScalar)
 {
     m_afEntry[ 0] *= fScalar;
     m_afEntry[ 1] *= fScalar;
@@ -728,12 +728,12 @@ inline CMatrix4<Real>& CMatrix4<Real>::operator*= (Real fScalar)
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real>& CMatrix4<Real>::operator/= (Real fScalar)
+template <class nReal>
+inline CMatrix4<nReal>& CMatrix4<nReal>::operator/= (nReal fScalar)
 {
-    if (fScalar != (Real)0.0)
+    if (fScalar != (nReal)0.0)
     {
-        Real fInvScalar = ((Real)1.0)/fScalar;
+        nReal fInvScalar = ((nReal)1.0)/fScalar;
         m_afEntry[ 0] *= fInvScalar;
         m_afEntry[ 1] *= fInvScalar;
         m_afEntry[ 2] *= fInvScalar;
@@ -753,31 +753,31 @@ inline CMatrix4<Real>& CMatrix4<Real>::operator/= (Real fScalar)
     }
     else
     {
-        m_afEntry[ 0] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 1] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 2] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 3] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 4] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 5] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 6] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 7] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 8] = CMath<Real>::MAX_REAL;
-        m_afEntry[ 9] = CMath<Real>::MAX_REAL;
-        m_afEntry[10] = CMath<Real>::MAX_REAL;
-        m_afEntry[11] = CMath<Real>::MAX_REAL;
-        m_afEntry[12] = CMath<Real>::MAX_REAL;
-        m_afEntry[13] = CMath<Real>::MAX_REAL;
-        m_afEntry[14] = CMath<Real>::MAX_REAL;
-        m_afEntry[15] = CMath<Real>::MAX_REAL;
+        m_afEntry[ 0] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 1] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 2] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 3] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 4] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 5] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 6] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 7] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 8] = CMath<nReal>::MAX_REAL;
+        m_afEntry[ 9] = CMath<nReal>::MAX_REAL;
+        m_afEntry[10] = CMath<nReal>::MAX_REAL;
+        m_afEntry[11] = CMath<nReal>::MAX_REAL;
+        m_afEntry[12] = CMath<nReal>::MAX_REAL;
+        m_afEntry[13] = CMath<nReal>::MAX_REAL;
+        m_afEntry[14] = CMath<nReal>::MAX_REAL;
+        m_afEntry[15] = CMath<nReal>::MAX_REAL;
     }
 
     return *this;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real> CMatrix4<Real>::operator* (const CVector4<Real>& rkV) const
+template <class nReal>
+inline CVector4<nReal> CMatrix4<nReal>::operator* (const CVector4<nReal>& rkV) const
 {
-    return CVector4<Real>(
+    return CVector4<nReal>(
         m_afEntry[ 0]*rkV[0] +
         m_afEntry[ 1]*rkV[1] +
         m_afEntry[ 2]*rkV[2] +
@@ -799,10 +799,10 @@ inline CVector4<Real> CMatrix4<Real>::operator* (const CVector4<Real>& rkV) cons
         m_afEntry[15]*rkV[3]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix4<Real> CMatrix4<Real>::Transpose () const
+template <class nReal>
+CMatrix4<nReal> CMatrix4<nReal>::Transpose () const
 {
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         m_afEntry[ 0],
         m_afEntry[ 4],
         m_afEntry[ 8],
@@ -821,11 +821,11 @@ CMatrix4<Real> CMatrix4<Real>::Transpose () const
         m_afEntry[15]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix4<Real> CMatrix4<Real>::TransposeTimes (const CMatrix4& rkM) const
+template <class nReal>
+CMatrix4<nReal> CMatrix4<nReal>::TransposeTimes (const CMatrix4& rkM) const
 {
     // P = A^T*B
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         m_afEntry[ 0]*rkM.m_afEntry[ 0] +
         m_afEntry[ 4]*rkM.m_afEntry[ 4] +
         m_afEntry[ 8]*rkM.m_afEntry[ 8] +
@@ -907,11 +907,11 @@ CMatrix4<Real> CMatrix4<Real>::TransposeTimes (const CMatrix4& rkM) const
         m_afEntry[15]*rkM.m_afEntry[15]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix4<Real> CMatrix4<Real>::TimesTranspose (const CMatrix4& rkM) const
+template <class nReal>
+CMatrix4<nReal> CMatrix4<nReal>::TimesTranspose (const CMatrix4& rkM) const
 {
     // P = A*B^T
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         m_afEntry[ 0]*rkM.m_afEntry[ 0] +
         m_afEntry[ 1]*rkM.m_afEntry[ 1] +
         m_afEntry[ 2]*rkM.m_afEntry[ 2] +
@@ -993,26 +993,26 @@ CMatrix4<Real> CMatrix4<Real>::TimesTranspose (const CMatrix4& rkM) const
         m_afEntry[15]*rkM.m_afEntry[15]);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix4<Real> CMatrix4<Real>::Inverse () const
+template <class nReal>
+CMatrix4<nReal> CMatrix4<nReal>::Inverse () const
 {
-    Real fA0 = m_afEntry[ 0]*m_afEntry[ 5] - m_afEntry[ 1]*m_afEntry[ 4];
-    Real fA1 = m_afEntry[ 0]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 4];
-    Real fA2 = m_afEntry[ 0]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 4];
-    Real fA3 = m_afEntry[ 1]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 5];
-    Real fA4 = m_afEntry[ 1]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 5];
-    Real fA5 = m_afEntry[ 2]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 6];
-    Real fB0 = m_afEntry[ 8]*m_afEntry[13] - m_afEntry[ 9]*m_afEntry[12];
-    Real fB1 = m_afEntry[ 8]*m_afEntry[14] - m_afEntry[10]*m_afEntry[12];
-    Real fB2 = m_afEntry[ 8]*m_afEntry[15] - m_afEntry[11]*m_afEntry[12];
-    Real fB3 = m_afEntry[ 9]*m_afEntry[14] - m_afEntry[10]*m_afEntry[13];
-    Real fB4 = m_afEntry[ 9]*m_afEntry[15] - m_afEntry[11]*m_afEntry[13];
-    Real fB5 = m_afEntry[10]*m_afEntry[15] - m_afEntry[11]*m_afEntry[14];
+    nReal fA0 = m_afEntry[ 0]*m_afEntry[ 5] - m_afEntry[ 1]*m_afEntry[ 4];
+    nReal fA1 = m_afEntry[ 0]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 4];
+    nReal fA2 = m_afEntry[ 0]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 4];
+    nReal fA3 = m_afEntry[ 1]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 5];
+    nReal fA4 = m_afEntry[ 1]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 5];
+    nReal fA5 = m_afEntry[ 2]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 6];
+    nReal fB0 = m_afEntry[ 8]*m_afEntry[13] - m_afEntry[ 9]*m_afEntry[12];
+    nReal fB1 = m_afEntry[ 8]*m_afEntry[14] - m_afEntry[10]*m_afEntry[12];
+    nReal fB2 = m_afEntry[ 8]*m_afEntry[15] - m_afEntry[11]*m_afEntry[12];
+    nReal fB3 = m_afEntry[ 9]*m_afEntry[14] - m_afEntry[10]*m_afEntry[13];
+    nReal fB4 = m_afEntry[ 9]*m_afEntry[15] - m_afEntry[11]*m_afEntry[13];
+    nReal fB5 = m_afEntry[10]*m_afEntry[15] - m_afEntry[11]*m_afEntry[14];
 
-    Real fDet = fA0*fB5-fA1*fB4+fA2*fB3+fA3*fB2-fA4*fB1+fA5*fB0;
-    if (CMath<Real>::FAbs(fDet) <= CMath<Real>::ZERO_TOLERANCE)
+    nReal fDet = fA0*fB5-fA1*fB4+fA2*fB3+fA3*fB2-fA4*fB1+fA5*fB0;
+    if (CMath<nReal>::FAbs(fDet) <= CMath<nReal>::ZERO_TOLERANCE)
     {
-        return CMatrix4<Real>::ZERO;
+        return CMatrix4<nReal>::ZERO;
     }
 
     CMatrix4 kInv;
@@ -1049,7 +1049,7 @@ CMatrix4<Real> CMatrix4<Real>::Inverse () const
     kInv.m_afEntry[15] =
         + m_afEntry[ 8]*fA3 - m_afEntry[ 9]*fA1 + m_afEntry[10]*fA0;
 
-    Real fInvDet = ((Real)1.0)/fDet;
+    nReal fInvDet = ((nReal)1.0)/fDet;
     kInv.m_afEntry[ 0] *= fInvDet;
     kInv.m_afEntry[ 1] *= fInvDet;
     kInv.m_afEntry[ 2] *= fInvDet;
@@ -1070,23 +1070,23 @@ CMatrix4<Real> CMatrix4<Real>::Inverse () const
     return kInv;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-CMatrix4<Real> CMatrix4<Real>::Adjoint () const
+template <class nReal>
+CMatrix4<nReal> CMatrix4<nReal>::Adjoint () const
 {
-    Real fA0 = m_afEntry[ 0]*m_afEntry[ 5] - m_afEntry[ 1]*m_afEntry[ 4];
-    Real fA1 = m_afEntry[ 0]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 4];
-    Real fA2 = m_afEntry[ 0]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 4];
-    Real fA3 = m_afEntry[ 1]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 5];
-    Real fA4 = m_afEntry[ 1]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 5];
-    Real fA5 = m_afEntry[ 2]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 6];
-    Real fB0 = m_afEntry[ 8]*m_afEntry[13] - m_afEntry[ 9]*m_afEntry[12];
-    Real fB1 = m_afEntry[ 8]*m_afEntry[14] - m_afEntry[10]*m_afEntry[12];
-    Real fB2 = m_afEntry[ 8]*m_afEntry[15] - m_afEntry[11]*m_afEntry[12];
-    Real fB3 = m_afEntry[ 9]*m_afEntry[14] - m_afEntry[10]*m_afEntry[13];
-    Real fB4 = m_afEntry[ 9]*m_afEntry[15] - m_afEntry[11]*m_afEntry[13];
-    Real fB5 = m_afEntry[10]*m_afEntry[15] - m_afEntry[11]*m_afEntry[14];
+    nReal fA0 = m_afEntry[ 0]*m_afEntry[ 5] - m_afEntry[ 1]*m_afEntry[ 4];
+    nReal fA1 = m_afEntry[ 0]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 4];
+    nReal fA2 = m_afEntry[ 0]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 4];
+    nReal fA3 = m_afEntry[ 1]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 5];
+    nReal fA4 = m_afEntry[ 1]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 5];
+    nReal fA5 = m_afEntry[ 2]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 6];
+    nReal fB0 = m_afEntry[ 8]*m_afEntry[13] - m_afEntry[ 9]*m_afEntry[12];
+    nReal fB1 = m_afEntry[ 8]*m_afEntry[14] - m_afEntry[10]*m_afEntry[12];
+    nReal fB2 = m_afEntry[ 8]*m_afEntry[15] - m_afEntry[11]*m_afEntry[12];
+    nReal fB3 = m_afEntry[ 9]*m_afEntry[14] - m_afEntry[10]*m_afEntry[13];
+    nReal fB4 = m_afEntry[ 9]*m_afEntry[15] - m_afEntry[11]*m_afEntry[13];
+    nReal fB5 = m_afEntry[10]*m_afEntry[15] - m_afEntry[11]*m_afEntry[14];
 
-    return CMatrix4<Real>(
+    return CMatrix4<nReal>(
         + m_afEntry[ 5]*fB5 - m_afEntry[ 6]*fB4 + m_afEntry[ 7]*fB3,
         - m_afEntry[ 1]*fB5 + m_afEntry[ 2]*fB4 - m_afEntry[ 3]*fB3,
         + m_afEntry[13]*fA5 - m_afEntry[14]*fA4 + m_afEntry[15]*fA3,
@@ -1105,35 +1105,35 @@ CMatrix4<Real> CMatrix4<Real>::Adjoint () const
         + m_afEntry[ 8]*fA3 - m_afEntry[ 9]*fA1 + m_afEntry[10]*fA0);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-Real CMatrix4<Real>::Determinant () const
+template <class nReal>
+nReal CMatrix4<nReal>::Determinant () const
 {
-    Real fA0 = m_afEntry[ 0]*m_afEntry[ 5] - m_afEntry[ 1]*m_afEntry[ 4];
-    Real fA1 = m_afEntry[ 0]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 4];
-    Real fA2 = m_afEntry[ 0]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 4];
-    Real fA3 = m_afEntry[ 1]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 5];
-    Real fA4 = m_afEntry[ 1]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 5];
-    Real fA5 = m_afEntry[ 2]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 6];
-    Real fB0 = m_afEntry[ 8]*m_afEntry[13] - m_afEntry[ 9]*m_afEntry[12];
-    Real fB1 = m_afEntry[ 8]*m_afEntry[14] - m_afEntry[10]*m_afEntry[12];
-    Real fB2 = m_afEntry[ 8]*m_afEntry[15] - m_afEntry[11]*m_afEntry[12];
-    Real fB3 = m_afEntry[ 9]*m_afEntry[14] - m_afEntry[10]*m_afEntry[13];
-    Real fB4 = m_afEntry[ 9]*m_afEntry[15] - m_afEntry[11]*m_afEntry[13];
-    Real fB5 = m_afEntry[10]*m_afEntry[15] - m_afEntry[11]*m_afEntry[14];
-    Real fDet = fA0*fB5-fA1*fB4+fA2*fB3+fA3*fB2-fA4*fB1+fA5*fB0;
+    nReal fA0 = m_afEntry[ 0]*m_afEntry[ 5] - m_afEntry[ 1]*m_afEntry[ 4];
+    nReal fA1 = m_afEntry[ 0]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 4];
+    nReal fA2 = m_afEntry[ 0]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 4];
+    nReal fA3 = m_afEntry[ 1]*m_afEntry[ 6] - m_afEntry[ 2]*m_afEntry[ 5];
+    nReal fA4 = m_afEntry[ 1]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 5];
+    nReal fA5 = m_afEntry[ 2]*m_afEntry[ 7] - m_afEntry[ 3]*m_afEntry[ 6];
+    nReal fB0 = m_afEntry[ 8]*m_afEntry[13] - m_afEntry[ 9]*m_afEntry[12];
+    nReal fB1 = m_afEntry[ 8]*m_afEntry[14] - m_afEntry[10]*m_afEntry[12];
+    nReal fB2 = m_afEntry[ 8]*m_afEntry[15] - m_afEntry[11]*m_afEntry[12];
+    nReal fB3 = m_afEntry[ 9]*m_afEntry[14] - m_afEntry[10]*m_afEntry[13];
+    nReal fB4 = m_afEntry[ 9]*m_afEntry[15] - m_afEntry[11]*m_afEntry[13];
+    nReal fB5 = m_afEntry[10]*m_afEntry[15] - m_afEntry[11]*m_afEntry[14];
+    nReal fDet = fA0*fB5-fA1*fB4+fA2*fB3+fA3*fB2-fA4*fB1+fA5*fB0;
     return fDet;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-Real CMatrix4<Real>::QForm (const CVector4<Real>& rkU,
-    const CVector4<Real>& rkV) const
+template <class nReal>
+nReal CMatrix4<nReal>::QForm (const CVector4<nReal>& rkU,
+    const CVector4<nReal>& rkV) const
 {
     return rkU.Dot((*this)*rkV);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix4<Real>::MakeObliqueProjection (const CVector3<Real>& rkNormal,
-    const CVector3<Real>& rkPoint, const CVector3<Real>& rkDirection)
+template <class nReal>
+void CMatrix4<nReal>::MakeObliqueProjection (const CVector3<nReal>& rkNormal,
+    const CVector3<nReal>& rkPoint, const CVector3<nReal>& rkDirection)
 {
     // The projection plane is Dot(N,X-P) = 0 where N is a 3-by-1 unit-length
     // normal vector and P is a 3-by-1 point on the plane.  The projection
@@ -1155,8 +1155,8 @@ void CMatrix4<Real>::MakeObliqueProjection (const CVector3<Real>& rkNormal,
     // that M[3][3] > 0 whenever Dot(N,D) < 0 (projection is onto the
     // "positive side" of the plane).
 
-    Real fNdD = rkNormal.Dot(rkDirection);
-    Real fNdP = rkNormal.Dot(rkPoint);
+    nReal fNdD = rkNormal.Dot(rkDirection);
+    nReal fNdP = rkNormal.Dot(rkPoint);
     m_afEntry[ 0] = rkDirection[0]*rkNormal[0] - fNdD;
     m_afEntry[ 1] = rkDirection[0]*rkNormal[1];
     m_afEntry[ 2] = rkDirection[0]*rkNormal[2];
@@ -1175,9 +1175,9 @@ void CMatrix4<Real>::MakeObliqueProjection (const CVector3<Real>& rkNormal,
     m_afEntry[15] = -fNdD;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix4<Real>::MakePerspectiveProjection (const CVector3<Real>& rkNormal,
-    const CVector3<Real>& rkPoint, const CVector3<Real>& rkEye)
+template <class nReal>
+void CMatrix4<nReal>::MakePerspectiveProjection (const CVector3<nReal>& rkNormal,
+    const CVector3<nReal>& rkPoint, const CVector3<nReal>& rkEye)
 {
     //     +-                                                 -+
     // M = | Dot(N,E-P)*I - E*N^T    -(Dot(N,E-P)*I - E*N^T)*E |
@@ -1187,7 +1187,7 @@ void CMatrix4<Real>::MakePerspectiveProjection (const CVector3<Real>& rkNormal,
     // where E is the eye point, P is a point on the plane, and N is a
     // unit-length plane normal.
 
-    Real fNdEmP = rkNormal.Dot(rkEye-rkPoint);
+    nReal fNdEmP = rkNormal.Dot(rkEye-rkPoint);
 
     m_afEntry[ 0] = fNdEmP - rkEye[0]*rkNormal[0];
     m_afEntry[ 1] = -rkEye[0]*rkNormal[1];
@@ -1210,9 +1210,9 @@ void CMatrix4<Real>::MakePerspectiveProjection (const CVector3<Real>& rkNormal,
     m_afEntry[15] = rkNormal.Dot(rkEye);
 }
 //----------------------------------------------------------------------------
-template <class Real>
-void CMatrix4<Real>::MakeReflection (const CVector3<Real>& rkNormal,
-    const CVector3<Real>& rkPoint)
+template <class nReal>
+void CMatrix4<nReal>::MakeReflection (const CVector3<nReal>& rkNormal,
+    const CVector3<nReal>& rkPoint)
 {
     //     +-                         -+
     // M = | I-2*N*N^T    2*Dot(N,P)*N |
@@ -1221,37 +1221,37 @@ void CMatrix4<Real>::MakeReflection (const CVector3<Real>& rkNormal,
     //
     // where P is a point on the plane and N is a unit-length plane normal.
 
-    Real fTwoNdP = ((Real)2.0)*(rkNormal.Dot(rkPoint));
+    nReal fTwoNdP = ((nReal)2.0)*(rkNormal.Dot(rkPoint));
 
-    m_afEntry[ 0] = (Real)1.0 - ((Real)2.0)*rkNormal[0]*rkNormal[0];
-    m_afEntry[ 1] = -((Real)2.0)*rkNormal[0]*rkNormal[1];
-    m_afEntry[ 2] = -((Real)2.0)*rkNormal[0]*rkNormal[2];
+    m_afEntry[ 0] = (nReal)1.0 - ((nReal)2.0)*rkNormal[0]*rkNormal[0];
+    m_afEntry[ 1] = -((nReal)2.0)*rkNormal[0]*rkNormal[1];
+    m_afEntry[ 2] = -((nReal)2.0)*rkNormal[0]*rkNormal[2];
     m_afEntry[ 3] = fTwoNdP*rkNormal[0];
-    m_afEntry[ 4] = -((Real)2.0)*rkNormal[1]*rkNormal[0];
-    m_afEntry[ 5] = (Real)1.0 - ((Real)2.0)*rkNormal[1]*rkNormal[1];
-    m_afEntry[ 6] = -((Real)2.0)*rkNormal[1]*rkNormal[2];
+    m_afEntry[ 4] = -((nReal)2.0)*rkNormal[1]*rkNormal[0];
+    m_afEntry[ 5] = (nReal)1.0 - ((nReal)2.0)*rkNormal[1]*rkNormal[1];
+    m_afEntry[ 6] = -((nReal)2.0)*rkNormal[1]*rkNormal[2];
     m_afEntry[ 7] = fTwoNdP*rkNormal[1];
-    m_afEntry[ 8] = -((Real)2.0)*rkNormal[2]*rkNormal[0];
-    m_afEntry[ 9] = -((Real)2.0)*rkNormal[2]*rkNormal[1];
-    m_afEntry[10] = (Real)1.0 - ((Real)2.0)*rkNormal[2]*rkNormal[2];
+    m_afEntry[ 8] = -((nReal)2.0)*rkNormal[2]*rkNormal[0];
+    m_afEntry[ 9] = -((nReal)2.0)*rkNormal[2]*rkNormal[1];
+    m_afEntry[10] = (nReal)1.0 - ((nReal)2.0)*rkNormal[2]*rkNormal[2];
     m_afEntry[11] = fTwoNdP*rkNormal[2];
-    m_afEntry[12] = (Real)0.0;
-    m_afEntry[13] = (Real)0.0;
-    m_afEntry[14] = (Real)0.0;
-    m_afEntry[15] = (Real)1.0;
+    m_afEntry[12] = (nReal)0.0;
+    m_afEntry[13] = (nReal)0.0;
+    m_afEntry[14] = (nReal)0.0;
+    m_afEntry[15] = (nReal)1.0;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CMatrix4<Real> operator* (Real fScalar, const CMatrix4<Real>& rkM)
+template <class nReal>
+inline CMatrix4<nReal> operator* (nReal fScalar, const CMatrix4<nReal>& rkM)
 {
     return rkM*fScalar;
 }
 //----------------------------------------------------------------------------
-template <class Real>
-inline CVector4<Real> operator* (const CVector4<Real>& rkV,
-    const CMatrix4<Real>& rkM)
+template <class nReal>
+inline CVector4<nReal> operator* (const CVector4<nReal>& rkV,
+    const CMatrix4<nReal>& rkM)
 {
-    return CVector4<Real>(
+    return CVector4<nReal>(
         rkV[0]*rkM[0][0]+rkV[1]*rkM[1][0]+rkV[2]*rkM[2][0]+rkV[3]*rkM[3][0],
         rkV[0]*rkM[0][1]+rkV[1]*rkM[1][1]+rkV[2]*rkM[2][1]+rkV[3]*rkM[3][1],
         rkV[0]*rkM[0][2]+rkV[1]*rkM[1][2]+rkV[2]*rkM[2][2]+rkV[3]*rkM[3][2],
@@ -1259,7 +1259,7 @@ inline CVector4<Real> operator* (const CVector4<Real>& rkV,
 }
 
 
-typedef CMatrix4<real> Matrix4f;
+typedef CMatrix4<nReal> Matrix4f;
 
 
 }

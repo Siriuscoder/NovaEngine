@@ -223,10 +223,10 @@ public:
 
 	void MakeRenderWindowTarget(void);
 
-	void SetPerspectiveProjection(nova::real fovy, nova::real aspect, nova::real zNear, nova::real zFar);
+	void SetPerspectiveProjection(nova::nReal fovy, nova::nReal aspect, nova::nReal zNear, nova::nReal zFar);
 
-	void SetOrthoProjection(nova::real left, nova::real right,
-		nova::real bottom, nova::real top, nova::real znear, nova::real zfar);
+	void SetOrthoProjection(nova::nReal left, nova::nReal right,
+		nova::nReal bottom, nova::nReal top, nova::nReal znear, nova::nReal zfar);
 
 	void SetProjection(nova::Matrix4f & matrix);
 

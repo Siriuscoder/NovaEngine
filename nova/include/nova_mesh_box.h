@@ -35,22 +35,22 @@ class CMeshBox;
 #pragma pack(push, 1)
 typedef struct TVertex4d
 {
-	nova::real x;
-	nova::real y;
-	nova::real z;
+	nova::nReal x;
+	nova::nReal y;
+	nova::nReal z;
 } *PVertex3d;
 
 struct TTexCoord2d
 {
-	nova::real s;
-	nova::real t;
+	nova::nReal s;
+	nova::nReal t;
 };
 
 struct TNormal3d
 {
-	nova::real x;
-	nova::real y;
-	nova::real z;
+	nova::nReal x;
+	nova::nReal y;
+	nova::nReal z;
 };
 
 struct TTriIndex

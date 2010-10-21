@@ -367,9 +367,9 @@ typedef nova::ulong ulong_ptr, *pulong_ptr;
 
 // Float/Double precision
 #if NOVA_PRECISION == NOVA_FLOAT_PRECISION
-typedef float real;
+typedef float nReal;
 #elif NOVA_PRECISION == NOVA_DOUBLE_PRECISION
-typedef double real;
+typedef double nReal;
 #else
 #	error You mast choose correct precision...
 #endif
