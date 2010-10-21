@@ -56,28 +56,22 @@ public:
 		CHardwarePixelBuffer::TargetType type = CHardwarePixelBuffer::USE_TEXTURE_2D,
 		CTextureSurfaceList::MipMapTagertType mip = CTextureSurfaceList::DO_NOT_USE_MIPMAPS,
 		CTexture::TWrap wrapS = CTexture::CLAMP_TO_EDGE, CTexture::TWrap wrapT = CTexture::CLAMP_TO_EDGE,
-		CTexture::TEnv env = CTexture::EV_MODULATE, CTexture::TMagFilters magf = CTexture::FL_MAG_LINEAR,
-		CTexture::TMinFilters minf = CTexture::FL_LINEAR, CResource::TAttach state = CResource::NV_ATTACHED);
+		CTexture::TEnv env = CTexture::EV_MODULATE, CResource::TAttach state = CResource::NV_ATTACHED);
 
 	virtual CTexturePtr CreateNewTexturesCube(const nstring & name, const nstring & group, const TImageList & list,
 		CTextureSurfaceList::MipMapTagertType mip = CTextureSurfaceList::DO_NOT_USE_MIPMAPS,
 		CTexture::TEnv env = CTexture::EV_REPLACE,
-		CTexture::TMagFilters magf = CTexture::FL_MAG_LINEAR,
-		CTexture::TMinFilters minf = CTexture::FL_LINEAR,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
 	virtual CTexturePtr CreateNewTextureAsync(const nstring & name, const nstring & group, const CImagePtr & image,
 		CHardwarePixelBuffer::TargetType type = CHardwarePixelBuffer::USE_TEXTURE_2D,
 		CTextureSurfaceList::MipMapTagertType mip = CTextureSurfaceList::DO_NOT_USE_MIPMAPS,
 		CTexture::TWrap wrapS = CTexture::CLAMP_TO_EDGE, CTexture::TWrap wrapT = CTexture::CLAMP_TO_EDGE,
-		CTexture::TEnv env = CTexture::EV_MODULATE, CTexture::TMagFilters magf = CTexture::FL_MAG_LINEAR,
-		CTexture::TMinFilters minf = CTexture::FL_LINEAR, CResource::TAttach state = CResource::NV_ATTACHED);
+		CTexture::TEnv env = CTexture::EV_MODULATE, CResource::TAttach state = CResource::NV_ATTACHED);
 
 	virtual CTexturePtr CreateNewTexturesCubeAsync(const nstring & name, const nstring & group, const TImageList & list,
 		CTextureSurfaceList::MipMapTagertType mip = CTextureSurfaceList::DO_NOT_USE_MIPMAPS,
 		CTexture::TEnv env = CTexture::EV_REPLACE,
-		CTexture::TMagFilters magf = CTexture::FL_MAG_LINEAR,
-		CTexture::TMinFilters minf = CTexture::FL_LINEAR,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
 	virtual void UnloadAllManagerResources();

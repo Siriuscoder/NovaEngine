@@ -56,7 +56,7 @@
 				EnableFunctionLevelLinking="true"
 				FloatingPointModel="2"
 				TreatWChar_tAsBuiltInType="false"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough="nova_stable_precompiled_headers.h"
 				PrecompiledHeaderFile=".\Debug\$(TargetName).pch"
 				WarningLevel="3"
@@ -514,11 +514,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\nova_mesh_box.cpp"
+					RelativePath=".\src\nova_content_loader.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\nova_mesh_loader.cpp"
+					RelativePath=".\src\nova_mesh_box.cpp"
 					>
 				</File>
 			</Filter>
@@ -888,11 +888,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\nova_mesh_box.h"
+					RelativePath=".\include\nova_content_loader.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\nova_mesh_loader.h"
+					RelativePath=".\include\nova_mesh_box.h"
 					>
 				</File>
 			</Filter>

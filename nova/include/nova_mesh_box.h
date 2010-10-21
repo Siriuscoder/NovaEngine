@@ -58,6 +58,7 @@ struct TTriIndex
 	int a;
 	int b;
 	int c;
+
 };
 
 struct TTriangleInfo

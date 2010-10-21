@@ -58,8 +58,6 @@ CTexturePtr CTextureManager::CreateNewTexture
 	CTexture::TWrap wrapS,
 	CTexture::TWrap wrapT,
 	CTexture::TEnv env,
-	CTexture::TMagFilters magf,
-	CTexture::TMinFilters minf,
 	CResource::TAttach state
 )
 {
@@ -73,8 +71,6 @@ CTexturePtr CTextureManager::CreateNewTexture
 	texp->SetEnvType(env);
 	texp->SetWrapS(wrapS);
 	texp->SetWrapT(wrapT);
-	texp->SetMagFilters(magf);
-	texp->SetMinFilters(minf);
 
 	// Выделяем место в видео памяти под текстуру...
 	TImageList templ;
@@ -97,8 +93,6 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 	const TImageList & list,
 	CTextureSurfaceList::MipMapTagertType mip,
 	CTexture::TEnv env,
-	CTexture::TMagFilters magf,
-	CTexture::TMinFilters minf,
 	CResource::TAttach state)
 {
 	CTexturePtr texp = CResourceManager::AddNewResource(name, group, state);
@@ -111,8 +105,6 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 	texp->SetEnvType(env);
 	texp->SetWrapS(CTexture::CLAMP);
 	texp->SetWrapT(CTexture::CLAMP);
-	texp->SetMagFilters(magf);
-	texp->SetMinFilters(minf);
 
 	// Выделяем место в видео памяти под текстуру...
 
@@ -139,8 +131,6 @@ CTexturePtr CTextureManager::CreateNewTextureAsync
 	CTexture::TWrap wrapS,
 	CTexture::TWrap wrapT,
 	CTexture::TEnv env,
-	CTexture::TMagFilters magf,
-	CTexture::TMinFilters minf,
 	CResource::TAttach state
 )
 {
@@ -154,9 +144,6 @@ CTexturePtr CTextureManager::CreateNewTextureAsync
 	texp->SetEnvType(env);
 	texp->SetWrapS(wrapS);
 	texp->SetWrapT(wrapT);
-	texp->SetMagFilters(magf);
-	texp->SetMinFilters(minf);
-
 	TImageList templ;
 	templ.push_back(image);
 	texp->SetImageList(templ);
@@ -178,8 +165,6 @@ CTexturePtr CTextureManager::CreateNewTexturesCubeAsync
 	const TImageList & list,
 	CTextureSurfaceList::MipMapTagertType mip,
 	CTexture::TEnv env,
-	CTexture::TMagFilters magf,
-	CTexture::TMinFilters minf,
 	CResource::TAttach state
 )
 {
@@ -193,8 +178,6 @@ CTexturePtr CTextureManager::CreateNewTexturesCubeAsync
 	texp->SetEnvType(env);
 	texp->SetWrapS(CTexture::CLAMP);
 	texp->SetWrapT(CTexture::CLAMP);
-	texp->SetMagFilters(magf);
-	texp->SetMinFilters(minf);
 	texp->SetImageList(list);
 	texp->PrepareResource();
 	mResourceBuildQueue.AddToQueue(texp.GetPtr());

@@ -691,13 +691,11 @@ CTexturePtr C3DSLoader::ReadMap(const C3DSChunk &chunk)
 	if(	mOwerThread )
 		texture = CTextureManager::GetSingelton().CreateNewTextureAsync(tex_name, tex_name,
 			image, CHardwarePixelBuffer::USE_TEXTURE_2D, CTextureManager::GetSingelton().GetDefaultAutoMipmap(),
-			CTexture::CLAMP_TO_EDGE, CTexture::CLAMP_TO_EDGE, CTexture::EV_MODULATE,
-			CTexture::FL_MAG_LINEAR, mip ? CTexture::FL_LINEAR_MIPMAP_LINEAR : CTexture::FL_LINEAR);
+			CTexture::CLAMP_TO_EDGE, CTexture::CLAMP_TO_EDGE, CTexture::EV_MODULATE);
 	else
 		texture = CTextureManager::GetSingelton().CreateNewTexture(tex_name, tex_name,
 			image, CHardwarePixelBuffer::USE_TEXTURE_2D, CTextureManager::GetSingelton().GetDefaultAutoMipmap(),
-			CTexture::CLAMP_TO_EDGE, CTexture::CLAMP_TO_EDGE, CTexture::EV_MODULATE,
-			CTexture::FL_MAG_LINEAR, mip ? CTexture::FL_LINEAR_MIPMAP_LINEAR : CTexture::FL_LINEAR);
+			CTexture::CLAMP_TO_EDGE, CTexture::CLAMP_TO_EDGE, CTexture::EV_MODULATE);
 
 	CImageManager::GetSingelton().UnloadResourceFromHash(image_name);
 

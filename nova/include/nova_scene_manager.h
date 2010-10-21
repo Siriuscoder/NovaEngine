@@ -25,7 +25,7 @@
 #include "nova_static_object.h"
 #include "nova_movable_object.h"
 #include "nova_mesh_box.h"
-#include "nova_mesh_loader.h"
+#include "nova_content_loader.h"
 #include "nova_tree.h"
 #include "nova_bounding_box.h"
 #include "nova_resource_manager.h"

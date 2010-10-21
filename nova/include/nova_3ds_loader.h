@@ -21,7 +21,7 @@
  ***************************************************************************/
 #pragma once
 
-#include "nova_mesh_loader.h"
+#include "nova_content_loader.h"
 
 namespace nova
 {
@@ -51,7 +51,7 @@ public:
 	nova::uint GetEnd(void) const;
 };
 
-class NOVA_EXPORT C3DSLoader : public CMeshLoader
+class NOVA_EXPORT C3DSLoader : public CSceneContentLoaderBase
 {
 private:
 
