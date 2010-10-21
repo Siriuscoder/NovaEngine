@@ -42,7 +42,7 @@ namespace engine
 #ifdef uint64_t
 const uint64_t maxmemstack = 0x800000000;
 #else
-const nova::ulonglong maxmemstack = 0x800000000;
+const nova::nUInt64 maxmemstack = 0x800000000;
 #endif
 
 

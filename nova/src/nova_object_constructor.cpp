@@ -73,7 +73,7 @@ void CObjectConstructor::operator delete[](void *p, const std::nothrow_t & n)
 	freemems<nova::byte>(static_cast<nova::byte*>(p));
 }
 
-nova::ulonglong CObjectConstructor::GetMaxBlockSize(void)
+nova::nUInt64 CObjectConstructor::GetMaxBlockSize(void)
 {
 	return std::numeric_limits<size_t>::max();
 }

@@ -324,7 +324,7 @@ typedef int TSubmatmn[2];
 // refman documentation for these typedefs, as they're system-dependent.
 #if defined(_MSC_VER)
 // It's VC++, so we'll use Microsoft's 64-bit integer types
-typedef unsigned __int64 ulonglong;
+typedef unsigned __int64 nUInt64;
 typedef __int64 longlong;
 
 typedef unsigned __int16 word; // (16 bit word)
@@ -345,7 +345,7 @@ typedef nova::ulong ulong_ptr, *pulong_ptr;
 // doesn't support this, please provide a patch to extend this ifdef, or
 // define NO_LONG_LONGS.
 
-typedef uint64_t ulonglong;
+typedef uint64_t nUInt64;
 typedef int64_t longlong;
 
 typedef uint16_t word; // (16 bit word)

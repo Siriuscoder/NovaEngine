@@ -68,7 +68,7 @@ public:
 /// Не генерирует исключительных ситуаций
 	void operator delete[](void *p, const std::nothrow_t & n);
 /// \brief Максимальный размер блока памяти
-	nova::ulonglong GetMaxBlockSize(void);
+	nova::nUInt64 GetMaxBlockSize(void);
 };
 
 
