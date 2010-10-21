@@ -60,19 +60,19 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 	mNormals.resize(mVertexes.size());
 
 	expl.resize(mVertexes.size());
-	for(nova::uint i = 0; i < mInfo.size(); ++i)
+	for(nova::nUInt32 i = 0; i < mInfo.size(); ++i)
 	{
 		expl[mIndexes[i].a].push_back(i);
 		expl[mIndexes[i].b].push_back(i);
 		expl[mIndexes[i].c].push_back(i);
 	}
 
-    for (nova::uint i = 0; i < mVertexes.size(); ++i)
+    for (nova::nUInt32 i = 0; i < mVertexes.size(); ++i)
     {
 		memset(&normal, 0, sizeof(TNormal3d));
-		nova::uint t = expl[i].size();
+		nova::nUInt32 t = expl[i].size();
 
-        for (nova::uint k = 0; k < t; ++k)
+        for (nova::nUInt32 k = 0; k < t; ++k)
         {
 			normal.x += mInfo[expl[i][k]].normal.x;
 			normal.y += mInfo[expl[i][k]].normal.y;
@@ -88,11 +88,11 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 		mNormals.push_back(normal);
     }
 
-	for(nova::uint i = 0; i < expl.size(); ++i)
+	for(nova::nUInt32 i = 0; i < expl.size(); ++i)
 		expl[i].clear();
 	expl.clear();
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CMeshBoxListener * lis =
 			dynamic_cast<CMeshBoxListener *>(GetListener(i));
@@ -116,7 +116,7 @@ void CMeshBox::QSortFaces(TIndexes &index, TFacesInfo &faces)
 	tmp.resize(index.size());
 	std::copy(index.begin(), index.end(), tmp.begin());
 // переставляем элементы в массиве индексов
-	for(nova::uint i = 0; i < faces.size(); i++)
+	for(nova::nUInt32 i = 0; i < faces.size(); i++)
 	{
 		index[i] = tmp[faces[i].tri_id];
 		faces[i].tri_id = i;
@@ -132,12 +132,12 @@ void CMeshBox::SortFaceIndexByMaterials(void)
 	QSortFaces(mIndexes, mInfo);
 }
 
-nova::uint CMeshBox::GetVertexesLen(void)
+nova::nUInt32 CMeshBox::GetVertexesLen(void)
 {
 	return mVertexes.size();
 }
 
-nova::uint CMeshBox::GetTrianglesLen(void)
+nova::nUInt32 CMeshBox::GetTrianglesLen(void)
 {
 	return mIndexes.size();
 }
@@ -185,7 +185,7 @@ CBoundingBox CMeshBox::GenerateBoundingBox(void)
 	testbox.CalcSides(minpoint, maxpoint);
 
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CMeshBoxListener * lis =
 			dynamic_cast<CMeshBoxListener *>(GetListener(i));
@@ -357,14 +357,14 @@ bool CMeshBox::CheckValidLength()
 
 int CMeshBox::GetMaterialIDByName(nstring & name)
 {
-	for(nova::uint i = 0; i < mMatNames.size(); ++i)
+	for(nova::nUInt32 i = 0; i < mMatNames.size(); ++i)
 		if(mMatNames[i] == name)
 			return i;
 
 	return -1;
 }
 
-nstring CMeshBox::GetMeterialNameByID(nova::uint id)
+nstring CMeshBox::GetMeterialNameByID(nova::nUInt32 id)
 {
 	if(id < mMatNames.size())
 		return mMatNames[id];
@@ -388,7 +388,7 @@ int CMeshBox::AddNewSubMaterial(nstring & resource_name)
 	return -1;
 }
 
-int CMeshBox::GetMaterialID(nova::uint face)
+int CMeshBox::GetMaterialID(nova::nUInt32 face)
 {
 	if(face >= mSubMats.size())
 		return -1;
@@ -396,7 +396,7 @@ int CMeshBox::GetMaterialID(nova::uint face)
 	return mSubMats[face];
 }
 
-void CMeshBox::SetMaterialID(nova::uint face, int id)
+void CMeshBox::SetMaterialID(nova::nUInt32 face, int id)
 {
 	if(face >= mSubMats.size())
 		return;
@@ -436,7 +436,7 @@ void * CMeshBox::GetIndexes(void)
 	return NULL;
 }
 
-TTriangleInfo CMeshBox::GetFaceInfo(nova::uint face)
+TTriangleInfo CMeshBox::GetFaceInfo(nova::nUInt32 face)
 {
 	if(face >= mInfo.size())
 		return TTriangleInfo();
@@ -536,9 +536,9 @@ CMeshBoxPtr CMeshManager::CreateMesh(nstring & name, nstring & group,
 	if(normals.GetBufferSize() > 0)
 		mesh->FillNornalBuffer(normals);
 
-	for(nova::uint i = 0; i < sub_mats.size(); ++i)
+	for(nova::nUInt32 i = 0; i < sub_mats.size(); ++i)
 		mesh->AddNewSubMaterial(sub_mats[i]);
-	for(nova::uint i = 0; i < mat_indexes.size(); ++i)
+	for(nova::nUInt32 i = 0; i < mat_indexes.size(); ++i)
 		mesh->SetMaterialID(mat_indexes[i].tri_id, mat_indexes[i].mat_id);
 
 	mesh->SetPosition(trans_vec);
@@ -572,9 +572,9 @@ CMeshBoxPtr CMeshManager::CreateMeshAsync(nstring & name, nstring & group,
 	if(normals.GetBufferSize() > 0)
 		mesh->FillNornalBuffer(normals);
 
-	for(nova::uint i = 0; i < sub_mats.size(); ++i)
+	for(nova::nUInt32 i = 0; i < sub_mats.size(); ++i)
 		mesh->AddNewSubMaterial(sub_mats[i]);
-	for(nova::uint i = 0; i < mat_indexes.size(); ++i)
+	for(nova::nUInt32 i = 0; i < mat_indexes.size(); ++i)
 		mesh->SetMaterialID(mat_indexes[i].tri_id, mat_indexes[i].mat_id);
 
 	mesh->SetPosition(trans_vec);

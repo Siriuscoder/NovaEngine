@@ -90,7 +90,7 @@ public:
 		nstring nReflectionMapMask;
 /* Acubic opt */
 		int nAutoreflMapAntiAlias;
-		nova::uint nAutoreflMapFlags;
+		nova::nUInt32 nAutoreflMapFlags;
         int nAutoreflMapSize;
         int nAutoreflMapFrameStep;
 

@@ -24,14 +24,14 @@
 
 namespace nova {
 
-CConfig::CConfig(uint flag) : CBase((char *)"CConfig")
+CConfig::CConfig(nUInt32 flag) : CBase((char *)"CConfig")
 {
 	filename.clear();
 	FreeTree();
 	parseflag = flag;
 }
 
-CConfig::CConfig(nstring & _filename, uint flag) : CBase((char *)"CConfig")
+CConfig::CConfig(nstring & _filename, nUInt32 flag) : CBase((char *)"CConfig")
 {
 	filename.clear();
 	FreeTree();
@@ -60,7 +60,7 @@ int CConfig::MakeTree()
 		char strinlocale[LINE_LENGTH];
 		size_t insize, outsize = LINE_LENGTH;
 
-		cchar *inb = strinutf_8;
+		nCChar *inb = strinutf_8;
 		char *outb = strinlocale;
 		*/
 		{

@@ -125,7 +125,7 @@ private:
 
 	GPUVendor mVendor;
 
-	nova::uint mMaxDrawBuffers;
+	nova::nUInt32 mMaxDrawBuffers;
 
 public:
 
@@ -140,9 +140,9 @@ public:
 
 	GPUVendor GetGPUVendor();
 
-	void SetMaxBuffers(nova::uint num);
+	void SetMaxBuffers(nova::nUInt32 num);
 
-	nova::uint GetMaxBuffers();
+	nova::nUInt32 GetMaxBuffers();
 };
 
 class NOVA_EXPORT CRenderSystem : public CSingelton<CRenderSystem>, public CBase
@@ -172,7 +172,7 @@ private:
 
 	nstring mPrivateConfigFile;
 
-	nova::uint mGlobalFSAA;
+	nova::nUInt32 mGlobalFSAA;
 
 	int mTargetsBuilded;
 

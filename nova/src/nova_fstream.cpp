@@ -75,7 +75,7 @@ size_t CFileStream::Read (const CMemoryBuffer & dest)
 	if(mWrite)
 		throw NOVA_EXP("CFileStream::Read - file opened for writing!", BAD_OPERATION);
 
-	return fread(dest.GetBegin(), sizeof(nova::byte), dest.GetBufferSize(), mIOFile);
+	return fread(dest.GetBegin(), sizeof(nova::nByte), dest.GetBufferSize(), mIOFile);
 }
 
 size_t CFileStream::Read (void *dest, const size_t count)
@@ -85,7 +85,7 @@ size_t CFileStream::Read (void *dest, const size_t count)
 	if(mWrite)
 		throw NOVA_EXP("CFileStream::Read - file opened for writing!", BAD_OPERATION);
 
-	return fread(dest, sizeof(nova::byte), count, mIOFile);
+	return fread(dest, sizeof(nova::nByte), count, mIOFile);
 }
 
 size_t CFileStream::Write (const CMemoryBuffer & source)
@@ -95,7 +95,7 @@ size_t CFileStream::Write (const CMemoryBuffer & source)
 	if(!mWrite)
 		throw NOVA_EXP("CFileStream::Write - file opened for reading!", BAD_OPERATION);
 
-	return fwrite(source.GetBegin(), sizeof(nova::byte), source.GetBufferSize(), mIOFile);
+	return fwrite(source.GetBegin(), sizeof(nova::nByte), source.GetBufferSize(), mIOFile);
 }
 
 size_t CFileStream::Write (void *source, const size_t count)
@@ -105,7 +105,7 @@ size_t CFileStream::Write (void *source, const size_t count)
 	if(!mWrite)
 		throw NOVA_EXP("CFileStream::Write - file opened for reading!", BAD_OPERATION);
 
-	return fwrite(source, sizeof(nova::byte), count, mIOFile);
+	return fwrite(source, sizeof(nova::nByte), count, mIOFile);
 }
 
 size_t CFileStream::ReadLine (nstring & str, const size_t count)

@@ -26,7 +26,7 @@ class NOVA_EXPORT CDataStream : public CBase
 {
 protected:
 
-	nova::uint mSize;
+	nova::nUInt32 mSize;
 	bool mIsOpened;
 	bool mWrite;
 

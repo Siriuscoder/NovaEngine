@@ -43,12 +43,12 @@ friend CImageManager;
 private:
 	CMemoryBuffer data;
 
-	nova::uint mWidth;
-	nova::uint mHeight;
+	nova::nUInt32 mWidth;
+	nova::nUInt32 mHeight;
 	CImageFormats::NovaPixelFormats mPixelFormat;
-	nova::uint mDepth;
-	nova::uint mStride;
-	nova::uint mhStride;
+	nova::nUInt32 mDepth;
+	nova::nUInt32 mStride;
+	nova::nUInt32 mhStride;
 	nstring mFilename;
 	CImageCodec * mCodec;
 
@@ -62,9 +62,9 @@ protected:
 		CImageFormats::NovaPixelFormats format);
 
 	void SetParam(const CMemoryBuffer & bits,
-		nova::uint width,
-		nova::uint height,
-		nova::uint depth,
+		nova::nUInt32 width,
+		nova::nUInt32 height,
+		nova::nUInt32 depth,
 		CImageFormats::NovaPixelFormats format);
 
 	void SetParam(const CMemoryBuffer & buffer,
@@ -73,12 +73,12 @@ protected:
 
 public:
 
-	inline nova::uint GetWidth() const
+	inline nova::nUInt32 GetWidth() const
 	{
 		return mWidth;
 	}
 
-	inline nova::uint GetHeight() const
+	inline nova::nUInt32 GetHeight() const
 	{
 		return mHeight;
 	}
@@ -88,7 +88,7 @@ public:
 		return mPixelFormat;
 	}
 
-	inline nova::uint GetDepth() const
+	inline nova::nUInt32 GetDepth() const
 	{
 		return mDepth;
 	}
@@ -98,12 +98,12 @@ public:
 		mPixelFormat = p;
 	}
 
-	inline nova::uint GetStride() const 
+	inline nova::nUInt32 GetStride() const 
 	{
 		return mStride;
 	}
 
-	inline nova::uint GetVertStride() const
+	inline nova::nUInt32 GetVertStride() const
 	{
 		return mhStride;
 	}
@@ -132,7 +132,7 @@ public:
 
 	void Noise(nReal tolerance);
 
-	void Pixelization(nova::uint pix_size);
+	void Pixelization(nova::nUInt32 pix_size);
 
 	void Sharpering(nReal factor, int iter);
 #endif
@@ -177,9 +177,9 @@ public:
 
 	virtual CImagePtr CreateNewImage(const nstring & name, const nstring & group,
 		const CMemoryBuffer & bits,
-		nova::uint width,
-		nova::uint height,
-		nova::uint depth,
+		nova::nUInt32 width,
+		nova::nUInt32 height,
+		nova::nUInt32 depth,
 		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
@@ -196,9 +196,9 @@ public:
 
 	virtual CImagePtr CreateNewImageAsync(const nstring & name, const nstring & group,
 		const CMemoryBuffer & bits,
-		nova::uint width,
-		nova::uint height,
-		nova::uint depth,
+		nova::nUInt32 width,
+		nova::nUInt32 height,
+		nova::nUInt32 depth,
 		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 

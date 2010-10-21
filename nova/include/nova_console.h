@@ -36,19 +36,19 @@ namespace nova {
 struct nv_console_pram
 {
 /// \brief Высота строчек (в пикселях)
-	uint newline;
+	nUInt32 newline;
 /// \brief Расстоние левой границы консоли (в пикселях)
-	uint leftclear;
+	nUInt32 leftclear;
 /// \brief Дистанция между буквами (в пикселях)
-	uint distance;
+	nUInt32 distance;
 /// \brief Расстояние вехней границы консоли (в пикселях)
-	uint topclear;
+	nUInt32 topclear;
 /// \brief Расстояние нижней границы консоли (в пикселях)
-	uint bottomclear;
+	nUInt32 bottomclear;
 /// \brief Расстояние правой границы консоли (в пикселях)
-	uint rightclear;
+	nUInt32 rightclear;
 /// \brief Ширина табуляции (в пикселях)
-	uint tab;
+	nUInt32 tab;
 };
 
 /// \struct nv_console_init
@@ -64,13 +64,13 @@ struct nv_console_init
 /// Это связанно с тем, что для Win GDI Font нужен так называемый графический контекст окна
 /// который из SDL не вытащить. поэтому для этого типа шрифтов можно использовать только подложку Win.
 /// Для TrueType Font можно использовать любую.
-	uint fonttype;
+	nUInt32 fonttype;
 /// \brief Размер экрана
 ///
 /// x ширина. у высота.
 	POINT screen;
 /// \brief Максимальное количество символов в консоли.
-	uint maxchar;
+	nUInt32 maxchar;
 /// \brief Структура строчных параметров.
 ///
 /// \see nv_console_pram
@@ -158,7 +158,7 @@ class NOVA_EXPORT CConsole : public CConsoleBase, public CParser
 {
 	friend class CConsoleManager;
 private:
-	uint		position;
+	nUInt32		position;
 	nReal		dy;
 	int			ypos;
 	CFontPtr	font;
@@ -263,7 +263,7 @@ public:
 /// \brief Удаляет выбранную консоль
 ///
 /// \param n Номер консоли (0,1,2..)
-	void DeleteConsole(uint n);
+	void DeleteConsole(nUInt32 n);
 
 /// \brief Удалить все консоли.
 	void Clear();
@@ -273,7 +273,7 @@ public:
 /// \brief Установить активную консоль
 ///
 /// \param n Номер консоли (0,1,2..) 
-	void SetActive(uint n);
+	void SetActive(nUInt32 n);
 
 /// \brief Взять номер активной консоли.
 	const int GetActive();
@@ -290,7 +290,7 @@ public:
 ///	*(manager[2]) << "Test";
 /// \endcode
 /// \param ind номер консоли которую мы хотим получить.
-	inline CConsole * operator[](uint ind)
+	inline CConsole * operator[](nUInt32 ind)
 	{
 		if(ind < consoles.size())
 			return consoles[ind];

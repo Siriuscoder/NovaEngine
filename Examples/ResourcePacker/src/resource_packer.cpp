@@ -44,7 +44,7 @@ public:
 		mPack.OpenPackage(package, true);
 
 
-		for(nova::uint i = 0; i < files.size(); i++)
+		for(nova::nUInt32 i = 0; i < files.size(); i++)
 		{
 			nova::CFileStream packingfile;
 			packingfile.Open(files[i], false, false);
@@ -75,7 +75,7 @@ public:
 		stl<nstring>::vector vf = mPack.GetFileList();
 		cout << endl << "File list unpacked successfully, begin saving files -> " << endl;
 
-		for(nova::uint i = 0; i < vf.size(); i++)
+		for(nova::nUInt32 i = 0; i < vf.size(); i++)
 		{
 			cout << "Unpacking file: " << vf[i] << endl;
 			nova::CMemoryBuffer buf = mPack.GetFile(vf[i]);
@@ -158,7 +158,7 @@ ENTRY_POINT
 			if(args.size() >= 3)
 			{
 				cout << "Trying to create pack " << args[1].c_str() << "..." << endl;
-				for(nova::uint i = 2; i < args.size(); i++)
+				for(nova::nUInt32 i = 2; i < args.size(); i++)
 					files.push_back(args[i]);
 					
 				packer.Launch(args[1], files, false);

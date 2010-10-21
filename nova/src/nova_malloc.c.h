@@ -54,8 +54,8 @@
        and status information, and additional cross-check nUInt16
        if FOOTERS is defined.
 
-  Minimum allocated size: 4-byte ptrs:  16 bytes    (including overhead)
-                          8-byte ptrs:  32 bytes    (including overhead)
+  Minimum allocated size: 4-nByte ptrs:  16 bytes    (including overhead)
+                          8-nByte ptrs:  32 bytes    (including overhead)
 
        Even a request for zero bytes (i.e., malloc(0)) returns a
        pointer to something of the minimum allocatable size.
@@ -233,7 +233,7 @@ MALLOC_ALIGNMENT         default: (size_t)8
   power of two and at least 8, even on machines for which smaller
   alignments would suffice. It may be defined as larger than this
   though. Note however that code and data structures are optimized for
-  the case of 8-byte alignment.
+  the case of 8-nByte alignment.
 
 MSPACES                  default: 0 (false)
   If true, compile in support for independent allocation spaces.
@@ -528,7 +528,7 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 #ifndef HAVE_MORECORE
 #define HAVE_MORECORE 0
 #define HAVE_MMAP 1
-/* OSX allocators provide 16 byte alignment */
+/* OSX allocators provide 16 nByte alignment */
 #ifndef MALLOC_ALIGNMENT
 #define MALLOC_ALIGNMENT ((size_t)16U)
 #endif
@@ -836,7 +836,7 @@ void* dlrealloc(void*, size_t);
 
   The alignment argument should be a power of two. If the argument is
   not a power of two, the nearest greater power is used.
-  8-byte alignment is guaranteed by normal malloc calls, so don't
+  8-nByte alignment is guaranteed by normal malloc calls, so don't
   bother calling memalign with an argument of 8 or less.
 
   Overreliance on memalign is a sure way to fragment space.
@@ -1435,7 +1435,7 @@ unsigned char _BitScanReverse(unsigned long *index, unsigned long mask);
 
 /* ------------------- size_t and alignment properties -------------------- */
 
-/* The byte and bit size of a size_t */
+/* The nByte and bit size of a size_t */
 #define SIZE_T_SIZE         (sizeof(size_t))
 #define SIZE_T_BITSIZE      (sizeof(size_t) << 3)
 

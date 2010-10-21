@@ -109,7 +109,7 @@ void CCamera::Validate(void)
 	if(change)
 		CFrustum::ExtractFrustum();
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CCameraListener * lis = 
 			dynamic_cast<CCameraListener *>(GetListener(i));
@@ -120,7 +120,7 @@ void CCamera::Validate(void)
 
 void CCamera::InValidateModel(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CCameraListener * lis = 
 			dynamic_cast<CCameraListener *>(GetListener(i));
@@ -134,7 +134,7 @@ void CCamera::InValidateModel(void)
 
 void CCamera::InValidateProjection(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CCameraListener * lis = 
 			dynamic_cast<CCameraListener *>(GetListener(i));

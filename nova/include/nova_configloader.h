@@ -56,23 +56,23 @@ class NOVA_EXPORT CConfig : public CBase, public CParser
 private:
 	CTree<nstring> conftree;
 	nstring filename;
-	uint parseflag;
+	nUInt32 parseflag;
 
 public:
 /// \brief Флаг использования рекурсивного парсера
-	static const uint RECURSIVE = 0x12;
+	static const nUInt32 RECURSIVE = 0x12;
 /// \brief Флаг тспользования обычного парсера.
-	static const uint COMMON = 0x13;
+	static const nUInt32 COMMON = 0x13;
 /// \brief Конструктор
 ///
 /// \param flag флаг парсера
-	CConfig(uint flag = COMMON);
+	CConfig(nUInt32 flag = COMMON);
 
 /// \brief Конструктор 
 ///
 /// \param _filename Путь к файлу конфига.
 /// \param flag флаг парсера
-	CConfig(nstring & _filename, uint flag = COMMON);
+	CConfig(nstring & _filename, nUInt32 flag = COMMON);
 /// \brief Деструктор
 	~CConfig();
 

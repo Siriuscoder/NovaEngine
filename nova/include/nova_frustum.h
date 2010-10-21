@@ -63,7 +63,7 @@ public:
 
 	void ClearFrustumPlanes();
 
-	CPlanef GetPlane(nova::uint plane);
+	CPlanef GetPlane(nova::nUInt32 plane);
 	
 	Matrix4f & GetProjectionMatrix() const;
 

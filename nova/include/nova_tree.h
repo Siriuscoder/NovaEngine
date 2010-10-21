@@ -90,7 +90,7 @@ public:
 /// \brief Оператор []
 ///
 /// Тоже самое что и GetNode))
-	inline CTreeNode<usertype> * operator[](uint id)
+	inline CTreeNode<usertype> * operator[](nUInt32 id)
 	{
 		return GetNode(id);
 	}

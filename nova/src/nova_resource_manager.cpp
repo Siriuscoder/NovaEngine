@@ -40,7 +40,7 @@ CResource::CResource(CResourceManager * rm, const nstring & name, const nstring 
 
 void CResource::FreeResource()
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
 			dynamic_cast<CResourceListener *>(GetListener(i));
@@ -52,7 +52,7 @@ void CResource::FreeResource()
 
 void CResource::PreAddingAction()
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
 			dynamic_cast<CResourceListener *>(GetListener(i));
@@ -62,7 +62,7 @@ void CResource::PreAddingAction()
 
 void CResource::PostAddingAction()
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
 			dynamic_cast<CResourceListener *>(GetListener(i));
@@ -72,7 +72,7 @@ void CResource::PostAddingAction()
 
 void CResource::PreUnloadingAction()
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
 			dynamic_cast<CResourceListener *>(GetListener(i));
@@ -82,7 +82,7 @@ void CResource::PreUnloadingAction()
 
 void CResource::PrepareResource(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
 			dynamic_cast<CResourceListener *>(GetListener(i));
@@ -92,7 +92,7 @@ void CResource::PrepareResource(void)
 
 void CResource::BuildResource(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
 			dynamic_cast<CResourceListener *>(GetListener(i));
@@ -191,7 +191,7 @@ void CResourceManager::UnloadResourceGroupFromHash(const nstring & group)
 
 	RESOURCE_MUTEX_SECTION_UNLOCK;
 
-	for(nova::uint i = 0; i < res.size(); ++i)
+	for(nova::nUInt32 i = 0; i < res.size(); ++i)
 		if(!res[i].IsNull())
 			res[i]->PreUnloadingAction();
 	res.clear();
@@ -229,7 +229,7 @@ void CResourceManager::UnloadAllResources()
 
 	RESOURCE_MUTEX_SECTION_UNLOCK;
 
-	for(nova::uint i = 0; i < snapshot.size(); ++i)
+	for(nova::nUInt32 i = 0; i < snapshot.size(); ++i)
 		if(!snapshot[i].IsNull())
 		{
 			snapshot[i]->PreUnloadingAction();
@@ -258,7 +258,7 @@ void CResourceManager::FreeAllResource()
 	RESOURCE_MUTEX_SECTION_UNLOCK;
 
 	//UnloadAllResources();
-	for(nova::uint i = 0; i < snapshot.size(); ++i)
+	for(nova::nUInt32 i = 0; i < snapshot.size(); ++i)
 		if(!snapshot[i].IsNull())
 		{
 			snapshot[i]->PreUnloadingAction();
@@ -291,14 +291,14 @@ void CResourceManager::UnloadResourceFromHash(CResourceManager * rm)
 
 	RESOURCE_MUTEX_SECTION_UNLOCK;
 
-	for(nova::uint i = 0; i < res.size(); ++i)
+	for(nova::nUInt32 i = 0; i < res.size(); ++i)
 		if(!res[i].IsNull())
 			res[i]->PreUnloadingAction();
 
 	res.clear();
 }
 
-void CResourceManager::UnloadResourceFromHash(nova::uint handle)
+void CResourceManager::UnloadResourceFromHash(nova::nUInt32 handle)
 {
 	stl<nstring, CResourcePtr>::map::iterator it;
 	stl<CResourcePtr>::vector res;
@@ -321,7 +321,7 @@ void CResourceManager::UnloadResourceFromHash(nova::uint handle)
 
 	RESOURCE_MUTEX_SECTION_UNLOCK;
 
-	for(nova::uint i = 0; i < res.size(); ++i)
+	for(nova::nUInt32 i = 0; i < res.size(); ++i)
 		if(!res[i].IsNull())
 			res[i]->PreUnloadingAction();
 
@@ -384,7 +384,7 @@ CResourcePtr CResourceManager::GetResourceFromHash(const nstring & name)
 	return res;
 }
 
-CResourcePtr CResourceManager::GetResourceFromHash(nova::uint handle)
+CResourcePtr CResourceManager::GetResourceFromHash(nova::nUInt32 handle)
 {
 	stl<nstring, CResourcePtr>::map::iterator it;
 	CResourcePtr res;
@@ -441,7 +441,7 @@ int CAsyncLockingQueue::ProccesQueue(void)
 	int res = 0;
 	pthread_mutex_lock(&mLockMutex);
 
-	for(nova::uint i = 0; i < mQueue.size(); ++i)
+	for(nova::nUInt32 i = 0; i < mQueue.size(); ++i)
 	{
 		mQueue[i]->BuildResource();
 		res++;

@@ -132,12 +132,12 @@ void C3DSChunk::SetID(nova::nUInt16 id)
 	mID = id;
 }
 
-void C3DSChunk::SetStart(nova::uint start)
+void C3DSChunk::SetStart(nova::nUInt32 start)
 {
 	mStart = start;
 }
 
-void C3DSChunk::SetEnd(nova::uint end)
+void C3DSChunk::SetEnd(nova::nUInt32 end)
 {
 	mEnd = end;
 }
@@ -147,12 +147,12 @@ nova::nUInt16 C3DSChunk::GetID(void) const
 	return mID;
 }
 
-nova::uint C3DSChunk::GetStart(void) const
+nova::nUInt32 C3DSChunk::GetStart(void) const
 {
 	return mStart;
 }
 
-nova::uint C3DSChunk::GetEnd(void) const
+nova::nUInt32 C3DSChunk::GetEnd(void) const
 {
 	return mEnd;
 }
@@ -175,9 +175,9 @@ C3DSChunk C3DSLoader::ReadChunk()
 	C3DSChunk chunk;
 
 	chunk.SetID(mp3dsStream->ReadMemOfType<nova::nUInt16>());
-	nova::uint len = mp3dsStream->ReadMemOfType<nova::uint>();
+	nova::nUInt32 len = mp3dsStream->ReadMemOfType<nova::nUInt32>();
 	chunk.SetStart(mp3dsStream->Tell());
-	chunk.SetEnd(chunk.GetStart() + (len-sizeof(nova::nUInt16)-sizeof(nova::uint)));
+	chunk.SetEnd(chunk.GetStart() + (len-sizeof(nova::nUInt16)-sizeof(nova::nUInt32)));
 
 	return chunk;
 }
@@ -236,9 +236,9 @@ CColorRGB C3DSLoader::ReadColor(const C3DSChunk &chunk)
 		break;
     case T3DS_COLOR_24:
 		{
-			color.R() = mp3dsStream->ReadMemOfType<nova::byte>() / 255.0f;
-			color.G() = mp3dsStream->ReadMemOfType<nova::byte>() / 255.0f;
-			color.B() = mp3dsStream->ReadMemOfType<nova::byte>() / 255.0f;
+			color.R() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.G() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.B() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
 		}
         break;
     case T3DS_LIN_COLOR_F:
@@ -247,9 +247,9 @@ CColorRGB C3DSLoader::ReadColor(const C3DSChunk &chunk)
 			color.B() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
         break;
     case T3DS_LIN_COLOR_24:
-			color.R() = mp3dsStream->ReadMemOfType<nova::byte>() / 255.0f;
-			color.G() = mp3dsStream->ReadMemOfType<nova::byte>() / 255.0f;
-			color.B() = mp3dsStream->ReadMemOfType<nova::byte>() / 255.0f;
+			color.R() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.G() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.B() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
         break;
 	default:
 		throw NOVA_EXP("C3DSLoader::ReadColor - unknown color block type...", BAD_OPERATION);
@@ -418,7 +418,7 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
 /*
         case TRI_SMOOTH_GROUP:
             for (i=0; i<mesh.GetTriangleCount(); i++)
-                mesh.GetTri(i).smoothingGroups = (ulong) ReadInt();
+                mesh.GetTri(i).smoothingGroups = (nUInt32) ReadInt();
 
             break;
         }

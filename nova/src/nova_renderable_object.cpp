@@ -72,7 +72,7 @@ void CRenderableObject::Frustumable(bool flag)
 
 void CRenderableObject::PreRenderAction()
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CRenderableObjectListener * lis = 
 			dynamic_cast<CRenderableObjectListener *>(GetListener(i));
@@ -82,7 +82,7 @@ void CRenderableObject::PreRenderAction()
 
 void CRenderableObject::PostRenderAction()
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CRenderableObjectListener * lis = 
 			dynamic_cast<CRenderableObjectListener *>(GetListener(i));

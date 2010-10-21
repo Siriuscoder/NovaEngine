@@ -99,7 +99,7 @@ void CGLSupport::InitGLExtentions()
 	CLog::GetInstance().PrintMessage("OpenGL Extensions\n", CLog::LG_NO_TIME);
 
 	temp.clear();
-	nova::uint i, j;
+	nova::nUInt32 i, j;
 	for(i = 0, j = 0; i < mExtensionsList.size(); ++i, ++j)
 	{
 		temp += mExtensionsList[i] + " ";

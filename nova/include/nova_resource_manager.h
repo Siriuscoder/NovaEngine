@@ -61,13 +61,13 @@ public:
 
 protected:
 
-	nova::uint mResourceHandle;
+	nova::nUInt32 mResourceHandle;
 	nstring mName;
 	nstring mGroup;
 	TAttach mState;
 
 	CResourceManager * mCreator;
-	nova::uint mSize;
+	nova::nUInt32 mSize;
 	bool isReady;
 
 public:
@@ -91,12 +91,12 @@ public:
 		return mGroup;
 	}
 
-	inline nova::uint GetSize() const
+	inline nova::nUInt32 GetSize() const
 	{
 		return mSize;
 	}
 
-	inline nova::uint GetHandle() const
+	inline nova::nUInt32 GetHandle() const
 	{
 		return mResourceHandle;
 	}
@@ -176,7 +176,7 @@ public:
 
 	void UnloadResourceGroupFromHash(const nstring & group);
 
-	void UnloadResourceFromHash(nova::uint handle);
+	void UnloadResourceFromHash(nova::nUInt32 handle);
 
 	static size_t GetHashSize();
 
@@ -188,7 +188,7 @@ public:
 
 	CResourcePtr GetResourceFromHash(const nstring & name);
 
-	CResourcePtr GetResourceFromHash(nova::uint handle);
+	CResourcePtr GetResourceFromHash(nova::nUInt32 handle);
 
 	CResourcePtr AddNewResource(const nstring & name,
 		const nstring & group, CResource::TAttach state);

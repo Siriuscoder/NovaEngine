@@ -70,13 +70,13 @@ CSockEnviroment * CSockEnviroment::instance = NULL;
 
 CIPAddress::CIPAddress() : host(INADDR_ANY), port(0), CBase((char*)"CIPAddress") {}
 
-CIPAddress::CIPAddress(uint h, nUInt16 p) : host(h), port(p), CBase((char*)"CIPAddress") {}
+CIPAddress::CIPAddress(nUInt32 h, nUInt16 p) : host(h), port(p), CBase((char*)"CIPAddress") {}
 
-CIPAddress::CIPAddress(byte h1, byte h2, byte h3, byte h4, nUInt16 p) :
-	host(uint(h1) + (uint(h2)<<8) + (uint(h3)<<16) + (uint(h4)<<24)), 
+CIPAddress::CIPAddress(nByte h1, nByte h2, nByte h3, nByte h4, nUInt16 p) :
+	host(nUInt32(h1) + (nUInt32(h2)<<8) + (nUInt32(h3)<<16) + (nUInt32(h4)<<24)), 
 		port(p), CBase((char*)"IPAddress") {}
 
-CIPAddress::CIPAddress(cchar * ip, nUInt16 p) : 
+CIPAddress::CIPAddress(nCChar * ip, nUInt16 p) : 
 	host(CIPAddress::ParseString(ip)), port(p), CBase((char*)"CIPAddress") {}
 
 bool CIPAddress::operator==(const CIPAddress & ip)
@@ -84,7 +84,7 @@ bool CIPAddress::operator==(const CIPAddress & ip)
 	return (this->host == ip.host) && (this->port == ip.port);
 }
 
-uint CIPAddress::ParseString(cchar * ip) throw(nova::NovaExp)
+nUInt32 CIPAddress::ParseString(nCChar * ip) throw(nova::NovaExp)
 {
     if(!ip)
         throw NovaExp("IPAddress::ParseString(): pointer passed as argument is 0", MEM_ERROR);
@@ -97,12 +97,12 @@ uint CIPAddress::ParseString(cchar * ip) throw(nova::NovaExp)
         };
     };
     
-    uint h = 0;//parsed host
-    cchar *curp = ip;
-    for(uint t = 0; t < 4; ++t)
+    nUInt32 h = 0;//parsed host
+    nCChar *curp = ip;
+    for(nUInt32 t = 0; t < 4; ++t)
 	{
-        uint dights[3];
-        uint numDgts;
+        nUInt32 dights[3];
+        nUInt32 numDgts;
         for(numDgts = 0; numDgts < 3; ++numDgts)
 		{
             if( *curp == '.' || *curp == 0 )
@@ -115,7 +115,7 @@ uint CIPAddress::ParseString(cchar * ip) throw(nova::NovaExp)
 			{
                 if(*curp < '0' || *curp > '9')
                     sf::ThrowInvalidIP();
-                dights[numDgts] = uint(*curp) - uint('0');
+                dights[numDgts] = nUInt32(*curp) - nUInt32('0');
             }
             ++curp;
         }
@@ -125,11 +125,11 @@ uint CIPAddress::ParseString(cchar * ip) throw(nova::NovaExp)
         else if(t == 3 && *curp != 0)
             sf::ThrowInvalidIP();
         
-        uint xxx = 0;
-        for(uint i = 0; i < numDgts; ++i)
+        nUInt32 xxx = 0;
+        for(nUInt32 i = 0; i < numDgts; ++i)
 		{
-            uint ord = 1;
-            for(uint j = 1; j < numDgts-i; ++j)
+            nUInt32 ord = 1;
+            for(nUInt32 j = 1; j < numDgts-i; ++j)
                ord *= 10;
             xxx+=dights[i]*ord;
         }
@@ -179,7 +179,7 @@ void CSockEnviroment::DeinitSockets()
 #endif
 }
 
-CIPAddress CSockEnviroment::GetHostByName(cchar * hostName, nUInt16 port)
+CIPAddress CSockEnviroment::GetHostByName(nCChar * hostName, nUInt16 port)
 {
     if(!hostName)
         throw NovaExp("Sockets::GetHostByName(): pointer passed as argument is 0", MEM_ERROR);
@@ -301,8 +301,8 @@ void CTCPSocket::Open(const CIPAddress & ip, bool disableNaggle) throw(nova::Nov
     if(this->socket == M_INVALID_SOCKET)
         throw NovaExp("CTCPSocket::Open(): Couldn't create socket", BAD_OPERATION);
 
-	ulong dwRet = 1;
-	setsockopt(this->socket, SOL_SOCKET, SO_KEEPALIVE, reinterpret_cast<char *>(&dwRet),sizeof(ulong));
+	nUInt32 dwRet = 1;
+	setsockopt(this->socket, SOL_SOCKET, SO_KEEPALIVE, reinterpret_cast<char *>(&dwRet),sizeof(nUInt32));
     
     //Connecting to remote host
     
@@ -326,7 +326,7 @@ void CTCPSocket::Open(const CIPAddress & ip, bool disableNaggle) throw(nova::Nov
     this->isReady = false;
 }
 
-uint CTCPSocket::Send(const byte * data, uint size) 
+nUInt32 CTCPSocket::Send(const nByte * data, nUInt32 size) 
 {
     if(!this->IsValid())
         throw NovaExp("CTCPSocket::Send(): socket is not opened", BAD_OPERATION);
@@ -361,10 +361,10 @@ uint CTCPSocket::Send(const byte * data, uint size)
     if(res < 0)
         sent = res;
     
-    return uint(sent);
+    return nUInt32(sent);
 }
 
-uint CTCPSocket::Recv(byte * buf, uint maxSize) 
+nUInt32 CTCPSocket::Recv(nByte * buf, nUInt32 maxSize) 
 {
     if(!this->IsValid())
         throw NovaExp("CTCPSocket::Send(): socket is not opened", BAD_OPERATION);
@@ -394,7 +394,7 @@ uint CTCPSocket::Recv(byte * buf, uint maxSize)
         
 
     this->isReady = false;
-	return uint(len);
+	return nUInt32(len);
 }
 
 void CTCPSocket::DisableNaggle() throw(nova::NovaExp)
@@ -473,7 +473,7 @@ void CTCPServerSocket::Open(nUInt16 port, bool disableNaggle)
     }
 #elif defined(WIN32)
     {
-        ulong mode = 1;
+        nUInt32 mode = 1;
         ioctlsocket(this->socket, FIONBIO, (u_long *)&mode);
     }
 #elif defined(__OS2__)
@@ -507,7 +507,7 @@ CTCPSocket CTCPServerSocket::Accept()
 #ifdef  WIN_BUILD
     {
         /* passing a zero value, socket mode set to block on */
-        ulong mode = 0;
+        nUInt32 mode = 0;
         ioctlsocket(sock.socket, FIONBIO, (u_long *)&mode);
     }
 #elif defined(O_NONBLOCK)
@@ -574,7 +574,7 @@ void CUDPSocket::Open()
 	this->Open(0);
 }
 
-uint CUDPSocket::Send(const byte * buf, nUInt16 size, CIPAddress destinationIP) 
+nUInt32 CUDPSocket::Send(const nByte * buf, nUInt16 size, CIPAddress destinationIP) 
 {
     sockaddr_in sockAddr;
     int sockLen = sizeof(sockAddr);
@@ -587,7 +587,7 @@ uint CUDPSocket::Send(const byte * buf, nUInt16 size, CIPAddress destinationIP)
     return res;
 }
 
-uint CUDPSocket::Recv(byte * buf, nUInt16 maxSize, CIPAddress & out_SenderIP)
+nUInt32 CUDPSocket::Recv(nByte * buf, nUInt16 maxSize, CIPAddress & out_SenderIP)
 {
     sockaddr_in sockAddr;
     int sockLen = sizeof(sockAddr);

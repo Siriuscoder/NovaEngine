@@ -29,7 +29,7 @@ namespace nova
 
 void CSceneNode::ValidateNode(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneNodeListener * lis = 
 			dynamic_cast<CSceneNodeListener *>(GetListener(i));
@@ -47,7 +47,7 @@ bool CSceneNode::IsValidated(void)
 
 void CSceneNode::InValidateNode(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneNodeListener * lis = 
 			dynamic_cast<CSceneNodeListener *>(GetListener(i));
@@ -60,7 +60,7 @@ void CSceneNode::InValidateNode(void)
 
 void CSceneNode::ReleaseNode(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneNodeListener * lis = 
 			dynamic_cast<CSceneNodeListener *>(GetListener(i));
@@ -82,7 +82,7 @@ void CSceneNode::SetBoundingBox(const CBoundingBox &box)
 
 void CSceneNode::PrepareNode(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneNodeListener * lis = 
 			dynamic_cast<CSceneNodeListener *>(GetListener(i));
@@ -120,7 +120,7 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	if(!camera || !view)
 		return;
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneManagerListener * lis = 
 			dynamic_cast<CSceneManagerListener *>(GetListener(i));
@@ -135,7 +135,7 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	RenderSceneImpl();
 	RenderСompoundObjects();
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneManagerListener * lis = 
 			dynamic_cast<CSceneManagerListener *>(GetListener(i));
@@ -175,7 +175,7 @@ nstring CSceneManager::GetSceneSlavesGroup(void)
 
 void CSceneManager::PrepareScene(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneManagerListener * lis = 
 			dynamic_cast<CSceneManagerListener *>(GetListener(i));
@@ -192,7 +192,7 @@ int CSceneManager::PrepareRenderQueue(void)
 
 void CSceneManager::PrepareSceneFrame(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneManagerListener * lis = 
 			dynamic_cast<CSceneManagerListener *>(GetListener(i));
@@ -204,7 +204,7 @@ void CSceneManager::PrepareSceneFrame(void)
 
 void CSceneManager::BuildScene(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneManagerListener * lis = 
 			dynamic_cast<CSceneManagerListener *>(GetListener(i));
@@ -216,7 +216,7 @@ void CSceneManager::BuildScene(void)
 
 void CSceneManager::DestroyScene(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneManagerListener * lis = 
 			dynamic_cast<CSceneManagerListener *>(GetListener(i));

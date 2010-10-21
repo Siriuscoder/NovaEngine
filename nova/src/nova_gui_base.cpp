@@ -58,7 +58,7 @@ nReal PanelBase::GetHeight()
 	return height;
 }
 
-void PanelBase::SetTransparency(nova::uint tr)
+void PanelBase::SetTransparency(nova::nUInt32 tr)
 {
 	if(tr <= 255)
 		transparency = tr;

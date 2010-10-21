@@ -31,8 +31,8 @@ class NOVA_EXPORT CTextureManager : public CSingelton<CTextureManager>, public C
 {
 protected:
 
-	nova::uint blending_type_sfactor;
-	nova::uint blending_type_dfactor;
+	nova::nUInt32 blending_type_sfactor;
+	nova::nUInt32 blending_type_dfactor;
 	int mAnisotropyLevel;
 	CTextureSurfaceList::MipMapTagertType mAutoMipmap;
 
@@ -50,7 +50,7 @@ public:
 
 	CTexturePtr GetThisTexture(const nstring & name);
 
-	CTexturePtr GetThisTexture(nova::uint handle);
+	CTexturePtr GetThisTexture(nova::nUInt32 handle);
 
 	virtual CTexturePtr CreateNewTexture(const nstring & name, const nstring & group, const CImagePtr & image,
 		CHardwarePixelBuffer::TargetType type = CHardwarePixelBuffer::USE_TEXTURE_2D,

@@ -95,7 +95,7 @@ void CMemoryBuffer::CopyTo(const CMemoryBuffer & buffer, size_t size, size_t off
 	if((off + size) > mbSize)
 		NOVA_EXP("CMemoryBuffer::CopyTo: offset param too large", MEM_ERROR);
 
-	nova::byte *p = (nova::byte *)mBegin + off;
+	nova::nByte *p = (nova::nByte *)mBegin + off;
 	memcpy(buffer.GetBegin(), p, size);
 }
 

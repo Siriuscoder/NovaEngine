@@ -47,8 +47,8 @@ bool CRenderWindow::IsClosed()
 }
 
 void CRenderWindow::GetMetrics(int & xpos, int & ypos,
-		nova::uint & height, nova::uint & width,
-		nova::uint & color_depth, nova::uint & color_bits)
+		nova::nUInt32 & height, nova::nUInt32 & width,
+		nova::nUInt32 & color_depth, nova::nUInt32 & color_bits)
 {
 	xpos = mXPosition;
 	ypos = mYPosition;

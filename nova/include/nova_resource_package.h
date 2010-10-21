@@ -38,20 +38,20 @@ private:
 	bool mIsOpened;
 	bool mWritePackage;
 	bool mSelfOpen;
-	nova::uint mVersion;
+	nova::nUInt32 mVersion;
 
 #pragma pack(push, 1)
 	typedef struct PackageHeader
 	{
-		nova::uint m_signature;
-		nova::uint version;
-		nova::uint v_signature;
+		nova::nUInt32 m_signature;
+		nova::nUInt32 version;
+		nova::nUInt32 v_signature;
 		char package_name[50];
 	} TPackageHeader;
 
 	typedef struct FileHeader
 	{
-		nova::uint number;
+		nova::nUInt32 number;
 		size_t size;
 		size_t pos;
 		char file_name[150];

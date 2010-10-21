@@ -31,8 +31,8 @@ class NOVA_EXPORT CCPUTimer : public CBase
 {
 private:
 
-	nova::ulong mZeroClock;
-	nova::ulong mUpdateClock;
+	nova::nUInt32 mZeroClock;
+	nova::nUInt32 mUpdateClock;
 
 #ifdef WIN_BUILD
     LARGE_INTEGER mFrequency;                    // ticks per second
@@ -48,13 +48,13 @@ public:
 
 	void Reset();
 
-	nova::ulong GetMilliseconds();
+	nova::nUInt32 GetMilliseconds();
 
-	nova::ulong GetMicroseconds();
+	nova::nUInt32 GetMicroseconds();
 
-	nova::ulong GetKernelMilliseconds();
+	nova::nUInt32 GetKernelMilliseconds();
 
-	nova::ulong GetKernelMicroseconds();
+	nova::nUInt32 GetKernelMicroseconds();
 };
 
 }

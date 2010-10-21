@@ -203,7 +203,7 @@ void CMaterial::ApplyMaterial(void)
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mAmbientColor);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mSpecularColor);
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CMaterialListener * lis =
 			dynamic_cast<CMaterialListener *>(GetListener(i));

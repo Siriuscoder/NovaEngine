@@ -26,9 +26,9 @@ namespace nova {
 int er_code = 0;
 
 /*
-uint inline Stepin(uint i, int c)
+nUInt32 inline Stepin(nUInt32 i, int c)
 {
-	uint p = i;
+	nUInt32 p = i;
 	if(c == 0)
 		return 1;
 
@@ -156,14 +156,14 @@ NovaExp::NovaExp(int _code) : CBase("NovaExp")
 	code = _code;
 }
 
-NovaExp::NovaExp(nova::cchar *mes, int _code) : CBase("NovaExp")
+NovaExp::NovaExp(nova::nCChar *mes, int _code) : CBase("NovaExp")
 {
 	e_mes.clear();
 	e_mes.append(mes);
 	code = _code;
 }
 
-NovaExp::NovaExp(nova::cchar file[], int line, cchar * mes, int _code) : CBase("NovaExp")
+NovaExp::NovaExp(nova::nCChar file[], int line, nCChar * mes, int _code) : CBase("NovaExp")
 {
 	e_mes.clear();
 	e_mes.append(mes);
@@ -184,7 +184,7 @@ nstring NovaExp::Message()
 	return e_mes;
 }
 
-cchar * NovaExp::what() const
+nCChar * NovaExp::what() const
 {
 	return e_mes.c_str();
 }

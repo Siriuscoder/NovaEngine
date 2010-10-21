@@ -133,11 +133,11 @@ public:
 
 	bool CheckValidLength();
 
-	nova::uint GetVertexesLen(void);
+	nova::nUInt32 GetVertexesLen(void);
 
-	nova::uint GetTrianglesLen(void);
+	nova::nUInt32 GetTrianglesLen(void);
 
-	nova::uint GetNormalsLen(void);
+	nova::nUInt32 GetNormalsLen(void);
 
 	size_t GetVertexesLenInBytes(void);
 
@@ -161,13 +161,13 @@ public:
 
 	virtual void PrepareResource(void);
 //-----------------------------------
-	int GetMaterialID(nova::uint face);
+	int GetMaterialID(nova::nUInt32 face);
 
-	void SetMaterialID(nova::uint face, int id);
+	void SetMaterialID(nova::nUInt32 face, int id);
 
 	int GetMaterialIDByName(nstring & name);
 
-	nstring GetMeterialNameByID(nova::uint id);
+	nstring GetMeterialNameByID(nova::nUInt32 id);
 
 	stl<nstring>::vector GetMaterials();
 
@@ -181,7 +181,7 @@ public:
 
 	void * GetIndexes(void);
 
-	TTriangleInfo GetFaceInfo(nova::uint face);
+	TTriangleInfo GetFaceInfo(nova::nUInt32 face);
 
 	void ToWorldCoord(void);
 

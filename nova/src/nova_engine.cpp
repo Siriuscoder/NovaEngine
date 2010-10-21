@@ -212,7 +212,7 @@ void CNovaEngine::UpdateStatistic()
 {
 	mFrameCount++;
 	nova::nReal ps = (nova::nReal)mFrameTimer.GetKernelMicroseconds() * 0.001f;
-	nova::ulong sec = mCPUTimer.GetMilliseconds();
+	nova::nUInt32 sec = mCPUTimer.GetMilliseconds();
 
 	mStats.best_frame_time = std::min(mStats.best_frame_time, ps);
 	mStats.worst_frame_time = std::max(mStats.worst_frame_time, ps);

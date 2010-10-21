@@ -82,7 +82,7 @@ void CHardwareTextureBuffer::UnbindBuffer()
 
 CMemoryBuffer CHardwareTextureBuffer::LockSource(size_t offset, size_t length, THardwareBufferLock opt)
 {
-	nova::byte *mapper = NULL;
+	nova::nByte *mapper = NULL;
 	CMemoryBuffer result;
 
 	if((offset + length) > mSize)
@@ -108,7 +108,7 @@ CMemoryBuffer CHardwareTextureBuffer::LockSource(size_t offset, size_t length, T
 		method = GL_READ_ONLY_ARB;
 
 	
-	if((mapper = static_cast<nova::byte *>(glMapBufferARB(mUsage, method))) != NULL)
+	if((mapper = static_cast<nova::nByte *>(glMapBufferARB(mUsage, method))) != NULL)
 	{
 		mapper += offset;
 		CMemoryBuffer res(mapper, length);

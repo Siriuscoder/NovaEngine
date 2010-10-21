@@ -23,7 +23,7 @@
 
 namespace nova {
 
-uint gClassGenerate = 0x0;
+nUInt32 gClassGenerate = 0x0;
 
 CBase::CBase(char * _name)
 {
@@ -51,14 +51,14 @@ void CBase::GetClassName(char *buff)
 		strcpy(buff, mObjectName);
 }
 
-uint CBase::GetClassSizeO(CBase * pobject)
+nUInt32 CBase::GetClassSizeO(CBase * pobject)
 {
 	if(pobject)
 		return sizeof(pobject);
 	else return 0;
 }
 
-uint CBase::GetClassSize()
+nUInt32 CBase::GetClassSize()
 {
 	return sizeof(this);
 }

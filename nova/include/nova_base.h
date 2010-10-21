@@ -70,7 +70,7 @@ protected:
 /// \brief Буффер флагов
 ///
 /// По вашему усморению!
-	byte		mFlags[20];
+	nByte		mFlags[20];
 
 public:
 /// \brief Конструктор
@@ -90,14 +90,14 @@ public:
 ///
 /// \attention Особо не увлекайтесь этим полем
 /// я не знаю точно работает ли оно или нет))
-	uint GetClassSize();
+	nUInt32 GetClassSize();
 
 /// \brief Берет размер объекта
 ///
 /// \param pobject указатель на объект
 /// \attention Особо не увлекайтесь этим полем
 /// я не знаю точно работает ли оно или нет))
-	uint GetClassSizeO(CBase * pobject);
+	nUInt32 GetClassSizeO(CBase * pobject);
 
 /*	virtual bool operator ==(CBASE & pobject){};
 	virtual CBASE operator +(CBASE & pobject){};

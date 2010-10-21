@@ -126,7 +126,7 @@ public:
 	~CEventConveyor();
 
 //	void PushEvent(nv_ev_msg * _event);
-//	uint GetConveyorSize();
+//	nUInt32 GetConveyorSize();
 
 //	int GetEvent(nv_ev_msg * _event);
 //	void ClearEvents();
@@ -147,7 +147,7 @@ public:
 #ifdef WIN_BUILD
 	static int Win32MainLoopFunction(CRenderWindow * window);
 
-	static LRESULT CALLBACK WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK WinProcFunction(HWND hwnd, nUInt32 msg, WPARAM wParam, LPARAM lParam);
 #endif
 
 	static int SDLMainLoopFunction(CRenderWindow * window);

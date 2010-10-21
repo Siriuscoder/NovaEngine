@@ -73,19 +73,19 @@ public:
 
 	static GLenum TextureTarget(TargetType type);
 
-	nova::uint GetWidth();
+	nova::nUInt32 GetWidth();
 
-	nova::uint GetHeight();
+	nova::nUInt32 GetHeight();
 
-	nova::uint GetDepth();
+	nova::nUInt32 GetDepth();
 
-	nova::uint GetLockWidth();
+	nova::nUInt32 GetLockWidth();
 
-	nova::uint GetLockHeight();
+	nova::nUInt32 GetLockHeight();
 
-	nova::uint GetLockDepth();
+	nova::nUInt32 GetLockDepth();
 
-	nova::uint GetLockActSize();
+	nova::nUInt32 GetLockActSize();
 
 	GLuint GetBufferId();
 
@@ -143,7 +143,7 @@ public:
 
 	~CTextureSurfaceList();
 
-	CHardwarePixelBufferPtr GetSurface(nova::uint level);
+	CHardwarePixelBufferPtr GetSurface(nova::nUInt32 level);
 
 	size_t GetMaxMipmaps(size_t width, size_t height, size_t depth);
 

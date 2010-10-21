@@ -164,7 +164,7 @@ void CWin32Workspace::CreateRenderWindow(TWindowInitialTarget & init)
 						WS_SYSMENU | WS_MINIMIZEBOX;
 	}
 
-	nova::uint width, height;
+	nova::nUInt32 width, height;
 	if(init.width == 0 || init.height == 0)
 	{
 		width = GetSystemMetrics(SM_CXSCREEN);

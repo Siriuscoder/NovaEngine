@@ -98,9 +98,9 @@ void CFreeFont::BuildResource(void)
 }
 
 void CFreeFont::SetFontParam(FT_Library library,
-		nova::uint height,
+		nova::nUInt32 height,
 		const nstring & ttffile,
-		nova::uint coord_grid)
+		nova::nUInt32 coord_grid)
 {
 	this->height = height;
 	this->ttffile = ttffile;
@@ -110,7 +110,7 @@ void CFreeFont::SetFontParam(FT_Library library,
 		throw NOVA_EXP("CFreeFont::CreateFont - FreeFont library object is bad", MEM_ERROR);
 	this->library = library;
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CFontListener * lis =
 			dynamic_cast<CFontListener *>(GetListener(i));
@@ -142,7 +142,7 @@ void CFreeFont::BuildFont()
 	FT_Done_Face(face);
 	isReady = true;
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CFontListener * lis =
 			dynamic_cast<CFontListener *>(GetListener(i));
@@ -185,11 +185,11 @@ void CFreeFont::MakeLetter(wchar_t code)
 	int bheight = NextP2(bitmap.rows);
 
 	// Выделим память для данных текстуры.
-	//byte * expanded_data = NULL;
-	//expanded_data = getmem<byte>(expanded_data, 2 * bwidth * bheight);
+	//nByte * expanded_data = NULL;
+	//expanded_data = getmem<nByte>(expanded_data, 2 * bwidth * bheight);
 	CMemoryBuffer mem;
 	mem.AllocBuffer(2 * bwidth * bheight);
-	byte * expanded_data = (nova::byte *)mem.GetBegin();
+	nByte * expanded_data = (nova::nByte *)mem.GetBegin();
 
 	// Поместим данные в расширенный растр.
 	// Отмечу, что использован двухканальный растр (Один для
@@ -378,7 +378,7 @@ CResourcePtr CFontManager::CreateInstance(const nstring & name,
 }
 
 CFontPtr CFontManager::CreateNewFont(const nstring & name, const nstring & group,
-	nova::uint height, const nstring & ttffile, nova::uint coord_grid,
+	nova::nUInt32 height, const nstring & ttffile, nova::nUInt32 coord_grid,
 	CResource::TAttach state)
 {
 	CFontPtr fontp = CResourceManager::AddNewResource(name, group, state);
@@ -397,7 +397,7 @@ CFontPtr CFontManager::CreateNewFont(const nstring & name, const nstring & group
 }
 
 CFontPtr CFontManager::CreateNewFontAsync(const nstring & name, const nstring & group,
-	nova::uint height, const nstring & ttffile, nova::uint coord_grid,
+	nova::nUInt32 height, const nstring & ttffile, nova::nUInt32 coord_grid,
 	CResource::TAttach state)
 {
 	CFontPtr fontp = CResourceManager::AddNewResource(name, group, state);

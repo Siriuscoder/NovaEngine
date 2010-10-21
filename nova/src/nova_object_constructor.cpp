@@ -24,53 +24,53 @@ namespace nova {
 void *CObjectConstructor::operator new(size_t size)
 {
 	//return winnie_allocator::Alloc(size);
-	nova::byte *pblock = NULL;
-	return getmem<nova::byte>(pblock, size);
+	nova::nByte *pblock = NULL;
+	return getmem<nova::nByte>(pblock, size);
 }
 
 void CObjectConstructor::operator delete(void *p)
 {
 	//winnie_allocator::Free(p);
-	freemem<nova::byte>(static_cast<nova::byte*>(p));
+	freemem<nova::nByte>(static_cast<nova::nByte*>(p));
 }
 
 void *CObjectConstructor::operator new[](size_t size)
 {
 	//return winnie_allocator::Alloc(size);
-	nova::byte *pblock = NULL;
-	return getmem<nova::byte>(pblock, size);
+	nova::nByte *pblock = NULL;
+	return getmem<nova::nByte>(pblock, size);
 }
 
 void CObjectConstructor::operator delete[](void *p)
 {
 	//winnie_allocator::Free(p);
-	freemems<nova::byte>(static_cast<nova::byte*>(p));
+	freemems<nova::nByte>(static_cast<nova::nByte*>(p));
 }
 
 void *CObjectConstructor::operator new(size_t size, const std::nothrow_t & n)
 {
 	//return winnie_allocator::Alloc(size);
-	nova::byte *pblock = NULL;
-	return getmem<nova::byte>(pblock, size);
+	nova::nByte *pblock = NULL;
+	return getmem<nova::nByte>(pblock, size);
 }
 
 void CObjectConstructor::operator delete(void *p, const std::nothrow_t & n)
 {
 	//winnie_allocator::Free(p);
-	freemem<nova::byte>(static_cast<nova::byte*>(p));
+	freemem<nova::nByte>(static_cast<nova::nByte*>(p));
 }
 
 void *CObjectConstructor::operator new[](size_t size, const std::nothrow_t & n)
 {
 	//return winnie_allocator::Alloc(size);
-	nova::byte *pblock = NULL;
-	return getmem<nova::byte>(pblock, size);
+	nova::nByte *pblock = NULL;
+	return getmem<nova::nByte>(pblock, size);
 }
 
 void CObjectConstructor::operator delete[](void *p, const std::nothrow_t & n)
 {
 	//winnie_allocator::Free(p);
-	freemems<nova::byte>(static_cast<nova::byte*>(p));
+	freemems<nova::nByte>(static_cast<nova::nByte*>(p));
 }
 
 nova::nUInt64 CObjectConstructor::GetMaxBlockSize(void)

@@ -27,17 +27,17 @@
 namespace nova
 {
 
-nova::uint CHardwarePixelBuffer::GetWidth()
+nova::nUInt32 CHardwarePixelBuffer::GetWidth()
 {
 	return mWidth;
 }
 
-nova::uint CHardwarePixelBuffer::GetHeight()
+nova::nUInt32 CHardwarePixelBuffer::GetHeight()
 {
 	return mHeight;
 }
 
-nova::uint CHardwarePixelBuffer::GetDepth()
+nova::nUInt32 CHardwarePixelBuffer::GetDepth()
 {
 	return mDepth;
 }
@@ -57,22 +57,22 @@ size_t CHardwarePixelBuffer::GetSlicePitch()
 	return mSlicePitch;
 }
 
-nova::uint CHardwarePixelBuffer::GetLockWidth()
+nova::nUInt32 CHardwarePixelBuffer::GetLockWidth()
 {
 	return mLockWidth;
 }
 
-nova::uint CHardwarePixelBuffer::GetLockHeight()
+nova::nUInt32 CHardwarePixelBuffer::GetLockHeight()
 {
 	return mLockHeight;
 }
 
-nova::uint CHardwarePixelBuffer::GetLockDepth()
+nova::nUInt32 CHardwarePixelBuffer::GetLockDepth()
 {
 	return mLockDepth;
 }
 
-nova::uint CHardwarePixelBuffer::GetLockActSize()
+nova::nUInt32 CHardwarePixelBuffer::GetLockActSize()
 {
 	return mLockActSize;
 }
@@ -248,11 +248,11 @@ CMemoryBuffer CHardwarePixelBuffer::LockSource(size_t offset, size_t length, THa
 	result.AllocBuffer(mLockActSize);
 	size_t line = mLockWidth * informat.GetInternalChannels();
 
-	nova::byte * source = (nova::byte *)data.GetBegin() + offset;
-	nova::byte * dest = (nova::byte *)result.GetBegin();
-	for(nova::uint i = 0; i < mLockDepth; ++i)
+	nova::nByte * source = (nova::nByte *)data.GetBegin() + offset;
+	nova::nByte * dest = (nova::nByte *)result.GetBegin();
+	for(nova::nUInt32 i = 0; i < mLockDepth; ++i)
 	{
-		for(nova::uint j = 0; j < mLockHeight; ++j)
+		for(nova::nUInt32 j = 0; j < mLockHeight; ++j)
 		{
 			memcpy(dest, source, line);
 			source += mRowPitch * informat.GetInternalChannels();
@@ -312,9 +312,9 @@ void CHardwarePixelBuffer::UnlockSource(CMemoryBuffer & buf)
 	size_t xoff, yoff, zoff;
 	SizeToWHD(&xoff, &yoff, &zoff, mLockStart);
 
-	nova::uint _width;
-	nova::uint _height;
-	nova::uint _depth;
+	nova::nUInt32 _width;
+	nova::nUInt32 _height;
+	nova::nUInt32 _depth;
 	SizeToWHD(&_width, &_height, &_depth, mLockStart + mLockSize);
 
 	_width -= (xoff-1);
@@ -556,7 +556,7 @@ CTextureSurfaceList::~CTextureSurfaceList()
 	glDeleteTextures(1, &mTargetId);
 }
 
-CHardwarePixelBufferPtr CTextureSurfaceList::GetSurface(nova::uint level)
+CHardwarePixelBufferPtr CTextureSurfaceList::GetSurface(nova::nUInt32 level)
 {
 	if(level >= mSurfaceList.size())
 		throw NOVA_EXP("CTextureSurfaceList::GetSurface - level out of range..", BAD_OPERATION);

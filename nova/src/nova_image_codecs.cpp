@@ -72,7 +72,7 @@ CImageCodec * CImageCodec::GetCodecForExtention(const nstring & filename)
 
 	for(; it != gCodecs.end(); ++it)
 	{
-		for(nova::uint i = 0; i < (*it).first.size(); ++i)
+		for(nova::nUInt32 i = 0; i < (*it).first.size(); ++i)
 		{
 			const char *file = CStringUtils::ToLowerCase(filename).c_str();
 			const char *ex = CStringUtils::ToLowerCase((*it).first[i]).c_str();
@@ -94,7 +94,7 @@ CImageCodec * CImageCodec::GetCodecForCompressor(ESaveFormats ext)
 
 	for(; it != gCodecs.end(); ++it)
 	{
-		for(nova::uint i = 0; i < (*it).second->mCompressorList.size(); ++i)
+		for(nova::nUInt32 i = 0; i < (*it).second->mCompressorList.size(); ++i)
 		{
 			if((*it).second->mCompressorList[i] == ext)
 				return (*it).second;

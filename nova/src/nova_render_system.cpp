@@ -56,12 +56,12 @@ GPUVendor CRenderCapabilities::GetGPUVendor()
 	return mVendor;
 }
 
-void CRenderCapabilities::SetMaxBuffers(nova::uint num)
+void CRenderCapabilities::SetMaxBuffers(nova::nUInt32 num)
 {
 	mMaxDrawBuffers = num;
 }
 
-nova::uint CRenderCapabilities::GetMaxBuffers()
+nova::nUInt32 CRenderCapabilities::GetMaxBuffers()
 {
 	return mMaxDrawBuffers;
 }

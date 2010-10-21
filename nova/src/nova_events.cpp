@@ -98,7 +98,7 @@ void CEventConveyor::PushEvent(nv_ev_msg * _event)
 		conv.push_back(_event);
 }
 
-uint CEventConveyor::GetConveyorSize()
+nUInt32 CEventConveyor::GetConveyorSize()
 {
 	return conv.size();
 }
@@ -258,7 +258,7 @@ int CrossEventHandler::Win32MainLoopFunction(CRenderWindow * window)
 	return DispMess;
 }
 
-LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, nUInt32 msg, WPARAM wParam, LPARAM lParam)
 {
 	nv_ev_msg message;
 	memset(&message, 0, sizeof(nv_ev_msg));
@@ -538,7 +538,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, UINT msg, WPARAM wParam, L
 			//char in[2] = "";
 			message.eventid = EV_CHAR;
 			//CCodeConvertion encode("cp1251", "utf-16");
-			//byte key = wParam;
+			//nByte key = wParam;
 			//in[0] = (char)wParam;
 			//encode.Convert(in, (char *)ecode, 2);
 			message.chCode.chCharCode = CNormalUnicode::Convert((char)wParam);

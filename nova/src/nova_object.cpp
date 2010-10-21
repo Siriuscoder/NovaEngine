@@ -189,7 +189,7 @@ void CWorldObject::ExtractLocalMatrix()
 		mOrientationChanged = false;
 	}
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CWorldObjectListener * lis = 
 			dynamic_cast<CWorldObjectListener *>(GetListener(i));
@@ -202,7 +202,7 @@ void CWorldObject::ExtractLocalMatrix()
 
 void CWorldObject::LocationChanged(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CWorldObjectListener * lis = 
 			dynamic_cast<CWorldObjectListener *>(GetListener(i));
@@ -215,7 +215,7 @@ void CWorldObject::LocationChanged(void)
 
 void CWorldObject::OrientationChanged(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CWorldObjectListener * lis = 
 			dynamic_cast<CWorldObjectListener *>(GetListener(i));
@@ -227,7 +227,7 @@ void CWorldObject::OrientationChanged(void)
 
 void CWorldObject::ScaleChanged(void)
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CWorldObjectListener * lis = 
 			dynamic_cast<CWorldObjectListener *>(GetListener(i));

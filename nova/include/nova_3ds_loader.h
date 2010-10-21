@@ -31,8 +31,8 @@ class NOVA_EXPORT C3DSChunk : public CObjectConstructor
 private:
 
 	nova::nUInt16 mID;
-	nova::uint mStart;
-	nova::uint mEnd;
+	nova::nUInt32 mStart;
+	nova::nUInt32 mEnd;
 
 public:
 
@@ -40,15 +40,15 @@ public:
 
 	void SetID(nova::nUInt16 id);
 
-	void SetStart(nova::uint start);
+	void SetStart(nova::nUInt32 start);
 
-	void SetEnd(nova::uint end);
+	void SetEnd(nova::nUInt32 end);
 
 	nova::nUInt16 GetID(void) const;
 
-	nova::uint GetStart(void) const;
+	nova::nUInt32 GetStart(void) const;
 
-	nova::uint GetEnd(void) const;
+	nova::nUInt32 GetEnd(void) const;
 };
 
 class NOVA_EXPORT C3DSLoader : public CSceneContentLoaderBase

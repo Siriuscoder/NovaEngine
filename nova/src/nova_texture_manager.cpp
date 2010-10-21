@@ -201,7 +201,7 @@ CTexturePtr CTextureManager::GetThisTexture(const nstring & name)
 	return GetResourceFromHash(name);
 }
 
-CTexturePtr CTextureManager::GetThisTexture(nova::uint handle)
+CTexturePtr CTextureManager::GetThisTexture(nova::nUInt32 handle)
 {
 	return GetResourceFromHash(handle);
 }

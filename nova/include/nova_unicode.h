@@ -57,9 +57,9 @@ namespace nova
 
 namespace unicode
 {
-    typedef uint   utf32_char; /* at least 32 bits */
+    typedef nUInt32   utf32_char; /* at least 32 bits */
     typedef nUInt16  utf16_char; /* at least 16 bits */
-    typedef byte   utf8_char;  /* typically 8 bits */
+    typedef nByte   utf8_char;  /* typically 8 bits */
     typedef size_t   size_type;
 
 	typedef std::basic_string< utf8_char, char_traits<utf8_char>, nova::CNovaAlloc<utf8_char> >  utf8_string;
@@ -109,11 +109,11 @@ namespace unicode
     utf16_string str_utf32_to_utf16(const utf32_string &_utf32, bool _strict = true);
 
     /*
-    * Convert local multi-byte string to wstring
+    * Convert local multi-nByte string to wstring
     */
     nova::nwstring local_to_wstring(const nova::nstring &_local);
     /*
-    * Convert wstring to local multi-byte string
+    * Convert wstring to local multi-nByte string
     */
 	nova::nstring wstring_to_local(const nova::nwstring &_wstr);
 

@@ -69,7 +69,7 @@ struct nv_en_initst
 ///	\brief Флаг консоли: 0 неиспользуем, > 0 используем
 ///
 /// \attention если мы ставим 0, то менеджер консолей создаваться не будет!!
-	byte console;
+	nByte console;
 /// \brief Флаг графической подложки
 ///
 /// 2 варианта:
@@ -85,7 +85,7 @@ struct nv_en_initst
 /// на Linux, Windows, Windows CE, BeOS, MacOS, Mac OS X, FreeBSD,
 /// NetBSD, OpenBSD, BSD/OS, Solaris, IRIX, and QNX. Во какой
 /// выбор! наслаждайтесь)
-	byte draw_sys;
+	nByte draw_sys;
 };
 
 enum StartInit
@@ -118,8 +118,8 @@ public:
 		nova::nReal best_frame_time;
 		nova::nReal worst_frame_time;
 		nova::nReal average_frame_time;
-		nova::uint rendered_triangles;
-		nova::uint rendered_batches;
+		nova::nUInt32 rendered_triangles;
+		nova::nUInt32 rendered_batches;
 
 		void PrintStats(void);
 
@@ -142,8 +142,8 @@ private:
 	bool	mRenderLoop;
 
 	TRenderStats mStats;
-	nova::ulong mLastSecond;
-	nova::ulong mLastTime;
+	nova::nUInt32 mLastSecond;
+	nova::nUInt32 mLastTime;
 	size_t 	mFrameCount;
 	CCPUTimer mCPUTimer;
 	CCPUTimer mFrameTimer;

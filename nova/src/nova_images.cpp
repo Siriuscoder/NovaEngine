@@ -50,7 +50,7 @@ void CImage::SetParam(const nstring & file,
 	mPixelFormat = format;
 	mFilename = file;
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CImageListener * lis =
 			dynamic_cast<CImageListener *>(GetListener(i));
@@ -59,9 +59,9 @@ void CImage::SetParam(const nstring & file,
 }
 
 void CImage::SetParam(const CMemoryBuffer & bits,
-		nova::uint width,
-		nova::uint height,
-		nova::uint depth,
+		nova::nUInt32 width,
+		nova::nUInt32 height,
+		nova::nUInt32 depth,
 		CImageFormats::NovaPixelFormats format)
 {
 	if(isReady)
@@ -80,7 +80,7 @@ void CImage::SetParam(const CMemoryBuffer & bits,
 	data.AllocBuffer(bits.GetBufferSize());
 	bits.CopyTo(data, data.GetBufferSize(), 0);
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CImageListener * lis =
 			dynamic_cast<CImageListener *>(GetListener(i));
@@ -107,7 +107,7 @@ void CImage::SetParam(const CMemoryBuffer & buffer,
 	mCompressedStream = true;
 	mCompressor = compressor;
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CImageListener * lis =
 			dynamic_cast<CImageListener *>(GetListener(i));
@@ -352,7 +352,7 @@ void CImage::Noise(nReal tolerance)
 	ilDeleteImages(1, &image);
 }
 
-void CImage::Pixelization(nova::uint pix_size)
+void CImage::Pixelization(nova::nUInt32 pix_size)
 {
 	ILuint image;
 	CDevILFormats informat;
@@ -403,10 +403,10 @@ void CImage::BackHeigth()
 	CMemoryBuffer buf;
 	buf.AllocBuffer(data.GetBufferSize());
 
-	for(nova::uint i = 0; i < mHeight; i++)
+	for(nova::nUInt32 i = 0; i < mHeight; i++)
 	{
-		memcpy((nova::byte *)buf.GetBegin() + i * mStride,
-			(nova::byte *)data.GetBegin() + mStride * (mHeight - 1 - i), mStride);
+		memcpy((nova::nByte *)buf.GetBegin() + i * mStride,
+			(nova::nByte *)data.GetBegin() + mStride * (mHeight - 1 - i), mStride);
 	}
 
 	buf.CopyTo(data, buf.GetBufferSize(), 0);
@@ -418,10 +418,10 @@ void CImage::BackWidth()
 	CMemoryBuffer buf;
 	buf.AllocBuffer(data.GetBufferSize());
 
-	for(nova::uint i = 0; i < mWidth; i++)
+	for(nova::nUInt32 i = 0; i < mWidth; i++)
 	{
-		memcpy((nova::byte *)buf.GetBegin() + i * mhStride,
-				(nova::byte *)data.GetBegin() + mhStride * (mWidth - 1 - i),  mhStride);
+		memcpy((nova::nByte *)buf.GetBegin() + i * mhStride,
+				(nova::nByte *)data.GetBegin() + mhStride * (mWidth - 1 - i),  mhStride);
 	}
 
 	buf.CopyTo(data, buf.GetBufferSize(), 0);
@@ -495,9 +495,9 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 CImagePtr CImageManager::CreateNewImage(const nstring & name,
 	const nstring & group,
 	const CMemoryBuffer & bits,
-	nova::uint width,
-	nova::uint height,
-	nova::uint depth,
+	nova::nUInt32 width,
+	nova::nUInt32 height,
+	nova::nUInt32 depth,
 	CImageFormats::NovaPixelFormats p,
 	CResource::TAttach state)
 {
@@ -542,9 +542,9 @@ CImagePtr CImageManager::CreateNewImageAsync(const nstring & name,
 CImagePtr CImageManager::CreateNewImageAsync(const nstring & name,
 	const nstring & group,
 	const CMemoryBuffer & bits,
-	nova::uint width,
-	nova::uint height,
-	nova::uint depth,
+	nova::nUInt32 width,
+	nova::nUInt32 height,
+	nova::nUInt32 depth,
 	CImageFormats::NovaPixelFormats p,
 	CResource::TAttach state)
 {

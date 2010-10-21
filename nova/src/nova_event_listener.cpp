@@ -57,7 +57,7 @@ void CListenerInterface::RemoveListener(CEventListener * listener)
 		}
 }
 
-void CListenerInterface::RemoveListener(nova::uint listener)
+void CListenerInterface::RemoveListener(nova::nUInt32 listener)
 {
 	if(listener < mListeners.size())
 	{
@@ -76,12 +76,12 @@ void CListenerInterface::RemoveAllListeners()
 	mListeners.clear();
 }
 
-nova::uint CListenerInterface::GetListenersCount()
+nova::nUInt32 CListenerInterface::GetListenersCount()
 {
 	return mListeners.size();
 }
 
-CEventListener * CListenerInterface::GetListener(nova::uint i)
+CEventListener * CListenerInterface::GetListener(nova::nUInt32 i)
 {
 	if(i < mListeners.size())
 		return mListeners[i];

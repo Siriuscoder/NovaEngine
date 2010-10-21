@@ -234,7 +234,7 @@ size_t CMemoryStream::Write (const CMemoryBuffer & source)
 	}
 
 	void *ss = source.GetBegin();
-	void *des = (nova::byte *)mStreamBuffer.GetBegin() + mPos;
+	void *des = (nova::nByte *)mStreamBuffer.GetBegin() + mPos;
 
 	memcpy(des, ss, source.GetBufferSize());
 	return source.GetBufferSize();

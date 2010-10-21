@@ -33,28 +33,28 @@ namespace nova
 typedef struct __WindowInitialTarget
 {
 	// Биты цвета
-	nova::byte color_bits;
+	nova::nByte color_bits;
 	// Двойная буферизация
 	// 0 - нет, больше 0 - да
 	bool d_buff;
 	// Полноэкранный режим
 	// 0 - нет, больше 0 - да
-	nova::byte fullscreen;
+	nova::nByte fullscreen;
 	// Частота электронной трубки
 	// прииеняется только в случаее полноэкранного режима
 	// аккуратнее с этим полем ставим значения 60-100 герц
 	// у кого ЖК мониторы ставим 60-80 герц
-	nova::byte freq;
+	nova::nByte freq;
 
 	int xpos;
 
 	int ypos;
 
-	nova::uint height;
+	nova::nUInt32 height;
 
-	nova::uint width;
+	nova::nUInt32 width;
 
-	nova::uint FSAA;
+	nova::nUInt32 FSAA;
 
 	bool DepthBuffered;
 
@@ -101,8 +101,8 @@ public:
 	virtual ~CRenderWindow() {}
 
 	void GetMetrics(int & xpos, int & ypos,
-		nova::uint & height, nova::uint & width,
-		nova::uint & color_depth, nova::uint & color_bits);
+		nova::nUInt32 & height, nova::nUInt32 & width,
+		nova::nUInt32 & color_depth, nova::nUInt32 & color_bits);
 
 	TWindowInitialTarget GetMetrics();
 

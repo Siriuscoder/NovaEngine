@@ -67,7 +67,7 @@ public:
 		return ex_format;
 	}
 
-	virtual nova::uint GetFormat() 
+	virtual nova::nUInt32 GetFormat() 
 	{
 		return 0;
 	}
@@ -77,7 +77,7 @@ public:
 		ex_format = exformat;
 	}
 
-	virtual void SetFormat(nova::uint format) {}
+	virtual void SetFormat(nova::nUInt32 format) {}
 
 
 	CImageFormats() {}
@@ -91,8 +91,8 @@ public:
 	COpenGLFormats() {}
 	~COpenGLFormats() {}
 
-	void SetFormat(nova::uint format);
-	nova::uint GetFormat();
+	void SetFormat(nova::nUInt32 format);
+	nova::nUInt32 GetFormat();
 
 };
 

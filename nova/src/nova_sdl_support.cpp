@@ -96,7 +96,7 @@ void CSDLSupport::InitWGLExtensions()
 		CLog::GetInstance().PrintMessage("WGL Extensions\n", CLog::LG_NO_TIME);
 
 		nstring fullext;
-		nova::uint i, j;
+		nova::nUInt32 i, j;
 		for(i = 0, j = 0; i < exten.size(); ++i, ++j)
 		{
 			fullext += exten[i] + " ";

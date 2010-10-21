@@ -24,8 +24,8 @@
 #include "nova_resource_package.h"
 
 #define NPK_MAIN_SIGNATURE			0x10AF00DF
-#define NPK_VERSION(major,minor)	(nova::uint)(((nova::nUInt16)major & 0xffff) | ((((nova::uint)minor) & 0xffff) << 16))
-#define NPK_SECOND_SIGNATURE(x)		(nova::uint)((nova::uint)x | NPK_MAIN_SIGNATURE)
+#define NPK_VERSION(major,minor)	(nova::nUInt32)(((nova::nUInt16)major & 0xffff) | ((((nova::nUInt32)minor) & 0xffff) << 16))
+#define NPK_SECOND_SIGNATURE(x)		(nova::nUInt32)((nova::nUInt32)x | NPK_MAIN_SIGNATURE)
 
 namespace nova
 {

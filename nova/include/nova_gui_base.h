@@ -44,7 +44,7 @@ protected:
 // Указатель на камеру
 ///
 // Указатель на менеджер камер
-	nova::uint transparency;
+	nova::nUInt32 transparency;
 
 public:
 
@@ -70,7 +70,7 @@ public:
 	nReal GetWidth();
 	nReal GetHeight();
 
-	void SetTransparency(nova::uint tr);
+	void SetTransparency(nova::nUInt32 tr);
 
 	void Move(Point p);
 	void Move(nReal x, nReal y);

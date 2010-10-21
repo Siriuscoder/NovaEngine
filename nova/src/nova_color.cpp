@@ -57,7 +57,7 @@ CColorRGB::CColorRGB (nReal fR, nReal fG, nReal fB) : CBase("CColorRGB")
     m_afTuple[2] = fB;
 }
 
-CColorRGB::CColorRGB (nova::byte bR, nova::byte bG, nova::byte bB) : CBase("CColorRGB")
+CColorRGB::CColorRGB (nova::nByte bR, nova::nByte bG, nova::nByte bB) : CBase("CColorRGB")
 {
     m_afTuple[0] = (nReal)bR / 255;
     m_afTuple[1] = (nReal)bG / 255;
@@ -254,7 +254,7 @@ CColorRGBA::CColorRGBA (nReal fR, nReal fG, nReal fB, nReal fA) : CBase("CColorR
     m_afTuple[3] = fA;
 }
 
-CColorRGBA::CColorRGBA (nova::byte bR, nova::byte bG, nova::byte bB, nova::byte bA) : CBase("CColorRGB")
+CColorRGBA::CColorRGBA (nova::nByte bR, nova::nByte bG, nova::nByte bB, nova::nByte bA) : CBase("CColorRGB")
 {
     m_afTuple[0] = (nReal)bR / 255;
     m_afTuple[1] = (nReal)bG / 255;

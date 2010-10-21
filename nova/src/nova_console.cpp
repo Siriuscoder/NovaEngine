@@ -295,7 +295,7 @@ int CConsoleManager::NewConsole(nv_console_init * param)
 	return EXIT_OK;
 }
 
-void CConsoleManager::DeleteConsole(uint n)
+void CConsoleManager::DeleteConsole(nUInt32 n)
 {
 	delete consoles[n];
 	if(consoles.size() > 0)
@@ -311,7 +311,7 @@ const int CConsoleManager::Count()
 
 void CConsoleManager::Clear()
 {
-	for(uint i = 0; i < consoles.size(); i++)
+	for(nUInt32 i = 0; i < consoles.size(); i++)
 		delete consoles[i];
 	consoles.clear();
 }
@@ -322,7 +322,7 @@ void CConsoleManager::Render()
 	consoles[active]->Paint();
 }
 
-void  CConsoleManager::SetActive(uint n)
+void  CConsoleManager::SetActive(nUInt32 n)
 {
 	active = n;
 }

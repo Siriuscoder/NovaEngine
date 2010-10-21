@@ -112,11 +112,11 @@ public:
 /// \param _code Код ошибки
 /// \param file исходный файл
 /// \param line номер строки в исходном файле
-	NovaExp(cchar file[], int line, cchar * mes, int _code);
+	NovaExp(nCChar file[], int line, nCChar * mes, int _code);
 
 /// \param mes Сообщение об ошибке
 /// \param _code Код ошибки
-	NovaExp(cchar * mes, int _code);
+	NovaExp(nCChar * mes, int _code);
 
 /// \brief Конструктор
 ///
@@ -124,7 +124,7 @@ public:
 	NovaExp(int _code);
 
 /// \brief Возвращяет сообщение об ошибке
-	cchar * what() const ;
+	nCChar * what() const ;
 /// \brief Возвращяет сообщение об ошибке в виде nstring
 	nstring Message();
 

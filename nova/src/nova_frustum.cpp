@@ -102,7 +102,7 @@ void CFrustum::ExtractFrustum()
 	len = mFrustumPlanes[5].Normal.Normalize();
 	mFrustumPlanes[5].Constant /= len;
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CFrustumListener * lis = 
 			dynamic_cast<CFrustumListener *>(GetListener(i));
@@ -194,7 +194,7 @@ void CFrustum::ClearFrustumPlanes()
 	}
 }
 
-CPlanef CFrustum::GetPlane(nova::uint plane)
+CPlanef CFrustum::GetPlane(nova::nUInt32 plane)
 {
 	if(plane >= 6)
 		throw NOVA_EXP("CFrustum::GetPlane - plane must be in 0..5.", BAD_OPERATION);

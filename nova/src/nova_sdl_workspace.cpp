@@ -93,7 +93,7 @@ void CSDLWorkspace::CreateRenderWindow(nova::TWindowInitialTarget &init)
 		throw NOVA_EXP((nstring("CSDLWorkspace::CreateRenderWindow - Couldn't get video information: ")+
 			nstring(SDL_GetError())).c_str(), BAD_OPERATION);
 
-	nova::uint flags = SDL_OPENGL | SDL_HWSURFACE | SDL_ANYFORMAT;
+	nova::nUInt32 flags = SDL_OPENGL | SDL_HWSURFACE | SDL_ANYFORMAT;
 	if(mMetrics.fullscreen > 0)
 	{
 		mFullScreen = true;

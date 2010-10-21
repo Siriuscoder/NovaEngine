@@ -52,7 +52,7 @@ int CImageFormats::GetInternalChannels()
 	return 0;
 }
 
-nova::uint COpenGLFormats::GetFormat()
+nova::nUInt32 COpenGLFormats::GetFormat()
 {
 	switch(ex_format)
 	{
@@ -78,7 +78,7 @@ nova::uint COpenGLFormats::GetFormat()
 	return 0;
 }
 
-void COpenGLFormats::SetFormat(nova::uint format)
+void COpenGLFormats::SetFormat(nova::nUInt32 format)
 {
 	switch(format)
 	{

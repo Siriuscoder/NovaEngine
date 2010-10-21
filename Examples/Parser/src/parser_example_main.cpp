@@ -33,13 +33,13 @@ public:
 	{
 	}
 
-	void MakeTree(nova::uint nodes, nova::CTree<nova::nstring> & mytree)
+	void MakeTree(nova::nUInt32 nodes, nova::CTree<nova::nstring> & mytree)
 	{
 		nstring datastr("Config_file_01"); 
 		mytree.CreateRoot(datastr);
 
-		CMathf::RandSeed((nova::uint)time(NULL));
-		for(nova::uint i = 1; i < nodes; ++i)
+		CMathf::RandSeed((nova::nUInt32)time(NULL));
+		for(nova::nUInt32 i = 1; i < nodes; ++i)
 		{
 			std::ostringstream arg1;
 			arg1 << "PARAM" << i << "_TEST";
@@ -48,9 +48,9 @@ public:
 			datastr.append(arg1.str().c_str());
 			int num = mytree.GetRootElement()->AddNone(datastr);
 			
-			nova::uint col = CMathf::Rand() % 5;
+			nova::nUInt32 col = CMathf::Rand() % 5;
 			nova::CTreeNode<nstring> * node = mytree.GetRootElement()->GetNode(num);
-			for(nova::uint j = 0; j < col; ++j)
+			for(nova::nUInt32 j = 0; j < col; ++j)
 			{
 				std::ostringstream arg2;
 				arg2 << "  " << CMathf::Rand() % 200;

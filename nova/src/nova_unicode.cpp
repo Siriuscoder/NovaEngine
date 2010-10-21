@@ -23,7 +23,7 @@ namespace
     const utf32_char UNI_SUR_LOW_END      = 0xDFFF;
 
     /*
-    * Index into the table below with the first byte of a UTF-8 sequence to
+    * Index into the table below with the first nByte of a UTF-8 sequence to
     * get the number of trailing bytes that are supposed to follow it.
     * Note that *legal* UTF-8 values can't have 4 or 5-bytes. The table is
     * left as-is for anyone who may want to do such conversion, which was
@@ -58,9 +58,9 @@ namespace
 
     /*
     * Once the bits are split out into bytes of UTF-8, this is a mask OR-ed
-    * into the first byte, depending on how many bytes follow.  There are
+    * into the first nByte, depending on how many bytes follow.  There are
     * as many entries in this table as there are UTF-8 sequence types.
-    * (I.e., one byte sequence, two byte... etc.). Remember that sequencs
+    * (I.e., one nByte sequence, two nByte... etc.). Remember that sequencs
     * for *legal* UTF-8 will be 4 or fewer bytes total.
     */
     static const utf8_char firstByteMark[7] =

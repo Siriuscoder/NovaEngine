@@ -112,7 +112,7 @@ size_t CGZFileStream::Tell() const
 	return 0;
 }
 
-void CGZFileStream::Seek(nova::uint pos)
+void CGZFileStream::Seek(nova::nUInt32 pos)
 {
 	int i;
 	if(mIsOpened && mGZFile)
@@ -145,15 +145,15 @@ void CGZFileStream::Skip (long count)
 
 bool CGZFileStream::CompressData(CMemoryBuffer & dest, const CMemoryBuffer & source, int level)
 {
-	nova::uint len = source.GetBufferSize() + 
-		static_cast<nova::uint>(source.GetBufferSize() * 0.01) + 0xC;
+	nova::nUInt32 len = source.GetBufferSize() + 
+		static_cast<nova::nUInt32>(source.GetBufferSize() * 0.01) + 0xC;
 
 	CMemoryBuffer buffer;
 	buffer.AllocBuffer(len);
 
-	nova::ulong destlen = 0;
-	int res = compress2((nova::byte *)buffer.GetBegin(), (uLongf *)&destlen, 
-		(nova::byte *)source.GetBegin(), source.GetBufferSize(), level);
+	nova::nUInt32 destlen = 0;
+	int res = compress2((nova::nByte *)buffer.GetBegin(), (uLongf *)&destlen, 
+		(nova::nByte *)source.GetBegin(), source.GetBufferSize(), level);
 
 	if(res != Z_OK)
 		NOVA_EXP("CGZFileStream::CompressData - error compressing data stream!", BAD_OPERATION);
@@ -168,11 +168,11 @@ bool CGZFileStream::CompressData(CMemoryBuffer & dest, const CMemoryBuffer & sou
 
 bool CGZFileStream::UnCompressData(CMemoryBuffer & dest, const CMemoryBuffer & source, int reallen)
 {
-	nova::ulong destlen = 0;
+	nova::nUInt32 destlen = 0;
 	dest.AllocBuffer(reallen);
 
-	int res = uncompress((nova::byte *)dest.GetBegin(), (uLongf *)&destlen, 
-		(nova::byte *)source.GetBegin(), source.GetBufferSize());
+	int res = uncompress((nova::nByte *)dest.GetBegin(), (uLongf *)&destlen, 
+		(nova::nByte *)source.GetBegin(), source.GetBufferSize());
 
 	if(res != Z_OK)
 		NOVA_EXP("CGZFileStream::UnCompressData - error uncompressing data stream!", BAD_OPERATION);
@@ -193,18 +193,18 @@ size_t CGZFileStream::Read (const CMemoryBuffer & dest)
 		NOVA_EXP("CGZFileStream::Read - file opened for write!", BAD_OPERATION);
 
 	int block = 0xFFFF;
-	nova::uint len = dest.GetBufferSize();
-	nova::uint slen = 0;
+	nova::nUInt32 len = dest.GetBufferSize();
+	nova::nUInt32 slen = 0;
 
 	while(slen < len)
 	{
-		nova::uint ilen = 0;
+		nova::nUInt32 ilen = 0;
 		if((slen + block) > len)
 			ilen = len - slen;
 		else
 			ilen = block;
 
-		void * pchunk = ((nova::byte *)dest.GetBegin()) + slen;
+		void * pchunk = ((nova::nByte *)dest.GetBegin()) + slen;
 		slen += gzread(mGZFile, pchunk, ilen);
 	}
 
@@ -227,18 +227,18 @@ size_t CGZFileStream::Write(const CMemoryBuffer & source)
 		NOVA_EXP("CGZFileStream::Write - file opened for read!", BAD_OPERATION);
 
 	int block = 16384;
-	nova::uint len = source.GetBufferSize();
-	nova::uint slen = 0;
+	nova::nUInt32 len = source.GetBufferSize();
+	nova::nUInt32 slen = 0;
 
 	while(slen < len)
 	{
-		nova::uint ilen = 0;
+		nova::nUInt32 ilen = 0;
 		if((slen + block) > len)
 			ilen = len - slen;
 		else
 			ilen = block;
 
-		void * pchunk = ((nova::byte *)source.GetBegin()) + slen;
+		void * pchunk = ((nova::nByte *)source.GetBegin()) + slen;
 		slen += gzwrite(mGZFile, pchunk, ilen);
 	}
 

@@ -330,15 +330,13 @@ typedef __int64 nInt64;
 typedef unsigned __int16 nUInt16; // (16 bit nUInt16)
 
 /// \brief Contraction for 'const char*'
-typedef const __int8 cchar;
+typedef const __int8 nCChar;
 
-typedef unsigned __int8 byte; // (8 bit nUInt16)
+typedef unsigned __int8 nByte; // (8 bit nUInt16)
 
-typedef unsigned __int32 uint; // (32 bit uint)
+typedef unsigned __int32 nUInt32; // (32 bit nUInt32)
 /// \brief Contraction for 'unsigned long'
-typedef unsigned __int32 ulong; // (32 bit long)
-
-typedef nova::ulong ulong_ptr, *pulong_ptr;
+typedef nova::nUInt32 *nUInt32Ptr;
 
 #else
 // No better idea, so assume the C99 convention.  If your compiler
@@ -351,15 +349,13 @@ typedef int64_t nInt64;
 typedef uint16_t nUInt16; // (16 bit nUInt16)
 
 /// \brief Contraction for 'const char*'
-typedef const char cchar;
+typedef const char nCChar;
 
-typedef uint8_t byte; // (8 bit nUInt16)
+typedef uint8_t nByte; // (8 bit nUInt16)
 
-typedef uint32_t uint; // (32 bit uint)
+typedef uint32_t nUInt32; // (32 bit nUInt32)
 /// \brief Contraction for 'unsigned long'
-typedef uint32_t ulong; // (32 bit long)
-
-typedef nova::ulong ulong_ptr, *pulong_ptr;
+typedef nova::nUInt32 *nUInt32Ptr;
 
 #endif
 
@@ -377,12 +373,12 @@ typedef double nReal;
 
 #ifdef NOVA_UNIX_BUILD
 
-#define MAKEWORD(a, b)      ((nova::nUInt16)(((nova::byte)(((nova::ulong_ptr)(a)) & 0xff)) | ((nova::nUInt16)((nova::byte)(((nova::ulong_ptr)(b)) & 0xff))) << 8))
-#define MAKELONG(a, b)      ((nova::long)(((nova::nUInt16)(((nova::ulong_ptr)(a)) & 0xffff)) | ((nova::ulong)((nova::nUInt16)(((nova::ulong_ptr)(b)) & 0xffff))) << 16))
-#define LOWORD(l)           ((nova::nUInt16)(((nova::ulong_ptr)(l)) & 0xffff))
-#define HIWORD(l)           ((nova::nUInt16)((((nova::ulong_ptr)(l)) >> 16) & 0xffff))
-#define LOBYTE(w)           ((nova::byte)(((nova::ulong_ptr)(w)) & 0xff))
-#define HIBYTE(w)           ((nova::byte)((((nova::ulong_ptr)(w)) >> 8) & 0xff))
+#define MAKEWORD(a, b)      ((nova::nUInt16)(((nova::nByte)(((nova::nUInt32)(a)) & 0xff)) | ((nova::nUInt16)((nova::nByte)(((nova::nUInt32)(b)) & 0xff))) << 8))
+#define MAKELONG(a, b)      ((nova::long)(((nova::nUInt16)(((nova::nUInt32)(a)) & 0xffff)) | ((nova::nUInt32)((nova::nUInt16)(((nova::nUInt32)(b)) & 0xffff))) << 16))
+#define LOWORD(l)           ((nova::nUInt16)(((nova::nUInt32)(l)) & 0xffff))
+#define HIWORD(l)           ((nova::nUInt16)((((nova::nUInt32)(l)) >> 16) & 0xffff))
+#define LOBYTE(w)           ((nova::nByte)(((nova::nUInt32)(w)) & 0xff))
+#define HIBYTE(w)           ((nova::nByte)((((nova::nUInt32)(w)) >> 8) & 0xff))
 
 typedef struct tagPOINT
 {
@@ -394,7 +390,7 @@ typedef struct tagPOINT
 #define ZeroMemory(x, y)	memset((x), 0, (y))
 #endif
 
-typedef nova::ulong COLORREF;
+typedef nova::nUInt32 COLORREF;
 
 #endif
 

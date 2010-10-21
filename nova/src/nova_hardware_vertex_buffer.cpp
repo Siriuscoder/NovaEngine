@@ -118,7 +118,7 @@ void CHardwareVertexBuffer::UnbindBuffer()
 
 CMemoryBuffer CHardwareVertexBuffer::LockSource(size_t offset, size_t length, THardwareBufferLock opt)
 {
-	nova::byte *mapper = NULL;
+	nova::nByte *mapper = NULL;
 	CMemoryBuffer result;
 
 	if((offset + length) > mSize)
@@ -128,7 +128,7 @@ CMemoryBuffer CHardwareVertexBuffer::LockSource(size_t offset, size_t length, TH
 	
 	if(opt == HWB_DYNAMIC)
 	{
-		if((mapper = static_cast<nova::byte *>(glMapBufferARB(GL_ARRAY_BUFFER_ARB, GL_READ_WRITE_ARB))) != NULL)
+		if((mapper = static_cast<nova::nByte *>(glMapBufferARB(GL_ARRAY_BUFFER_ARB, GL_READ_WRITE_ARB))) != NULL)
 		{
 			mapper += offset;
 			CMemoryBuffer res(mapper, length);
@@ -212,7 +212,7 @@ void CHardwareIndexBuffer::UnbindBuffer()
 
 CMemoryBuffer CHardwareIndexBuffer::LockSource(size_t offset, size_t length, THardwareBufferLock opt)
 {
-	nova::byte *mapper = NULL;
+	nova::nByte *mapper = NULL;
 	CMemoryBuffer result;
 
 	if((offset + length) > mSize)
@@ -222,7 +222,7 @@ CMemoryBuffer CHardwareIndexBuffer::LockSource(size_t offset, size_t length, THa
 	
 	if(opt == HWB_DYNAMIC)
 	{
-		if((mapper = static_cast<nova::byte *>(glMapBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, GL_READ_WRITE_ARB))) != NULL)
+		if((mapper = static_cast<nova::nByte *>(glMapBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, GL_READ_WRITE_ARB))) != NULL)
 		{
 			mapper += offset;
 			CMemoryBuffer res(mapper, length);

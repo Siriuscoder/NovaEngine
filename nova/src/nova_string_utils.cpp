@@ -145,7 +145,7 @@ double CStringUtils::StringToDouble(const char * str)
 nstring CStringUtils::ToUpperCase(const nstring &str)
 {
 	nova::nstringstream upper;
-	for(nova::uint i = 0; i < str.size(); ++i)
+	for(nova::nUInt32 i = 0; i < str.size(); ++i)
 		upper << (char)toupper(str[i]);
 
 	return upper.str();
@@ -154,7 +154,7 @@ nstring CStringUtils::ToUpperCase(const nstring &str)
 nstring CStringUtils::ToLowerCase(const nstring &str)
 {
 	nova::nstringstream lower;
-	for(nova::uint i = 0; i < str.size(); ++i)
+	for(nova::nUInt32 i = 0; i < str.size(); ++i)
 		lower << (char)tolower(str[i]);
 
 	return lower.str();

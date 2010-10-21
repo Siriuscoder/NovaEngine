@@ -47,7 +47,7 @@ public:
     // and 2 = blue.
     CColorRGB ();  // initial values (0,0,0)
     CColorRGB (nReal fR, nReal fG, nReal fB);
-	CColorRGB (nova::byte bR, nova::byte bG, nova::byte bB);
+	CColorRGB (nova::nByte bR, nova::nByte bG, nova::nByte bB);
     CColorRGB (const nReal* afTuple);
     CColorRGB (const CColorRGB& rkC);
 
@@ -114,7 +114,7 @@ public:
     // 2 = blue, and 3 = alpha.
     CColorRGBA ();  // initial values (0,0,0,0)
     CColorRGBA (nReal fR, nReal fG, nReal fB, nReal fA);
-	CColorRGBA (nova::byte bR, nova::byte bG, nova::byte bB, nova::byte bA);
+	CColorRGBA (nova::nByte bR, nova::nByte bG, nova::nByte bB, nova::nByte bA);
     CColorRGBA (const nReal* afTuple);
     CColorRGBA (const CColorRGBA& rkC);
 

@@ -55,13 +55,13 @@ public:
 
 	void RemoveListener(CEventListener * listener);
 
-	void RemoveListener(nova::uint listener);
+	void RemoveListener(nova::nUInt32 listener);
 
 	void RemoveAllListeners();
 
-	CEventListener * GetListener(nova::uint i);
+	CEventListener * GetListener(nova::nUInt32 i);
 
-	nova::uint GetListenersCount();
+	nova::nUInt32 GetListenersCount();
 };
 
 }

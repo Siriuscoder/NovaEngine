@@ -93,7 +93,7 @@ void CTexture::SetImageList(const TImageList & list)
 {
 	mList = list;
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CTextureListener * lis =
 			dynamic_cast<CTextureListener *>(GetListener(i));
@@ -133,7 +133,7 @@ void CTexture::ApplyTexture()
 	glTexParameteri(CHardwarePixelBuffer::TextureTarget(mType), GL_TEXTURE_WRAP_T, mWrapTypeT);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mEnvType);
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CTextureListener * lis =
 			dynamic_cast<CTextureListener *>(GetListener(i));
@@ -143,8 +143,8 @@ void CTexture::ApplyTexture()
 }
 
 
-void CTexture::AddSubTexture(CImagePtr & image, nova::uint level, int face,
-	nova::uint xoff, nova::uint yoff, nova::uint zoff)
+void CTexture::AddSubTexture(CImagePtr & image, nova::nUInt32 level, int face,
+	nova::nUInt32 xoff, nova::nUInt32 yoff, nova::nUInt32 zoff)
 {
 	if(!isReady)
 		throw NOVA_EXP("CTexture::CreateTexture - resource not created!", BAD_OPERATION);
@@ -159,7 +159,7 @@ void CTexture::AddSubTexture(CImagePtr & image, nova::uint level, int face,
 	surface->Unlock(lock);
 
 
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CTextureListener * lis =
 			dynamic_cast<CTextureListener *>(GetListener(i));
@@ -167,7 +167,7 @@ void CTexture::AddSubTexture(CImagePtr & image, nova::uint level, int face,
 	}
 }
 
-CTextureSurfaceListPtr CTexture::GetSurfaceList(nova::uint face)
+CTextureSurfaceListPtr CTexture::GetSurfaceList(nova::nUInt32 face)
 {
 	if(face >= mSurfaceList.size())
 		throw NOVA_EXP("CTexture::GetSurfaceList - this face not exist!", BAD_OPERATION);

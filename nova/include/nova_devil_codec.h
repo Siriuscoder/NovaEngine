@@ -48,7 +48,7 @@ typedef struct TDevILEffects
 	union TVal
 	{
 		nova::nReal r;
-		nova::uint ui;
+		nova::nUInt32 ui;
 	};
 
 	TVal par1;
@@ -63,8 +63,8 @@ public:
 	CDevILFormats() {}
 	~CDevILFormats() {}
 
-	nova::uint GetFormat();
-	void SetFormat(nova::uint format);
+	nova::nUInt32 GetFormat();
+	void SetFormat(nova::nUInt32 format);
 
 };
 

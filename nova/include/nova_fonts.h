@@ -215,9 +215,9 @@ class NOVA_EXPORT CFreeFont : public CResource
 private:
 	nova::stl<wchar_t, CLetter>::map letters_map;
 	FT_Face face;
-	nova::uint height;
+	nova::nUInt32 height;
 	nstring ttffile;
-	nova::uint coord_grid;
+	nova::nUInt32 coord_grid;
 	FT_Library library;
 	FT_GlyphSlot slot;
 
@@ -232,9 +232,9 @@ public:
 	virtual void PrepareResource(void);
 
 	void SetFontParam(FT_Library library,
-		nova::uint height,
+		nova::nUInt32 height,
 		const nstring & ttffile,
-		nova::uint coord_grid);
+		nova::nUInt32 coord_grid);
 
 	~CFreeFont();
 
@@ -260,11 +260,11 @@ public:
 		const nstring & group, CResource::TAttach state);
 
 	CFontPtr CreateNewFont(const nstring & name, const nstring & group,
-		nova::uint height, const nstring & ttffile, nova::uint coord_grid,
+		nova::nUInt32 height, const nstring & ttffile, nova::nUInt32 coord_grid,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
 	CFontPtr CreateNewFontAsync(const nstring & name, const nstring & group,
-		nova::uint height, const nstring & ttffile, nova::uint coord_grid,
+		nova::nUInt32 height, const nstring & ttffile, nova::nUInt32 coord_grid,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 };
 

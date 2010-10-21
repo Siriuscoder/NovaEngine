@@ -111,7 +111,7 @@ void CRenderTarget::UpdateSource()
 CRenderTarget::~CRenderTarget()
 {
 	//ResetStats();
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CRenderTargetListener * lis = 
 			dynamic_cast<CRenderTargetListener *>(GetListener(i));
@@ -133,7 +133,7 @@ void CRenderTarget::Update()
 	}
 }
 
-nova::uint CRenderTarget::GetViewPortCount()
+nova::nUInt32 CRenderTarget::GetViewPortCount()
 {
 	return mViewPortList.size();
 }
@@ -145,7 +145,7 @@ bool CRenderTarget::IsReady()
 
 void CRenderTarget::PreUpdateAction()
 {
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CRenderTargetListener * lis = 
 			dynamic_cast<CRenderTargetListener *>(GetListener(i));
@@ -155,7 +155,7 @@ void CRenderTarget::PreUpdateAction()
 
 void CRenderTarget::PostUpdateAction()
 {	
-	for(nova::uint i = 0; i < GetListenersCount(); i++)
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CRenderTargetListener * lis = 
 			dynamic_cast<CRenderTargetListener *>(GetListener(i));

@@ -51,11 +51,11 @@ public:
 protected:
 
 	nstring mName;
-	nova::byte 	mPriority;
-	nova::uint 	mWidth;
-	nova::uint 	mHeight;
-	nova::uint 	mColourDepth;
-	nova::uint  mColourBits;
+	nova::nByte 	mPriority;
+	nova::nUInt32 	mWidth;
+	nova::nUInt32 	mHeight;
+	nova::nUInt32 	mColourDepth;
+	nova::nUInt32  mColourBits;
 	bool 	mIsDepthBuffered;
 	bool 	mActive;
 	bool 	mAutoUpdate;
@@ -81,24 +81,24 @@ public:
 
 	void RemoveViewPort(int zorder);
 
-	nova::uint GetViewPortCount();
+	nova::nUInt32 GetViewPortCount();
 
-	inline nova::uint GetWidth()
+	inline nova::nUInt32 GetWidth()
 	{
 		return mWidth;
 	}
 
-	inline nova::uint GetHeight()
+	inline nova::nUInt32 GetHeight()
 	{
 		return mHeight;
 	}
 
-	inline nova::uint GetColourDepth()
+	inline nova::nUInt32 GetColourDepth()
 	{
 		return mColourDepth;
 	}
 
-	inline nova::uint GetColourBits()
+	inline nova::nUInt32 GetColourBits()
 	{
 		return mColourBits;
 	}
@@ -123,12 +123,12 @@ public:
 		mAutoUpdate = flag;
 	}
 
-	inline nova::uint GetPriority()
+	inline nova::nUInt32 GetPriority()
 	{
 		return mPriority;
 	}
 
-	inline void SetPriority(nova::uint pr)
+	inline void SetPriority(nova::nUInt32 pr)
 	{
 		mPriority = pr;
 	}

@@ -34,18 +34,18 @@ template<> CDevILCodec * CSingelton<CDevILCodec>::SingeltonObject = NULL;
 void* STDCALL__ DevILAlloc(const ILsizei size)
 {
 	//return winnie_allocator::Alloc(size);
-	nova::byte *pblock = NULL;
-	return getmem<nova::byte>(pblock, size);
+	nova::nByte *pblock = NULL;
+	return getmem<nova::nByte>(pblock, size);
 }
 
 void STDCALL__ DevILFree(const void *p)
 {
 	//return winnie_allocator::Free(const_cast<void*>(p));
 	void *cp = const_cast<void *>(p);
-	freemem<nova::byte>(static_cast<nova::byte*>(cp));
+	freemem<nova::nByte>(static_cast<nova::nByte*>(cp));
 }
 
-nova::uint CDevILFormats::GetFormat()
+nova::nUInt32 CDevILFormats::GetFormat()
 {
 	switch(ex_format)
 	{
@@ -67,7 +67,7 @@ nova::uint CDevILFormats::GetFormat()
 }
 
 
-void CDevILFormats::SetFormat(nova::uint format)
+void CDevILFormats::SetFormat(nova::nUInt32 format)
 {
 	switch(format)
 	{
@@ -122,7 +122,7 @@ void CDevILCodec::Initialize()
 	mCompressorList.push_back(SF_PCX);
 	mCompressorList.push_back(SF_TGA);
 
-	for(nova::uint i = 0; i < mExtentions.size(); ++i)
+	for(nova::nUInt32 i = 0; i < mExtentions.size(); ++i)
 		line += "\t" + mExtentions[i] + "\n";
 
 	LOG_MESSAGE(line);
@@ -512,13 +512,13 @@ CMemoryBuffer CDevILCodec::UnlockBits()
 	CDevILFormats informat;
 	informat.SetExFormat(pixel_format);
 
-	byte * bits = NULL;
+	nByte * bits = NULL;
 	bits = getmem(bits, size);
 
 	ilBindImage(image_id);
 	ilCopyPixels(0, 0, 0, width, height, depth, informat.GetFormat(), IL_UNSIGNED_BYTE, bits);
 
-	nova::uint actsize = size;
+	nova::nUInt32 actsize = size;
 	CImageCodec::UnlockCodec();
 
 	return CMemoryBuffer(bits, actsize);
