@@ -217,7 +217,7 @@ void GetAllocInfo(Statistic &statistic)
     statistic.num_allocated_blocks[i] = num_allocated_blocks[i];
     statistic.num_block_allocations[i] = num_block_allocations[i];
 
-    int num_free_blocks = 0;
+    nInt32 num_free_blocks = 0;
     Header *p = free_blocks_lists[i];
     while (p) 
     {

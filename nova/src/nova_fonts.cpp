@@ -56,8 +56,8 @@ CLetter::CLetter(FT_Pos BearingX,
 		FT_Pos Advance,
 		FT_Pos width,
 		FT_Pos height,
-		int bitmapw,
-		int bitmapr,
+		nInt32 bitmapw,
+		nInt32 bitmapr,
 		wchar_t letter,
 		CTexturePtr texid) : CBase("CLetter")
 {
@@ -150,9 +150,9 @@ void CFreeFont::BuildFont()
 	}
 }
 
-int NextP2(int a)
+nInt32 NextP2(nInt32 a)
 {
-	int rval = 1;
+	nInt32 rval = 1;
     while(rval < a) rval <<= 1;
 
 	return rval;
@@ -181,8 +181,8 @@ void CFreeFont::MakeLetter(wchar_t code)
 
     // Используем нашу вспомогательную функцию для вычисления ширины и высоты
 	// текстуры для нашего растра.
-	int bwidth = NextP2(bitmap.width);
-	int bheight = NextP2(bitmap.rows);
+	nInt32 bwidth = NextP2(bitmap.width);
+	nInt32 bheight = NextP2(bitmap.rows);
 
 	// Выделим память для данных текстуры.
 	//nByte * expanded_data = NULL;
@@ -197,8 +197,8 @@ void CFreeFont::MakeLetter(wchar_t code)
 	// обоим каналам одно и тоже значение, которое мы
 	// получим из растра FreeType.
 	// Мы используем оператор ?: для того чтобы поместить 0 в зону вне растра FreeType.
-	for(int j = 0; j < bheight; ++j)
-		for(int i = 0; i < bwidth; ++i)
+	for(nInt32 j = 0; j < bheight; ++j)
+		for(nInt32 i = 0; i < bwidth; ++i)
 			expanded_data[2*(i + j * bwidth)] = expanded_data[2*(i + j * bwidth)+1] =
 				(i >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[i + bitmap.width*j];
 
@@ -214,7 +214,7 @@ void CFreeFont::MakeLetter(wchar_t code)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bwidth, bheight, 0,
 		GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, expanded_data);
 */
-	//int tid = CTextureManager::GetSingeltonPtr()->AddTexture(GL_TEXTURE_2D,
+	//nInt32 tid = CTextureManager::GetSingeltonPtr()->AddTexture(GL_TEXTURE_2D,
 	//	expanded_data, bwidth, bheight, CImageFormats::NF_LUMINANCE_ALPHA);
 /*	CTexturePtr ptex = CTextureManager::GetSingeltonPtr()->AddTexture(new CTexture(fname.c_str(), GL_TEXTURE_2D));
 	ptex->SetEnvType(GL_MODULATE);
@@ -230,7 +230,7 @@ void CFreeFont::MakeLetter(wchar_t code)
 */
 	nstring resnamet;
 	nstring resnamei("TempFontImage");
-	resnamet = mName + "_" + CStringUtils::IntTo16xString(static_cast<int>(code));
+	resnamet = mName + "_" + CStringUtils::IntTo16xString(static_cast<nInt32>(code));
 // Создаем промежуточное изображение в памяти
 	CImagePtr pImage = CImageManager::GetSingelton().CreateNewImage(resnamei, mName, mem,
 		bwidth, bheight, 1, CImageFormats::NF_LUMINANCE_ALPHA, CResource::NV_FREE);

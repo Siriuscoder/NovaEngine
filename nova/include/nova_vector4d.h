@@ -51,8 +51,8 @@ public:
     // coordinate access
     inline operator const nReal* () const;
     inline operator nReal* ();
-    inline nReal operator[] (int i) const;
-    inline nReal& operator[] (int i);
+    inline nReal operator[] (nInt32 i) const;
+    inline nReal& operator[] (nInt32 i);
     inline nReal X () const;
     inline nReal& X ();
     inline nReal Y () const;
@@ -102,7 +102,7 @@ public:
 
 private:
     // support for comparisons
-    int CompareArrays (const CVector4& rkV) const;
+    nInt32 CompareArrays (const CVector4& rkV) const;
 
     nReal m_afTuple[4];
 };
@@ -161,13 +161,13 @@ inline CVector4<nReal>::operator nReal* ()
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal CVector4<nReal>::operator[] (int i) const
+inline nReal CVector4<nReal>::operator[] (nInt32 i) const
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal& CVector4<nReal>::operator[] (int i)
+inline nReal& CVector4<nReal>::operator[] (nInt32 i)
 {
     return m_afTuple[i];
 }
@@ -231,7 +231,7 @@ inline CVector4<nReal>& CVector4<nReal>::operator= (const CVector4& rkV)
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-int CVector4<nReal>::CompareArrays (const CVector4& rkV) const
+nInt32 CVector4<nReal>::CompareArrays (const CVector4& rkV) const
 {
     return memcmp(m_afTuple,rkV.m_afTuple,4*sizeof(nReal));
 }

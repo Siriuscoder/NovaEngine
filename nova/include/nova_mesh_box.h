@@ -55,16 +55,16 @@ struct TNormal3d
 
 struct TTriIndex
 {
-	int a;
-	int b;
-	int c;
+	nInt32 a;
+	nInt32 b;
+	nInt32 c;
 
 };
 
 struct TTriangleInfo
 {
-	int mat_id;
-	int tri_id;
+	nInt32 mat_id;
+	nInt32 tri_id;
 	TNormal3d normal;
 };
 
@@ -92,7 +92,7 @@ public:
 	typedef nova::stl<TTexCoord2d>::vector TTexCoords;
 	typedef nova::stl<TTriIndex>::vector TIndexes;
 	typedef nova::stl<TTriangleInfo>::vector TFacesInfo;
-	typedef nova::stl<int>::vector TSubMats;
+	typedef nova::stl<nInt32>::vector TSubMats;
 
 	nova::Matrix3f mRotationMatrix;
 	nova::Vector3f mRealPosition;
@@ -101,7 +101,7 @@ public:
 
 private:
 
-	static int QComparer(const void * a, const void * b);
+	static nInt32 QComparer(const void * a, const void * b);
 
 protected:
 
@@ -161,17 +161,17 @@ public:
 
 	virtual void PrepareResource(void);
 //-----------------------------------
-	int GetMaterialID(nova::nUInt32 face);
+	nInt32 GetMaterialID(nova::nUInt32 face);
 
-	void SetMaterialID(nova::nUInt32 face, int id);
+	void SetMaterialID(nova::nUInt32 face, nInt32 id);
 
-	int GetMaterialIDByName(nstring & name);
+	nInt32 GetMaterialIDByName(nstring & name);
 
 	nstring GetMeterialNameByID(nova::nUInt32 id);
 
 	stl<nstring>::vector GetMaterials();
 
-	int AddNewSubMaterial(nstring & resource_name);
+	nInt32 AddNewSubMaterial(nstring & resource_name);
 
 	void * GetMesh(void);
 

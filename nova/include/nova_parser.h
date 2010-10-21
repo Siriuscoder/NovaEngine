@@ -70,7 +70,7 @@ public:
 /// в итоге мы получаем массив отдельных строк command,arg1,arg2.arg3.
 /// \param input Входная строка
 /// \param result Выходной массив строк
-	int ParseStringRecurse(nstring input, values & result);
+	nInt32 ParseStringRecurse(nstring input, values & result);
 
 /// \brief Рекурсивный парсер входной строки
 ///

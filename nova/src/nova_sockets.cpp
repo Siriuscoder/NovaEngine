@@ -43,7 +43,7 @@ Copyright (c) 2008 Ivan Gagis, SIRIUS
 #define M_EINTR WSAEINTR
 #define M_FD_SETSIZE FD_SETSIZE
 
-typedef int socklen_t;
+typedef nova::nInt32 socklen_t;
 
 #else //assume linux/unix
 
@@ -152,7 +152,7 @@ void CSockEnviroment::InitSockets()	throw(nova::NovaExp)
         throw NovaExp("InitSockets(): Winsock 2.2 initialization failed", BAD_OPERATION);
 #else //assume linux/unix
     // SIGPIPE is generated when a remote socket is closed
-    void (*handler)(int);
+    void (*handler)(nInt32);
     handler = signal(SIGPIPE, SIG_IGN);
     if(handler != SIG_DFL)
         signal(SIGPIPE, handler);
@@ -172,7 +172,7 @@ void CSockEnviroment::DeinitSockets()
         }
 #else //assume linux/unix
     // Restore the SIGPIPE handler
-    void (*handler)(int);
+    void (*handler)(nInt32);
     handler = signal(SIGPIPE, SIG_DFL);
     if(handler != SIG_IGN)
         signal(SIGPIPE, handler);
@@ -331,12 +331,12 @@ nUInt32 CTCPSocket::Send(const nByte * data, nUInt32 size)
     if(!this->IsValid())
         throw NovaExp("CTCPSocket::Send(): socket is not opened", BAD_OPERATION);
     
-    int sent = 0, left = int(size);
+    nInt32 sent = 0, left = nInt32(size);
     
     //Keep sending data until it's sent or an error occurs
-    int errorCode = 0;
+    nInt32 errorCode = 0;
 
-    int res;
+    nInt32 res;
     do
 	{
         res = send(this->socket, reinterpret_cast<const char *>(data), left, 0);
@@ -369,8 +369,8 @@ nUInt32 CTCPSocket::Recv(nByte * buf, nUInt32 maxSize)
     if(!this->IsValid())
         throw NovaExp("CTCPSocket::Send(): socket is not opened", BAD_OPERATION);
     
-    int len;
-    int errorCode = 0;
+    nInt32 len;
+    nInt32 errorCode = 0;
     
 	while (maxSize > 0) 
 	{
@@ -402,7 +402,7 @@ void CTCPSocket::DisableNaggle() throw(nova::NovaExp)
     if(!this->IsValid())
         throw NovaExp("CTCPSocket::DisableNaggle(): socket is not opened", BAD_OPERATION);
     
-    int yes = 1;
+    nInt32 yes = 1;
     setsockopt(this->socket, IPPROTO_TCP, TCP_NODELAY, (char *)&yes, sizeof(yes));
 }
 
@@ -443,7 +443,7 @@ void CTCPServerSocket::Open(nUInt16 port, bool disableNaggle)
 
     // allow local address reuse
     {
-        int yes = 1;
+        nInt32 yes = 1;
         setsockopt(this->socket, SOL_SOCKET, SO_REUSEADDR, (char*)&yes, sizeof(yes));
     }
 
@@ -478,7 +478,7 @@ void CTCPServerSocket::Open(nUInt16 port, bool disableNaggle)
     }
 #elif defined(__OS2__)
     {
-        int dontblock = 1;
+        nInt32 dontblock = 1;
         ioctl(this->socket, FIONBIO, &dontblock);
     }
 #else
@@ -494,7 +494,7 @@ CTCPSocket CTCPServerSocket::Accept()
     this->isReady = false;
     
     struct sockaddr_in sockAddr;
-    int sock_alen = sizeof(sockAddr);
+    nInt32 sock_alen = sizeof(sockAddr);
     CTCPSocket sock;//allocate a new socket object
     
     sock.socket = accept(this->socket, reinterpret_cast<sockaddr*>(&sockAddr),
@@ -512,7 +512,7 @@ CTCPSocket CTCPServerSocket::Accept()
     }
 #elif defined(O_NONBLOCK)
     {
-        int flags = fcntl(sock.socket, F_GETFL, 0);
+        nInt32 flags = fcntl(sock.socket, F_GETFL, 0);
         fcntl(sock.socket, F_SETFL, flags & ~O_NONBLOCK);
     }
 #else
@@ -560,7 +560,7 @@ void CUDPSocket::Open(nUInt16 port)
 #ifdef SO_BROADCAST
     //Allow LAN broadcasts with the socket
     {
-        int yes = 1;
+        nInt32 yes = 1;
         setsockopt(this->socket, SOL_SOCKET, SO_BROADCAST, (char*)&yes, sizeof(yes));
     }
 #endif
@@ -577,12 +577,12 @@ void CUDPSocket::Open()
 nUInt32 CUDPSocket::Send(const nByte * buf, nUInt16 size, CIPAddress destinationIP) 
 {
     sockaddr_in sockAddr;
-    int sockLen = sizeof(sockAddr);
+    nInt32 sockLen = sizeof(sockAddr);
     
     sockAddr.sin_addr.s_addr = destinationIP.host;
     sockAddr.sin_port = destinationIP.port;
     sockAddr.sin_family = AF_INET;
-    int res = sendto(this->socket, reinterpret_cast<const char*>(buf), size, 0, reinterpret_cast<struct sockaddr*>(&sockAddr), sockLen);
+    nInt32 res = sendto(this->socket, reinterpret_cast<const char*>(buf), size, 0, reinterpret_cast<struct sockaddr*>(&sockAddr), sockLen);
     
     return res;
 }
@@ -590,9 +590,9 @@ nUInt32 CUDPSocket::Send(const nByte * buf, nUInt16 size, CIPAddress destination
 nUInt32 CUDPSocket::Recv(nByte * buf, nUInt16 maxSize, CIPAddress & out_SenderIP)
 {
     sockaddr_in sockAddr;
-    int sockLen = sizeof(sockAddr);
+    nInt32 sockLen = sizeof(sockAddr);
     
-    int res = recvfrom(this->socket, reinterpret_cast<char*>(buf), maxSize, 0, 
+    nInt32 res = recvfrom(this->socket, reinterpret_cast<char*>(buf), maxSize, 0, 
 		reinterpret_cast<sockaddr*>(&sockAddr), reinterpret_cast<socklen_t*>(&sockLen));
     
     out_SenderIP.host = ntohl(sockAddr.sin_addr.s_addr);

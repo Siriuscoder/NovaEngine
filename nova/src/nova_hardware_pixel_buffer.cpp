@@ -108,8 +108,8 @@ CHardwarePixelBuffer::CHardwarePixelBuffer() : mWidth(0), mHeight(0),
 
 }
 
-CHardwarePixelBuffer::CHardwarePixelBuffer(GLuint TargetId, TargetType tag, int level,
-	int face, CImageFormats::NovaPixelFormats pixelformat) : mPixelFormat(pixelformat),
+CHardwarePixelBuffer::CHardwarePixelBuffer(GLuint TargetId, TargetType tag, nInt32 level,
+	nInt32 face, CImageFormats::NovaPixelFormats pixelformat) : mPixelFormat(pixelformat),
 	mTargetId(TargetId), mLevel(level), mTarget(tag), mFace(face),
 	mLockWidth(0), mLockHeight(0), mLockDepth(0), mLockActSize(0)
 {
@@ -161,8 +161,8 @@ void CHardwarePixelBuffer::SizeToWHD(size_t * Width, size_t * Height, size_t * D
 {
 	COpenGLFormats informat;
 	informat.SetExFormat(mPixelFormat);
-	unsigned int line = mRowPitch;
-	unsigned int sec = mSlicePitch;
+	nUInt32 line = mRowPitch;
+	nUInt32 sec = mSlicePitch;
 	Start /= informat.GetInternalChannels();
 
 	if(Start < line)
@@ -180,7 +180,7 @@ void CHardwarePixelBuffer::SizeToWHD(size_t * Width, size_t * Height, size_t * D
 	else if(Start >= sec)
 	{
 		*Depth = Start / sec;
-		unsigned int slice = Start % sec;
+		nUInt32 slice = Start % sec;
 
 		if(slice < line)
 		{
@@ -200,8 +200,8 @@ void CHardwarePixelBuffer::WHDToSize(size_t Width, size_t Height, size_t Depth,
 {
 	COpenGLFormats informat;
 	informat.SetExFormat(mPixelFormat);
-	unsigned int line = mRowPitch * informat.GetInternalChannels();
-	unsigned int sec = mSlicePitch * informat.GetInternalChannels();
+	nUInt32 line = mRowPitch * informat.GetInternalChannels();
+	nUInt32 sec = mSlicePitch * informat.GetInternalChannels();
 
 	*Start = (Width * informat.GetInternalChannels()) +
 		(line * Height) + (sec * Depth);
@@ -235,7 +235,7 @@ CMemoryBuffer CHardwarePixelBuffer::LockSource(size_t offset, size_t length, THa
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 4);
 
-	int error = glGetError();
+	nInt32 error = glGetError();
 	if(error != GL_NO_ERROR)
 	{
 		nstringstream str;
@@ -267,7 +267,7 @@ CMemoryBuffer CHardwarePixelBuffer::LockSource(size_t offset, size_t length, THa
 }
 
 CMemoryBuffer CHardwarePixelBuffer::Lock(size_t xoff,
-	size_t yoff, size_t zoff, int width, int height, int depth, THardwareBufferLock opt)
+	size_t yoff, size_t zoff, nInt32 width, nInt32 height, nInt32 depth, THardwareBufferLock opt)
 {
 	size_t start, end;
 
@@ -355,7 +355,7 @@ void CHardwarePixelBuffer::UnlockSource(CMemoryBuffer & buf)
 }
 
 CTextureSurfaceList::CTextureSurfaceList(CHardwarePixelBuffer::TargetType type,
-	MipMapTagertType mip, int face, CImageFormats::NovaPixelFormats pixelformat, GLuint cube) : CBase("CTextureSurfaceList")
+	MipMapTagertType mip, nInt32 face, CImageFormats::NovaPixelFormats pixelformat, GLuint cube) : CBase("CTextureSurfaceList")
 {
 	mType = type;
 	mMipState = mip;
@@ -529,7 +529,7 @@ void CTextureSurfaceList::BuildSurfaceList(const CMemoryBuffer & data, size_t wi
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-	int error = glGetError();
+	nInt32 error = glGetError();
 	if(error != GL_NO_ERROR)
 	{
 		nstringstream str;
@@ -538,7 +538,7 @@ void CTextureSurfaceList::BuildSurfaceList(const CMemoryBuffer & data, size_t wi
 		throw NOVA_EXP(str.str().c_str(), BAD_OPERATION);
 	}
 
-	for(int level = 0; level < mMaxMipmaps; ++level)
+	for(nInt32 level = 0; level < mMaxMipmaps; ++level)
 	{
 		CHardwarePixelBufferPtr hpb(new CHardwarePixelBuffer(mTargetId, mType,
 			level, mFace, mPixelFormat));
@@ -564,7 +564,7 @@ CHardwarePixelBufferPtr CTextureSurfaceList::GetSurface(nova::nUInt32 level)
 	return mSurfaceList[level];
 }
 
-CHardwarePixelBufferPtr CTextureSurfaceList::operator[](int level)
+CHardwarePixelBufferPtr CTextureSurfaceList::operator[](nInt32 level)
 {
 	return GetSurface(level);
 }
@@ -574,7 +574,7 @@ CImageFormats::NovaPixelFormats CTextureSurfaceList::GetPixelFormat()
 	return mPixelFormat;
 }
 
-int CTextureSurfaceList::GetMaxLevels(void)
+nInt32 CTextureSurfaceList::GetMaxLevels(void)
 {
 	return mSurfaceList.size();
 }

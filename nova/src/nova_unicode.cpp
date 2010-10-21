@@ -101,7 +101,7 @@ namespace
 
     bool is_legal_utf8(const utf8_char *_pData, size_type _size)
     {
-        int check_size = trailingBytesForUTF8[*_pData] + 1;
+		nova::nInt32 check_size = trailingBytesForUTF8[*_pData] + 1;
 
         if(check_size != _size)
         {
@@ -984,7 +984,7 @@ namespace unicode
 
         nova::nwstring wstr;
 
-        int len = mbstowcs(NULL, _local.c_str(), _local.size());
+        nInt32 len = mbstowcs(NULL, _local.c_str(), _local.size());
 
         if(len > 0)
         {
@@ -1009,7 +1009,7 @@ namespace unicode
 
         nova::nstring str;
 
-        int len = wcstombs(NULL, _wstr.c_str(), _wstr.size());
+        nInt32 len = wcstombs(NULL, _wstr.c_str(), _wstr.size());
 
         if(len > 0)
         {

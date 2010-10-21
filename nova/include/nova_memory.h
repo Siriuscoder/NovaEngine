@@ -83,10 +83,10 @@ public:
 /// \param n количество элементов данного типа
 /// \return указатель на блок выделенной памяти или NULL;
 /// \code
-///	CNovaAlloc<int> allocator;
-/// int * pointer = allocator.allocate(10);
+///	CNovaAlloc<nInt32> allocator;
+/// nInt32 * pointer = allocator.allocate(10);
 ///
-/// for(int * i = pointer; i < pointer+10; ++i)
+/// for(nInt32 * i = pointer; i < pointer+10; ++i)
 ///		*i = 5;
 /// // 5 5 5 5 5 5 5 5 5 5
 /// pointer.deallocate(p, 10);

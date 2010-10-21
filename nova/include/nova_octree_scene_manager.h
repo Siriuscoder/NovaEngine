@@ -31,11 +31,11 @@ class NOVA_EXPORT COctreeSceneManager : public CSceneManager
 {
 protected:
 
-	int RenderSceneImpl(void);
+	nInt32 RenderSceneImpl(void);
 
 	void PrepareSceneImpl(void);
 
-	int PrepareRenderQueueImpl(void);
+	nInt32 PrepareRenderQueueImpl(void);
 
 	void PrepareSceneFrameImpl(void);
 

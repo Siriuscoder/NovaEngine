@@ -88,14 +88,14 @@ public:
     // member access
     inline operator const nReal* () const;
     inline operator nReal* ();
-    inline const nReal* operator[] (int iRow) const;
-    inline nReal* operator[] (int iRow);
-    inline nReal operator() (int iRow, int iCol) const;
-    inline nReal& operator() (int iRow, int iCol);
-    void SetRow (int iRow, const CVector3<nReal>& rkV);
-    CVector3<nReal> GetRow (int iRow) const;
-    void SetColumn (int iCol, const CVector3<nReal>& rkV);
-    CVector3<nReal> GetColumn (int iCol) const;
+    inline const nReal* operator[] (nInt32 iRow) const;
+    inline nReal* operator[] (nInt32 iRow);
+    inline nReal operator() (nInt32 iRow, nInt32 iCol) const;
+    inline nReal& operator() (nInt32 iRow, nInt32 iCol);
+    void SetRow (nInt32 iRow, const CVector3<nReal>& rkV);
+    CVector3<nReal> GetRow (nInt32 iRow) const;
+    void SetColumn (nInt32 iCol, const CVector3<nReal>& rkV);
+    CVector3<nReal> GetColumn (nInt32 iCol) const;
     void GetColumnMajor (nReal* afCMajor) const;
 
     // assignment
@@ -340,7 +340,7 @@ private:
     static void GolubKahanStep (CMatrix3& rkA, CMatrix3& rkL, CMatrix3& rkR);
 
     // support for comparisons
-    int CompareArrays (const CMatrix3& rkM) const;
+    nInt32 CompareArrays (const CMatrix3& rkM) const;
 
     nReal m_afEntry[9];
 };
@@ -515,25 +515,25 @@ inline CMatrix3<nReal>::operator nReal* ()
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline const nReal* CMatrix3<nReal>::operator[] (int iRow) const
+inline const nReal* CMatrix3<nReal>::operator[] (nInt32 iRow) const
 {
     return &m_afEntry[3*iRow];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal* CMatrix3<nReal>::operator[] (int iRow)
+inline nReal* CMatrix3<nReal>::operator[] (nInt32 iRow)
 {
     return &m_afEntry[3*iRow];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal CMatrix3<nReal>::operator() (int iRow, int iCol) const
+inline nReal CMatrix3<nReal>::operator() (nInt32 iRow, nInt32 iCol) const
 {
     return m_afEntry[iCol+3*iRow];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal& CMatrix3<nReal>::operator() (int iRow, int iCol)
+inline nReal& CMatrix3<nReal>::operator() (nInt32 iRow, nInt32 iCol)
 {
     return m_afEntry[iCol+3*iRow];
 }
@@ -630,23 +630,23 @@ CMatrix3<nReal>& CMatrix3<nReal>::MakeTensorProduct (const CVector3<nReal>& rkU,
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-void CMatrix3<nReal>::SetRow (int iRow, const CVector3<nReal>& rkV)
+void CMatrix3<nReal>::SetRow (nInt32 iRow, const CVector3<nReal>& rkV)
 {
-    int i0 = 3*iRow, i1 = i0+1, i2 = i1+1;
+    nInt32 i0 = 3*iRow, i1 = i0+1, i2 = i1+1;
     m_afEntry[i0] = rkV[0];
     m_afEntry[i1] = rkV[1];
     m_afEntry[i2] = rkV[2];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-CVector3<nReal> CMatrix3<nReal>::GetRow (int iRow) const
+CVector3<nReal> CMatrix3<nReal>::GetRow (nInt32 iRow) const
 {
-    int i0 = 3*iRow, i1 = i0+1, i2 = i1+1;
+    nInt32 i0 = 3*iRow, i1 = i0+1, i2 = i1+1;
     return CVector3<nReal>(m_afEntry[i0],m_afEntry[i1],m_afEntry[i2]);
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-void CMatrix3<nReal>::SetColumn (int iCol, const CVector3<nReal>& rkV)
+void CMatrix3<nReal>::SetColumn (nInt32 iCol, const CVector3<nReal>& rkV)
 {
     m_afEntry[iCol] = rkV[0];
     m_afEntry[iCol+3] = rkV[1];
@@ -654,7 +654,7 @@ void CMatrix3<nReal>::SetColumn (int iCol, const CVector3<nReal>& rkV)
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-CVector3<nReal> CMatrix3<nReal>::GetColumn (int iCol) const
+CVector3<nReal> CMatrix3<nReal>::GetColumn (nInt32 iCol) const
 {
     return CVector3<nReal>(m_afEntry[iCol],m_afEntry[iCol+3],m_afEntry[iCol+6]);
 }
@@ -689,7 +689,7 @@ inline CMatrix3<nReal>& CMatrix3<nReal>::operator= (const CMatrix3& rkM)
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-int CMatrix3<nReal>::CompareArrays (const CMatrix3& rkM) const
+nInt32 CMatrix3<nReal>::CompareArrays (const CMatrix3& rkM) const
 {
     return memcmp(m_afEntry,rkM.m_afEntry,9*sizeof(nReal));
 }
@@ -1311,7 +1311,7 @@ void CMatrix3<nReal>::EigenDecomposition (CMatrix3& rkRot, CMatrix3& rkDiag) con
     assert(bConverged);
 
     // (insertion) sort eigenvalues in increasing order, d0 <= d1 <= d2
-    int i;
+    nInt32 i;
     nReal fSave;
 
     if (afDiag[1] < afDiag[0])
@@ -2164,11 +2164,11 @@ bool CMatrix3<nReal>::QLAlgorithm (nReal afDiag[3], nReal afSubd[2])
     // when either of the subdiagonal terms s0 or s1 is zero and reduces the
     // 2-by-2 subblock directly.
 
-    const int iMax = 32;
-    for (int i = 0; i < iMax; i++)
+    const nInt32 iMax = 32;
+    for (nInt32 i = 0; i < iMax; i++)
     {
         nReal fSum, fDiff, fDiscr, fEValue0, fEValue1, fCos, fSin, fTmp;
-        int iRow;
+        nInt32 iRow;
 
         fSum = CMath<nReal>::FAbs(afDiag[0]) + CMath<nReal>::FAbs(afDiag[1]);
         if (CMath<nReal>::FAbs(afSubd[0]) + fSum == fSum)
@@ -2479,7 +2479,7 @@ void CMatrix3<nReal>::Bidiagonalize (CMatrix3& rkA, CMatrix3& rkL, CMatrix3& rkR
         }
         else
         {
-            for (int iRow = 0; iRow < 3; iRow++)
+            for (nInt32 iRow = 0; iRow < 3; iRow++)
             {
                 nReal fTmp0 = rkL[iRow][1];
                 nReal fTmp1 = rkL[iRow][2];
@@ -2517,7 +2517,7 @@ void CMatrix3<nReal>::GolubKahanStep (CMatrix3& rkA, CMatrix3& rkL, CMatrix3& rk
     rkA[1][0] = -fSin*rkA[1][1];
     rkA[1][1] *= fCos;
 
-    int iRow;
+    nInt32 iRow;
     for (iRow = 0; iRow < 3; iRow++)
     {
         fTmp0 = rkR[0][iRow];
@@ -2541,7 +2541,7 @@ void CMatrix3<nReal>::GolubKahanStep (CMatrix3& rkA, CMatrix3& rkL, CMatrix3& rk
     rkA[0][2] = -fSin*rkA[1][2];
     rkA[1][2] *= fCos;
 
-    int iCol;
+    nInt32 iCol;
     for (iCol = 0; iCol < 3; iCol++)
     {
         fTmp0 = rkL[iCol][0];
@@ -2599,15 +2599,15 @@ template <class nReal>
 void CMatrix3<nReal>::SingularValueDecomposition (CMatrix3& rkL, CMatrix3& rkD,
     CMatrix3& rkRTranspose) const
 {
-    int iRow, iCol;
+    nInt32 iRow, iCol;
 
     CMatrix3 kA = *this;
     Bidiagonalize(kA,rkL,rkRTranspose);
     rkD.MakeZero();
 
-    const int iMax = 32;
+    const nInt32 iMax = 32;
     const nReal fEpsilon = (nReal)1e-04;
-    for (int i = 0; i < iMax; i++)
+    for (nInt32 i = 0; i < iMax; i++)
     {
         nReal fTmp, fTmp0, fTmp1;
         nReal fSin0, fCos0, fTan0;
@@ -2823,9 +2823,9 @@ void CMatrix3<nReal>::QDUDecomposition (CMatrix3& rkQ, CMatrix3& rkD,
 
     if (fDet < (nReal)0.0)
     {
-        for (int iRow = 0; iRow < 3; iRow++)
+        for (nInt32 iRow = 0; iRow < 3; iRow++)
         {
-            for (int iCol = 0; iCol < 3; iCol++)
+            for (nInt32 iCol = 0; iCol < 3; iCol++)
             {
                 rkQ[iRow][iCol] = -rkQ[iRow][iCol];
             }

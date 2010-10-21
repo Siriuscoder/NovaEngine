@@ -64,12 +64,12 @@ nova::stl<nstring>::vector CStringUtils::Split(const nstring & str, char delim)
 	return temp;
 }
 
-int CStringUtils::StringToInt(const nstring & str)
+nInt32 CStringUtils::StringToInt(const nstring & str)
 {
 	return StringToInt(str.c_str());
 }
 
-nstring CStringUtils::IntToString(int num)
+nstring CStringUtils::IntToString(nInt32 num)
 {
 	char temp[30] = "\0";
 
@@ -78,7 +78,7 @@ nstring CStringUtils::IntToString(int num)
 	//return nstring(itoa(num, temp, 10));
 }
 
-nstring CStringUtils::IntTo16xString(int num)
+nstring CStringUtils::IntTo16xString(nInt32 num)
 {
 	char temp[30] = "\0";
 
@@ -113,9 +113,9 @@ nstring CStringUtils::DoubleToString(double nReal)
 	return stream.str();
 }
 
-int CStringUtils::StringToInt(const char * str)
+nInt32 CStringUtils::StringToInt(const char * str)
 {
-	int res = 0;
+	nInt32 res = 0;
 
 	sscanf(str, "%d", &res);
 	return res;

@@ -137,7 +137,7 @@ public:
 	CAsyncLockingQueue();
 	~CAsyncLockingQueue();
 
-	int ProccesQueue(void);
+	nInt32 ProccesQueue(void);
 	void AddToQueue(CResource *resource);
 
 	void ClearQueue(void);
@@ -200,9 +200,9 @@ public:
 
 	void BuildNextResource(const nstring & name);
 
-	int LoadResourcesForce(const CFilesPackage &rPack);
+	nInt32 LoadResourcesForce(const CFilesPackage &rPack);
 
-	int LoadResourcesInBackgroundMode(const CFilesPackage &rPack);
+	nInt32 LoadResourcesInBackgroundMode(const CFilesPackage &rPack);
 
 };
 

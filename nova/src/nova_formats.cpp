@@ -30,7 +30,7 @@
 namespace nova
 {
 
-int CImageFormats::GetInternalChannels()
+nInt32 CImageFormats::GetInternalChannels()
 {
 	switch(ex_format)
 	{

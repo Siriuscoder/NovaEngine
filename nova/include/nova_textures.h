@@ -220,7 +220,7 @@ public:
 
 	virtual void PrepareResource(void);
 
-	void AddSubTexture(CImagePtr & image, nova::nUInt32 level, int face,
+	void AddSubTexture(CImagePtr & image, nova::nUInt32 level, nInt32 face,
 		nova::nUInt32 xoff, nova::nUInt32 yoff = 0, nova::nUInt32 zoff = 0);
 
 	CTextureSurfaceListPtr GetSurfaceList(nova::nUInt32 face);

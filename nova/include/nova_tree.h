@@ -66,23 +66,23 @@ public:
 	usertype GetData();
 
 /// \brief Взять количество потомков.
-	int GetChildrenLen();
+	nInt32 GetChildrenLen();
 
 /// \brief Взять дочернюю вершину по номеру в листе.
 ///
 /// \attention Будьте внимаетельны с номером!
-	CTreeNode<usertype> * GetNode(int id);
+	CTreeNode<usertype> * GetNode(nInt32 id);
 
 /// \brief Добавить вершину в конец листа
 ///
 /// \param _data данные вершины.
-	int AddNone(usertype & _data);
+	nInt32 AddNone(usertype & _data);
 
 /// \brief Добавить вершину в конец листа
-	int AddCurrentNone(CTreeNode<usertype> * node);
+	nInt32 AddCurrentNone(CTreeNode<usertype> * node);
 
 /// \brief Удалить вершину и все ее дочерние элементы, по номеру листа. 
-	void DeleteNode(int id);
+	void DeleteNode(nInt32 id);
 /// \brief Удалить всю секцию дерева полностью.
 	void DeleteAll();
 /// \brief Деструктор
@@ -106,13 +106,13 @@ public:
 /// его на виду всегда! Поэтому я и добавил этот класс, с ним не 
 /// пропадете =)
 /// \code 
-/// CTree<int> tree;
+/// CTree<nInt32> tree;
 ///
 /// tree.CreateRoot(3); // Заносим в корень тройку.
 /// tree.GetRootElement()->AddNone(2); // добавляем элемент
 /// tree.GetRootElement()->AddNone(1);
 /// tree.GetRootElement()->AddNone(4);
-/// CTreeNode<int> * node = tree.GetRootElement()->GetNode(1);
+/// CTreeNode<nInt32> * node = tree.GetRootElement()->GetNode(1);
 /// node->AddNone(5);
 /// node->AddNone(6);
 /// // у нас получилось вот такое дерево.
@@ -148,14 +148,14 @@ template <class usertype> usertype CTreeNode<usertype>::GetData()
 	return data;
 }
 
-template <class usertype> CTreeNode<usertype> * CTreeNode<usertype>::GetNode(int id)
+template <class usertype> CTreeNode<usertype> * CTreeNode<usertype>::GetNode(nInt32 id)
 {
 	if(id < 0)
 		throw NovaExp("CTreeNode::GetNode - id < 0 !!", BAD_OPERATION);
 	typename stl< CTreeNode<usertype> *>::list::iterator it;
 	//list< void *, CNovaAlloc<void *> >::iterator it;
 	it = ch_nodes.begin();
-	for(int i = 0; i < id; ++i, it++);
+	for(nInt32 i = 0; i < id; ++i, it++);
 
 	return *it;
 }
@@ -172,12 +172,12 @@ template <class usertype> CTreeNode<usertype>::~CTreeNode()
 	DeleteAll();
 }
 
-template <class usertype> int CTreeNode<usertype>::GetChildrenLen()
+template <class usertype> nInt32 CTreeNode<usertype>::GetChildrenLen()
 {
 	return ch_nodes.size();
 }
 
-template <class usertype> int CTreeNode<usertype>::AddNone(usertype &_data)
+template <class usertype> nInt32 CTreeNode<usertype>::AddNone(usertype &_data)
 {
 	CTreeNode<usertype> * node = new CTreeNode<usertype>(_data);
 	ch_nodes.push_back(node);
@@ -185,14 +185,14 @@ template <class usertype> int CTreeNode<usertype>::AddNone(usertype &_data)
 	return ch_nodes.size()-1;
 }
 
-template <class usertype> int CTreeNode<usertype>::AddCurrentNone(CTreeNode<usertype> * node)
+template <class usertype> nInt32 CTreeNode<usertype>::AddCurrentNone(CTreeNode<usertype> * node)
 {
 	ch_nodes.push_back(node);
 
 	return ch_nodes.size()-1;
 }
 
-template <class usertype> void CTreeNode<usertype>::DeleteNode(int id)
+template <class usertype> void CTreeNode<usertype>::DeleteNode(nInt32 id)
 {
 	if(id < 0)
 		throw NovaExp("CTreeNode::DeleteNode - id < 0 !!", BAD_OPERATION);

@@ -33,15 +33,15 @@ template<> CRenderSystem * CSingelton<CRenderSystem>::SingeltonObject = NULL;
 CRenderCapabilities::CRenderCapabilities() : mMaxDrawBuffers(0),
 	mVendor(GPU_UNKNOWN), CBase("CRenderCapabilities")
 {
-	memset(mCap, 0, sizeof(int) * NUM_CATEGORYES);
+	memset(mCap, 0, sizeof(nInt32) * NUM_CATEGORYES);
 }
 
-bool CRenderCapabilities::IsSupport(nova::CapCategory cat, int cap)
+bool CRenderCapabilities::IsSupport(nova::CapCategory cat, nInt32 cap)
 {
 	return ((mCap[cat] & (1 << cap)) != 0) ? true : false;
 }
 
-void CRenderCapabilities::SetCap(nova::CapCategory cat, int cap)
+void CRenderCapabilities::SetCap(nova::CapCategory cat, nInt32 cap)
 {
 	mCap[cat] |= ( 1 << cap);
 }
@@ -209,7 +209,7 @@ void CRenderSystem::InitializeFromConfigFile()
 	}
 }
 
-int CRenderSystem::MessageLoopPump()
+nInt32 CRenderSystem::MessageLoopPump()
 {
 	if(!mRootWindow.IsNull())
 		return mRootWindow->MessagePump();
@@ -397,7 +397,7 @@ CRenderTargetPtr CRenderSystem::AttachRenderTarget(CRenderTarget * target)
 		throw NOVA_EXP("CRenderSystem::AttachWindowRenderTarget - can not attach this window, \
 		this priority already exist!", BAD_OPERATION);
 
-	std::pair<int, CRenderTargetPtr> Tagert;
+	std::pair<nInt32, CRenderTargetPtr> Tagert;
 	Tagert.first = target->GetPriority();
 	Tagert.second = CRenderTargetPtr(target);
 
@@ -430,7 +430,7 @@ void CRenderSystem::DetachRenderTarget(nstring & name)
 		throw NOVA_EXP("CRenderSystem::AttachWindowRenderTarget - can not find this target!", BAD_OPERATION);
 }
 
-CRenderWindowPtr CRenderSystem::CreateRenderWindow(nstring & name, int priority)
+CRenderWindowPtr CRenderSystem::CreateRenderWindow(nstring & name, nInt32 priority)
 {
 	CRenderWindow * target = mSupport->CreateRenderWindowTarget(name, priority);
 
@@ -515,12 +515,12 @@ void CRenderSystem::PrepareAllRenderTargets()
 
 }
 
-bool CRenderSystem::CheckCapabilities(CapCategory cat, int cap)
+bool CRenderSystem::CheckCapabilities(CapCategory cat, nInt32 cap)
 {
 	return mCapabilities.IsSupport(cat, cap);
 }
 
-int CRenderSystem::BuildAllRenderTargets()
+nInt32 CRenderSystem::BuildAllRenderTargets()
 {
 	// building RTT targets
 	TRenderTargetsMap::iterator it;
@@ -682,7 +682,7 @@ void CRenderSystem::SetBlendFunc(BlendingFinctions blend_sfactor, BlendingFincti
 {
 	GLenum sfactor = 0x0, dfactor = 0x0;
 
-	for(int i = 0; i < 2; i++)
+	for(nInt32 i = 0; i < 2; i++)
 	{
 		GLenum * target1 = NULL;
 		GLenum * target2 = NULL;
@@ -767,7 +767,7 @@ void CRenderSystem::SetBlendFunc(BlendingFinctions blend_sfactor, BlendingFincti
 	glBlendFunc(sfactor, dfactor);
 }
 
-void CRenderSystem::SetVeiwport(int x, int y, int width, int height)
+void CRenderSystem::SetVeiwport(nInt32 x, nInt32 y, nInt32 width, nInt32 height)
 {
 	glViewport(x, y, width, height);
 }

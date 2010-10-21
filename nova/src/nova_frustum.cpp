@@ -115,7 +115,7 @@ bool CFrustum::PointInFrustum(Vector3f & point)
 	if(!mActive)
 		return true;
 
-	for(int face = 0; face < 6; face++)
+	for(nInt32 face = 0; face < 6; face++)
 	{
 		if(mFrustumPlanes[face].WhichSide(point) <= 0)
 			return false;
@@ -129,7 +129,7 @@ bool CFrustum::SphereInFrustum(CSpheref & sphere)
 	if(!mActive)
 		return true;
 
-	for(int face = 0; face < 6; face++)
+	for(nInt32 face = 0; face < 6; face++)
 	{
 		if(mFrustumPlanes[face].DistanceTo(sphere.Center) <= -sphere.Radius)
 			return false;
@@ -145,7 +145,7 @@ nova::nReal CFrustum::DistanceInFrustumSphere(CSpheref & sphere)
 
 	nova::nReal dist;
 
-	for(int face = 0; face < 6; face++)
+	for(nInt32 face = 0; face < 6; face++)
 	{
 		dist = mFrustumPlanes[face].DistanceTo(sphere.Center);
 		if(dist <= -sphere.Radius)
@@ -160,7 +160,7 @@ bool CFrustum::BoxInFrustum(CBoundingBox & box)
 	if(!mActive)
 		return true;
 
-	for(int face = 0; face < 6; face++)
+	for(nInt32 face = 0; face < 6; face++)
 	{
 		if(mFrustumPlanes[face].WhichSide(box.GetP1()) > 0)
 			continue;
@@ -187,7 +187,7 @@ bool CFrustum::BoxInFrustum(CBoundingBox & box)
 
 void CFrustum::ClearFrustumPlanes()
 {
-	for(int i = 0; i < 6; ++i)
+	for(nInt32 i = 0; i < 6; ++i)
 	{
 		mFrustumPlanes[i].Normal = Vector3f::ZERO;
 		mFrustumPlanes[i].Constant = 0;

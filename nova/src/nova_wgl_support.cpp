@@ -107,7 +107,7 @@ bool CWGLSupport::SupportPBuffers()
 	return (CheckExtention(temp) && wglewIsSupported("WGL_EXT_pbuffer")) == GL_TRUE;
 }
 
-CRenderWindow * CWGLSupport::CreateRenderWindowTarget(nstring & name, int priority)
+CRenderWindow * CWGLSupport::CreateRenderWindowTarget(nstring & name, nInt32 priority)
 {
 	CLog::GetInstance().PrintMessage("(!)Creating wgl window... ");
 

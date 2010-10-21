@@ -421,7 +421,7 @@ nstring CResourceManager::GetResourceLocation()
 CAsyncLockingQueue::CAsyncLockingQueue()
 {
 	mQueue.clear();
-	int res = pthread_mutex_init(&mLockMutex, NULL);
+	nInt32 res = pthread_mutex_init(&mLockMutex, NULL);
 	if(res != 0)
 	{
 		nstring er("CAsyncLockingQueue::CAsyncLockingQueue() - can not create mutex section code: ");
@@ -436,9 +436,9 @@ CAsyncLockingQueue::~CAsyncLockingQueue()
 	pthread_mutex_destroy(&mLockMutex);
 }
 
-int CAsyncLockingQueue::ProccesQueue(void)
+nInt32 CAsyncLockingQueue::ProccesQueue(void)
 {
-	int res = 0;
+	nInt32 res = 0;
 	pthread_mutex_lock(&mLockMutex);
 
 	for(nova::nUInt32 i = 0; i < mQueue.size(); ++i)
@@ -467,12 +467,12 @@ void CAsyncLockingQueue::ClearQueue(void)
 	pthread_mutex_unlock(&mLockMutex);
 }
 
-int CResourceManager::LoadResourcesForce(const CFilesPackage &rPack)
+nInt32 CResourceManager::LoadResourcesForce(const CFilesPackage &rPack)
 {
 	return 0;
 }
 
-int CResourceManager::LoadResourcesInBackgroundMode(const CFilesPackage &rPack)
+nInt32 CResourceManager::LoadResourcesInBackgroundMode(const CFilesPackage &rPack)
 {
 	return 0;
 }

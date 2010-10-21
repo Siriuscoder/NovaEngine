@@ -36,13 +36,13 @@ CRenderTarget::CRenderTarget() : mPriority(0), mWidth(0),
 	mBackColor = CColorRGBA::BLACK;
 }
 
-CViewPortPtr CRenderTarget::AddViewport(int left, 
-		int top, int width, int height, int ZOrder)
+CViewPortPtr CRenderTarget::AddViewport(nInt32 left, 
+		nInt32 top, nInt32 width, nInt32 height, nInt32 ZOrder)
 {
 	CViewPortPtr viewport(new CViewPort(this, left, top,
 		width, height, ZOrder));
 
-	pair<int, CViewPortPtr> view;
+	pair<nInt32, CViewPortPtr> view;
 	view.first = ZOrder;
 	view.second = viewport;
 
@@ -61,7 +61,7 @@ void CRenderTarget::RemoveAllViewPorts()
 	mViewPortList.clear();
 }
 
-void CRenderTarget::RemoveViewPort(int zorder)
+void CRenderTarget::RemoveViewPort(nInt32 zorder)
 {
 	TViewPortList::iterator it;
 
@@ -74,9 +74,9 @@ void CRenderTarget::RemoveViewPort(int zorder)
 		throw NOVA_EXP("CRenderTarget::RemoveViewPort - viewport on this zorder not exist..", BAD_OPERATION);
 }
 
-CViewPortPtr CRenderTarget::GetViewport(int zorder)
+CViewPortPtr CRenderTarget::GetViewport(nInt32 zorder)
 {
-	stl<int, CViewPortPtr>::map::iterator it;
+	stl<nInt32, CViewPortPtr>::map::iterator it;
 
 	if((it = mViewPortList.find(zorder)) != mViewPortList.end())
 		return (*it).second;
@@ -90,7 +90,7 @@ CViewPortPtr CRenderTarget::GetViewport(int zorder)
 void CRenderTarget::UpdateSource()
 {
 // Updating all viewports
-	stl<int, CViewPortPtr>::map::iterator it;
+	stl<nInt32, CViewPortPtr>::map::iterator it;
 
 	CRenderSystem::GetSingelton().ClearBackBuffers(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, mBackColor);
 

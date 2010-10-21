@@ -36,7 +36,7 @@ public:
 	typedef struct _MatGroupInfo
 	{
 		nstring nMatName;
-		int nFace;
+		nInt32 nFace;
 	} TMatGroupInfo;
 
 	typedef nova::stl<TMatGroupInfo>::vector TMatGroups;
@@ -89,10 +89,10 @@ public:
 		nstring nSelfIlMapMask;
 		nstring nReflectionMapMask;
 /* Acubic opt */
-		int nAutoreflMapAntiAlias;
+		nInt32 nAutoreflMapAntiAlias;
 		nova::nUInt32 nAutoreflMapFlags;
-        int nAutoreflMapSize;
-        int nAutoreflMapFrameStep;
+        nInt32 nAutoreflMapSize;
+        nInt32 nAutoreflMapFrameStep;
 
 	} TMaterialContainer;
 
@@ -127,7 +127,7 @@ public:
 
 	void LoadImmediately(void);
 
-	void LoadAsync(int timeout);
+	void LoadAsync(nInt32 timeout);
 
 	stl<string>::vector GetMeshList(void);
 

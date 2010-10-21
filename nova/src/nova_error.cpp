@@ -23,10 +23,10 @@
 
 namespace nova {
 
-int er_code = 0;
+nInt32 er_code = 0;
 
 /*
-nUInt32 inline Stepin(nUInt32 i, int c)
+nUInt32 inline Stepin(nUInt32 i, nInt32 c)
 {
 	nUInt32 p = i;
 	if(c == 0)
@@ -57,9 +57,9 @@ void prError(nova::nstringstream & mes)
 		<< "address\tallocated blocks\tfree_blocks\tblocks_allocations\n";
 
 
-	for(int i = 0; i < winnie_allocator::max_lists_num; ++i)
+	for(nInt32 i = 0; i < winnie_allocator::max_lists_num; ++i)
 	{
-		int level = (int)CMathf::Pow(0x02, i);
+		nInt32 level = (nInt32)CMathf::Pow(0x02, i);
 
 		table << "0x" << CStringUtils::IntTo16xString(level) << "\t         ";
 
@@ -74,7 +74,7 @@ void prError(nova::nstringstream & mes)
 #endif
 }
 
-int STDCALL__ error(int code, nstring & mes, CBase *pp)
+nInt32 STDCALL__ error(nInt32 code, nstring & mes, CBase *pp)
 {
 	char class_name[CLASS_NAME_LEN]= "Unknown class";
 	nova::nstringstream err;
@@ -134,7 +134,7 @@ int STDCALL__ error(int code, nstring & mes, CBase *pp)
 	return er_code;
 }
 
-int last_error()
+nInt32 last_error()
 {
 	return er_code;
 }
@@ -150,20 +150,20 @@ NovaExp::NovaExp() : CBase("NovaExp")
 	code = 0;
 }
 
-NovaExp::NovaExp(int _code) : CBase("NovaExp")
+NovaExp::NovaExp(nInt32 _code) : CBase("NovaExp")
 {
 	e_mes.clear();
 	code = _code;
 }
 
-NovaExp::NovaExp(nova::nCChar *mes, int _code) : CBase("NovaExp")
+NovaExp::NovaExp(nova::nCChar *mes, nInt32 _code) : CBase("NovaExp")
 {
 	e_mes.clear();
 	e_mes.append(mes);
 	code = _code;
 }
 
-NovaExp::NovaExp(nova::nCChar file[], int line, nCChar * mes, int _code) : CBase("NovaExp")
+NovaExp::NovaExp(nova::nCChar file[], nInt32 line, nCChar * mes, nInt32 _code) : CBase("NovaExp")
 {
 	e_mes.clear();
 	e_mes.append(mes);
@@ -174,7 +174,7 @@ NovaExp::NovaExp(nova::nCChar file[], int line, nCChar * mes, int _code) : CBase
 	code = _code;
 }
 
-int NovaExp::GetCode()
+nInt32 NovaExp::GetCode()
 {
 	return code;
 }

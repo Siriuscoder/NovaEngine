@@ -115,7 +115,7 @@ void CSDLSupport::InitWGLExtensions()
 
 #endif
 
-CRenderWindow * CSDLSupport::CreateRenderWindowTarget(nstring & name, int priority)
+CRenderWindow * CSDLSupport::CreateRenderWindowTarget(nstring & name, nInt32 priority)
 {
 	CLog::GetInstance().PrintMessage("(!)Creating sdl window... ");
 

@@ -97,14 +97,14 @@ CThread::CThread(char * _name) : CBase(_name)
 	BeginInit();
 }
 
-int CThread::Exec(void *_buf) throw(nova::NovaExp)
+nInt32 CThread::Exec(void *_buf) throw(nova::NovaExp)
 {
 //	pth = this;
 //	if(!(pthread = SDL_CreateThread(__in__thread, _buf)))
 //		throw NOVA_EXP("Can not create thread!", BAD_OPERATION);
 //	state = TH_PLAY;
 	pthread_attr_t attr;
-	int rc = 0;
+	nInt32 rc = 0;
 	_in_data * threadset = NULL;
 
 	pthread_attr_init(&attr);
@@ -134,7 +134,7 @@ CThread::~CThread()
 	pthread_mutex_destroy(&mStateMutex);
 }
 
-int CThread::Destroy()
+nInt32 CThread::Destroy()
 {
 //	if(pthread)
 //		SDL_KillThread(pthread);

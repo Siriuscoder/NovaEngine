@@ -113,7 +113,7 @@ Matrix4f CMovableObject::ComputeLocalMatrix(void)
 	mOrientation.ToRotationMatrix(temp);
 
 
-	for(int i = 0; i < 4; ++i)
+	for(nInt32 i = 0; i < 4; ++i)
 	{
 		if(i < 3)
 		{

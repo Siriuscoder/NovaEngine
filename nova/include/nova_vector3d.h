@@ -51,8 +51,8 @@ public:
     // coordinate access
     inline operator const nReal* () const;
     inline operator nReal* ();
-    inline nReal operator[] (int i) const;
-    inline nReal& operator[] (int i);
+    inline nReal operator[] (nInt32 i) const;
+    inline nReal& operator[] (nInt32 i);
     inline nReal X () const;
     inline nReal& X ();
     inline nReal Y () const;
@@ -124,7 +124,7 @@ public:
         const CVector3& rkW);
 
     // Compute the extreme values.
-    static void ComputeExtremes (int iVQuantity, const CVector3* akPoint,
+    static void ComputeExtremes (nInt32 iVQuantity, const CVector3* akPoint,
         CVector3& rkMin, CVector3& rkMax);
 
     // special vectors
@@ -136,7 +136,7 @@ public:
 
 private:
     // support for comparisons
-    int CompareArrays (const CVector3& rkV) const;
+    nInt32 CompareArrays (const CVector3& rkV) const;
 
     nReal m_afTuple[3];
 };
@@ -192,13 +192,13 @@ inline CVector3<nReal>::operator nReal* ()
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal CVector3<nReal>::operator[] (int i) const
+inline nReal CVector3<nReal>::operator[] (nInt32 i) const
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal& CVector3<nReal>::operator[] (int i)
+inline nReal& CVector3<nReal>::operator[] (nInt32 i)
 {
     return m_afTuple[i];
 }
@@ -249,7 +249,7 @@ inline CVector3<nReal>& CVector3<nReal>::operator= (const CVector3& rkV)
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-int CVector3<nReal>::CompareArrays (const CVector3& rkV) const
+nInt32 CVector3<nReal>::CompareArrays (const CVector3& rkV) const
 {
     return memcmp(m_afTuple,rkV.m_afTuple,3*sizeof(nReal));
 }
@@ -494,10 +494,10 @@ void CVector3<nReal>::GetBarycentrics (const CVector3<nReal>& rkV0,
     // edges to be of order 1.  The scaling of all differences does not
     // change the barycentric coordinates.
     nReal fMax = (nReal)0.0;
-    int i;
+    nInt32 i;
     for (i = 0; i < 3; i++)
     {
-        for (int j = 0; j < 3; j++)
+        for (nInt32 j = 0; j < 3; j++)
         {
             nReal fValue = CMath<nReal>::FAbs(akDiff[i][j]);
             if (fValue > fMax)
@@ -545,7 +545,7 @@ void CVector3<nReal>::GetBarycentrics (const CVector3<nReal>& rkV0,
 
         CVector3<nReal> kE02cE12 = kE02.Cross(kE12);
         nReal fMaxSqrArea = kE02cE12.SquaredLength();
-        int iMaxIndex = 3;
+        nInt32 iMaxIndex = 3;
         nReal fSqrArea = kE0cE1.SquaredLength();
         if (fSqrArea > fMaxSqrArea)
         {
@@ -812,17 +812,17 @@ void CVector3<nReal>::GenerateComplementBasis (CVector3& rkU, CVector3& rkV,
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-void CVector3<nReal>::ComputeExtremes (int iVQuantity, const CVector3* akPoint,
+void CVector3<nReal>::ComputeExtremes (nInt32 iVQuantity, const CVector3* akPoint,
     CVector3& rkMin, CVector3& rkMax)
 {
     assert(iVQuantity > 0 && akPoint);
 
     rkMin = akPoint[0];
     rkMax = rkMin;
-    for (int i = 1; i < iVQuantity; i++)
+    for (nInt32 i = 1; i < iVQuantity; i++)
     {
         const CVector3<nReal>& rkPoint = akPoint[i];
-        for (int j = 0; j < 3; j++)
+        for (nInt32 j = 0; j < 3; j++)
         {
             if (rkPoint[j] < rkMin[j])
             {

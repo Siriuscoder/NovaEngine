@@ -219,7 +219,7 @@ void CImage::Alienifying()
 	ilDeleteImages(1, &image);
 }
 
-void CImage::Blurring(int iter)
+void CImage::Blurring(nInt32 iter)
 {
 	ILuint image;
 	CDevILFormats informat;
@@ -374,7 +374,7 @@ void CImage::Pixelization(nova::nUInt32 pix_size)
 	ilDeleteImages(1, &image);
 }
 
-void CImage::Sharpering(nReal factor, int iter)
+void CImage::Sharpering(nReal factor, nInt32 iter)
 {
 	ILuint image;
 	CDevILFormats informat;

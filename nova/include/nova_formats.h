@@ -60,7 +60,7 @@ protected:
 
 public:
 
-	int GetInternalChannels();
+	nInt32 GetInternalChannels();
 
 	inline NovaPixelFormats GetExFormat()
 	{

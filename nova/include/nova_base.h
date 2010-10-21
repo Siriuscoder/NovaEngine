@@ -52,10 +52,10 @@ protected:
 /// \brief Идентификатор объекта
 ///
 /// \attention Присваевается автоматически
-	int			mIDObject;
+	nInt32			mIDObject;
 
 /// \brief Служебное поле
-	int			mReserved;
+	nInt32			mReserved;
 
 /// \brief Имя класса
 ///
@@ -84,7 +84,7 @@ public:
 	void GetClassName(char *buff);
 
 /// \brief Берет идентификатор класса
-	int GetObjectId();
+	nInt32 GetObjectId();
 
 /// \brief Берет размер объекта
 ///
@@ -106,7 +106,7 @@ public:
 	virtual void operator +(CBASE & pobject){};
 	virtual void operator -(CBASE & pobject){};
 
-	virtual CBASE * operator [](int index){};
+	virtual CBASE * operator [](nInt32 index){};
 	virtual void operator <<(CBASE & pobject){};
 	virtual void operator >>(CBASE & pobject){}; 
 */

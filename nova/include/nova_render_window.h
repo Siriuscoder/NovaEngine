@@ -46,9 +46,9 @@ typedef struct __WindowInitialTarget
 	// у кого ЖК мониторы ставим 60-80 герц
 	nova::nByte freq;
 
-	int xpos;
+	nInt32 xpos;
 
-	int ypos;
+	nInt32 ypos;
 
 	nova::nUInt32 height;
 
@@ -67,14 +67,14 @@ typedef struct __WindowInitialTarget
 class CRenderWindow;
 
 
-typedef int (*MessageLoopUtility)(CRenderWindow * window);
+typedef nInt32 (*MessageLoopUtility)(CRenderWindow * window);
 
 class NOVA_EXPORT CRenderWindow : public CRenderTarget
 {
 protected:
 
-	int mXPosition;
-	int mYPosition;
+	nInt32 mXPosition;
+	nInt32 mYPosition;
 
 	bool mFullScreen;
 	bool mClosed;
@@ -100,7 +100,7 @@ public:
 
 	virtual ~CRenderWindow() {}
 
-	void GetMetrics(int & xpos, int & ypos,
+	void GetMetrics(nInt32 & xpos, nInt32 & ypos,
 		nova::nUInt32 & height, nova::nUInt32 & width,
 		nova::nUInt32 & color_depth, nova::nUInt32 & color_bits);
 
@@ -114,9 +114,9 @@ public:
 
 	virtual void SwapBuffers() {} 
 
-	int GetXPosition();
+	nInt32 GetXPosition();
 
-	int GetYPosition();
+	nInt32 GetYPosition();
 
 	bool IsFullScreen();
 
@@ -136,7 +136,7 @@ public:
 
 	void Close();
 
-	int MessagePump(void);
+	nInt32 MessagePump(void);
 
 	virtual void SaveContents(nstring & file) {}
 };

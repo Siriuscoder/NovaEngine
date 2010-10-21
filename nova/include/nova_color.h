@@ -54,8 +54,8 @@ public:
     // member access
     operator const nReal* () const;
     operator nReal* ();
-    nReal operator[] (int i) const;
-    nReal& operator[] (int i);
+    nReal operator[] (nInt32 i) const;
+    nReal& operator[] (nInt32 i);
     nReal R () const;
     nReal& R ();
     nReal G () const;
@@ -99,7 +99,7 @@ public:
 
 private:
     // support for comparisons
-    int CompareArrays (const CColorRGB& rkC) const;
+    nInt32 CompareArrays (const CColorRGB& rkC) const;
 
     nReal m_afTuple[3];
 };
@@ -121,8 +121,8 @@ public:
     // member access
     operator const nReal* () const;
     operator nReal* ();
-    nReal operator[] (int i) const;
-    nReal& operator[] (int i);
+    nReal operator[] (nInt32 i) const;
+    nReal& operator[] (nInt32 i);
     nReal R () const;
     nReal& R ();
     nReal G () const;
@@ -168,7 +168,7 @@ public:
 
 private:
     // support for comparisons
-    int CompareArrays (const CColorRGBA& rkC) const;
+    nInt32 CompareArrays (const CColorRGBA& rkC) const;
 
     nReal m_afTuple[4];
 };
@@ -185,7 +185,7 @@ inline CColorRGB::operator nReal* ()
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-inline nReal CColorRGB::operator[] (int i) const
+inline nReal CColorRGB::operator[] (nInt32 i) const
 {
     assert(0 <= i && i <= 2);
     if (i < 0)
@@ -200,7 +200,7 @@ inline nReal CColorRGB::operator[] (int i) const
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-inline nReal& CColorRGB::operator[] (int i)
+inline nReal& CColorRGB::operator[] (nInt32 i)
 {
     assert(0 <= i && i <= 2);
     if (i < 0)
@@ -255,7 +255,7 @@ inline CColorRGBA::operator nReal* ()
     return m_afTuple;
 }
 //----------------------------------------------------------------------------
-inline nReal CColorRGBA::operator[] (int i) const
+inline nReal CColorRGBA::operator[] (nInt32 i) const
 {
     assert(0 <= i && i <= 3);
     if (i < 0)
@@ -270,7 +270,7 @@ inline nReal CColorRGBA::operator[] (int i) const
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
-inline nReal& CColorRGBA::operator[] (int i)
+inline nReal& CColorRGBA::operator[] (nInt32 i)
 {
     assert(0 <= i && i <= 3);
     if (i < 0)

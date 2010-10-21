@@ -70,7 +70,7 @@ public:
     // normal points.  The "negative side" is the other half space.  The
     // function returns +1 for the positive side, -1 for the negative side,
     // and 0 for the point being on the plane.
-    int WhichSide (const CVector3<nReal>& rkP) const;
+    nInt32 WhichSide (const CVector3<nReal>& rkP) const;
 
     // Compute d = Dot(N,Q)-c where N is the plane normal and c is the plane
     // constant.  This is a signed distance.  The sign of the return value is
@@ -140,7 +140,7 @@ nReal CPlane<nReal>::DistanceTo (const CVector3<nReal>& rkP) const
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-int CPlane<nReal>::WhichSide (const CVector3<nReal>& rkQ) const
+nInt32 CPlane<nReal>::WhichSide (const CVector3<nReal>& rkQ) const
 {
     nReal fDistance = DistanceTo(rkQ);
 

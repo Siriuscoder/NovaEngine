@@ -103,7 +103,7 @@ nUInt32 CEventConveyor::GetConveyorSize()
 	return conv.size();
 }
 
-int CEventConveyor::GetEvent(nv_ev_msg * _event)
+nInt32 CEventConveyor::GetEvent(nv_ev_msg * _event)
 {
 	if(GetConveyorSize() <= 0)
 		return -1;
@@ -126,7 +126,7 @@ int CEventConveyor::GetEvent(nv_ev_msg * _event)
 
 */
 
-int CEventConveyor::Generate(nv_ev_msg * _event)
+nInt32 CEventConveyor::Generate(nv_ev_msg * _event)
 {
 	switch(_event->eventid)
 	{
@@ -222,10 +222,10 @@ void CEventConveyor::OnRender()
 
 /*
 
-int CEventConveyor::Execute()
+nInt32 CEventConveyor::Execute()
 {
 	nv_ev_msg message;
-	int col = 0;
+	nInt32 col = 0;
 
 	while(GetEvent(&message) > 0)
 	{
@@ -240,10 +240,10 @@ int CEventConveyor::Execute()
 
 #ifdef WIN_BUILD
 
-int CrossEventHandler::Win32MainLoopFunction(CRenderWindow * window)
+nInt32 CrossEventHandler::Win32MainLoopFunction(CRenderWindow * window)
 {
 	MSG msg;
-	int DispMess = 0;
+	nInt32 DispMess = 0;
 
 	while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
 	{
@@ -519,7 +519,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, nUInt32 msg, WPARAM wParam
     case WM_KEYDOWN:
 		{
 			message.eventid = EV_KEYDOWN;
-			message.chCode.nVirtKey = static_cast<int>(wParam);
+			message.chCode.nVirtKey = static_cast<nInt32>(wParam);
 			message.iKeyData = lParam;
 			Generator->Generate(&message);
 		}
@@ -527,7 +527,7 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, nUInt32 msg, WPARAM wParam
 	case WM_KEYUP:
 		{
 			message.eventid = EV_KEYUP;
-			message.chCode.nVirtKey = static_cast<int>(wParam);
+			message.chCode.nVirtKey = static_cast<nInt32>(wParam);
 			message.iKeyData = lParam;
 			Generator->Generate(&message);
 		}
@@ -560,10 +560,10 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, nUInt32 msg, WPARAM wParam
 
 #endif
 
-int CrossEventHandler::SDLMainLoopFunction(CRenderWindow * window)
+nInt32 CrossEventHandler::SDLMainLoopFunction(CRenderWindow * window)
 {
     SDL_Event sys_event;
-	int DispMess = 0;
+	nInt32 DispMess = 0;
 
 		// process pending events
     while(SDL_PollEvent(&sys_event))
@@ -575,7 +575,7 @@ int CrossEventHandler::SDLMainLoopFunction(CRenderWindow * window)
 	return DispMess;
 }
 
-int CrossEventHandler::SDLProc(SDL_Event & s_event, CRenderWindow * window)
+nInt32 CrossEventHandler::SDLProc(SDL_Event & s_event, CRenderWindow * window)
 {
 	nv_ev_msg message;
 	memset(&message, 0, sizeof(nv_ev_msg));

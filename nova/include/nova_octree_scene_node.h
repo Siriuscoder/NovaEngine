@@ -44,8 +44,8 @@ public:
 		CHardwareIndexBufferPtr VboIndex;
 
 		CMaterialPtr Material;
-		int start_index;
-		int end_index;
+		nInt32 start_index;
+		nInt32 end_index;
 	} TBatchStruct;
 
 	typedef stl<TBatchStruct>::vector TBatchList;

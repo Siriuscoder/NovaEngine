@@ -114,7 +114,7 @@ size_t CGZFileStream::Tell() const
 
 void CGZFileStream::Seek(nova::nUInt32 pos)
 {
-	int i;
+	nInt32 i;
 	if(mIsOpened && mGZFile)
 	{
 //		if(mOpt != GZ_READ)
@@ -143,7 +143,7 @@ void CGZFileStream::Skip (long count)
 	Seek(pos + count);
 }
 
-bool CGZFileStream::CompressData(CMemoryBuffer & dest, const CMemoryBuffer & source, int level)
+bool CGZFileStream::CompressData(CMemoryBuffer & dest, const CMemoryBuffer & source, nInt32 level)
 {
 	nova::nUInt32 len = source.GetBufferSize() + 
 		static_cast<nova::nUInt32>(source.GetBufferSize() * 0.01) + 0xC;
@@ -152,7 +152,7 @@ bool CGZFileStream::CompressData(CMemoryBuffer & dest, const CMemoryBuffer & sou
 	buffer.AllocBuffer(len);
 
 	nova::nUInt32 destlen = 0;
-	int res = compress2((nova::nByte *)buffer.GetBegin(), (uLongf *)&destlen, 
+	nInt32 res = compress2((nova::nByte *)buffer.GetBegin(), (uLongf *)&destlen, 
 		(nova::nByte *)source.GetBegin(), source.GetBufferSize(), level);
 
 	if(res != Z_OK)
@@ -166,12 +166,12 @@ bool CGZFileStream::CompressData(CMemoryBuffer & dest, const CMemoryBuffer & sou
 }
 
 
-bool CGZFileStream::UnCompressData(CMemoryBuffer & dest, const CMemoryBuffer & source, int reallen)
+bool CGZFileStream::UnCompressData(CMemoryBuffer & dest, const CMemoryBuffer & source, nInt32 reallen)
 {
 	nova::nUInt32 destlen = 0;
 	dest.AllocBuffer(reallen);
 
-	int res = uncompress((nova::nByte *)dest.GetBegin(), (uLongf *)&destlen, 
+	nInt32 res = uncompress((nova::nByte *)dest.GetBegin(), (uLongf *)&destlen, 
 		(nova::nByte *)source.GetBegin(), source.GetBufferSize());
 
 	if(res != Z_OK)
@@ -192,7 +192,7 @@ size_t CGZFileStream::Read (const CMemoryBuffer & dest)
 	if(mOpt != GZ_READ)
 		NOVA_EXP("CGZFileStream::Read - file opened for write!", BAD_OPERATION);
 
-	int block = 0xFFFF;
+	nInt32 block = 0xFFFF;
 	nova::nUInt32 len = dest.GetBufferSize();
 	nova::nUInt32 slen = 0;
 
@@ -226,7 +226,7 @@ size_t CGZFileStream::Write(const CMemoryBuffer & source)
 	if(mOpt == GZ_READ)
 		NOVA_EXP("CGZFileStream::Write - file opened for read!", BAD_OPERATION);
 
-	int block = 16384;
+	nInt32 block = 16384;
 	nova::nUInt32 len = source.GetBufferSize();
 	nova::nUInt32 slen = 0;
 

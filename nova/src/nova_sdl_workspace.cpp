@@ -28,7 +28,7 @@
 namespace nova
 {
 
-CSDLWorkspace::CSDLWorkspace(nstring & name, int priority, CGLSupport *creator) :
+CSDLWorkspace::CSDLWorkspace(nstring & name, nInt32 priority, CGLSupport *creator) :
 	mScreen(NULL), mVideo(NULL)
 {
 	mSupport = dynamic_cast<CSDLSupport*>(creator);
@@ -80,9 +80,9 @@ void CSDLWorkspace::CreateRenderWindow(nova::TWindowInitialTarget &init)
 	mMetrics.FSAA = init.FSAA;
 	mMetrics.DepthBuffered = init.DepthBuffered;
 
-	int color_depth = init.color_bits;
-	int alpha_bits = (init.color_bits > 16)? 8 : 0;
-	int color_bits = (init.color_bits > 16)? 24 : init.color_bits;
+	nInt32 color_depth = init.color_bits;
+	nInt32 alpha_bits = (init.color_bits > 16)? 8 : 0;
+	nInt32 color_bits = (init.color_bits > 16)? 24 : init.color_bits;
 
 	mMetrics.color_bits = color_bits;
 

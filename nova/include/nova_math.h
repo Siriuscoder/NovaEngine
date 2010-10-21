@@ -68,7 +68,7 @@ public:
 
     // Return -1 if the input is negative, 0 if the input is zero, and +1
     // if the input is positive.
-    static int Sign (int iValue);
+    static nInt32 Sign (nInt32 iValue);
     static nReal Sign (nReal fValue);
 
     // Generate a random number in [0,1).  The random number generator may
@@ -84,7 +84,7 @@ public:
     static nReal IntervalRandom (nReal fMin, nReal fMax,
         unsigned int uiSeed = 0);
 
-	static int Rand();
+	static nInt32 Rand();
 	static void RandSeed(unsigned int uiSeed = 0);
 
     // Fast evaluation of trigonometric and inverse trigonometric functions
@@ -301,7 +301,7 @@ nReal CMath<nReal>::Tan (nReal fValue)
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-int CMath<nReal>::Sign (int iValue)
+nInt32 CMath<nReal>::Sign (nInt32 iValue)
 {
     if (iValue > 0)
     {
@@ -369,7 +369,7 @@ nReal CMath<nReal>::IntervalRandom (nReal fMin, nReal fMax, unsigned int uiSeed)
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-int CMath<nReal>::Rand()
+nInt32 CMath<nReal>::Rand()
 {
 	return rand();
 }

@@ -22,7 +22,7 @@
 namespace nova {
 
 
-int CParser::ParseStringRecurse(nstring input, CParser::values & result)
+nInt32 CParser::ParseStringRecurse(nstring input, CParser::values & result)
 {
 	if(input.empty())
 		return 0;
@@ -120,7 +120,7 @@ CParser::values CParser::NodeToValues(CTreeNode<nstring> * node)
 	{
 		result.push_back(node->GetData());
 
-		for(int i = 0; i < node->GetChildrenLen(); ++i)
+		for(nInt32 i = 0; i < node->GetChildrenLen(); ++i)
 			result.push_back((*node)[i]->GetData());
 	}
 

@@ -52,7 +52,7 @@ protected:
 
 public:
 
-	CWin32Workspace(nstring & name, int priority, CGLSupport * creator);
+	CWin32Workspace(nstring & name, nInt32 priority, CGLSupport * creator);
 
 	~CWin32Workspace();
 

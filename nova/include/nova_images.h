@@ -120,7 +120,7 @@ public:
 
 	void Alienifying();
 
-	void Blurring(int iter);
+	void Blurring(nInt32 iter);
 
 	void Contrast(nReal level);
 
@@ -134,7 +134,7 @@ public:
 
 	void Pixelization(nova::nUInt32 pix_size);
 
-	void Sharpering(nReal factor, int iter);
+	void Sharpering(nReal factor, nInt32 iter);
 #endif
 
 	void BackWidth();

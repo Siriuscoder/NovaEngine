@@ -26,12 +26,12 @@
 namespace nova
 {
 
-int CRenderWindow::GetXPosition()
+nInt32 CRenderWindow::GetXPosition()
 {
 	return this->mXPosition;
 }
 
-int CRenderWindow::GetYPosition()
+nInt32 CRenderWindow::GetYPosition()
 {
 	return this->mYPosition;
 }
@@ -46,7 +46,7 @@ bool CRenderWindow::IsClosed()
 	return this->mClosed;
 }
 
-void CRenderWindow::GetMetrics(int & xpos, int & ypos,
+void CRenderWindow::GetMetrics(nInt32 & xpos, nInt32 & ypos,
 		nova::nUInt32 & height, nova::nUInt32 & width,
 		nova::nUInt32 & color_depth, nova::nUInt32 & color_bits)
 {
@@ -104,7 +104,7 @@ void CRenderWindow::PostUpdateAction()
 	CRenderTarget::PostUpdateAction();
 }
 
-int CRenderWindow::MessagePump(void)
+nInt32 CRenderWindow::MessagePump(void)
 {
 	if(mLoopFunc != NULL)
 		return mLoopFunc(this);

@@ -33,7 +33,7 @@ protected:
 
 	nova::nUInt32 blending_type_sfactor;
 	nova::nUInt32 blending_type_dfactor;
-	int mAnisotropyLevel;
+	nInt32 mAnisotropyLevel;
 	CTextureSurfaceList::MipMapTagertType mAutoMipmap;
 
 public:

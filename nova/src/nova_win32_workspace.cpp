@@ -32,7 +32,7 @@ namespace nova
 HINSTANCE CWin32Workspace::mModuleHandle = NULL;
 bool CWin32Workspace::mWinClassRegistred = false;
 
-CWin32Workspace::CWin32Workspace(nstring & name, int priority, CGLSupport * creator)
+CWin32Workspace::CWin32Workspace(nstring & name, nInt32 priority, CGLSupport * creator)
 {
 	mName = name;
 	mPriority = priority;
@@ -199,7 +199,7 @@ void CWin32Workspace::CreateRenderWindow(TWindowInitialTarget & init)
 
 	{
 		nstring str("Render context on pixel format created: 0x");
-		str.append(CStringUtils::IntTo16xString((int) dynamic_cast<CWGLContext *>(mContext)->GetRenderContext()));
+		str.append(CStringUtils::IntTo16xString((nInt32) dynamic_cast<CWGLContext *>(mContext)->GetRenderContext()));
 		LOG_MESSAGE(str);
 	}
 
@@ -412,7 +412,7 @@ bool CWin32Workspace::CreateBestPixelFormat(PIXELFORMATDESCRIPTOR & pfd)
 		{
 			bool useHwGamma = false;
 			// Use WGL to test extended caps (multisample, sRGB)
-			stl<int>::vector attribList;
+			stl<nInt32>::vector attribList;
 			attribList.push_back(WGL_DRAW_TO_WINDOW_ARB); attribList.push_back(GL_TRUE);
 			attribList.push_back(WGL_SUPPORT_OPENGL_ARB); attribList.push_back(GL_TRUE);
 			attribList.push_back(WGL_DOUBLE_BUFFER_ARB); attribList.push_back(GL_TRUE);
@@ -432,7 +432,7 @@ bool CWin32Workspace::CreateBestPixelFormat(PIXELFORMATDESCRIPTOR & pfd)
 
 			GLuint numformats;
 			GLint format;
-			int valid = wglChoosePixelFormatARB(DummyContext.GetDeviceContext(), &(attribList[0]),
+			nInt32 valid = wglChoosePixelFormatARB(DummyContext.GetDeviceContext(), &(attribList[0]),
 				NULL, 1, &format, &numformats);
 
 			if(valid && numformats > 0)

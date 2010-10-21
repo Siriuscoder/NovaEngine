@@ -35,7 +35,7 @@ CNovaEngine::CNovaEngine() : CBase("CNovaEngine")
 
 	nstring mes;
 	mes.append("Starting... Engine kernel instance is 0x");
-	mes += CStringUtils::IntTo16xString((int)this);
+	mes += CStringUtils::IntTo16xString((nInt32)this);
 
 	mSystemLog->PrintMessage(mes, CLog::LG_WITH_TIME_TITLE);
 
@@ -98,7 +98,7 @@ void CNovaEngine::Release(void)
 	ResetStats();
 }
 
-int CNovaEngine::Init(StartInit flag)
+nInt32 CNovaEngine::Init(StartInit flag)
 {
 	//RenderManager->SetGraphicManager(new CGraphicManager(initst.draw_sys));
 	//ConsoleManager = new CConsoleManager();

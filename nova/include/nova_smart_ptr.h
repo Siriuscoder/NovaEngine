@@ -29,7 +29,7 @@ namespace nova
 template<class T> class CSmartPtr
 {
 protected:
-	int * mUseCount;
+	nInt32 * mUseCount;
 	T * mPtr;
 
 	void swap(CSmartPtr<T> & other) 
@@ -46,7 +46,7 @@ public:
 	CSmartPtr(T * ptr) : mUseCount(NULL), mPtr(NULL)
 	{
 		mPtr = ptr;
-		mUseCount = getmem<int>(mUseCount);
+		mUseCount = getmem<nInt32>(mUseCount);
 		*mUseCount = 1;
 	}
 
@@ -80,7 +80,7 @@ public:
 		if(!mPtr && !mUseCount)
 		{
 			mPtr = ptr;
-			mUseCount = getmem<int>(mUseCount);
+			mUseCount = getmem<nInt32>(mUseCount);
 			*mUseCount = 1;
 		}
 	}
@@ -90,12 +90,12 @@ public:
 		return mPtr;
 	}
 
-	int GetUseCount() const
+	nInt32 GetUseCount() const
 	{
 		return *mUseCount;
 	}
 
-	int * GetUseCountPtr() const
+	nInt32 * GetUseCountPtr() const
 	{
 		return mUseCount;
 	}

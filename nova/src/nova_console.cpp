@@ -75,7 +75,7 @@ CConsole::CConsole(nv_console_init * _init) : CConsoleBase("CConsole")
 	memcpy(&initdata, _init, sizeof(struct nv_console_init));
 }
 
-int CConsole::Paint()
+nInt32 CConsole::Paint()
 {
 	glDepthMask(false);
 
@@ -87,7 +87,7 @@ int CConsole::Paint()
 	glTranslated(0.0, 0.0, 0.5);
 	glTranslated(0.0, dy, 0.0);
 
-	int i = 0;
+	nInt32 i = 0;
 	register POINT TempPos;
 
 	TempPos.x = TempPos.y = initdata.param.topclear;
@@ -212,7 +212,7 @@ void CConsole::Clear()
 	ypos = initdata.screen.y;
 }
 
-int CConsole::PutChar(const wchar_t bb, const CColorRGB & pc)
+nInt32 CConsole::PutChar(const wchar_t bb, const CColorRGB & pc)
 {
 	if(console_string.size() >= initdata.maxchar)
 		console_string.erase(console_string.begin());
@@ -226,7 +226,7 @@ int CConsole::PutChar(const wchar_t bb, const CColorRGB & pc)
 	return EXIT_OK;
 }
 
-int CConsole::PutChar(const char bb, const CColorRGB & pc)
+nInt32 CConsole::PutChar(const char bb, const CColorRGB & pc)
 {
 	if(console_string.size() >= initdata.maxchar)
 		console_string.erase(console_string.begin());
@@ -242,17 +242,17 @@ int CConsole::PutChar(const char bb, const CColorRGB & pc)
 
 void CConsole::HoreLine(const wchar_t symbol)
 {
-	//int len = int(initdata.screen.x / (initdata.param.distance));
+	//nInt32 len = nInt32(initdata.screen.x / (initdata.param.distance));
 
-	for(int i = 0; i < 30; ++i)
+	for(nInt32 i = 0; i < 30; ++i)
 		this->PutChar(symbol, color);
 
 	PutChar('\n', color);
 }
 
-int CConsole::Delete(int x)
+nInt32 CConsole::Delete(nInt32 x)
 {
-	int len = console_string.size() - x -1;
+	nInt32 len = console_string.size() - x -1;
 	if(len < 0)
 		return -1;
 
@@ -281,7 +281,7 @@ CConsoleManager::~CConsoleManager()
 	Clear();
 }
 
-int CConsoleManager::NewConsole(nv_console_init * param)
+nInt32 CConsoleManager::NewConsole(nv_console_init * param)
 {
 	if(!param) return MEM_ERROR;
 
@@ -304,7 +304,7 @@ void CConsoleManager::DeleteConsole(nUInt32 n)
 		active = -1;
 }
 
-const int CConsoleManager::Count()
+const nInt32 CConsoleManager::Count()
 {
 	return consoles.size();
 }
@@ -333,7 +333,7 @@ CConsole * CConsoleManager::GetActivePtr()
 	return consoles[active];
 }
 
-const int CConsoleManager::GetActive()
+const nInt32 CConsoleManager::GetActive()
 {
 	return active;
 }

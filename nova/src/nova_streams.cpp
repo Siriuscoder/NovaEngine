@@ -27,9 +27,9 @@ size_t CDataStream::Size() const
 	return mSize;
 }
 
-char* CDataStream::ReadASCIIZ(char * outbuf, int _max)
+char* CDataStream::ReadASCIIZ(char * outbuf, nInt32 _max)
 {
-	int _count = 0;
+	nInt32 _count = 0;
 	char c = ReadMemOfType<char>();
 	while(c != 0 && (_count < _max-1))
 	{
@@ -72,7 +72,7 @@ size_t CMemoryStream::Read (const CMemoryBuffer & dest)
 	if(Eof())
 		return 0;
 
-	int total;
+	nInt32 total;
 
 	if((mPos + dest.GetBufferSize()) > mSize)
 		total = mSize - mPos;

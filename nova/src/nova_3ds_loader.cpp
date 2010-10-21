@@ -375,7 +375,7 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
 
 	indexes.AllocBuffer(count * sizeof(TTriIndex));
 	TTriIndex *tri = static_cast<TTriIndex *>(indexes.GetBegin());
-	for(int i = 0; i < count; ++i)
+	for(nInt32 i = 0; i < count; ++i)
 	{
 		tri->a = mp3dsStream->ReadMemOfType<nova::nUInt16>();
 		tri->b = mp3dsStream->ReadMemOfType<nova::nUInt16>();
@@ -395,7 +395,7 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
         {
         case T3DS_TRI_MAT_GROUP:
 			{
-				int mat_id = 0;
+				nInt32 mat_id = 0;
 				char str[30] = "\0";
 				mp3dsStream->ReadASCIIZ(str, 30);
 

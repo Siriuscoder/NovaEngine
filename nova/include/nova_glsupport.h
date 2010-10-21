@@ -89,7 +89,7 @@ public:
 
 // Creating Pbuffers and Render windows //
 
-	virtual CRenderWindow * CreateRenderWindowTarget(nstring & name, int priority) = 0;
+	virtual CRenderWindow * CreateRenderWindowTarget(nstring & name, nInt32 priority) = 0;
 
 	virtual void DestroyRootWindow();
 	

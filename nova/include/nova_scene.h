@@ -40,8 +40,8 @@ friend CSceneManager;
 protected:
 
 	stl<CSceneManager *>::list mScraps;
-	int mRenderedFaces;
-	int mRenderedBatches;
+	nInt32 mRenderedFaces;
+	nInt32 mRenderedBatches;
 
 public:
 
@@ -51,23 +51,23 @@ public:
 
 	void DeleteAllScraps(void);
 
-	int AddScrap(CSceneManager *manager);
+	nInt32 AddScrap(CSceneManager *manager);
 
 	CSceneManager *FindScene(const nstring &name);
 
 	void RenderAllScene(CCamera * camera, CViewPort * view);
 
-	int GetRenderedBatches(void);
+	nInt32 GetRenderedBatches(void);
 
-	int GetRenderedFaces(void);
+	nInt32 GetRenderedFaces(void);
 
-	int LoadSceneForce(const CFilesPackage &rPack, bool withResorces);
+	nInt32 LoadSceneForce(const CFilesPackage &rPack, bool withResorces);
 
-	int LoadSceneForce(const nstring &pckFile, bool withResorces);
+	nInt32 LoadSceneForce(const nstring &pckFile, bool withResorces);
 
-	int LoadSceneInBackgroundMode(const CFilesPackage &rPack, bool withResorces);
+	nInt32 LoadSceneInBackgroundMode(const CFilesPackage &rPack, bool withResorces);
 
-	int LoadSceneInBackgroundMode(const nstring &pckFile, bool withResorces);
+	nInt32 LoadSceneInBackgroundMode(const nstring &pckFile, bool withResorces);
 };
 
 }

@@ -24,26 +24,26 @@ namespace nova {
 
 class NOVA_EXPORT CEventConveyor;
 
-typedef void(THISCALL__ CEventConveyor::*pfCHAR)(nUInt16, int);
+typedef void(THISCALL__ CEventConveyor::*pfCHAR)(nUInt16, nInt32);
 typedef void(THISCALL__ CEventConveyor::*pfREPAINT)(void);
 typedef void(THISCALL__ CEventConveyor::*pfBEGIN)(void);
-typedef void(THISCALL__ CEventConveyor::*pfTIMER_TICK)(int);
+typedef void(THISCALL__ CEventConveyor::*pfTIMER_TICK)(nInt32);
 typedef void(THISCALL__ CEventConveyor::*pfEND)(void);
-typedef void(THISCALL__ CEventConveyor::*pfMOUSEMOVE)(int, int, int);
-typedef void(THISCALL__ CEventConveyor::*pfRBUTTONUP)(int, int, int);
-typedef void(THISCALL__ CEventConveyor::*pfRBUTTONDBLCLK)(int, int);
-typedef void(THISCALL__ CEventConveyor::*pfLBUTTONDBLCLK)(int, int);
-typedef void(THISCALL__ CEventConveyor::*pfMBUTTONDBLCLK)(int, int);
-typedef void(THISCALL__ CEventConveyor::*pfLBUTTONDOWN)(int, int, int);
-typedef void(THISCALL__ CEventConveyor::*pfLBUTTONUP)(int, int, int);
-typedef void(THISCALL__ CEventConveyor::*pfMBUTTONDOWN)(int, int, int);
+typedef void(THISCALL__ CEventConveyor::*pfMOUSEMOVE)(nInt32, nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfRBUTTONUP)(nInt32, nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfRBUTTONDBLCLK)(nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfLBUTTONDBLCLK)(nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfMBUTTONDBLCLK)(nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfLBUTTONDOWN)(nInt32, nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfLBUTTONUP)(nInt32, nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfMBUTTONDOWN)(nInt32, nInt32, nInt32);
 typedef void(THISCALL__ CEventConveyor::*pfON_RENDER)(void);
-typedef void(THISCALL__ CEventConveyor::*pfMBUTTONUP)(int, int, int);
-typedef void(THISCALL__ CEventConveyor::*pfRBUTTONDOWN)(int, int, int);
+typedef void(THISCALL__ CEventConveyor::*pfMBUTTONUP)(nInt32, nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfRBUTTONDOWN)(nInt32, nInt32, nInt32);
 typedef void(THISCALL__ CEventConveyor::*pfQUIT)(void);
 
-typedef void(THISCALL__ CEventConveyor::*pfKEYDOWN)(int, int);
-typedef void(THISCALL__ CEventConveyor::*pfKEYUP)(int, int);
+typedef void(THISCALL__ CEventConveyor::*pfKEYDOWN)(nInt32, nInt32);
+typedef void(THISCALL__ CEventConveyor::*pfKEYUP)(nInt32, nInt32);
 
 enum TEvents
 {
@@ -82,16 +82,16 @@ typedef struct __msg
 {
 	TEvents eventid;
 
-	int Xpos;
-	int Ypos;
-	int fwKeys;
+	nInt32 Xpos;
+	nInt32 Ypos;
+	nInt32 fwKeys;
 
-	int iKeyData;
-	int timerid;
+	nInt32 iKeyData;
+	nInt32 timerid;
 
 	union {
 		nova::nUInt16 chCharCode;
-		int nVirtKey;
+		nInt32 nVirtKey;
 	} chCode;
 } nv_ev_msg;
 
@@ -128,13 +128,13 @@ public:
 //	void PushEvent(nv_ev_msg * _event);
 //	nUInt32 GetConveyorSize();
 
-//	int GetEvent(nv_ev_msg * _event);
+//	nInt32 GetEvent(nv_ev_msg * _event);
 //	void ClearEvents();
 
-	int Generate(nv_ev_msg * _event);
+	nInt32 Generate(nv_ev_msg * _event);
 
 	void OnRender();
-//	int Execute();
+//	nInt32 Execute();
 };
 
 class CRenderWindow;
@@ -145,13 +145,13 @@ class NOVA_EXPORT CrossEventHandler
 public:
 
 #ifdef WIN_BUILD
-	static int Win32MainLoopFunction(CRenderWindow * window);
+	static nInt32 Win32MainLoopFunction(CRenderWindow * window);
 
 	static LRESULT CALLBACK WinProcFunction(HWND hwnd, nUInt32 msg, WPARAM wParam, LPARAM lParam);
 #endif
 
-	static int SDLMainLoopFunction(CRenderWindow * window);
-	static int SDLProc(SDL_Event & s_event, CRenderWindow * window);
+	static nInt32 SDLMainLoopFunction(CRenderWindow * window);
+	static nInt32 SDLProc(SDL_Event & s_event, CRenderWindow * window);
 
 };
 

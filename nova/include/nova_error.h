@@ -64,7 +64,7 @@ namespace nova {
 /// \param code Код ошибки.
 /// \param mes Сообщение с текстом ошибки
 /// \param pp Указатель на объект где возникла ошибка (используется редко)
-extern "C" NOVA_EXPORT int STDCALL__ error(int code, nstring & mes, CBase *pp);
+extern "C" NOVA_EXPORT nInt32 STDCALL__ error(nInt32 code, nstring & mes, CBase *pp);
 
 /// \brief Взять код прошлой ошибки
 ///
@@ -77,7 +77,7 @@ extern "C" NOVA_EXPORT int STDCALL__ error(int code, nstring & mes, CBase *pp);
 /// nova::error(nova::last_error(), nstring("Some error"), NULL);
 /// \endcode
 ///
-extern "C" NOVA_EXPORT int last_error();
+extern "C" NOVA_EXPORT nInt32 last_error();
 
 /// \brief Обнуляет прошлую ошибку
 ///
@@ -102,7 +102,7 @@ class NOVA_EXPORT NovaExp : public std::exception, public CBase
 /// \brief Сообщение об ошибке
 	nstring e_mes;
 /// \brief Код ошибки
-	int code;
+	nInt32 code;
 public:
 /// \brief Дефолтный конструктор
 	NovaExp();
@@ -112,16 +112,16 @@ public:
 /// \param _code Код ошибки
 /// \param file исходный файл
 /// \param line номер строки в исходном файле
-	NovaExp(nCChar file[], int line, nCChar * mes, int _code);
+	NovaExp(nCChar file[], nInt32 line, nCChar * mes, nInt32 _code);
 
 /// \param mes Сообщение об ошибке
 /// \param _code Код ошибки
-	NovaExp(nCChar * mes, int _code);
+	NovaExp(nCChar * mes, nInt32 _code);
 
 /// \brief Конструктор
 ///
 /// \param _code Код ошибки
-	NovaExp(int _code);
+	NovaExp(nInt32 _code);
 
 /// \brief Возвращяет сообщение об ошибке
 	nCChar * what() const ;
@@ -129,7 +129,7 @@ public:
 	nstring Message();
 
 /// \brief Возвращяет код ошибки
-	int GetCode();
+	nInt32 GetCode();
 
 /// \brief Обработчик ошибки
 ///

@@ -34,13 +34,13 @@ public:
 
 	static nova::stl<nstring>::vector Split(const nstring & str, char delim);
 
-	static int StringToInt(const nstring & str);
+	static nInt32 StringToInt(const nstring & str);
 
-	static int StringToInt(const char * str);
+	static nInt32 StringToInt(const char * str);
 
-	static nstring IntToString(int num);
+	static nstring IntToString(nInt32 num);
 
-	static nstring IntTo16xString(int num);
+	static nstring IntTo16xString(nInt32 num);
 
 	static float StringToFloat(const nstring & str);
 

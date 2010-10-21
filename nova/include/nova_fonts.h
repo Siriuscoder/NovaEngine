@@ -124,8 +124,8 @@ private:
 	FT_Pos Advance;
 	FT_Pos width;
     FT_Pos height;
-	int bitmapw;
-	int bitmapr;
+	nInt32 bitmapw;
+	nInt32 bitmapr;
 	CTexturePtr tex;
 	CDisplayList mDList;
 public:
@@ -151,8 +151,8 @@ public:
 		FT_Pos Advance,
 		FT_Pos width,
 		FT_Pos height,
-		int bitmapw,
-		int bitmapr,
+		nInt32 bitmapw,
+		nInt32 bitmapr,
 		wchar_t letter,
 		CTexturePtr texid);
 
@@ -188,12 +188,12 @@ public:
 		return height;
 	}
 
-	inline int GetBitmapw()
+	inline nInt32 GetBitmapw()
 	{
 		return bitmapw;
 	}
 
-	inline int GetBitmapr()
+	inline nInt32 GetBitmapr()
 	{
 		return bitmapr;
 	}

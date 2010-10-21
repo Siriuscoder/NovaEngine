@@ -69,7 +69,7 @@ public:
 		Write((void *)&nb, m_size);
 	}
 
-	char *ReadASCIIZ(char * outbuf, int _max);
+	char *ReadASCIIZ(char * outbuf, nInt32 _max);
 
 	virtual size_t Read (const CMemoryBuffer & dest) = 0;
 

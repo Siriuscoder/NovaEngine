@@ -79,7 +79,7 @@ public:
 /// \brief Парсер
 ///
 /// Открывает файл, парсит конфиг, строит дерево.
-	int MakeTree();
+	nInt32 MakeTree();
 /// \brief Берет указатель на вершину дерева по имени.
 	CTreeNode<nstring> * GetNodePointer(nstring & node);
 /// \brief Берет вектор параметров из указанной вершины дерева.
@@ -96,7 +96,7 @@ public:
 /// бы и не сделать сохрание дерева параметров.
 /// \param tree входное заполненное дерево.
 /// \param _filename имя выходного файла.
-	int SaveTree(CTree<nstring> & tree, nstring & _filename);
+	nInt32 SaveTree(CTree<nstring> & tree, nstring & _filename);
 };
 
 

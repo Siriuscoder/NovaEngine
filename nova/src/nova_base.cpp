@@ -40,7 +40,7 @@ CBase::CBase(char * _name)
 	mParent = NULL;
 }
 
-int CBase::GetObjectId()
+nInt32 CBase::GetObjectId()
 {
 	return mIDObject;
 }

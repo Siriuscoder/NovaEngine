@@ -107,8 +107,8 @@ class NOVA_EXPORT CSceneManager : public CListenerInterface
 {
 protected:
 
-	int mRenderedBatches;
-	int mRenderedFaces;
+	nInt32 mRenderedBatches;
+	nInt32 mRenderedFaces;
 	nstring mRegisterGroup;
 	CCamera *mCurCamera; 
 	CViewPort *mCurView;
@@ -117,13 +117,13 @@ protected:
 
 	bool isEnabled;
 
-	virtual int RenderSceneImpl(void) = 0;
+	virtual nInt32 RenderSceneImpl(void) = 0;
 
-	virtual int RenderСompoundObjects(void) {return 0;}
+	virtual nInt32 RenderСompoundObjects(void) {return 0;}
 
 	virtual void PrepareSceneImpl(void) = 0;
 
-	virtual int PrepareRenderQueueImpl(void) = 0;
+	virtual nInt32 PrepareRenderQueueImpl(void) = 0;
 
 	virtual void PrepareSceneFrameImpl(void) = 0;
 
@@ -155,7 +155,7 @@ public:
 
 	void PrepareScene(void);
 
-	int PrepareRenderQueue(void);
+	nInt32 PrepareRenderQueue(void);
 
 	void PrepareSceneFrame(void);
 
@@ -169,9 +169,9 @@ public:
 
 	nstring GetSceneSlavesGroup(void);
 
-	int GetRenderedBatches(void);
+	nInt32 GetRenderedBatches(void);
 
-	int GetRenderedFaces(void);
+	nInt32 GetRenderedFaces(void);
 
 	inline bool IsEnabled(void) { return isEnabled; }
 

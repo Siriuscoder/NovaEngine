@@ -46,7 +46,7 @@ Copyright (c) 2008 Ivan Gagis, SIRIUS
 #ifdef WIN_BUILD
 typedef SOCKET T_Socket;
 #else
-typedef int T_Socket;
+typedef nInt32 T_Socket;
 #endif
 
 #define ERR_DISCONNECTED	-1
@@ -149,11 +149,11 @@ class NOVA_EXPORT CSocket : public CBase
 public:
     //this type will hold system specific socket handle.
     //this buffer should be large enough to hold socket handle in different systems.
-    //sizeof(int) looks enough so far.
+    //sizeof(nInt32) looks enough so far.
 #ifndef DOC_DONT_EXTRACT //direction to doxygen not to extract this class
     struct SystemIndependentSocketHandle
 	{
-        nByte buffer[sizeof(int)];
+        nByte buffer[sizeof(nInt32)];
     };
 #endif//~DOC_DONT_EXTRACT
 

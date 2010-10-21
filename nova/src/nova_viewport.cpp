@@ -28,8 +28,8 @@
 namespace nova
 {
 
-CViewPort::CViewPort(CRenderTarget * tag, int left, 
-	int top, int width, int height, int ZOrder) : mTarget(tag), mActLeft(left),
+CViewPort::CViewPort(CRenderTarget * tag, nInt32 left, 
+	nInt32 top, nInt32 width, nInt32 height, nInt32 ZOrder) : mTarget(tag), mActLeft(left),
 	mActTop(top), mActWidth(width), mActHeight(height), mZOrder(ZOrder), mActiveCamera(NULL),
 	CBase("CViewPort")
 {

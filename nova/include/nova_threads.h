@@ -68,7 +68,7 @@ extern pthread_mutex_t OBJECT_MUTEX_SECTION;
 ///
 /// При наследовании от класса CThread, в пользовательском классе
 /// потомке вы должны объявить эту функцию.
-typedef int (THISCALL__ CThread::*pfThread)(void *);
+typedef nInt32 (THISCALL__ CThread::*pfThread)(void *);
 
 
 /// \brief Основа потоков
@@ -80,13 +80,13 @@ typedef int (THISCALL__ CThread::*pfThread)(void *);
 /// private:
 ///		bool state;
 /// // Наша поточная функция
-///		int LoopFunc(void * data); 
+///		nInt32 LoopFunc(void * data); 
 ///
 /// public:
 ///		CEventPumpThread();
 ///		~CEventPumpThread();
 ///
-///		int StartPump();
+///		nInt32 StartPump();
 ///		void StopPump();
 ///
 ///		inline bool IsProcess()
@@ -136,10 +136,10 @@ public:
 /// данных _buf.
 ///
 /// \param _buf буффер данных
-	int Exec(void *_buf) throw(nova::NovaExp);
+	nInt32 Exec(void *_buf) throw(nova::NovaExp);
 
 /// \brief Останов нити.
-	int Destroy();
+	nInt32 Destroy();
 
 /// \brief Ждать нить.
 ///

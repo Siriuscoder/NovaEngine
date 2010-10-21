@@ -37,7 +37,7 @@ protected:
 
 public:
 
-	CSDLWorkspace(nstring & name, int priority, CGLSupport *creator);
+	CSDLWorkspace(nstring & name, nInt32 priority, CGLSupport *creator);
 
 	~CSDLWorkspace();
 

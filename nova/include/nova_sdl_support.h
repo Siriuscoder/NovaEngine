@@ -46,7 +46,7 @@ public:
 	void InitWGLExtensions();
 #endif
 
-	CRenderWindow * CreateRenderWindowTarget(nstring & name, int priority);
+	CRenderWindow * CreateRenderWindowTarget(nstring & name, nInt32 priority);
 
 };
 

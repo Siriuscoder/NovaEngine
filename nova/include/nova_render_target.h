@@ -46,7 +46,7 @@ class NOVA_EXPORT CRenderTarget : public CBase, public CListenerInterface
 {
 public:
 
-	typedef nova::stl<int, CViewPortPtr>::map TViewPortList;
+	typedef nova::stl<nInt32, CViewPortPtr>::map TViewPortList;
 
 protected:
 
@@ -72,14 +72,14 @@ public:
 	CRenderTarget();
 	virtual ~CRenderTarget();
 
-	CViewPortPtr AddViewport(int left, 
-		int top, int width, int height, int ZOrder);
+	CViewPortPtr AddViewport(nInt32 left, 
+		nInt32 top, nInt32 width, nInt32 height, nInt32 ZOrder);
 
-	CViewPortPtr GetViewport(int zorder);
+	CViewPortPtr GetViewport(nInt32 zorder);
 
 	void RemoveAllViewPorts();
 
-	void RemoveViewPort(int zorder);
+	void RemoveViewPort(nInt32 zorder);
 
 	nova::nUInt32 GetViewPortCount();
 

@@ -62,8 +62,8 @@ public:
     // member access:  0 = w, 1 = x, 2 = y, 3 = z
     inline operator const nReal* () const;
     inline operator nReal* ();
-    inline nReal operator[] (int i) const;
-    inline nReal& operator[] (int i);
+    inline nReal operator[] (nInt32 i) const;
+    inline nReal& operator[] (nInt32 i);
     inline nReal W () const;
     inline nReal& W ();
     inline nReal X () const;
@@ -123,7 +123,7 @@ public:
     CQuaternion& Slerp (nReal fT, const CQuaternion& rkP, const CQuaternion& rkQ);
 
     CQuaternion& SlerpExtraSpins (nReal fT, const CQuaternion& rkP,
-        const CQuaternion& rkQ, int iExtraSpins);
+        const CQuaternion& rkQ, nInt32 iExtraSpins);
 
     // intermediate terms for spherical quadratic interpolation
     CQuaternion& Intermediate (const CQuaternion& rkQ0,
@@ -313,22 +313,22 @@ public:
 
 private:
     // support for comparisons
-    int CompareArrays (const CQuaternion& rkQ) const;
+    nInt32 CompareArrays (const CQuaternion& rkQ) const;
 
     // Closest unconstrained CQuaternion of the form:
     //   (cx + sx*i) when iAxis = 1,
     //   (cy + sy*j) when iAxis = 2,
     //   (cz + sz*k) when iAxis = 3
-    CQuaternion GetClosest (int iAxis) const;
+    CQuaternion GetClosest (nInt32 iAxis) const;
 
     // Closest constrained CQuaternion of the form:
     //   (cx + sx*i) when iAxis = 1,
     //   (cy + sy*j) when iAxis = 2,
     //   (cz + sz*k) when iAxis = 3
-    CQuaternion GetClosest (int iAxis, const Constraints& rkCon) const;
+    CQuaternion GetClosest (nInt32 iAxis, const Constraints& rkCon) const;
 
     // support for FromRotationMatrix
-    NOVA_EXPORT static int ms_iNext[3];
+    NOVA_EXPORT static nInt32 ms_iNext[3];
 
     // support for closest quaternions
     NOVA_EXPORT static nReal ms_fTolerance;
@@ -396,13 +396,13 @@ inline CQuaternion<nReal>::operator nReal* ()
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal CQuaternion<nReal>::operator[] (int i) const
+inline nReal CQuaternion<nReal>::operator[] (nInt32 i) const
 {
     return m_afTuple[i];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal& CQuaternion<nReal>::operator[] (int i)
+inline nReal& CQuaternion<nReal>::operator[] (nInt32 i)
 {
     return m_afTuple[i];
 }
@@ -466,7 +466,7 @@ inline CQuaternion<nReal>& CQuaternion<nReal>::operator= (const CQuaternion& rkQ
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-int CQuaternion<nReal>::CompareArrays (const CQuaternion& rkQ) const
+nInt32 CQuaternion<nReal>::CompareArrays (const CQuaternion& rkQ) const
 {
     return memcmp(m_afTuple,rkQ.m_afTuple,4*sizeof(nReal));
 }
@@ -512,7 +512,7 @@ inline CQuaternion<nReal> CQuaternion<nReal>::operator+ (
     const CQuaternion& rkQ) const
 {
     CQuaternion kSum;
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         kSum.m_afTuple[i] = m_afTuple[i] + rkQ.m_afTuple[i];
     }
@@ -524,7 +524,7 @@ inline CQuaternion<nReal> CQuaternion<nReal>::operator- (
     const CQuaternion& rkQ) const
 {
     CQuaternion kDiff;
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         kDiff.m_afTuple[i] = m_afTuple[i] - rkQ.m_afTuple[i];
     }
@@ -571,7 +571,7 @@ template <class nReal>
 inline CQuaternion<nReal> CQuaternion<nReal>::operator* (nReal fScalar) const
 {
     CQuaternion kProd;
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         kProd.m_afTuple[i] = fScalar*m_afTuple[i];
     }
@@ -582,7 +582,7 @@ template <class nReal>
 inline CQuaternion<nReal> CQuaternion<nReal>::operator/ (nReal fScalar) const
 {
     CQuaternion kQuot;
-    int i;
+    nInt32 i;
 
     if (fScalar != (nReal)0.0)
     {
@@ -607,7 +607,7 @@ template <class nReal>
 inline CQuaternion<nReal> CQuaternion<nReal>::operator- () const
 {
     CQuaternion kNeg;
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         kNeg.m_afTuple[i] = -m_afTuple[i];
     }
@@ -618,7 +618,7 @@ template <class nReal>
 inline CQuaternion<nReal> operator* (nReal fScalar, const CQuaternion<nReal>& rkQ)
 {
     CQuaternion<nReal> kProd;
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         kProd[i] = fScalar*rkQ[i];
     }
@@ -628,7 +628,7 @@ inline CQuaternion<nReal> operator* (nReal fScalar, const CQuaternion<nReal>& rk
 template <class nReal>
 inline CQuaternion<nReal>& CQuaternion<nReal>::operator+= (const CQuaternion& rkQ)
 {
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         m_afTuple[i] += rkQ.m_afTuple[i];
     }
@@ -638,7 +638,7 @@ inline CQuaternion<nReal>& CQuaternion<nReal>::operator+= (const CQuaternion& rk
 template <class nReal>
 inline CQuaternion<nReal>& CQuaternion<nReal>::operator-= (const CQuaternion& rkQ)
 {
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         m_afTuple[i] -= rkQ.m_afTuple[i];
     }
@@ -648,7 +648,7 @@ inline CQuaternion<nReal>& CQuaternion<nReal>::operator-= (const CQuaternion& rk
 template <class nReal>
 inline CQuaternion<nReal>& CQuaternion<nReal>::operator*= (nReal fScalar)
 {
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         m_afTuple[i] *= fScalar;
     }
@@ -658,7 +658,7 @@ inline CQuaternion<nReal>& CQuaternion<nReal>::operator*= (nReal fScalar)
 template <class nReal>
 inline CQuaternion<nReal>& CQuaternion<nReal>::operator/= (nReal fScalar)
 {
-    int i;
+    nInt32 i;
 
     if (fScalar != (nReal)0.0)
     {
@@ -702,7 +702,7 @@ CQuaternion<nReal>& CQuaternion<nReal>::FromRotationMatrix (
     else
     {
         // |w| <= 1/2
-        int i = 0;
+        nInt32 i = 0;
         if ( rkRot(1,1) > rkRot(0,0) )
         {
             i = 1;
@@ -711,8 +711,8 @@ CQuaternion<nReal>& CQuaternion<nReal>::FromRotationMatrix (
         {
             i = 2;
         }
-        int j = ms_iNext[i];
-        int k = ms_iNext[j];
+        nInt32 j = ms_iNext[i];
+        nInt32 k = ms_iNext[j];
 
         fRoot = CMath<nReal>::Sqrt(rkRot(i,i)-rkRot(j,j)-rkRot(k,k)+(nReal)1.0);
         nReal* apfQuat[3] = { &m_afTuple[1], &m_afTuple[2], &m_afTuple[3] };
@@ -758,7 +758,7 @@ CQuaternion<nReal>& CQuaternion<nReal>::FromRotationMatrix (
     const CVector3<nReal> akRotColumn[3])
 {
     CMatrix3<nReal> kRot;
-    for (int iCol = 0; iCol < 3; iCol++)
+    for (nInt32 iCol = 0; iCol < 3; iCol++)
     {
         kRot(0,iCol) = akRotColumn[iCol][0];
         kRot(1,iCol) = akRotColumn[iCol][1];
@@ -772,7 +772,7 @@ void CQuaternion<nReal>::ToRotationMatrix (CVector3<nReal> akRotColumn[3]) const
 {
     CMatrix3<nReal> kRot;
     ToRotationMatrix(kRot);
-    for (int iCol = 0; iCol < 3; iCol++)
+    for (nInt32 iCol = 0; iCol < 3; iCol++)
     {
         akRotColumn[iCol][0] = kRot(0,iCol);
         akRotColumn[iCol][1] = kRot(1,iCol);
@@ -851,7 +851,7 @@ template <class nReal>
 inline nReal CQuaternion<nReal>::Dot (const CQuaternion& rkQ) const
 {
     nReal fDot = (nReal)0.0;
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         fDot += m_afTuple[i]*rkQ.m_afTuple[i];
     }
@@ -889,7 +889,7 @@ CQuaternion<nReal> CQuaternion<nReal>::Inverse () const
     CQuaternion kInverse;
 
     nReal fNorm = (nReal)0.0;
-    int i;
+    nInt32 i;
     for (i = 0; i < 4; i++)
     {
         fNorm += m_afTuple[i]*m_afTuple[i];
@@ -937,7 +937,7 @@ CQuaternion<nReal> CQuaternion<nReal>::Exp () const
     nReal fSin = CMath<nReal>::Sin(fAngle);
     kResult.m_afTuple[0] = CMath<nReal>::Cos(fAngle);
 
-    int i;
+    nInt32 i;
 
     if (CMath<nReal>::FAbs(fSin) >= CMath<nReal>::ZERO_TOLERANCE)
     {
@@ -968,7 +968,7 @@ CQuaternion<nReal> CQuaternion<nReal>::Log () const
     CQuaternion kResult;
     kResult.m_afTuple[0] = (nReal)0.0;
 
-    int i;
+    nInt32 i;
 
     if (CMath<nReal>::FAbs(m_afTuple[0]) < (nReal)1.0)
     {
@@ -1059,7 +1059,7 @@ CQuaternion<nReal>& CQuaternion<nReal>::Slerp (nReal fT, const CQuaternion& rkP,
 //----------------------------------------------------------------------------
 template <class nReal>
 CQuaternion<nReal>& CQuaternion<nReal>::SlerpExtraSpins (nReal fT,
-    const CQuaternion& rkP, const CQuaternion& rkQ, int iExtraSpins)
+    const CQuaternion& rkP, const CQuaternion& rkQ, nInt32 iExtraSpins)
 {
     nReal fCos = rkP.Dot(rkQ);
     nReal fAngle = CMath<nReal>::ACos(fCos);
@@ -1196,7 +1196,7 @@ void CQuaternion<nReal>::DecomposeSwingTimesTwist (
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-CQuaternion<nReal> CQuaternion<nReal>::GetClosest (int iAxis) const
+CQuaternion<nReal> CQuaternion<nReal>::GetClosest (nInt32 iAxis) const
 {
     // The appropriate nonzero components will be set later.
     CQuaternion kQ((nReal)0,(nReal)0,(nReal)0,(nReal)0);
@@ -1466,7 +1466,7 @@ void CQuaternion<nReal>::FactorZYX (nReal& rfCz, nReal& rfSz, nReal& rfCy,
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-CQuaternion<nReal> CQuaternion<nReal>::GetClosest (int iAxis,
+CQuaternion<nReal> CQuaternion<nReal>::GetClosest (nInt32 iAxis,
     const Constraints& rkCon) const
 {
     CQuaternion kQ((nReal)0,(nReal)0,(nReal)0,(nReal)0);

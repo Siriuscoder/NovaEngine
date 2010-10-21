@@ -121,7 +121,7 @@ class NOVA_EXPORT CRenderCapabilities : public CBase
 {
 private:
 
-	int mCap[NUM_CATEGORYES];
+	nInt32 mCap[NUM_CATEGORYES];
 
 	GPUVendor mVendor;
 
@@ -132,9 +132,9 @@ public:
 	CRenderCapabilities();
 	~CRenderCapabilities() {}
 
-	bool IsSupport(CapCategory cat, int cap);
+	bool IsSupport(CapCategory cat, nInt32 cap);
 
-	void SetCap(CapCategory cat, int cap);
+	void SetCap(CapCategory cat, nInt32 cap);
 
 	void SetGPUVendor(GPUVendor vendor);
 
@@ -149,7 +149,7 @@ class NOVA_EXPORT CRenderSystem : public CSingelton<CRenderSystem>, public CBase
 {
 public:
 
-	typedef nova::stl<int, CRenderTargetPtr>::map TRenderTargetsMap;
+	typedef nova::stl<nInt32, CRenderTargetPtr>::map TRenderTargetsMap;
 protected:
 
 	CGLSupport * mSupport;
@@ -174,7 +174,7 @@ private:
 
 	nova::nUInt32 mGlobalFSAA;
 
-	int mTargetsBuilded;
+	nInt32 mTargetsBuilded;
 
 	StartUpFlags mFlags;
 	bool mConfigIsReady;
@@ -191,7 +191,7 @@ public:
 
 	void SetVideoSettings(RenderSysType type, TWindowInitialTarget & config);
 
-	int MessageLoopPump();
+	nInt32 MessageLoopPump();
 
 	void StartUp(StartUpFlags flags);
 
@@ -205,7 +205,7 @@ public:
 
 	void DetachRenderTarget(nstring & name);
 
-	CRenderWindowPtr CreateRenderWindow(nstring & name, int priority);
+	CRenderWindowPtr CreateRenderWindow(nstring & name, nInt32 priority);
 
 	void ReleaseRenderTarget(CRenderTargetPtr & target);
 
@@ -213,11 +213,11 @@ public:
 
 	void PrepareAllRenderTargets();
 
-	bool CheckCapabilities(CapCategory cat, int cap);
+	bool CheckCapabilities(CapCategory cat, nInt32 cap);
 
 	CRenderCapabilities & GetCapabilities();
 
-	int BuildAllRenderTargets();
+	nInt32 BuildAllRenderTargets();
 
 	CRenderWindowPtr GetRootWindow();
 
@@ -242,7 +242,7 @@ public:
 
 	void SetBlendFunc(BlendingFinctions blend_sfactor, BlendingFinctions blend_dfactor);
 
-	void SetVeiwport(int x, int y, int width, int height);
+	void SetVeiwport(nInt32 x, nInt32 y, nInt32 width, nInt32 height);
 
 	void ClearBackBuffers(GLbitfield mask, CColorRGBA & clcolor);
 

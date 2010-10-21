@@ -84,14 +84,14 @@ void CLog::ReDirectTo(std::ostream & out)
 	mState = LG_REDIRECTED;
 }
 
-int CLog::PrintMessage(const char * mes, LogFormat format)
+nInt32 CLog::PrintMessage(const char * mes, LogFormat format)
 {
 	nova::nstring smes(mes);
 	return PrintMessage(smes, format);
 }
 
 
-int CLog::PrintMessage(const nova::nstring & mes, LogFormat format)
+nInt32 CLog::PrintMessage(const nova::nstring & mes, LogFormat format)
 {
 	nstringstream res;
 	time_t now;
@@ -178,7 +178,7 @@ int CLog::PrintMessage(const nova::nstring & mes, LogFormat format)
 	return mes.size();
 }
 
-int CLog::PrintStream(const nova::nstringstream & stream, LogFormat format)
+nInt32 CLog::PrintStream(const nova::nstringstream & stream, LogFormat format)
 {
 	return PrintMessage(stream.str(), format);
 }

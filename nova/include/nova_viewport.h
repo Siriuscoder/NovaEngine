@@ -41,11 +41,11 @@ protected:
 	nReal  	mRelTop;
 	nReal  	mRelWidth;
 	nReal  	mRelHeight;
-	int 	mActLeft;
-	int 	mActTop;
-	int 	mActWidth;
-	int 	mActHeight;
-	int 	mZOrder;
+	nInt32 	mActLeft;
+	nInt32 	mActTop;
+	nInt32 	mActWidth;
+	nInt32 	mActHeight;
+	nInt32 	mZOrder;
 
 	bool mClearScr;
 	bool mActive;
@@ -56,8 +56,8 @@ protected:
 
 public:
 
-	CViewPort(CRenderTarget * tag, int left, 
-		int top, int width, int height, int ZOrder);
+	CViewPort(CRenderTarget * tag, nInt32 left, 
+		nInt32 top, nInt32 width, nInt32 height, nInt32 ZOrder);
 
 	~CViewPort();
 
@@ -83,27 +83,27 @@ public:
 		return mRelLeft;
 	}
 
-	int 	GetActualLeft (void) const
+	nInt32 	GetActualLeft (void) const
 	{
 		return mActLeft;
 	}
 
-	int 	GetActualTop (void) const
+	nInt32 	GetActualTop (void) const
 	{
 		return mActTop;
 	}
 
-	int 	GetActualWidth (void) const
+	nInt32 	GetActualWidth (void) const
 	{
 		return mActWidth;
 	}
 
-	int 	GetActualHeight (void) const
+	nInt32 	GetActualHeight (void) const
 	{
 		return mActHeight;
 	}
 
-	int		GetZOrder(void) const
+	nInt32		GetZOrder(void) const
 	{
 		return mZOrder;
 	}

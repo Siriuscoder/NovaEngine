@@ -58,9 +58,9 @@ public:
 
 	~CGZFileStream();
 
-	static bool CompressData(CMemoryBuffer & dest, const CMemoryBuffer & source, int level);
+	static bool CompressData(CMemoryBuffer & dest, const CMemoryBuffer & source, nInt32 level);
 
-	static bool UnCompressData(CMemoryBuffer & dest, const CMemoryBuffer & sourcem, int reallen);
+	static bool UnCompressData(CMemoryBuffer & dest, const CMemoryBuffer & sourcem, nInt32 reallen);
 
 	virtual size_t Read (const CMemoryBuffer & dest);
 

@@ -105,12 +105,12 @@ CSceneManager::~CSceneManager()
 	ClearObjects();
 }
 
-int CSceneManager::GetRenderedBatches(void)
+nInt32 CSceneManager::GetRenderedBatches(void)
 {
 	return mRenderedBatches;
 }
 
-int CSceneManager::GetRenderedFaces(void)
+nInt32 CSceneManager::GetRenderedFaces(void)
 {
 	return mRenderedFaces;
 }
@@ -185,7 +185,7 @@ void CSceneManager::PrepareScene(void)
 	PrepareSceneImpl();
 }
 
-int CSceneManager::PrepareRenderQueue(void)
+nInt32 CSceneManager::PrepareRenderQueue(void)
 {
 	return PrepareRenderQueueImpl();
 }
@@ -232,7 +232,7 @@ void CSceneManager::DestroySceneNode(CTreeNode<CSceneNode*> *node)
 {
 	if(node)
 	{
-		for(int i = 0; i < node->GetChildrenLen(); i++)
+		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
 			DestroySceneNode(node->GetNode(i));
 
 		if(node->GetData())

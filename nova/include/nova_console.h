@@ -127,7 +127,7 @@ protected:
 
 public:
 /// \brief Отрисовка консоли.
-	virtual int Paint() = 0;
+	virtual nInt32 Paint() = 0;
 
 /// \brief Конструктор.
 	CConsoleBase(char * _name) : CBase(_name) 
@@ -160,7 +160,7 @@ class NOVA_EXPORT CConsole : public CConsoleBase, public CParser
 private:
 	nUInt32		position;
 	nReal		dy;
-	int			ypos;
+	nInt32			ypos;
 	CFontPtr	font;
 
 
@@ -194,8 +194,8 @@ public:
 /// \code
 /// console->writelen('c', N_RGB(150, 40, 130));
 /// \endcode
-    int PutChar(const wchar_t bb, const CColorRGB & pc);
-	int PutChar(const char bb, const CColorRGB & pc);
+    nInt32 PutChar(const wchar_t bb, const CColorRGB & pc);
+	nInt32 PutChar(const char bb, const CColorRGB & pc);
 /// \brief Вывести строку в консоль.
 ///
 /// Цвет ставится как стандартный белый.
@@ -206,12 +206,12 @@ public:
 	void HoreLine(const wchar_t symbol);
 
 /// \brief Отрисовка консоли 
-    int  Paint();
+    nInt32  Paint();
 /// \brief Очистка консоли.
 	void Clear();
 
 /// \brief Удаление последних х символов консоли.
-	int Delete(int x);
+	nInt32 Delete(nInt32 x);
   
 /// \brief Оператор << 
 ///
@@ -238,8 +238,8 @@ class NOVA_EXPORT CConsoleManager : public CSingelton<CConsoleManager>, public C
 {
 private:
 	stl<CConsole *>::vector consoles;
-	int							active;
-	int							iter;
+	nInt32							active;
+	nInt32							iter;
 	CFontPtr					font;
 
 public:
@@ -253,7 +253,7 @@ public:
 ///
 /// \param param Структура параметров новой консоли
 /// \see nv_console_init
-	int NewConsole(nv_console_init * param);
+	nInt32 NewConsole(nv_console_init * param);
 /// \brief Устанавливает в консоль шрифт.
 ///
 /// Для всех консолей будет использоваться именно этот шрифт.
@@ -276,11 +276,11 @@ public:
 	void SetActive(nUInt32 n);
 
 /// \brief Взять номер активной консоли.
-	const int GetActive();
+	const nInt32 GetActive();
 /// \brief Взять адрес активной консоли
 	CConsole * GetActivePtr();
 /// \brief Взять количество консолей
-	const int Count();
+	const nInt32 Count();
 
 /// \brief Оператор []
 ///

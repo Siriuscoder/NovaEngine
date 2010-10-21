@@ -53,7 +53,7 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 	if(mInfo.size() == 0)
 		return ;
 
-	typedef stl< stl<int>::vector >::vector t_expl;
+	typedef stl< stl<nInt32>::vector >::vector t_expl;
 	t_expl expl;
 	TNormal3d normal;
 	mNormals.clear();
@@ -100,7 +100,7 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 	}
 }
 
-int CMeshBox::QComparer(const void * a, const void * b)
+nInt32 CMeshBox::QComparer(const void * a, const void * b)
 {
 	TTriangleInfo *right = (TTriangleInfo *)b;
 	TTriangleInfo *left = (TTriangleInfo *)a;
@@ -223,7 +223,7 @@ void CMeshBox::PreUnloadingAction()
 
 void CMeshBox::ToWorldCoord()
 {
-	for(unsigned int i = 0; i < mVertexes.size(); i++)
+	for(nUInt32 i = 0; i < mVertexes.size(); i++)
 	{
 		nova::Vector3f vec(&(mVertexes[i].x));
 		vec = vec * mRotationMatrix;
@@ -266,7 +266,7 @@ void CMeshBox::BuildResource(void)
 
 void CMeshBox::FillMeshBuffer(CMemoryBuffer & vertexes)
 {
-	int chunksize = sizeof(TVertex4d);
+	nInt32 chunksize = sizeof(TVertex4d);
 	mVertexes.clear();
 
 /*	while(vertexes.GetReadPos() < vertexes.GetStreamSize())
@@ -286,7 +286,7 @@ void CMeshBox::FillMeshBuffer(CMemoryBuffer & vertexes)
 
 void CMeshBox::FillNornalBuffer(CMemoryBuffer & normals)
 {
-	int chunksize = sizeof(TNormal3d);
+	nInt32 chunksize = sizeof(TNormal3d);
 	mNormals.clear();
 
 /*	while(normals.GetReadPos() < normals.GetStreamSize())
@@ -306,7 +306,7 @@ void CMeshBox::FillNornalBuffer(CMemoryBuffer & normals)
 
 void CMeshBox::FillTexCoordBuffer(CMemoryBuffer & coords)
 {
-	int chunksize = sizeof(TTexCoord2d);
+	nInt32 chunksize = sizeof(TTexCoord2d);
 	mTexCoords.clear();
 
 /*	while(coords.GetReadPos() < coords.GetStreamSize())
@@ -326,7 +326,7 @@ void CMeshBox::FillTexCoordBuffer(CMemoryBuffer & coords)
 
 void CMeshBox::FillIndexBuffer(CMemoryBuffer & indexes)
 {
-	int chunksize = sizeof(TTriIndex);
+	nInt32 chunksize = sizeof(TTriIndex);
 	mIndexes.clear();
 
 /*	while(indexes.GetReadPos() < indexes.GetStreamSize())
@@ -355,7 +355,7 @@ bool CMeshBox::CheckValidLength()
 	return false;
 }
 
-int CMeshBox::GetMaterialIDByName(nstring & name)
+nInt32 CMeshBox::GetMaterialIDByName(nstring & name)
 {
 	for(nova::nUInt32 i = 0; i < mMatNames.size(); ++i)
 		if(mMatNames[i] == name)
@@ -377,7 +377,7 @@ stl<nstring>::vector CMeshBox::GetMaterials()
 	return mMatNames;
 }
 
-int CMeshBox::AddNewSubMaterial(nstring & resource_name)
+nInt32 CMeshBox::AddNewSubMaterial(nstring & resource_name)
 {
 	if(GetMaterialIDByName(resource_name) < 0)
 	{
@@ -388,7 +388,7 @@ int CMeshBox::AddNewSubMaterial(nstring & resource_name)
 	return -1;
 }
 
-int CMeshBox::GetMaterialID(nova::nUInt32 face)
+nInt32 CMeshBox::GetMaterialID(nova::nUInt32 face)
 {
 	if(face >= mSubMats.size())
 		return -1;
@@ -396,7 +396,7 @@ int CMeshBox::GetMaterialID(nova::nUInt32 face)
 	return mSubMats[face];
 }
 
-void CMeshBox::SetMaterialID(nova::nUInt32 face, int id)
+void CMeshBox::SetMaterialID(nova::nUInt32 face, nInt32 id)
 {
 	if(face >= mSubMats.size())
 		return;
@@ -451,7 +451,7 @@ void CMeshBox::GenerateNormalsToFaces(void)
 
 	try
 	{
-		for(int i = 0; it != mIndexes.end(); ++it, ++i)
+		for(nInt32 i = 0; it != mIndexes.end(); ++it, ++i)
 		{
 			TTriangleInfo info;
 

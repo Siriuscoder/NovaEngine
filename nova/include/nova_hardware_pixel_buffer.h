@@ -49,8 +49,8 @@ protected:
 	size_t 	mSlicePitch;
 	CImageFormats::NovaPixelFormats mPixelFormat;
 	GLuint  mTargetId;
-	int mFace;
-	int mLevel;
+	nInt32 mFace;
+	nInt32 mLevel;
 
 	TargetType mTarget;
 
@@ -97,13 +97,13 @@ public:
 
 	CHardwarePixelBuffer();
 
-	CHardwarePixelBuffer(GLuint TargetId, TargetType tag, int level,
-		int face, CImageFormats::NovaPixelFormats pixelformat);
+	CHardwarePixelBuffer(GLuint TargetId, TargetType tag, nInt32 level,
+		nInt32 face, CImageFormats::NovaPixelFormats pixelformat);
 
 	~CHardwarePixelBuffer();
 
 	CMemoryBuffer Lock(size_t xoff, size_t yoff, size_t zoff,
-		int width, int height, int depth, THardwareBufferLock opt);
+		nInt32 width, nInt32 height, nInt32 depth, THardwareBufferLock opt);
 };
 
 typedef CSmartPtr<CHardwarePixelBuffer> CHardwarePixelBufferPtr;
@@ -125,8 +125,8 @@ protected:
 
 	TSurfaseList mSurfaceList;
 
-	int mMaxMipmaps;
-	int mFace;
+	nInt32 mMaxMipmaps;
+	nInt32 mFace;
 	CHardwarePixelBuffer::TargetType mType;
 	MipMapTagertType mMipState;
 	GLuint  mTargetId;
@@ -137,7 +137,7 @@ protected:
 public:
 
 	CTextureSurfaceList(CHardwarePixelBuffer::TargetType type,
-		MipMapTagertType mip, int face, CImageFormats::NovaPixelFormats pixelformat, GLuint cube);
+		MipMapTagertType mip, nInt32 face, CImageFormats::NovaPixelFormats pixelformat, GLuint cube);
 
 	void BuildSurfaceList(const CMemoryBuffer & data, size_t width, size_t height, size_t depth);
 
@@ -155,9 +155,9 @@ public:
 
 	CImageFormats::NovaPixelFormats GetPixelFormat();
 
-	CHardwarePixelBufferPtr operator[](int level);
+	CHardwarePixelBufferPtr operator[](nInt32 level);
 
-	int GetMaxLevels(void);
+	nInt32 GetMaxLevels(void);
 
 	GLuint GetRecomendedMagFilter(void);
 

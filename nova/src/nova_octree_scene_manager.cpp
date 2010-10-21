@@ -42,13 +42,13 @@ void COctreeSceneManager::RenderNode(CTreeNode<CSceneNode*> *node)
 			if(!pNode->IsValidated())
 				pNode->ValidateNode();
 
-			for(int i = 0; i < node->GetChildrenLen(); i++)
+			for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
 				RenderNode(node->GetNode(i));
 		}
 	}
 }
 
-int COctreeSceneManager::RenderSceneImpl()
+nInt32 COctreeSceneManager::RenderSceneImpl()
 {
 	RenderNode(mSceneTree.GetRootElement());
 	return 0;
@@ -59,7 +59,7 @@ void COctreeSceneManager::PrepareSceneImpl(void)
 
 }
 
-int COctreeSceneManager::PrepareRenderQueueImpl(void)
+nInt32 COctreeSceneManager::PrepareRenderQueueImpl(void)
 {
 
 	return 0;

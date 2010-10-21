@@ -304,7 +304,7 @@ typedef float TVectorf[M_BASIS_4D];
 typedef float TVectord[M_BASIS_4D];
 
   // Массив граней
-typedef int TFaces[M_TRIANGLES];
+typedef nInt32 TFaces[M_TRIANGLES];
 
   // Массив нормалей к граням ( к вершинам)
 typedef float TNormals[M_BASIS_3D];
@@ -312,7 +312,7 @@ typedef float TNormals[M_BASIS_3D];
 typedef TNormals TMatfaces;
 
   // Массив подматериалов
-typedef int TSubmatmn[2];
+typedef nInt32 TSubmatmn[2];
 */
 
 ///////////////////////////////////////////////////
@@ -329,12 +329,15 @@ typedef __int64 nInt64;
 
 typedef unsigned __int16 nUInt16; // (16 bit nUInt16)
 
+typedef __int16 nInt16; // (16 bit nUInt16)
+
 /// \brief Contraction for 'const char*'
 typedef const __int8 nCChar;
 
 typedef unsigned __int8 nByte; // (8 bit nUInt16)
 
 typedef unsigned __int32 nUInt32; // (32 bit nUInt32)
+typedef __int32 nInt32; // (32 bit nUInt32)
 /// \brief Contraction for 'unsigned long'
 typedef nova::nUInt32 *nUInt32Ptr;
 
@@ -347,6 +350,7 @@ typedef uint64_t nUInt64;
 typedef int64_t nInt64;
 
 typedef uint16_t nUInt16; // (16 bit nUInt16)
+typedef int16_t nInt16; // (16 bit nUInt16)
 
 /// \brief Contraction for 'const char*'
 typedef const char nCChar;
@@ -354,6 +358,7 @@ typedef const char nCChar;
 typedef uint8_t nByte; // (8 bit nUInt16)
 
 typedef uint32_t nUInt32; // (32 bit nUInt32)
+typedef int32_t nInt32; // (32 bit nUInt32)
 /// \brief Contraction for 'unsigned long'
 typedef nova::nUInt32 *nUInt32Ptr;
 
@@ -382,8 +387,8 @@ typedef double nReal;
 
 typedef struct tagPOINT
 {
-    int  x;
-    int  y;
+    nInt32  x;
+    nInt32  y;
 } POINT, *PPOINT;
 
 #ifdef HAVE_MEMSET

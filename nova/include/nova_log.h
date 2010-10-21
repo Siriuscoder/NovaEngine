@@ -65,9 +65,9 @@ public:
 	CLog(nstring & file);
 	~CLog();
 
-	int PrintMessage(const nova::nstring & mes, LogFormat format = LG_WITH_TIME);
-	int PrintMessage(const char * mes, LogFormat format = LG_WITH_TIME);
-	int PrintStream(const nova::nstringstream & stream, LogFormat format = LG_WITH_TIME);
+	nInt32 PrintMessage(const nova::nstring & mes, LogFormat format = LG_WITH_TIME);
+	nInt32 PrintMessage(const char * mes, LogFormat format = LG_WITH_TIME);
+	nInt32 PrintStream(const nova::nstringstream & stream, LogFormat format = LG_WITH_TIME);
 
 	void Flush();
 	void Close();

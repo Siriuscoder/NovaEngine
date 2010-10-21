@@ -49,12 +49,12 @@ void CScene::DeleteAllScraps(void)
 	mScraps.clear();
 }
 
-int CScene::GetRenderedBatches(void)
+nInt32 CScene::GetRenderedBatches(void)
 {
 	return mRenderedBatches;
 }
 
-int CScene::GetRenderedFaces(void)
+nInt32 CScene::GetRenderedFaces(void)
 {
 	return mRenderedFaces;
 }
@@ -71,10 +71,10 @@ void CScene::RenderAllScene(CCamera * camera, CViewPort * view)
 	CRenderSystem * Renderer = NULL;
 
 	Renderer = CRenderSystem::GetSingeltonPtr();
-	Renderer->SetVeiwport((int)view->GetActualLeft(), 
-		(int)view->GetActualTop(), 
-		(int)view->GetActualWidth(), 
-		(int)view->GetActualHeight());
+	Renderer->SetVeiwport((nInt32)view->GetActualLeft(), 
+		(nInt32)view->GetActualTop(), 
+		(nInt32)view->GetActualWidth(), 
+		(nInt32)view->GetActualHeight());
 
 	camera->Validate();
 
@@ -103,7 +103,7 @@ CSceneManager *CScene::FindScene(const nstring &name)
 	return NULL;
 }
 
-int CScene::AddScrap(CSceneManager *manager)
+nInt32 CScene::AddScrap(CSceneManager *manager)
 {
 	if(manager)
 	{
@@ -114,23 +114,23 @@ int CScene::AddScrap(CSceneManager *manager)
 	throw NOVA_EXP("CScene::AddScrap: manager pointer refer to null ptr..", MEM_ERROR);
 }
 
-int CScene::LoadSceneForce(const CFilesPackage &rPack, bool withResorces)
+nInt32 CScene::LoadSceneForce(const CFilesPackage &rPack, bool withResorces)
 {
 
 	return 0;
 }
 
-int CScene::LoadSceneForce(const nstring &pckFile, bool withResorces)
+nInt32 CScene::LoadSceneForce(const nstring &pckFile, bool withResorces)
 {
 	return 0;
 }
 
-int CScene::LoadSceneInBackgroundMode(const CFilesPackage &rPack, bool withResorces)
+nInt32 CScene::LoadSceneInBackgroundMode(const CFilesPackage &rPack, bool withResorces)
 {
 	return 0;
 }
 
-int CScene::LoadSceneInBackgroundMode(const nstring &pckFile, bool withResorces)
+nInt32 CScene::LoadSceneInBackgroundMode(const nstring &pckFile, bool withResorces)
 {
 	return 0;
 }

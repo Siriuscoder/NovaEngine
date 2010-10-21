@@ -42,7 +42,7 @@ void CTexture::CreateTexture(void)
 	mSize = 0;
 
 	TImageList::iterator it;
-	int face;
+	nInt32 face;
 
 	if(mType == CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE)
 	{
@@ -75,7 +75,7 @@ void CTexture::CreateTexture(void)
 
 		TexturePlane->BuildSurfaceList((*it)->GetBits(), (*it)->GetWidth(), (*it)->GetHeight(), (*it)->GetDepth());
 
-		for(int i = 0; i < TexturePlane->GetMaxLevels(); ++i)
+		for(nInt32 i = 0; i < TexturePlane->GetMaxLevels(); ++i)
 			mSize += TexturePlane->GetSurface(i)->GetHDSize();
 
 		if(mType == CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE && face == 0)
@@ -143,7 +143,7 @@ void CTexture::ApplyTexture()
 }
 
 
-void CTexture::AddSubTexture(CImagePtr & image, nova::nUInt32 level, int face,
+void CTexture::AddSubTexture(CImagePtr & image, nova::nUInt32 level, nInt32 face,
 	nova::nUInt32 xoff, nova::nUInt32 yoff, nova::nUInt32 zoff)
 {
 	if(!isReady)

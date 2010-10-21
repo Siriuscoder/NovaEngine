@@ -43,7 +43,7 @@ template<> const CQuaternion<nReal>
     CQuaternion<nReal>::IDENTITY(1.0f,0.0f,0.0f,0.0f);
 template<> const CQuaternion<nReal>
     CQuaternion<nReal>::ZERO(0.0f,0.0f,0.0f,0.0f);
-template<> int CQuaternion<nReal>::ms_iNext[3] = { 1, 2, 0 };
+template<> nInt32 CQuaternion<nReal>::ms_iNext[3] = { 1, 2, 0 };
 template<> nReal CQuaternion<nReal>::ms_fTolerance = 1e-06f;
 template<> nReal CQuaternion<nReal>::ms_fRootTwo = (nReal)sqrt(2.0);
 template<> nReal CQuaternion<nReal>::ms_fRootHalf = (nReal)sqrt(0.5);

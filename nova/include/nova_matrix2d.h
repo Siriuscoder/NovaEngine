@@ -85,14 +85,14 @@ public:
     // member access
     inline operator const nReal* () const;
     inline operator nReal* ();
-    inline const nReal* operator[] (int iRow) const;
-    inline nReal* operator[] (int iRow);
-    inline nReal operator() (int iRow, int iCol) const;
-    inline nReal& operator() (int iRow, int iCol);
-    void SetRow (int iRow, const CVector2<nReal>& rkV);
-    CVector2<nReal> GetRow (int iRow) const;
-    void SetColumn (int iCol, const CVector2<nReal>& rkV);
-    CVector2<nReal> GetColumn (int iCol) const;
+    inline const nReal* operator[] (nInt32 iRow) const;
+    inline nReal* operator[] (nInt32 iRow);
+    inline nReal operator() (nInt32 iRow, nInt32 iCol) const;
+    inline nReal& operator() (nInt32 iRow, nInt32 iCol);
+    void SetRow (nInt32 iRow, const CVector2<nReal>& rkV);
+    CVector2<nReal> GetRow (nInt32 iRow) const;
+    void SetColumn (nInt32 iCol, const CVector2<nReal>& rkV);
+    CVector2<nReal> GetColumn (nInt32 iCol) const;
     void GetColumnMajor (nReal* afCMajor) const;
 
     // assignment
@@ -152,7 +152,7 @@ public:
 
 private:
     // support for comparisons
-    int CompareArrays (const CMatrix2& rkM) const;
+    nInt32 CompareArrays (const CMatrix2& rkM) const;
 
     // matrix stored in row-major order
     nReal m_afEntry[4];
@@ -287,25 +287,25 @@ inline CMatrix2<nReal>::operator nReal* ()
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline const nReal* CMatrix2<nReal>::operator[] (int iRow) const
+inline const nReal* CMatrix2<nReal>::operator[] (nInt32 iRow) const
 {
     return &m_afEntry[2*iRow];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal* CMatrix2<nReal>::operator[] (int iRow)
+inline nReal* CMatrix2<nReal>::operator[] (nInt32 iRow)
 {
     return &m_afEntry[2*iRow];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal CMatrix2<nReal>::operator() (int iRow, int iCol) const
+inline nReal CMatrix2<nReal>::operator() (nInt32 iRow, nInt32 iCol) const
 {
     return m_afEntry[iCol + 2*iRow];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-inline nReal& CMatrix2<nReal>::operator() (int iRow, int iCol)
+inline nReal& CMatrix2<nReal>::operator() (nInt32 iRow, nInt32 iCol)
 {
     return m_afEntry[iCol + 2*iRow];
 }
@@ -357,29 +357,29 @@ void CMatrix2<nReal>::MakeTensorProduct (const CVector2<nReal>& rkU,
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-void CMatrix2<nReal>::SetRow (int iRow, const CVector2<nReal>& rkV)
+void CMatrix2<nReal>::SetRow (nInt32 iRow, const CVector2<nReal>& rkV)
 {
-    int i0 = 2*iRow ,i1 = i0+1;
+    nInt32 i0 = 2*iRow ,i1 = i0+1;
     m_afEntry[i0] = rkV[0];
     m_afEntry[i1] = rkV[1];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-CVector2<nReal> CMatrix2<nReal>::GetRow (int iRow) const
+CVector2<nReal> CMatrix2<nReal>::GetRow (nInt32 iRow) const
 {
-    int i0 = 2*iRow ,i1 = i0+1;
+    nInt32 i0 = 2*iRow ,i1 = i0+1;
     return CVector2<nReal>(m_afEntry[i0],m_afEntry[i1]);
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-void CMatrix2<nReal>::SetColumn (int iCol, const CVector2<nReal>& rkV)
+void CMatrix2<nReal>::SetColumn (nInt32 iCol, const CVector2<nReal>& rkV)
 {
     m_afEntry[iCol] = rkV[0];
     m_afEntry[iCol+2] = rkV[1];
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-CVector2<nReal> CMatrix2<nReal>::GetColumn (int iCol) const
+CVector2<nReal> CMatrix2<nReal>::GetColumn (nInt32 iCol) const
 {
     return CVector2<nReal>(m_afEntry[iCol],m_afEntry[iCol+2]);
 }
@@ -404,7 +404,7 @@ inline CMatrix2<nReal>& CMatrix2<nReal>::operator= (const CMatrix2& rkM)
 }
 //----------------------------------------------------------------------------
 template <class nReal>
-int CMatrix2<nReal>::CompareArrays (const CMatrix2& rkM) const
+nInt32 CMatrix2<nReal>::CompareArrays (const CMatrix2& rkM) const
 {
     return memcmp(m_afEntry,rkM.m_afEntry,4*sizeof(nReal));
 }

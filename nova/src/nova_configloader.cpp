@@ -45,9 +45,9 @@ CConfig::~CConfig()
 	filename.clear();
 }
 
-int CConfig::MakeTree()
+nInt32 CConfig::MakeTree()
 {
-	int count = 0;
+	nInt32 count = 0;
 
 	if(filename.size() <= 0)
 		throw NovaExp("CConfig::MakeTree - filename is empty.", BAD_OPERATION);
@@ -110,7 +110,7 @@ void CConfig::FreeTree()
 
 CTreeNode<nstring> * CConfig::GetNodePointer(nstring & node)
 {
-	for(int i = 0; i < conftree.GetRootElement()->GetChildrenLen(); ++i)
+	for(nInt32 i = 0; i < conftree.GetRootElement()->GetChildrenLen(); ++i)
 		if(node.compare((*(conftree.GetRootElement()))[i]->GetData()) == 0)
 			return conftree.GetRootElement()->GetNode(i);
 
@@ -127,16 +127,16 @@ CTree<nstring> * CConfig::GetTree()
 	return &conftree;
 }
 
-int CConfig::SaveTree(CTree<nstring> & tree, nstring & _filename)
+nInt32 CConfig::SaveTree(CTree<nstring> & tree, nstring & _filename)
 {
 	ofstream out;
-	int count = 0;
+	nInt32 count = 0;
 
 	out.open(_filename.c_str());
 	if(out)
 	{
 		out << tree.GetRootElement()->GetData() << endl;
-		for(int i = 0; i < tree.GetRootElement()->GetChildrenLen(); ++i)
+		for(nInt32 i = 0; i < tree.GetRootElement()->GetChildrenLen(); ++i)
 		{
 			CTreeNode<nstring> * node = tree.GetRootElement()->GetNode(i);
 			nstring line;
@@ -144,7 +144,7 @@ int CConfig::SaveTree(CTree<nstring> & tree, nstring & _filename)
 			line.clear();
 			line.append(node->GetData());
 
-			for(int j = 0; j < node->GetChildrenLen(); ++j)
+			for(nInt32 j = 0; j < node->GetChildrenLen(); ++j)
 				line.append(" " + node->GetNode(j)->GetData());
 			out << line << endl;
 

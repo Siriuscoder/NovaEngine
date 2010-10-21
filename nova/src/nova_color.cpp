@@ -102,7 +102,7 @@ bool CColorRGB::operator!= (const CColorRGB& rkC) const
         m_afTuple[2] != rkC.m_afTuple[2];
 }
 //----------------------------------------------------------------------------
-int CColorRGB::CompareArrays (const CColorRGB& rkC) const
+nInt32 CColorRGB::CompareArrays (const CColorRGB& rkC) const
 {
     return memcmp(m_afTuple,rkC.m_afTuple,3*sizeof(nReal));
 }
@@ -198,7 +198,7 @@ CColorRGB& CColorRGB::operator*= (nReal fScalar)
 //----------------------------------------------------------------------------
 void CColorRGB::Clamp ()
 {
-    for (int i = 0; i < 3; i++)
+    for (nInt32 i = 0; i < 3; i++)
     {
         if (m_afTuple[i] > 1.0f)
         {
@@ -226,7 +226,7 @@ void CColorRGB::ScaleByMax ()
     if (fMax > 1.0f)
     {
         nReal fInvMax = 1.0f/fMax;
-        for (int i = 0; i < 3; i++)
+        for (nInt32 i = 0; i < 3; i++)
         {
             m_afTuple[i] *= fInvMax;
         }
@@ -305,7 +305,7 @@ bool CColorRGBA::operator!= (const CColorRGBA& rkC) const
         m_afTuple[3] != rkC.m_afTuple[3];
 }
 //----------------------------------------------------------------------------
-int CColorRGBA::CompareArrays (const CColorRGBA& rkC) const
+nInt32 CColorRGBA::CompareArrays (const CColorRGBA& rkC) const
 {
     return memcmp(m_afTuple,rkC.m_afTuple,4*sizeof(nReal));
 }
@@ -413,7 +413,7 @@ CColorRGBA& CColorRGBA::operator*= (nReal fScalar)
 //----------------------------------------------------------------------------
 void CColorRGBA::Clamp ()
 {
-    for (int i = 0; i < 4; i++)
+    for (nInt32 i = 0; i < 4; i++)
     {
         if (m_afTuple[i] > 1.0f)
         {
@@ -442,7 +442,7 @@ void CColorRGBA::ScaleByMax ()
     if (fMax > 1.0f)
     {
         nReal fInvMax = 1.0f/fMax;
-        for (int i = 0; i < 3; i++)
+        for (nInt32 i = 0; i < 3; i++)
         {
             m_afTuple[i] *= fInvMax;
         }
