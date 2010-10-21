@@ -325,7 +325,7 @@ typedef int TSubmatmn[2];
 #if defined(_MSC_VER)
 // It's VC++, so we'll use Microsoft's 64-bit integer types
 typedef unsigned __int64 nUInt64;
-typedef __int64 longlong;
+typedef __int64 nInt64;
 
 typedef unsigned __int16 word; // (16 bit word)
 
@@ -346,7 +346,7 @@ typedef nova::ulong ulong_ptr, *pulong_ptr;
 // define NO_LONG_LONGS.
 
 typedef uint64_t nUInt64;
-typedef int64_t longlong;
+typedef int64_t nInt64;
 
 typedef uint16_t word; // (16 bit word)
 
