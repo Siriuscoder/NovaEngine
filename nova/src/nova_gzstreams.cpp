@@ -260,7 +260,7 @@ void CGZFileStream::Flush()
 	gzflush(mGZFile, 0);
 }
 
-size_t CGZFileStream::ReadLine (nstring & str, const size_t count)
+nstring CGZFileStream::ReadLine (const size_t count)
 {
 	if(!mIsOpened || !mGZFile)
 		throw NOVA_EXP("CGZFileStream::ReadLine - gzfile is not opened!", BAD_OPERATION);
@@ -269,17 +269,18 @@ size_t CGZFileStream::ReadLine (nstring & str, const size_t count)
 		NOVA_EXP("CGZFileStream::ReadLine - file opened for read!", BAD_OPERATION);
 
 	char *buf = NULL;
+	nstring res;
 	buf = getmem(buf, count);
 	buf = gzgets(mGZFile, buf, count);
 
-	str.append(buf);
+	res.append(buf);
 	freemem(buf);
 
-	return strlen(buf);
+	return res;
 }
 
 
-size_t CGZFileStream::ReadLine (nstring & str, const char delim)
+nstring CGZFileStream::ReadLine (const char delim)
 {
 	if(!mIsOpened || !mGZFile)
 		throw NOVA_EXP("CGZFileStream::ReadLine - gzfile is not opened!", BAD_OPERATION);
@@ -288,6 +289,7 @@ size_t CGZFileStream::ReadLine (nstring & str, const char delim)
 		NOVA_EXP("CGZFileStream::ReadLine - file opened for read!", BAD_OPERATION);
 
 	size_t cc = 0;
+	nstring res;
 
 	register char bb;
 	for(cc = 0; ; cc++)
@@ -296,14 +298,14 @@ size_t CGZFileStream::ReadLine (nstring & str, const char delim)
 			break;
 
 		bb = gzgetc(mGZFile);
-		str.push_back(bb);
+		res.push_back(bb);
 
 		cc++;
 		if(bb == delim)
 			break;
 	}
 
-	return cc;
+	return res;
 }
 
 size_t CGZFileStream::WriteLine (const nstring & str, const size_t count)

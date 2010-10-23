@@ -33,32 +33,78 @@ namespace nova
 class CMeshBox;
 
 #pragma pack(push, 1)
-typedef struct TVertex4d
-{
-	nova::nReal x;
-	nova::nReal y;
-	nova::nReal z;
-} *PVertex3d;
 
-struct TTexCoord2d
+union TVertex3d
 {
-	nova::nReal s;
-	nova::nReal t;
+	struct 
+	{
+		nova::nReal x;
+		nova::nReal y;
+		nova::nReal z;
+	};
+
+	nova::nReal v[3];
 };
 
-struct TNormal3d
+union TVertex4d
 {
-	nova::nReal x;
-	nova::nReal y;
-	nova::nReal z;
+	struct 
+	{
+		nova::nReal x;
+		nova::nReal y;
+		nova::nReal z;
+		nova::nReal t;
+	};
+
+	nova::nReal v[4];
 };
 
-struct TTriIndex
+union TUVMapping
 {
-	nInt32 a;
-	nInt32 b;
-	nInt32 c;
+	struct 
+	{
+		nova::nReal s;
+		nova::nReal t;
+	};
 
+	nova::nReal v[2];
+};
+
+union TNormal3d
+{
+	struct
+	{
+		nova::nReal x;
+		nova::nReal y;
+		nova::nReal z;
+	};
+
+	nova::nReal v[3];
+};	
+
+union TNormal4d
+{
+	struct
+	{
+		nova::nReal x;
+		nova::nReal y;
+		nova::nReal z;
+		nova::nReal t;
+	};
+
+	nova::nReal v[4];
+};	
+
+union TFaceIndex
+{
+	struct
+	{
+		nInt32 a;
+		nInt32 b;
+		nInt32 c;
+	};
+
+	nova::nInt32 v[3];
 };
 
 struct TTriangleInfo
@@ -87,10 +133,10 @@ class NOVA_EXPORT CMeshBox : public CResource
 {
 public:
 
-	typedef nova::stl<TVertex4d>::vector TVertexes;
+	typedef nova::stl<TVertex3d>::vector TVertexes;
 	typedef nova::stl<TNormal3d>::vector TNormals;
-	typedef nova::stl<TTexCoord2d>::vector TTexCoords;
-	typedef nova::stl<TTriIndex>::vector TIndexes;
+	typedef nova::stl<TUVMapping>::vector TTexCoords;
+	typedef nova::stl<TFaceIndex>::vector TIndexes;
 	typedef nova::stl<TTriangleInfo>::vector TFacesInfo;
 	typedef nova::stl<nInt32>::vector TSubMats;
 

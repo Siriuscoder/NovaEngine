@@ -144,12 +144,12 @@ nova::nUInt32 CMeshBox::GetTrianglesLen(void)
 
 size_t CMeshBox::GetVertexesLenInBytes(void)
 {
-	return mVertexes.size() * sizeof(TVertex4d);
+	return mVertexes.size() * sizeof(TVertex3d);
 }
 
 size_t CMeshBox::GetTrianglesLenInBytes(void)
 {
-	return mIndexes.size() * sizeof(TTriIndex);
+	return mIndexes.size() * sizeof(TFaceIndex);
 }
 
 size_t CMeshBox::GetNormalsLen(void)
@@ -255,10 +255,10 @@ void CMeshBox::BuildResource(void)
 	if(isReady)
 		return;
 
-	mSize += mVertexes.size() * sizeof(TVertex4d);
+	mSize += mVertexes.size() * sizeof(TVertex3d);
 	mSize += mNormals.size() * sizeof(TNormal3d);
-	mSize += mTexCoords.size() * sizeof(TTexCoord2d);
-	mSize += mIndexes.size() * sizeof(TTriIndex);
+	mSize += mTexCoords.size() * sizeof(TUVMapping);
+	mSize += mIndexes.size() * sizeof(TFaceIndex);
 	mSize += mInfo.size() * sizeof(TTriangleInfo);
 
 	CResource::BuildResource();
@@ -266,12 +266,12 @@ void CMeshBox::BuildResource(void)
 
 void CMeshBox::FillMeshBuffer(CMemoryBuffer & vertexes)
 {
-	nInt32 chunksize = sizeof(TVertex4d);
+	nInt32 chunksize = sizeof(TVertex3d);
 	mVertexes.clear();
 
 /*	while(vertexes.GetReadPos() < vertexes.GetStreamSize())
 	{
-		TVertex4d vertex;
+		TVertex3d vertex;
 		memcpy(&vertex, vertexes.GetReadPtr(), chunksize);
 
 		vertexes.SetReadPos(vertexes.GetReadPos() + chunksize);
@@ -306,12 +306,12 @@ void CMeshBox::FillNornalBuffer(CMemoryBuffer & normals)
 
 void CMeshBox::FillTexCoordBuffer(CMemoryBuffer & coords)
 {
-	nInt32 chunksize = sizeof(TTexCoord2d);
+	nInt32 chunksize = sizeof(TUVMapping);
 	mTexCoords.clear();
 
 /*	while(coords.GetReadPos() < coords.GetStreamSize())
 	{
-		TTexCoord2d coord;
+		TUVMapping coord;
 		memcpy(&coord, coords.GetReadPtr(), chunksize);
 
 		coords.SetReadPos(coords.GetReadPos() + chunksize);
@@ -326,12 +326,12 @@ void CMeshBox::FillTexCoordBuffer(CMemoryBuffer & coords)
 
 void CMeshBox::FillIndexBuffer(CMemoryBuffer & indexes)
 {
-	nInt32 chunksize = sizeof(TTriIndex);
+	nInt32 chunksize = sizeof(TFaceIndex);
 	mIndexes.clear();
 
 /*	while(indexes.GetReadPos() < indexes.GetStreamSize())
 	{
-		TTriIndex triangle;
+		TFaceIndex triangle;
 		memcpy(&triangle, indexes.GetReadPtr(), chunksize);
 
 		indexes.SetReadPos(indexes.GetReadPos() + chunksize);

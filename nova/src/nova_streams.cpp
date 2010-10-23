@@ -165,7 +165,7 @@ void CMemoryStream::Open (void *buf, const size_t maxsize, bool write)
 	mIsOpened = true; 
 }
 
-size_t CMemoryStream::ReadLine (nstring & str, const size_t count)
+nstring CMemoryStream::ReadLine (const size_t count)
 {
 	if(!mIsOpened)
 		throw NOVA_EXP("CMemoryStream::ReadLine - stream is not opened!", BAD_OPERATION);
@@ -174,6 +174,7 @@ size_t CMemoryStream::ReadLine (nstring & str, const size_t count)
 		throw NOVA_EXP("CMemoryStream::ReadLine - stream opened for writing", BAD_OPERATION);
 
 	size_t cc = 0;
+	nstring res;
 
 	register char bb;
 	for( cc = 0; cc < count; cc++)
@@ -182,15 +183,15 @@ size_t CMemoryStream::ReadLine (nstring & str, const size_t count)
 			break;
 
 		bb = *((char *)mStreamBuffer.GetBegin() + mPos);
-		str.push_back(bb);
+		res.push_back(bb);
 
 		mPos++;
 	}
 
-	return cc;
+	return res;
 }
 	
-size_t CMemoryStream::ReadLine (nstring & str, const char delim)
+nstring CMemoryStream::ReadLine (const char delim)
 {
 	if(!mIsOpened)
 		throw NOVA_EXP("CMemoryStream::ReadLine - stream is not opened!", BAD_OPERATION);
@@ -199,6 +200,7 @@ size_t CMemoryStream::ReadLine (nstring & str, const char delim)
 		throw NOVA_EXP("CMemoryStream::ReadLine - stream opened for writing", BAD_OPERATION);
 
 	size_t cc = 0;
+	nstring res;
 
 	register char bb;
 	for(cc = 0; ; cc++)
@@ -207,7 +209,7 @@ size_t CMemoryStream::ReadLine (nstring & str, const char delim)
 			break;
 
 		bb = *((char *)mStreamBuffer.GetBegin() + mPos);
-		str.push_back(bb);
+		res.push_back(bb);
 
 		mPos++;
 
@@ -215,7 +217,7 @@ size_t CMemoryStream::ReadLine (nstring & str, const char delim)
 			break;
 	}
 
-	return cc;
+	return res;
 }
 
 size_t CMemoryStream::Write (const CMemoryBuffer & source)

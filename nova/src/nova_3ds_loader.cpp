@@ -159,7 +159,7 @@ nova::nUInt32 C3DSChunk::GetEnd(void) const
 
 C3DSLoader::C3DSLoader(CDataStream & stream, bool geom, bool mult_thread)
 {
-	mp3dsStream = &stream;
+	mpStream = &stream;
 	mGeometry = geom;
 	mOwerThread = mult_thread;
 }
@@ -174,9 +174,9 @@ C3DSChunk C3DSLoader::ReadChunk()
 {
 	C3DSChunk chunk;
 
-	chunk.SetID(mp3dsStream->ReadMemOfType<nova::nUInt16>());
-	nova::nUInt32 len = mp3dsStream->ReadMemOfType<nova::nUInt32>();
-	chunk.SetStart(mp3dsStream->Tell());
+	chunk.SetID(mpStream->ReadMemOfType<nova::nUInt16>());
+	nova::nUInt32 len = mpStream->ReadMemOfType<nova::nUInt32>();
+	chunk.SetStart(mpStream->Tell());
 	chunk.SetEnd(chunk.GetStart() + (len-sizeof(nova::nUInt16)-sizeof(nova::nUInt32)));
 
 	return chunk;
@@ -184,7 +184,7 @@ C3DSChunk C3DSLoader::ReadChunk()
 
 bool C3DSLoader::FindChunk(C3DSChunk & target, C3DSChunk & parent)
 {
-	if(parent.GetEnd() >= mp3dsStream->Tell())
+	if(parent.GetEnd() >= mpStream->Tell())
 		return false;
 
 	C3DSChunk chunk;
@@ -212,12 +212,12 @@ bool C3DSLoader::FindChunk(C3DSChunk & target, C3DSChunk & parent)
 
 void C3DSLoader::SkipChunk(const C3DSChunk &chunk)
 {
-	mp3dsStream->Seek(chunk.GetEnd());
+	mpStream->Seek(chunk.GetEnd());
 }
 
 void C3DSLoader::GotoChunk(const C3DSChunk &chunk)
 {
-	mp3dsStream->Seek(chunk.GetStart());
+	mpStream->Seek(chunk.GetStart());
 }
 
 CColorRGB C3DSLoader::ReadColor(const C3DSChunk &chunk)
@@ -229,27 +229,27 @@ CColorRGB C3DSLoader::ReadColor(const C3DSChunk &chunk)
 	{
 	case T3DS_COLOR_F:
 		{
-			color.R() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-			color.G() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-			color.B() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+			color.R() = mpStream->ReadMemOfTypeInSize<float>(4);
+			color.G() = mpStream->ReadMemOfTypeInSize<float>(4);
+			color.B() = mpStream->ReadMemOfTypeInSize<float>(4);
 		}
 		break;
     case T3DS_COLOR_24:
 		{
-			color.R() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
-			color.G() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
-			color.B() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.R() = mpStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.G() = mpStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.B() = mpStream->ReadMemOfType<nova::nByte>() / 255.0f;
 		}
         break;
     case T3DS_LIN_COLOR_F:
-			color.R() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-			color.G() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-			color.B() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+			color.R() = mpStream->ReadMemOfTypeInSize<float>(4);
+			color.G() = mpStream->ReadMemOfTypeInSize<float>(4);
+			color.B() = mpStream->ReadMemOfTypeInSize<float>(4);
         break;
     case T3DS_LIN_COLOR_24:
-			color.R() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
-			color.G() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
-			color.B() = mp3dsStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.R() = mpStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.G() = mpStream->ReadMemOfType<nova::nByte>() / 255.0f;
+			color.B() = mpStream->ReadMemOfType<nova::nByte>() / 255.0f;
         break;
 	default:
 		throw NOVA_EXP("C3DSLoader::ReadColor - unknown color block type...", BAD_OPERATION);
@@ -264,9 +264,9 @@ float C3DSLoader::ReadPercentage(const C3DSChunk &chunk)
 	switch (chunk.GetID())
     {
     case T3DS_INT_PERCENTAGE:
-        return mp3dsStream->ReadMemOfType<nova::nUInt16>() / 100.0f;
+        return mpStream->ReadMemOfType<nova::nUInt16>() / 100.0f;
     case T3DS_FLOAT_PERCENTAGE:
-        return mp3dsStream->ReadMemOfTypeInSize<float>(4);
+        return mpStream->ReadMemOfTypeInSize<float>(4);
     }
 
     throw NOVA_EXP("C3DSLoader::ReadPercentage - unknown Percentage block type...", BAD_OPERATION);
@@ -298,18 +298,18 @@ CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_nam
 		{
 		case T3DS_TRI_VERTEXLIST:
 			{
-				count = mp3dsStream->ReadMemOfType<nova::nUInt16>();
-				vertexes.AllocBuffer(count * sizeof(TVertex4d));
+				count = mpStream->ReadMemOfType<nova::nUInt16>();
+				vertexes.AllocBuffer(count * sizeof(TVertex3d));
 
-				mp3dsStream->Read(vertexes);
+				mpStream->Read(vertexes);
 			}
 			break;
 		case T3DS_TRI_FACEMAPPING:
 			{
-				count = mp3dsStream->ReadMemOfType<nova::nUInt16>();
-				mat_coords.AllocBuffer(count * sizeof(TTexCoord2d));
+				count = mpStream->ReadMemOfType<nova::nUInt16>();
+				mat_coords.AllocBuffer(count * sizeof(TUVMapping));
 
-				mp3dsStream->Read(mat_coords);
+				mpStream->Read(mat_coords);
 			}
 			break;
 		case T3DS_TRI_FACELIST:
@@ -319,21 +319,21 @@ CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_nam
 			break;
 		case T3DS_TRI_MATRIX:
 			{
-				matrix(0, 0) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-				matrix(0, 1) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-				matrix(0, 2) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+				matrix(0, 0) = mpStream->ReadMemOfTypeInSize<float>(4);
+				matrix(0, 1) = mpStream->ReadMemOfTypeInSize<float>(4);
+				matrix(0, 2) = mpStream->ReadMemOfTypeInSize<float>(4);
 
-				matrix(1, 0) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-				matrix(1, 1) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-				matrix(1, 2) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+				matrix(1, 0) = mpStream->ReadMemOfTypeInSize<float>(4);
+				matrix(1, 1) = mpStream->ReadMemOfTypeInSize<float>(4);
+				matrix(1, 2) = mpStream->ReadMemOfTypeInSize<float>(4);
 
-				matrix(2, 0) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-				matrix(2, 1) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-				matrix(2, 2) = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+				matrix(2, 0) = mpStream->ReadMemOfTypeInSize<float>(4);
+				matrix(2, 1) = mpStream->ReadMemOfTypeInSize<float>(4);
+				matrix(2, 2) = mpStream->ReadMemOfTypeInSize<float>(4);
 
-				pos.X() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-				pos.Y() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
-				pos.Z() = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+				pos.X() = mpStream->ReadMemOfTypeInSize<float>(4);
+				pos.Y() = mpStream->ReadMemOfTypeInSize<float>(4);
+				pos.Z() = mpStream->ReadMemOfTypeInSize<float>(4);
 			}
 			break;
 		default:
@@ -371,18 +371,18 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
 	nova::nUInt16 count;
 	GotoChunk(chunk);
 
-	count = mp3dsStream->ReadMemOfType<nova::nUInt16>();
+	count = mpStream->ReadMemOfType<nova::nUInt16>();
 
-	indexes.AllocBuffer(count * sizeof(TTriIndex));
-	TTriIndex *tri = static_cast<TTriIndex *>(indexes.GetBegin());
+	indexes.AllocBuffer(count * sizeof(TFaceIndex));
+	TFaceIndex *tri = static_cast<TFaceIndex *>(indexes.GetBegin());
 	for(nInt32 i = 0; i < count; ++i)
 	{
-		tri->a = mp3dsStream->ReadMemOfType<nova::nUInt16>();
-		tri->b = mp3dsStream->ReadMemOfType<nova::nUInt16>();
-		tri->c = mp3dsStream->ReadMemOfType<nova::nUInt16>();
+		tri->a = mpStream->ReadMemOfType<nova::nUInt16>();
+		tri->b = mpStream->ReadMemOfType<nova::nUInt16>();
+		tri->c = mpStream->ReadMemOfType<nova::nUInt16>();
 
-		//memcpy(indexes.GetWritePtr(), &tri, sizeof(TTriIndex));
-		//indexes.SetWritePos(indexes.GetWritePos() + sizeof(TTriIndex));
+		//memcpy(indexes.GetWritePtr(), &tri, sizeof(TFaceIndex));
+		//indexes.SetWritePos(indexes.GetWritePos() + sizeof(TFaceIndex));
 		tri++;
 	}
 
@@ -397,16 +397,16 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
 			{
 				nInt32 mat_id = 0;
 				char str[30] = "\0";
-				mp3dsStream->ReadASCIIZ(str, 30);
+				mpStream->ReadASCIIZ(str, 30);
 
 				mat_names.push_back(nstring(str));
 				mat_id = mat_names.size() -1;
 
-				count = mp3dsStream->ReadMemOfType<nova::nUInt16>();
+				count = mpStream->ReadMemOfType<nova::nUInt16>();
 				for (nova::nUInt16 i = 0; i < count; i++)
 				{
 					TTriangleInfo info;
-					nova::nUInt16 index = mp3dsStream->ReadMemOfType<nova::nUInt16>();
+					nova::nUInt16 index = mpStream->ReadMemOfType<nova::nUInt16>();
 
 					info.mat_id = mat_id;
 					info.tri_id = index;
@@ -434,7 +434,7 @@ stl<CMeshBoxPtr>::vector C3DSLoader::LoadMeshList(void)
 {
 	stl<CMeshBoxPtr>::vector result;
 
-	mp3dsStream->Seek(0);
+	mpStream->Seek(0);
 
 	C3DSChunk mainchunk;
 	C3DSChunk object_block;
@@ -442,7 +442,7 @@ stl<CMeshBoxPtr>::vector C3DSLoader::LoadMeshList(void)
 	mainchunk = ReadChunk();
 	if(mainchunk.GetID() != T3DS_MAIN3DS)
 	{
-		//mp3dsStream->FreeBuffer();
+		//mpStream->FreeBuffer();
 		throw NOVA_EXP("C3DSLoader::LoadMeshList - memory image is not appear \
 			in 3ds format..", BAD_OPERATION);
 	}
@@ -458,7 +458,7 @@ stl<CMeshBoxPtr>::vector C3DSLoader::LoadMeshList(void)
 	while(FindChunk(scene_object, object_block))
 	{
 		char str[255] = "\0";
-		mp3dsStream->ReadASCIIZ( str, 255);
+		mpStream->ReadASCIIZ( str, 255);
 		nstring ob_name(str);
 
 		C3DSChunk _ch = ReadChunk();
@@ -497,7 +497,7 @@ CMaterialPtr C3DSLoader::ReadMaterial(const C3DSChunk &parent)
         case T3DS_MAT_NAME:
 			{
 				char str[255] = "\0";
-				mp3dsStream->ReadASCIIZ(str, 255);
+				mpStream->ReadASCIIZ(str, 255);
 
 				mat_name.append(str);
 			}
@@ -643,25 +643,25 @@ CTexturePtr C3DSLoader::ReadMap(const C3DSChunk &chunk)
         case T3DS_MAT_MAPNAME:
 			{
 				char str[255] = "\0";
-				mp3dsStream->ReadASCIIZ(str, 255);
+				mpStream->ReadASCIIZ(str, 255);
 
 				image_name.append(str);
 			}
             break;
         case T3DS_MAT_MAP_USCALE:
-            uScale = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+            uScale = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         case T3DS_MAT_MAP_VSCALE:
-            vScale = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+            vScale = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         case T3DS_MAT_MAP_UOFFSET:
-            uOffset = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+            uOffset = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         case T3DS_MAT_MAP_VOFFSET:
-            vOffset = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+            vOffset = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         case T3DS_MAT_MAP_ANG:
-            Angle = mp3dsStream->ReadMemOfTypeInSize<float>(4);
+            Angle = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         }
         SkipChunk(child);
@@ -712,7 +712,7 @@ stl<CMaterialPtr>::vector C3DSLoader::LoadMaterialList()
 {
 	stl<CMaterialPtr>::vector result;
 
-	mp3dsStream->Seek(0);
+	mpStream->Seek(0);
 
 	C3DSChunk mainchunk;
 	C3DSChunk object_block;
@@ -721,7 +721,7 @@ stl<CMaterialPtr>::vector C3DSLoader::LoadMaterialList()
 	mainchunk = ReadChunk();
 	if(mainchunk.GetID() != T3DS_MAIN3DS)
 	{
-		//mp3dsStream->FreeBuffer();
+		//mpStream->FreeBuffer();
 		throw NOVA_EXP("C3DSLoader::LoadMaterialList - memory image is not appear \
 			in 3ds format..", BAD_OPERATION);
 	}

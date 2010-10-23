@@ -56,7 +56,6 @@ class NOVA_EXPORT C3DSLoader : public CSceneContentLoaderBase
 private:
 
 	//std::ifstream m3dsStream;
-	nova::CDataStream *mp3dsStream;
 
 	bool mGeometry;
 

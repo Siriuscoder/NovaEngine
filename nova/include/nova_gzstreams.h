@@ -66,9 +66,9 @@ public:
 
 	virtual size_t Read (void *dest, const size_t count);
 
-	virtual size_t ReadLine (nstring & str, const size_t count);
+	virtual nstring ReadLine (const size_t count);
 
-	virtual size_t ReadLine (nstring & str, const char delim);
+	virtual nstring ReadLine (const char delim);
 
 	virtual size_t Write (const CMemoryBuffer & source);
 

@@ -514,6 +514,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\nova_ase_loader.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\nova_content_loader.cpp"
 					>
 				</File>
@@ -885,6 +889,10 @@
 				>
 				<File
 					RelativePath=".\include\nova_3ds_loader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\nova_ase_loader.h"
 					>
 				</File>
 				<File

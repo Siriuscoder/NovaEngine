@@ -108,7 +108,7 @@ size_t CFileStream::Write (void *source, const size_t count)
 	return fwrite(source, sizeof(nova::nByte), count, mIOFile);
 }
 
-size_t CFileStream::ReadLine (nstring & str, const size_t count)
+nstring CFileStream::ReadLine (const size_t count)
 {
 	if(!mIsOpened)
 		throw NOVA_EXP("CFileStream::ReadLine - stream is not opened!", BAD_OPERATION);
@@ -116,22 +116,20 @@ size_t CFileStream::ReadLine (nstring & str, const size_t count)
 	if(mWrite)
 		throw NOVA_EXP("CFileStream::ReadLine - stream opened for writing", BAD_OPERATION);
 
+	char *input = NULL;
+	nstring res;
 	size_t cc = 0;
-
-	register char bb = 0;
-	for(; cc < count; cc++)
+	input = getmem<char>(input, count);
+	if ( fgets ( input, count, mIOFile ) != NULL )
 	{
-		if(Eof())
-			break;
-
-		bb = fgetc(mIOFile);
-		str.push_back(bb);
+		cc = strlen(input);
+		res.assign(input);
 	}
 
-	return cc;
+	return res;
 }
 
-size_t CFileStream::ReadLine (nstring & str, const char delim)
+nstring CFileStream::ReadLine (const char delim)
 {
 	if(!mIsOpened)
 		throw NOVA_EXP("CFileStream::ReadLine - stream is not opened!", BAD_OPERATION);
@@ -140,20 +138,24 @@ size_t CFileStream::ReadLine (nstring & str, const char delim)
 		throw NOVA_EXP("CFileStream::ReadLine - stream opened for writing", BAD_OPERATION);
 
 	size_t cc = 0;
+	nstring res;
 
 	register char bb = 0;
 	for(; ; cc++)
 	{
 		if(Eof())
 			break;
+		bb = fgetc(mIOFile);
+
 		if(bb == delim)
 			break;
+		if(bb == '\n')
+			break;
 
-		bb = fgetc(mIOFile);
-		str.push_back(bb);
+		res.push_back(bb);
 	}
 
-	return cc;
+	return res;
 }
 
 size_t CFileStream::WriteLine (const nstring & str, const size_t count)

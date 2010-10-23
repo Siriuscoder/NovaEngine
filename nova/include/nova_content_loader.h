@@ -47,6 +47,7 @@ public:
 		nova::CColorRGB mMeshColor;
 		CMeshBox::TVertexes nVertexList;
 		CMeshBox::TTexCoords nMappingFacesList;
+		CMeshBox::TNormals nNormalList;
 		CMeshBox::TIndexes nIndexList;
 		TMatGroups nMatGroupsList;
 	} TMeshContainer;
@@ -125,9 +126,9 @@ public:
 	CSceneContentLoaderBase();
 	virtual ~CSceneContentLoaderBase();
 
-	void LoadImmediately(void);
+	void LoadImmediately(CDataStream & stream);
 
-	void LoadAsync(nInt32 timeout);
+	void LoadAsync(CDataStream & stream, nInt32 timeout);
 
 	stl<string>::vector GetMeshList(void);
 
@@ -135,11 +136,18 @@ public:
 
 	stl<string>::vector GetTextureList(void);
 
+	TMeshContainer GetMesh(nstring name);
+
+	TMaterialContainer GetMaterial(nstring name);
+
+	TTextureContainer GetTextureList(nstring name);
+
 protected:
 
 	nova::stl<nstring, TMeshContainer>::map mMeshesMap;
 	nova::stl<nstring, TMaterialContainer>::map mMaterialsMap;
 	nova::stl<nstring, TTextureContainer>::map mTexturesMap;
+	nova::CDataStream *mpStream;
 };
 
 class NOVA_EXPORT CMeshLoaderFactory : public CObjectConstructor
