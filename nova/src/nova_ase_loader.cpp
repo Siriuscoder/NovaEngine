@@ -794,7 +794,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else
 				{
-					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in SCENE part, line: ") + 
+					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MATERIAL_LIST part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
 					break;
 				}
@@ -857,9 +857,270 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					continue;
 				}
+				else if ( strcmp ( word, "*MAP_DIFFUSE" ) == 0 )
+				{
+					continue;
+				}
+				else if ( strcmp ( word, "*MAP_AMBIENT" ) == 0 )
+				{
+					continue;
+				}
+				else if ( strcmp ( word, "*MAP_OPACITY" ) == 0 )
+				{
+					continue;
+				}
 				else
 				{
-					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in SCENE part, line: ") + 
+					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MATERIAL part, line: ") + 
+						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
+					break;
+				}
+			}
+//
+//  *SUBMATERIAL
+//
+			else if ( strcmp ( level_name[level], "*SUBMATERIAL" ) == 0 )
+			{
+				if ( strcmp ( word, "{" ) == 0 )
+				{
+					continue;
+				}
+				else if ( strcmp ( word, "}" ) == 0 )
+				{
+					level = nlbrack - nrbrack;
+					continue;
+				}
+				else if ( strcmp ( word, "*MATERIAL_NAME" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_CLASS" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_AMBIENT" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_DIFFUSE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_SPECULAR" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_SHINE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_SHINESTRENGTH" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_TRANSPARENCY" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_WIRESIZE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_SHADING" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_XP_FALLOFF" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_SELFILLUM" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_FALLOFF" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_XP_TYPE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MAP_DIFFUSE" ) == 0 )
+				{
+					continue;
+				}
+				else if ( strcmp ( word, "*MAP_AMBIENT" ) == 0 )
+				{
+					continue;
+				}
+				else if ( strcmp ( word, "*MAP_OPACITY" ) == 0 )
+				{
+					continue;
+				}
+				else
+				{
+					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in SUBMATERIAL part, line: ") + 
+						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
+					break;
+				}
+			}
+//
+//  *MAP_AMBIENT && MAP_OPACITY && MAP_DIFFUSE
+//
+			else if ( strcmp ( level_name[level], "*MAP_AMBIENT" ) == 0 || 
+				strcmp ( level_name[level], "*MAP_OPACITY" ) == 0 || 
+				strcmp ( level_name[level], "*MAP_DIFFUSE" ) == 0 )
+			{
+				if ( strcmp ( word, "{" ) == 0 )
+				{
+					continue;
+				}
+				else if ( strcmp ( word, "}" ) == 0 )
+				{
+					level = nlbrack - nrbrack;
+					continue;
+				}
+				else if ( strcmp ( word, "*MAP_NAME" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MAP_SUBNO" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MAP_AMOUNT" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*BITMAP" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_U_OFFSET" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_V_OFFSET" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_U_TILING" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_V_TILING" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_ANGLE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_BLUR" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_BLUR_OFFSET" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_NOISE_SIZE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_NOISE_LEVEL" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_XP_TYPE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MAP_GENERIC" ) == 0 )
+				{
+					continue;
+				}
+				else
+				{
+					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in ") + level_name[level] + " part, line: " + 
+						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
+					break;
+				}
+			}
+//
+//  *MAP_GENERIC
+//
+			else if ( strcmp ( level_name[level], "*MAP_GENERIC" ) == 0 )
+			{
+				if ( strcmp ( word, "{" ) == 0 )
+				{
+					continue;
+				}
+				else if ( strcmp ( word, "}" ) == 0 )
+				{
+					level = nlbrack - nrbrack;
+					continue;
+				}
+				else if ( strcmp ( word, "*MAP_NAME" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MAP_SUBNO" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MAP_AMOUNT" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*BITMAP" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_U_OFFSET" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_V_OFFSET" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_U_TILING" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_V_TILING" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_ANGLE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_BLUR" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_BLUR_OFFSET" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_NOISE_SIZE" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*UVW_NOISE_LEVEL" ) == 0 )
+				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_XP_TYPE" ) == 0 )
+				{
+					break;
+				}
+				else
+				{
+					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in ") + level_name[level] + " part, line: " + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
 					break;
 				}
