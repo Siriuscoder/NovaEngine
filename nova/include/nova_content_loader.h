@@ -130,11 +130,11 @@ public:
 
 	void LoadAsync(CDataStream & stream, nInt32 timeout);
 
-	stl<string>::vector GetMeshList(void);
+	stl<nstring>::vector GetMeshList(void);
 
-	stl<string>::vector GetMaterialList(void);
+	stl<nstring>::vector GetMaterialList(void);
 
-	stl<string>::vector GetTextureList(void);
+	stl<nstring>::vector GetTextureList(void);
 
 	TMeshContainer GetMesh(nstring name);
 
