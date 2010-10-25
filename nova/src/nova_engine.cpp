@@ -66,27 +66,26 @@ CNovaEngine::~CNovaEngine()
 
 void CNovaEngine::Release(void)
 {
+	if(mScene)
+		delete mScene;
+
 	mRenderer->ShutDown();
-//	if(RenderManager)
-//		delete RenderManager;
+
 	if(mFontManager)
 		delete mFontManager;
-//	if(ConsoleManager)
-//		delete ConsoleManager;
+
 	if(mTextureManager)
 		delete mTextureManager;
+
 	if(mImageManager)
 		delete mImageManager;
-//	if(ResourceManager)
-//		delete ResourceManager;
+
 #ifdef USING_DEVIL
 	if(mDevILCodec)
 		delete mDevILCodec;
 #endif
 	if(mRenderer)
 		delete mRenderer;
-	if(mScene)
-		delete mScene;
 
 	mFontManager = NULL;
 	mTextureManager = NULL;

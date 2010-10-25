@@ -45,6 +45,8 @@ protected:
 
 	void RenderNode(CTreeNode<CSceneNode*> *node);
 
+	stl<nstring, std::pair<CStaticObject *, CMeshBoxPtr>>::map mObjectsMap;
+
 public:
 
 	COctreeSceneManager(const nstring &scene_name, const nstring & factory_name);
@@ -54,9 +56,7 @@ public:
 
 	CTreeNode<CSceneNode*> *ConstactSpecifiedNode();
 
-	CRenderableObject *AddRenderableResourceToScene(CResource *resource);
-
-	void AddResourceToScene(CResource *resource);
+	CRenderableObject *AddRenderableResourceToScene(const nstring &resource_name);
 
 };
 

@@ -143,9 +143,7 @@ public:
 
 	virtual CTreeNode<CSceneNode*> *ConstactSpecifiedNode();
 
-	virtual CRenderableObject *AddRenderableResourceToScene(CResource *resource);
-
-	virtual void AddResourceToScene(CResource *resource);
+	virtual CRenderableObject *AddRenderableResourceToScene(const nstring &resource_name);
 
 	CTreeNode<CSceneNode*> *GetRootElement(void);
 

@@ -245,14 +245,9 @@ void CSceneManager::ClearObjects(void)
 	ClearObjectsImpl();
 }
 
-CRenderableObject *CSceneManager::AddRenderableResourceToScene(CResource *resource)
+CRenderableObject *CSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
 {
 	return NULL;
-}
-
-void CSceneManager::AddResourceToScene(CResource *resource)
-{
-
 }
 
 }

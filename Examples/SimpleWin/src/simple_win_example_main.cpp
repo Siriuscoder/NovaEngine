@@ -24,6 +24,39 @@ protected:
 
 	CMyEventHandler * mEventController;
 
+	class SceneListener : public nova::CSceneManagerListener
+	{
+		void SceneRenderBeginListener(nova::CSceneManager * object)
+		{
+			glBegin(GL_TRIANGLES);				// Начало рисования пирамиды
+			glColor3f(1.0f,0.0f,0.0f);			// Красный
+			glVertex3f( 0.0f, 1.0f, 0.0f);			// Верх треугольника (Передняя)
+			glColor3f(0.0f,1.0f,0.0f);			// Зеленный
+			glVertex3f(-1.0f,-1.0f, 1.0f);			// Левая точка
+			glColor3f(0.0f,0.0f,1.0f);			// Синий
+			glVertex3f( 1.0f,-1.0f, 1.0f);			// Правая точка
+			glColor3f(1.0f,0.0f,0.0f);			// Красная
+			glVertex3f( 0.0f, 1.0f, 0.0f);			// Верх треугольника (Правая)
+			glColor3f(0.0f,0.0f,1.0f);			// Синия
+			glVertex3f( 1.0f,-1.0f, 1.0f);			// Лево треугольника (Правая)
+			glColor3f(0.0f,1.0f,0.0f);			// Зеленная
+			glVertex3f( 1.0f,-1.0f, -1.0f);			// Право треугольника (Правая)
+			glColor3f(1.0f,0.0f,0.0f);			// Красный
+			glVertex3f( 0.0f, 1.0f, 0.0f);			// Низ треугольника (Сзади)
+			glColor3f(0.0f,1.0f,0.0f);			// Зеленный
+			glVertex3f( 1.0f,-1.0f, -1.0f);			// Лево треугольника (Сзади)
+			glColor3f(0.0f,0.0f,1.0f);			// Синий
+			glVertex3f(-1.0f,-1.0f, -1.0f);			// Право треугольника (Сзади)
+			glColor3f(1.0f,0.0f,0.0f);			// Красный
+			glVertex3f( 0.0f, 1.0f, 0.0f);			// Верх треугольника (Лево)
+			glColor3f(0.0f,0.0f,1.0f);			// Синий
+			glVertex3f(-1.0f,-1.0f,-1.0f);			// Лево треугольника (Лево)
+			glColor3f(0.0f,1.0f,0.0f);			// Зеленный
+			glVertex3f(-1.0f,-1.0f, 1.0f);			// Право треугольника (Лево)
+			glEnd();
+		}
+	};
+
 public:
 
 	SimpleWinExample()

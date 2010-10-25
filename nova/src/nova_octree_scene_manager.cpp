@@ -89,4 +89,24 @@ CTreeNode<CSceneNode*> *COctreeSceneManager::ConstactSpecifiedNode()
 	return pNode;
 }
 
+CRenderableObject *COctreeSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
+{
+	CMeshBoxPtr mesh = CMeshManager::GetSingelton().GetResourceFromHash(resource_name);
+	if(!mesh.IsNull())
+	{
+		CStaticObject *target = new CStaticObject(mesh->GetResName(), this->GetSceneName());
+		if(target)
+		{
+			//target->SetMatrix(mesh->
+
+			std::pair<CStaticObject*, CMeshBoxPtr> alias(target, mesh);
+			if(mObjectsMap.find(target->GetObjectName()) != mObjectsMap.end())
+				mObjectsMap.insert(std::pair<nstring, std::pair<CStaticObject*, CMeshBoxPtr>>(target->GetObjectName(), alias));
+			return target;
+		}
+	}
+
+	return NULL;
+}
+
 }
