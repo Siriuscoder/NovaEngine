@@ -94,7 +94,7 @@ void CSceneNode::PrepareNode(void)
 
 CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
 {
-	ClearObjects();
+	//ClearObjects(); // Error R6025: Pure virual function call ..fuck =)
 	mRegisterGroup = group;
 	mSceneName = scene_name;
 	isEnabled = true;
@@ -102,8 +102,8 @@ CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
 
 CSceneManager::~CSceneManager()
 {
-	ClearObjects();
-}
+	//ClearObjects(); // Error R6025: Pure virual function call ..fuck =)
+} 
 
 nInt32 CSceneManager::GetRenderedBatches(void)
 {

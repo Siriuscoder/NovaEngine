@@ -56,7 +56,7 @@ void CViewPort::Update()
 	}
 }
 
-void CViewPort::SetActiveCamera(nstring & name)
+void CViewPort::SetActiveCamera(const nstring & name)
 {
 	TCamerasList::iterator it;
 
@@ -85,7 +85,7 @@ CCameraPtr CViewPort::GetActiveCamera(void)
 	return CCameraPtr();
 }
 
-CCameraPtr CViewPort::GetCameraByName(nstring & name)
+CCameraPtr CViewPort::GetCameraByName(const nstring & name)
 {
 	TCamerasList::iterator it;
 
@@ -97,7 +97,7 @@ CCameraPtr CViewPort::GetCameraByName(nstring & name)
 		throw NOVA_EXP("CViewPort::GetCameraByName - Can not find this camera..", BAD_OPERATION);
 }
 
-CCameraPtr CViewPort::CreateLinearCamera(nstring & name, nova::nReal Left, nova::nReal Right, 
+CCameraPtr CViewPort::CreateLinearCamera(const nstring & name, nova::nReal Left, nova::nReal Right, 
 	nova::nReal Bottom, nova::nReal Top, nova::nReal ZFar, nova::nReal ZNear)
 {
 	mActiveCamera = new CCamera(Left, Right, Bottom, Top, ZFar, ZNear, this);
@@ -114,7 +114,7 @@ CCameraPtr CViewPort::CreateLinearCamera(nstring & name, nova::nReal Left, nova:
 }
 
 
-CCameraPtr CViewPort::CreatePerspectiveCamera(nstring & name, nova::nReal FOV, nova::nReal ZFar, 
+CCameraPtr CViewPort::CreatePerspectiveCamera(const nstring & name, nova::nReal FOV, nova::nReal ZFar, 
 	nova::nReal ZNear)
 {
 	mActiveCamera = new CCamera(FOV, ZFar, ZNear, this);
@@ -130,7 +130,7 @@ CCameraPtr CViewPort::CreatePerspectiveCamera(nstring & name, nova::nReal FOV, n
 	return camera;
 }
 
-void CViewPort::RemoveCamera(nstring & name)
+void CViewPort::RemoveCamera(const nstring & name)
 {
 	TCamerasList::iterator it;
 

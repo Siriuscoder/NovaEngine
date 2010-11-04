@@ -96,17 +96,18 @@ nInt32 CLog::PrintMessage(const nova::nstring & mes, LogFormat format)
 	nstringstream res;
 	time_t now;
 	struct tm * nowst;
+	char timebuf[100];
 	time(&now);
 	nowst = localtime(&now);
+
+	strcpy(timebuf, asctime(nowst));
+	timebuf[strlen(timebuf)-1] = 0;
 
 	switch(format)
 	{
 	case LG_WITH_TIME:
 		{
-			res << std::setw(2) << std::setfill('0') << nowst->tm_hour
-				<< ":" << std::setw(2) << std::setfill('0') << nowst->tm_min
-				<< ":" << std::setw(2) << std::setfill('0') << nowst->tm_sec
-				<< ": " << mes << std::endl;
+			res << timebuf << ": " << mes << std::endl;
 		} break;
 	case LG_NO_TIME:
 		{
@@ -114,26 +115,17 @@ nInt32 CLog::PrintMessage(const nova::nstring & mes, LogFormat format)
 		} break;
 	case LG_WITH_TIME_WARNING:
 		{
-			res << std::setw(2) << std::setfill('0') << nowst->tm_hour
-				<< ":" << std::setw(2) << std::setfill('0') << nowst->tm_min
-				<< ":" << std::setw(2) << std::setfill('0') << nowst->tm_sec
-				<< ": <- WARNING -> : " << mes << std::endl;
+			res << timebuf << " <- WARNING -> : " << mes << std::endl;
 		} break;
 	case LG_WITH_TIME_TITLE:
 		{
-			res << std::setw(2) << std::setfill('0') << nowst->tm_hour
-				<< ":" << std::setw(2) << std::setfill('0') << nowst->tm_min
-				<< ":" << std::setw(2) << std::setfill('0') << nowst->tm_sec
-				<< ": " << std::setw(10) << std::setfill('=') <<
+			res << timebuf << ": " << std::setw(10) << std::setfill('=') <<
 				"==" << mes << std::setw(10) << std::setfill('=') <<
 				"==" << std::endl;
 		} break;
 	case LG_WITH_TIME_ERROR:
 		{
-			res << std::setw(2) << std::setfill('0') << nowst->tm_hour
-				<< ":" << std::setw(2) << std::setfill('0') << nowst->tm_min
-				<< ":" << std::setw(2) << std::setfill('0') << nowst->tm_sec
-				<< ": <-= ERROR =-> : " << mes << std::endl;
+			res << timebuf << " <-= ERROR =-> : " << mes << std::endl;
 		} break;
 	case LG_NO_TIME_WARNING:
 		{

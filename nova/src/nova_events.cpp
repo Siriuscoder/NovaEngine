@@ -212,7 +212,7 @@ nInt32 CEventConveyor::Generate(nv_ev_msg * _event)
 
 
 
-void CEventConveyor::OnRender()
+void CEventConveyor::OnRenderInternal()
 {
 	nv_ev_msg  sevent;
 	sevent.eventid = EV_ON_RENDER;
@@ -275,6 +275,8 @@ LRESULT CrossEventHandler::WinProcFunction(HWND hwnd, nUInt32 msg, WPARAM wParam
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 
 	CEventConveyor * Generator = window->GetEventHandler();
+	if(!Generator)
+		return DefWindowProc(hwnd, msg, wParam, lParam);
 
 	switch(msg)
 	{

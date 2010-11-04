@@ -75,7 +75,7 @@ void CWin32Workspace::PreUpdateAction()
 	//if(mMetrics.FSAA > 1)
 	//	glEnable( GL_MULTISAMPLE_ARB ); 
 
-	mEventHandler->OnRender();
+	mEventHandler->OnRenderInternal();
 }
 
 void CWin32Workspace::PostUpdateAction()

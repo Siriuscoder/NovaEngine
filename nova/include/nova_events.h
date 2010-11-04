@@ -133,7 +133,7 @@ public:
 
 	nInt32 Generate(nv_ev_msg * _event);
 
-	void OnRender();
+	void OnRenderInternal();
 //	nInt32 Execute();
 };
 

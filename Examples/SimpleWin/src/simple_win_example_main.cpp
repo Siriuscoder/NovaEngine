@@ -55,7 +55,7 @@ protected:
 			glVertex3f(-1.0f,-1.0f, 1.0f);			// Право треугольника (Лево)
 			glEnd();
 		}
-	};
+	} mRenderListener;
 
 public:
 
@@ -83,30 +83,23 @@ public:
 		nova::CSceneScrap *mainscrap = new nova::CSceneScrap(moution_manager, true);
 		nova::CScene::GetSingelton().AddScrap(mainscrap);
 	*/
+
+		nova::COctreeSceneManager *nSceneMan = new nova::COctreeSceneManager("TestScene", "Manual");
+		nSceneMan->AddListener(&mRenderListener);
+		nova::CScene::GetSingelton().AddScrap(nSceneMan);
 	}
 
 	virtual void InitViewport(void)
 	{
 		nova::CRenderWindowPtr win = mEngine->GetRenderSystem()->GetRootWindow();
 		nova::CViewPortPtr viewport1 = win->AddViewport(0, 0, 800, 600, 2);
-		nova::CViewPortPtr viewport2 = win->AddViewport(0, 0, 256, 192, 1);
+		//nova::CViewPortPtr viewport2 = win->AddViewport(0, 0, 256, 192, 1);
 
-        nova::nstring cam1("cam1"), cam2("cam2");
-		nova::CCameraPtr camera1 = viewport1->CreatePerspectiveCamera(cam1, 45.0f, 100.0f, 0.1f);
-		nova::CCameraPtr camera2 = viewport2->CreatePerspectiveCamera(cam2, 45.0f, 100.0f, 0.1f);
-		viewport1->SetActiveCamera(cam1);
-		viewport2->SetActiveCamera(cam2);
-
-		//camera->OffsetPosition(0, 0, -6.0f);
-		camera2->SetLocation(0.0, 0.0, -5.0f);
-		camera2->LookAt(3, 0, 0);
+		nova::CCameraPtr camera1 = viewport1->CreatePerspectiveCamera("cam1", 45.0f, 100.0f, 0.1f);
+		viewport1->SetActiveCamera("cam1");
 
 		camera1->SetLocation(0, 0, -6.0f);
-		camera1->SetPolygonMode(nova::CCamera::PM_WIREFRAME, nova::CCamera::FS_FRONT_AND_BACK);
-		//camera1->SetLocalLocation(0, 10.0, -6.0f);
-
-		//camera->Roll(0.1f);
-		//camera1->LookAt(0, 0, 0);
+		camera1->SetPolygonMode(nova::CCamera::PM_WIREFRAME, nova::CCamera::FS_FRONT);
 	}
 };
 

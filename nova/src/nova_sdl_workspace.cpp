@@ -54,7 +54,7 @@ void CSDLWorkspace::Destroy()
 void CSDLWorkspace::PreUpdateAction()
 {
 	CRenderWindow::PreUpdateAction();
-	mEventHandler->OnRender();
+	mEventHandler->OnRenderInternal();
 }
 
 void CSDLWorkspace::PostUpdateAction()

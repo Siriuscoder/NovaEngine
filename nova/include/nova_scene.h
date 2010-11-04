@@ -21,7 +21,7 @@
  ***************************************************************************/
 #pragma once
 
-#include "nova_scene_manager.h"
+#include "nova_octree_scene_manager.h"
 #include "nova_resource_package.h"
 
 namespace nova

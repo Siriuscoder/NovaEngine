@@ -123,19 +123,19 @@ public:
 		return mActive;
 	}
 
-	void SetActiveCamera(nstring & name);
+	void SetActiveCamera(const nstring & name);
 
 	CCameraPtr GetActiveCamera(void);
 
-	CCameraPtr GetCameraByName(nstring & name);
+	CCameraPtr GetCameraByName(const nstring & name);
 
-	CCameraPtr CreateLinearCamera(nstring & name, nova::nReal Left, nova::nReal Right, nova::nReal Bottom, 
+	CCameraPtr CreateLinearCamera(const nstring & name, nova::nReal Left, nova::nReal Right, nova::nReal Bottom, 
 		nova::nReal Top, nova::nReal ZFar, nova::nReal ZNear);
 
-	CCameraPtr CreatePerspectiveCamera(nstring & name, nova::nReal FOV, nova::nReal ZFar, 
+	CCameraPtr CreatePerspectiveCamera(const nstring & name, nova::nReal FOV, nova::nReal ZFar, 
 		nova::nReal ZNear);
 
-	void RemoveCamera(nstring & name);
+	void RemoveCamera(const nstring & name);
 
 	void RemoveAllCameras(void);
 };

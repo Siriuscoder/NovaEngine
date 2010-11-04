@@ -61,12 +61,12 @@ nstring CWorldObject::GetObjectGroup()
 	return mGroup;
 }
 
-void CWorldObject::SetObjectName(nstring & name)
+void CWorldObject::SetObjectName(const nstring & name)
 {
 	mName = name;
 }
 
-void CWorldObject::SetObjectGroup(nstring & group)
+void CWorldObject::SetObjectGroup(const nstring & group)
 {
 	mGroup = group;
 }

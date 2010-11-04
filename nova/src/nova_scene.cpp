@@ -44,7 +44,11 @@ void CScene::DeleteAllScraps(void)
 	stl<CSceneManager *>::list::iterator it = mScraps.begin();
 
 	for(; it != mScraps.end(); it++)
+	{
+		(*it)->DestroyScene();
+		(*it)->ClearObjects();
 		delete (*it);
+	}
 
 	mScraps.clear();
 }

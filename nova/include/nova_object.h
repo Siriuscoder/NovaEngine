@@ -83,8 +83,8 @@ public:
 	nstring GetObjectName();
 	nstring GetObjectGroup();
 
-	void SetObjectName(nstring & name);
-	void SetObjectGroup(nstring & group);
+	void SetObjectName(const nstring & name);
+	void SetObjectGroup(const nstring & group);
 
 	bool GetAttachState();
 

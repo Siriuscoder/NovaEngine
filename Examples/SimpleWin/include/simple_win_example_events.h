@@ -29,7 +29,6 @@ public:
 
 	void OnKeyUp(int key, int mode);
 	void OnQuit(void);
-	void OnRender(void);
 	void OnTimer(int);
 	void OnChar(nova::nUInt16 s, int m);
 	void OnMouseMove(int x, int y, int code);
