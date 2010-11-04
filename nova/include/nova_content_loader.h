@@ -50,6 +50,7 @@ public:
 		CMeshBox::TNormals nNormalList;
 		CMeshBox::TIndexes nIndexList;
 		TMatGroups nMatGroupsList;
+		nInt32 MatID;
 	} TMeshContainer;
 
 	typedef struct _MaterialContainer
@@ -94,6 +95,8 @@ public:
 		nova::nUInt32 nAutoreflMapFlags;
         nInt32 nAutoreflMapSize;
         nInt32 nAutoreflMapFrameStep;
+
+		nova::stl<_MaterialContainer>::vector nSubMats;
 
 	} TMaterialContainer;
 

@@ -304,7 +304,7 @@ void CWin32Workspace::SwapBuffers()
 {
 	if(mContext)
 	{
-		glFinish();
+		//glFinish();
 		::SwapBuffers(dynamic_cast<CWGLContext *>(mContext)->GetDeviceContext());
 	}
 }

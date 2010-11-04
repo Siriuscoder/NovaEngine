@@ -126,6 +126,11 @@ nInt32 CASELoader::LoadAseInternal(void)
 	nlbrack = 0;
 	nrbrack = 0;
 
+	TMeshContainer *LastGeomObject = NULL;
+	TMaterialContainer *LastMaterial = NULL;
+	TMaterialContainer *LastSubMaterial = NULL;
+	TTextureContainer *LastTexture = NULL;
+
 	strcpy ( word, " " );
 	strcpy ( wordm1, " " );
 //
@@ -199,7 +204,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 			{
 				char comment[LINE_MAX_LEN];
 				sscanf(next, "\"%s\"", comment);
-				CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) ase comment: ") + comment);
+				LOG_MESSAGE(nstring("void CASELoader::LoadAseInternal(void) ase comment: ") + comment);
 				break;
 			}
 //
@@ -214,6 +219,7 @@ nInt32 CASELoader::LoadAseInternal(void)
        			else if ( strcmp ( word, "}" ) == 0 )
        			{
        				level = nlbrack - nrbrack;
+					LastGeomObject = NULL;
        				continue;
        			}
 //
@@ -221,6 +227,12 @@ nInt32 CASELoader::LoadAseInternal(void)
 //
 				else if ( strcmp ( word, "*NODE_NAME" ) == 0 )
 				{
+					count = sscanf ( next, "%s%n", word2, &width );
+		    		next = next + width;
+// Добавляем новый каркас в кеш объектов, сохраняем на него ссылку
+					nstring nObjName(word2);
+					mMeshesMap.insert(std::pair<nstring, TMeshContainer>(nObjName, TMeshContainer()));
+					LastGeomObject = &(mMeshesMap[nObjName]);
 					break;
 				}
 				else if ( strcmp ( word, "*NODE_TM" ) == 0 )
@@ -245,6 +257,11 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*MATERIAL_REF" ) == 0 )
 				{
+					count = sscanf ( next, "%d%n", i, &width );
+		    		next = next + width;
+
+					if(!LastGeomObject)
+						LastGeomObject->MatID = i;
 					break;
 				}
 				else
@@ -573,17 +590,24 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word1, "*MESH_VERTEX" ) == 0 )
 				{
+					TVertex3d vertex;
+
 					count = sscanf ( next, "%d%n", &i, &width );
 					next = next + width;
 
-					count = sscanf ( next, "%f%n", &x, &width );
+					count = sscanf ( next, "%f%n", &vertex.x, &width );
 					next = next + width;
 
-					count = sscanf ( next, "%f%n", &y, &width );
+					count = sscanf ( next, "%f%n", &vertex.y, &width );
 					next = next + width;
 
-					count = sscanf ( next, "%f%n", &z, &width );
+					count = sscanf ( next, "%f%n", &vertex.z, &width );
 					next = next + width;
+
+					if(!LastGeomObject)
+					{
+						LastGeomObject->nVertexList.push_back(vertex);
+					}
 
 					break;
 				}
