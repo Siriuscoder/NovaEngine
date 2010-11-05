@@ -101,7 +101,7 @@ public:
         nInt32 nAutoreflMapSize;
         nInt32 nAutoreflMapFrameStep;
 
-		nova::stl<_MaterialContainer>::vector nSubMats;
+		nova::stl<nstring>::vector nSubMats;
 
 	} TMaterialContainer;
 

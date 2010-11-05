@@ -230,7 +230,10 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		next = next + width;
 // Добавляем новый каркас в кеш объектов, сохраняем на него ссылку
 					nstring nObjName(word2);
-					mMeshesMap.insert(std::pair<nstring, TMeshContainer>(nObjName, TMeshContainer()));
+					TMeshContainer mesh;
+
+					mesh.nName = nObjName;
+					mMeshesMap.insert(std::pair<nstring, TMeshContainer>(nObjName, mesh));
 					LastGeomObject = &(mMeshesMap[nObjName]);
 					break;
 				}
@@ -906,10 +909,22 @@ nInt32 CASELoader::LoadAseInternal(void)
 				else if ( strcmp ( word, "}" ) == 0 )
 				{
 					level = nlbrack - nrbrack;
+					LastMaterial = NULL;
+					LastSubMaterial = NULL;
 					continue;
 				}
 				else if ( strcmp ( word, "*MATERIAL_NAME" ) == 0 )
 				{
+					count = sscanf ( next, "%s%n", word2, &width );
+		    		next = next + width;
+// Добавляем новый материал в кеш объектов, сохраняем на него ссылку
+					nstring nMatName(word2);
+					TMaterialContainer mat;
+
+					mat.nName = nMatName;
+					mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nMatName, mat));
+					LastMaterial = &(mMaterialsMap[nMatName]);
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_CLASS" ) == 0 )
@@ -918,30 +933,112 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*MATERIAL_AMBIENT" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nAmbientColor.R()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastMaterial->nAmbientColor.G()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastMaterial->nAmbientColor.B()), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_DIFFUSE" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nDiffuseColor.R()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastMaterial->nDiffuseColor.G()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastMaterial->nDiffuseColor.B()), &width );
+						next = next + width;
+					}
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_SPECULAR" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nSpecularColor.R()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastMaterial->nSpecularColor.G()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastMaterial->nSpecularColor.B()), &width );
+						next = next + width;
+					}
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_SHINE" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nShininess), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_SHINESTRENGTH" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nShinStrength), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_TRANSPARENCY" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nTransparency), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_WIRESIZE" ) == 0 )
 				{
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_SHADING" ) == 0 )
+				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nShading), &width );
+						next = next + width;
+					}
+
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_SELFILLUM" ) == 0 )
+				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nSelfIllum), &width );
+						next = next + width;
+					}
+
+					break;
+				}
+				else if ( strcmp ( word, "*MATERIAL_FALLOFF" ) == 0 )
+				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastMaterial->nFalloff), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*NUMSUBMTLS" ) == 0 )
@@ -983,10 +1080,24 @@ nInt32 CASELoader::LoadAseInternal(void)
 				else if ( strcmp ( word, "}" ) == 0 )
 				{
 					level = nlbrack - nrbrack;
+					LastSubMaterial = NULL;
 					continue;
 				}
 				else if ( strcmp ( word, "*MATERIAL_NAME" ) == 0 )
 				{
+					count = sscanf ( next, "%s%n", word2, &width );
+		    		next = next + width;
+// Добавляем новый материал в кеш объектов, сохраняем на него ссылку
+					nstring nMatName(word2);
+					TMaterialContainer mat;
+
+					mat.nName = nMatName;
+					mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nMatName, mat));
+
+					if(LastMaterial)
+						LastMaterial->nSubMats.push_back(nMatName);
+
+					LastSubMaterial = &(mMaterialsMap[nMatName]);
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_CLASS" ) == 0 )
@@ -995,26 +1106,80 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*MATERIAL_AMBIENT" ) == 0 )
 				{
+					if(LastSubMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nAmbientColor.R()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nAmbientColor.G()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nAmbientColor.B()), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_DIFFUSE" ) == 0 )
 				{
+					if(LastSubMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nDiffuseColor.R()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nDiffuseColor.G()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nDiffuseColor.B()), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_SPECULAR" ) == 0 )
 				{
+					if(LastSubMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nSpecularColor.R()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nSpecularColor.G()), &width );
+						next = next + width;
+
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nSpecularColor.B()), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_SHINE" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nShininess), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_SHINESTRENGTH" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nShinStrength), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_TRANSPARENCY" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nTransparency), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_WIRESIZE" ) == 0 )
@@ -1023,22 +1188,32 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*MATERIAL_SHADING" ) == 0 )
 				{
-					break;
-				}
-				else if ( strcmp ( word, "*MATERIAL_XP_FALLOFF" ) == 0 )
-				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nShading), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_SELFILLUM" ) == 0 )
 				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nSelfIllum), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_FALLOFF" ) == 0 )
 				{
-					break;
-				}
-				else if ( strcmp ( word, "*MATERIAL_XP_TYPE" ) == 0 )
-				{
+					if(LastMaterial)
+					{
+						count = sscanf ( next, "%f%n", &(LastSubMaterial->nFalloff), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MAP_DIFFUSE" ) == 0 )
