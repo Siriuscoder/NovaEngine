@@ -107,7 +107,6 @@ nInt32 CASELoader::LoadAseInternal(void)
 	nInt32  nlbrack;
 	nInt32  nrbrack;
 	float	rval;
-	float	temp;
 	nInt32  width;
 	char	word[LINE_MAX_LEN];
 	char	word1[LINE_MAX_LEN];
@@ -428,7 +427,10 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    	}
 		    	else if ( strcmp ( word, "*MESH_FACE" ) == 0 )
 		    	{
-		    		count = sscanf ( next, "%d%n", &i, &width );
+					TFaceIndex index;
+					TMatGroupInfo mat_alias;
+
+					count = sscanf ( next, "%d%n", &mat_alias.nFace, &width );
 		    		next = next + width;
 
 		    		count = sscanf ( next, "%s%n", word2, &width );
@@ -437,29 +439,44 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		count = sscanf ( next, "%s%n", word2, &width );
 		    		next = next + width;
 
-		    		count = sscanf ( next, "%d%n", &i, &width );
+		    		count = sscanf ( next, "%d%n", &index.a, &width );
 		    		next = next + width;
 
 		    		count = sscanf ( next, "%s%n", word2, &width );
 		    		next = next + width;
 
-		    		count = sscanf ( next, "%d%n", &i, &width );
+		    		count = sscanf ( next, "%d%n", &index.b, &width );
 		    		next = next + width;
 
 		    		count = sscanf ( next, "%s%n", word2, &width );
 		    		next = next + width;
 
-		    		count = sscanf ( next, "%d%n", &i, &width );
+		    		count = sscanf ( next, "%d%n", &index.c, &width );
 		    		next = next + width;
 
-		    		count = sscanf ( next, "%s%n", word2, &width );
-		    		next = next + width;
 
-		    		if ( strcmp ( word2, "D:" ) == 0 )
-		    		{
+					/////////////////// Sub mat read //////////////////////
+					while(true)
+					{
+		    			count = sscanf ( next, "%s%n", word2, &width );
+		    			next = next + width;
+
 		    			count = sscanf ( next, "%d%n", &i, &width );
 		    			next = next + width;
-		    		}
+		
+						if(	strcmp ( level_name[level], "*MESH_MTLID" ) == 0 )
+						{
+							mat_alias.nMatSubID = i;
+							break;
+						}
+					}
+
+					if(!LastGeomObject)
+					{
+						LastGeomObject->nIndexList.push_back(index);
+						LastGeomObject->nMatGroupsList.push_back(mat_alias);
+					}
+					
 
 		    		break;
 		    	}
@@ -540,6 +557,25 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word1, "*MESH_TFACE" ) == 0 )
 				{
+					TFaceIndex index;
+
+					count = sscanf ( next, "%d%n", &i, &width );
+		    		next = next + width;
+
+		    		count = sscanf ( next, "%d%n", &index.a, &width );
+		    		next = next + width;
+
+		    		count = sscanf ( next, "%d%n", &index.b, &width );
+		    		next = next + width;
+
+		    		count = sscanf ( next, "%d%n", &index.c, &width );
+		    		next = next + width;
+
+					if(!LastGeomObject)
+					{
+						LastGeomObject->nTVIndexList.push_back(index);
+					}
+
 					break;
 				}
 				else
@@ -565,6 +601,25 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word1, "*MESH_TVERT" ) == 0  )
 				{
+					TUVMapping uv;
+
+					count = sscanf ( next, "%d%n", &i, &width );
+					next = next + width;
+
+					count = sscanf ( next, "%f%n", &uv.s, &width );
+					next = next + width;
+
+					count = sscanf ( next, "%f%n", &uv.t, &width );
+					next = next + width;
+
+					count = sscanf ( next, "%f%n", &uv.w, &width );
+					next = next + width;
+
+					if(!LastGeomObject)
+					{
+						LastGeomObject->nTVMappingList.push_back(uv);
+					}
+
 					break;
 				}
 				else
@@ -664,65 +719,81 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*TM_ROW0" ) == 0 )
 				{
-					count = sscanf ( next, "%f%n", &temp, &width );
+					Vector4f row;
+					count = sscanf ( next, "%f%n", &(row[0]), &width );
 					next = next + width;
-					//transform_matrix[0][0] = temp;
 
-					count = sscanf ( next, "%f%n", &temp, &width );
+					count = sscanf ( next, "%f%n", &(row[1]), &width );
 					next = next + width;
-					//transform_matrix[1][0] = temp;
 
-					count = sscanf ( next, "%f%n", &temp, &width );
+					count = sscanf ( next, "%f%n", &(row[2]), &width );
 					next = next + width;
-					//transform_matrix[2][0] = temp;
+
+					row[3] = 0;
+					if(!LastGeomObject)
+					{
+						LastGeomObject->nTMatrix.SetRow(0, row);
+					}
 
 					break;
 				}
 				else if ( strcmp ( word, "*TM_ROW1" ) == 0 )
 				{
-					count = sscanf ( next, "%f%n", &temp, &width );
+					Vector4f row;
+					count = sscanf ( next, "%f%n", &(row[0]), &width );
 					next = next + width;
-					//transform_matrix[0][1] = temp;
 
-					count = sscanf ( next, "%f%n", &temp, &width );
+					count = sscanf ( next, "%f%n", &(row[1]), &width );
 					next = next + width;
-					//transform_matrix[1][1] = temp;
 
-					count = sscanf ( next, "%f%n", &temp, &width );
+					count = sscanf ( next, "%f%n", &(row[2]), &width );
 					next = next + width;
-					//transform_matrix[2][1] = temp;
+
+					row[3] = 0;
+					if(!LastGeomObject)
+					{
+						LastGeomObject->nTMatrix.SetRow(1, row);
+					}
 
 					break;
 				}
 				else if ( strcmp ( word, "*TM_ROW2" ) == 0 )
 				{
-					count = sscanf ( next, "%f%n", &temp, &width );
+					Vector4f row;
+					count = sscanf ( next, "%f%n", &(row[0]), &width );
 					next = next + width;
-					//transform_matrix[0][2] = temp;
 
-					count = sscanf ( next, "%f%n", &temp, &width );
+					count = sscanf ( next, "%f%n", &(row[1]), &width );
 					next = next + width;
-					//transform_matrix[1][2] = temp;
 
-					count = sscanf ( next, "%f%n", &temp, &width );
+					count = sscanf ( next, "%f%n", &(row[2]), &width );
 					next = next + width;
-					//transform_matrix[2][2] = temp;
+
+					row[3] = 0;
+					if(!LastGeomObject)
+					{
+						LastGeomObject->nTMatrix.SetRow(2, row);
+					}
 
 					break;
 				}
 				else if ( strcmp ( word, "*TM_ROW3" ) == 0 )
 				{
-					count = sscanf ( next, "%f%n", &temp, &width );
+					Vector4f row;
+					count = sscanf ( next, "%f%n", &(row[0]), &width );
 					next = next + width;
-					//transform_matrix[0][3] = temp;
 
-					count = sscanf ( next, "%f%n", &temp, &width );
+					count = sscanf ( next, "%f%n", &(row[1]), &width );
 					next = next + width;
-					//transform_matrix[1][3] = temp;
 
-					count = sscanf ( next, "%f%n", &temp, &width );
+					count = sscanf ( next, "%f%n", &(row[2]), &width );
 					next = next + width;
-					//transform_matrix[2][3] = temp;
+
+					row[3] = 1;
+					if(!LastGeomObject)
+					{
+						LastGeomObject->nTMatrix.SetRow(3, row);
+					}
 
 					break;
 				}

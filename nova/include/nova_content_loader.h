@@ -37,6 +37,7 @@ public:
 	{
 		nstring nMatName;
 		nInt32 nFace;
+		nInt32 nMatSubID;
 	} TMatGroupInfo;
 
 	typedef nova::stl<TMatGroupInfo>::vector TMatGroups;
@@ -50,7 +51,11 @@ public:
 		CMeshBox::TNormals nNormalList;
 		CMeshBox::TIndexes nIndexList;
 		TMatGroups nMatGroupsList;
+		Matrix4f nTMatrix;
 		nInt32 MatID;
+// Reserved buffers
+		CMeshBox::TIndexes nTVIndexList;
+		CMeshBox::TTexCoords nTVMappingList;
 	} TMeshContainer;
 
 	typedef struct _MaterialContainer

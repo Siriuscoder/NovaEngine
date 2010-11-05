@@ -65,9 +65,10 @@ union TUVMapping
 	{
 		nova::nReal s;
 		nova::nReal t;
+		nova::nReal w;
 	};
 
-	nova::nReal v[2];
+	nova::nReal v[3];
 };
 
 union TNormal3d
