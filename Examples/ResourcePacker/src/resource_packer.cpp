@@ -33,10 +33,13 @@ public:
 
 	ResourcePackerTool()
 	{
+		mEngine = new nova::CNovaEngine();
 	}
 
 	~ResourcePackerTool()
 	{
+		delete mEngine;
+		mEngine = NULL;
 	}
 
 	void StartPack(const nstring &package, const stl<nstring>::vector & files)
@@ -102,36 +105,9 @@ public:
 	}
 };
 
-#if defined(__WIN32__)
-void RestreamToAllocatedConsole(void)
-{
-	AllocConsole();
-
-	FILE *hf = _fdopen(_open_osfhandle(
-                (long)GetStdHandle(STD_OUTPUT_HANDLE), 2), "w");
-	FILE *hfr = _fdopen(_open_osfhandle(
-                (long)GetStdHandle(STD_INPUT_HANDLE), 2), "r");
-
-	if(hf && hfr)
-	{
-		*stdout = *stderr = *hf;
-		*stdin = *hfr;
-	}
-}
-
-void CloseConsole()
-{
-	FreeConsole();
-}
-#endif
-
 
 ENTRY_POINT	
 {
-#if defined(__WIN32__)
-	RestreamToAllocatedConsole();
-#endif
-
 	try
 	{
 		ResourcePackerTool packer;
@@ -191,11 +167,7 @@ ENTRY_POINT
 		cerr << exp.what() << endl;
 	}
 
-
-#if defined(__WIN32__)
 	cin.get();
-	CloseConsole();
-#endif
 
 	return 0;
 }

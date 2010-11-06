@@ -36,9 +36,9 @@ CSceneContentLoaderBase::~CSceneContentLoaderBase()
 	mpStream = NULL;
 }
 
-void CSceneContentLoaderBase::LoadImmediately(CDataStream & stream)
+void CSceneContentLoaderBase::LoadImmediately(CDataStream *stream)
 {
-	mpStream = &stream;
+	mpStream = stream;
 	LoadImpl();
 }
 

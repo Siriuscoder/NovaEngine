@@ -23,6 +23,7 @@
 
 #include "nova_octree_scene_manager.h"
 #include "nova_resource_package.h"
+#include "nova_ase_loader.h"
 
 namespace nova
 {

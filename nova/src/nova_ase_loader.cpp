@@ -135,9 +135,21 @@ nInt32 CASELoader::LoadAseInternal(void)
 //
 //  Read a line of text from the file.
 //
+	input_buf = mpStream->ReadLine((size_t)LINE_MAX_LEN);
+	count = sscanf ( input_buf.c_str(), "%s%n", word, &width );
+//
+//  *3DSMAX_ASCIIEXPORT  200
+//
+	if ( strcmp ( word, "*3DSMAX_ASCIIEXPORT" ) != 0 )
+	{
+		throw NOVA_EXP("CASELoader::LoadAseInternal: fatal error, bad ase file format...", BAD_OPERATION);
+	}
 
 	for ( ;; )
 	{
+		if(mpStream->Eof())
+			break;
+
 		input_buf = mpStream->ReadLine((size_t)LINE_MAX_LEN);
 		input = input_buf.c_str();
 
@@ -149,7 +161,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 //
 	    for ( ;; )
 	    {
-			strcpy ( wordm1, word );
+			if ( iword == 1 )
+				strcpy ( wordm1, word );
+
 			strcpy ( word, " " );
 
 	    	count = sscanf ( next, "%s%n", word, &width );
@@ -190,20 +204,11 @@ nInt32 CASELoader::LoadAseInternal(void)
 	    		}
 	    	}
 //
-//  *3DSMAX_ASCIIEXPORT  200
-//
-			if ( strcmp ( word1, "*3DSMAX_ASCIIEXPORT" ) == 0 )
-			{
-				break;
-			}
-//
 //  *COMMENT
 //
-			else if ( strcmp ( word1, "*COMMENT" ) == 0 )
+			if ( strcmp ( word1, "*COMMENT" ) == 0 )
 			{
-				char comment[LINE_MAX_LEN];
-				sscanf(next, "\"%s\"", comment);
-				LOG_MESSAGE(nstring("void CASELoader::LoadAseInternal(void) ase comment: ") + comment);
+				LOG_MESSAGE(nstring("void CASELoader::LoadAseInternal(void) ase comment: ") + next);
 				break;
 			}
 //
@@ -226,11 +231,12 @@ nInt32 CASELoader::LoadAseInternal(void)
 //
 				else if ( strcmp ( word, "*NODE_NAME" ) == 0 )
 				{
-					count = sscanf ( next, "%s%n", word2, &width );
+					count = sscanf ( next, "%*[^\"]%*c%[^\"]%n", word2, &width );
 		    		next = next + width;
 // Добавляем новый каркас в кеш объектов, сохраняем на него ссылку
 					nstring nObjName(word2);
 					TMeshContainer mesh;
+					memset(&mesh, 0, sizeof(TMeshContainer));
 
 					mesh.nName = nObjName;
 					mMeshesMap.insert(std::pair<nstring, TMeshContainer>(nObjName, mesh));
@@ -259,10 +265,10 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*MATERIAL_REF" ) == 0 )
 				{
-					count = sscanf ( next, "%d%n", i, &width );
+					count = sscanf ( next, "%d%n", &i, &width );
 		    		next = next + width;
 
-					if(!LastGeomObject)
+					if(LastGeomObject)
 						LastGeomObject->MatID = i;
 					break;
 				}
@@ -467,14 +473,14 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    			count = sscanf ( next, "%d%n", &i, &width );
 		    			next = next + width;
 		
-						if(	strcmp ( level_name[level], "*MESH_MTLID" ) == 0 )
+						if(	strcmp ( word2, "*MESH_MTLID" ) == 0 )
 						{
 							mat_alias.nMatSubID = i;
 							break;
 						}
 					}
 
-					if(!LastGeomObject)
+					if(LastGeomObject)
 					{
 						LastGeomObject->nIndexList.push_back(index);
 						LastGeomObject->nMatGroupsList.push_back(mat_alias);
@@ -574,7 +580,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		count = sscanf ( next, "%d%n", &index.c, &width );
 		    		next = next + width;
 
-					if(!LastGeomObject)
+					if(LastGeomObject)
 					{
 						LastGeomObject->nTVIndexList.push_back(index);
 					}
@@ -618,7 +624,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					count = sscanf ( next, "%f%n", &uv.w, &width );
 					next = next + width;
 
-					if(!LastGeomObject)
+					if(LastGeomObject)
 					{
 						LastGeomObject->nTVMappingList.push_back(uv);
 					}
@@ -662,7 +668,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					count = sscanf ( next, "%f%n", &vertex.z, &width );
 					next = next + width;
 
-					if(!LastGeomObject)
+					if(LastGeomObject)
 					{
 						LastGeomObject->nVertexList.push_back(vertex);
 					}
@@ -733,7 +739,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(!LastGeomObject)
+					if(LastGeomObject)
 					{
 						LastGeomObject->nTMatrix.SetRow(0, row);
 					}
@@ -753,7 +759,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(!LastGeomObject)
+					if(LastGeomObject)
 					{
 						LastGeomObject->nTMatrix.SetRow(1, row);
 					}
@@ -773,7 +779,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(!LastGeomObject)
+					if(LastGeomObject)
 					{
 						LastGeomObject->nTMatrix.SetRow(2, row);
 					}
@@ -793,7 +799,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 1;
-					if(!LastGeomObject)
+					if(LastGeomObject)
 					{
 						LastGeomObject->nTMatrix.SetRow(3, row);
 					}
@@ -890,12 +896,6 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					continue;
 				}
-				else
-				{
-					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MATERIAL_LIST part, line: ") + 
-						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
-				}
 			}
 //
 //  *MATERIAL
@@ -915,11 +915,12 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*MATERIAL_NAME" ) == 0 )
 				{
-					count = sscanf ( next, "%s%n", word2, &width );
+					count = sscanf ( next, "%*[^\"]%*c%[^\"]%n", word2, &width);
 		    		next = next + width;
 // Добавляем новый материал в кеш объектов, сохраняем на него ссылку
 					nstring nMatName(word2);
 					TMaterialContainer mat;
+					memset(&mat, 0, sizeof(TMaterialContainer));
 
 					mat.nName = nMatName;
 					mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nMatName, mat));
@@ -1031,7 +1032,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 
 					break;
 				}
-				else if ( strcmp ( word, "*MATERIAL_FALLOFF" ) == 0 )
+				else if ( strcmp ( word, "*MATERIAL_XP_FALLOFF" ) == 0 )
 				{
 					if(LastMaterial)
 					{
@@ -1061,11 +1062,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					continue;
 				}
-				else
+				else if ( strcmp ( word, "*MAP_BUMP" ) == 0 )
 				{
-					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MATERIAL part, line: ") + 
-						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -1090,6 +1089,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 // Добавляем новый материал в кеш объектов, сохраняем на него ссылку
 					nstring nMatName(word2);
 					TMaterialContainer mat;
+					memset(&mat, 0, sizeof(TMaterialContainer));
 
 					mat.nName = nMatName;
 					mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nMatName, mat));
@@ -1206,7 +1206,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 
 					break;
 				}
-				else if ( strcmp ( word, "*MATERIAL_FALLOFF" ) == 0 )
+				else if ( strcmp ( word, "*MATERIAL_XP_FALLOFF" ) == 0 )
 				{
 					if(LastMaterial)
 					{
@@ -1228,6 +1228,10 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					continue;
 				}
+				else if ( strcmp ( word, "*MAP_BUMP" ) == 0 )
+				{
+					continue;
+				}
 				else
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in SUBMATERIAL part, line: ") + 
@@ -1236,11 +1240,12 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 			}
 //
-//  *MAP_AMBIENT && MAP_OPACITY && MAP_DIFFUSE
+//  *MAP_AMBIENT && MAP_OPACITY && MAP_DIFFUSE && MAP_BUMP
 //
 			else if ( strcmp ( level_name[level], "*MAP_AMBIENT" ) == 0 || 
 				strcmp ( level_name[level], "*MAP_OPACITY" ) == 0 || 
-				strcmp ( level_name[level], "*MAP_DIFFUSE" ) == 0 )
+				strcmp ( level_name[level], "*MAP_DIFFUSE" ) == 0 || 
+				strcmp ( level_name[level], "*MAP_BUMP" ) == 0)
 			{
 				if ( strcmp ( word, "{" ) == 0 )
 				{
@@ -1249,10 +1254,56 @@ nInt32 CASELoader::LoadAseInternal(void)
 				else if ( strcmp ( word, "}" ) == 0 )
 				{
 					level = nlbrack - nrbrack;
+					LastTexture = NULL;
 					continue;
 				}
 				else if ( strcmp ( word, "*MAP_NAME" ) == 0 )
 				{
+					count = sscanf ( next, "%*[^\"]%*c%[^\"]%n", word2, &width );
+		    		next = next + width;
+// Добавляем новую текстуру в кеш объектов, сохраняем на него ссылку
+					nstring nMapName(word2);
+					TTextureContainer tmap;
+					memset(&tmap, 0, sizeof(TTextureContainer));
+
+					tmap.nName = nMapName;
+
+					stl<nstring, TTextureContainer>::map::iterator it = mTexturesMap.find(nMapName);
+					if(it != mTexturesMap.end())
+						LastTexture = &(it->second);
+					else
+					{
+						mTexturesMap.insert(std::pair<nstring, TTextureContainer>(nMapName, tmap));
+						LastTexture = &(mTexturesMap[nMapName]);
+					}
+
+					if(LastSubMaterial)
+					{
+						if(strcmp ( level_name[level], "*MAP_AMBIENT" ) == 0)
+							LastSubMaterial->nAmbientMap = nMapName;
+						else if(strcmp ( level_name[level], "*MAP_OPACITY" ) == 0)
+							LastSubMaterial->nOpacMap = nMapName;
+						else if(strcmp ( level_name[level], "*MAP_DIFFUSE" ) == 0)
+							LastSubMaterial->nDiffuseMap1 = nMapName;
+						else if(strcmp ( level_name[level], "*MAP_BUMP" ) == 0)
+							LastSubMaterial->nBumpMap = nMapName;
+					}
+					else
+					{
+						if(LastMaterial)
+						{
+							if(strcmp ( level_name[level], "*MAP_AMBIENT" ) == 0)
+								LastMaterial->nAmbientMap = nMapName;
+							else if(strcmp ( level_name[level], "*MAP_OPACITY" ) == 0)
+								LastMaterial->nOpacMap = nMapName;
+							else if(strcmp ( level_name[level], "*MAP_DIFFUSE" ) == 0)
+								LastMaterial->nDiffuseMap1 = nMapName;
+							else if(strcmp ( level_name[level], "*MAP_BUMP" ) == 0)
+								LastMaterial->nBumpMap = nMapName;
+						}
+					}
+
+					
 					break;
 				}
 				else if ( strcmp ( word, "*MAP_SUBNO" ) == 0 )
@@ -1265,30 +1316,74 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*BITMAP" ) == 0 )
 				{
+					count = sscanf ( next, "%*[^\"]%*c%[^\"]%n", word2, &width );
+		    		next = next + width;
+
+					if(LastTexture)
+					{
+						LastTexture->nBitMap = nstring(word2);
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_U_OFFSET" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nUOffset), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_V_OFFSET" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nVOffset), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_U_TILING" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nUScale), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_V_TILING" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nVScale), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_ANGLE" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nRotation), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_BLUR" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nBlur), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_BLUR_OFFSET" ) == 0 )
@@ -1297,10 +1392,22 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*UVW_NOISE_SIZE" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nNoiseSize), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_NOISE_LEVEL" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nNoiseLevel), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_XP_TYPE" ) == 0 )
@@ -1346,30 +1453,74 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*BITMAP" ) == 0 )
 				{
+					count = sscanf ( next, "%*[^\"]%*c%[^\"]%n", word2, &width );
+		    		next = next + width;
+
+					if(LastTexture)
+					{
+						LastTexture->nBitMap = nstring(word2);
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_U_OFFSET" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nUOffset), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_V_OFFSET" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nVOffset), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_U_TILING" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nUScale), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_V_TILING" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nVScale), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_ANGLE" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nRotation), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_BLUR" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nBlur), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_BLUR_OFFSET" ) == 0 )
@@ -1378,10 +1529,22 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*UVW_NOISE_SIZE" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nNoiseSize), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*UVW_NOISE_LEVEL" ) == 0 )
 				{
+					if(LastTexture)
+					{
+						count = sscanf ( next, "%f%n", &(LastTexture->nNoiseLevel), &width );
+						next = next + width;
+					}
+
 					break;
 				}
 				else if ( strcmp ( word, "*MATERIAL_XP_TYPE" ) == 0 )

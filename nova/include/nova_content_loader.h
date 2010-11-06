@@ -78,8 +78,9 @@ public:
 		bool nIsAdditive;
 		bool nSoften;
 /* Texture Maps */
-		nstring nTexMap1;
-		nstring nTexMap2;
+		nstring nDiffuseMap1;
+		nstring nDiffuseMap2;
+		nstring nAmbientMap;
 		nstring nOpacMap;
 		nstring nSpecMap;
 		nstring nBumpMap;
@@ -87,8 +88,9 @@ public:
 		nstring nSelfIlMap;
 		nstring nReflectionMap;
 /* Mask Maps */
-		nstring nTexMap1Mask;
-		nstring nTexMap2Mask;
+		nstring nDiffuseMap1Mask;
+		nstring nDiffuseMap2Mask;
+		nstring nAmbientMapMask;
 		nstring nOpacMapMask;
 		nstring nSpecMapMask;
 		nstring nBumpMapMask;
@@ -134,7 +136,7 @@ public:
 	CSceneContentLoaderBase();
 	virtual ~CSceneContentLoaderBase();
 
-	void LoadImmediately(CDataStream & stream);
+	void LoadImmediately(CDataStream *stream);
 
 	void LoadAsync(CDataStream & stream, nInt32 timeout);
 

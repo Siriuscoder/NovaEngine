@@ -69,7 +69,8 @@ void CNovaEngine::Release(void)
 	if(mScene)
 		delete mScene;
 
-	mRenderer->ShutDown();
+	if(mRenderer)
+		mRenderer->ShutDown();
 
 	if(mFontManager)
 		delete mFontManager;

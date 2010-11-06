@@ -46,9 +46,14 @@ CLog::CLog(nstring & file) : mState(LG_ACTIVE), CBase("CLog")
 
 	FILE *hf = _fdopen(_open_osfhandle(
                 (long)GetStdHandle(STD_OUTPUT_HANDLE), 2), "w");
+	FILE *hfr = _fdopen(_open_osfhandle(
+                (long)GetStdHandle(STD_INPUT_HANDLE), 2), "r");
 
-	if(hf)
+	if(hf && hfr)
+	{
 		*stdout = *stderr = *hf;
+		*stdin = *hfr;
+	}
 #endif
 }
 

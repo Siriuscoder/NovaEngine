@@ -28,10 +28,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ResourcePacker", "Examples\
 		{26C0FEBA-9218-4C94-991C-30BB7FE130E4} = {26C0FEBA-9218-4C94-991C-30BB7FE130E4}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3dsSceneBuilder", "Examples\3dsSceneBuilder\3dsSceneBuilder.vcproj", "{75D5BBFF-B4AB-4567-95D1-FB43EB35AF6D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{26C0FEBA-9218-4C94-991C-30BB7FE130E4} = {26C0FEBA-9218-4C94-991C-30BB7FE130E4}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SceneBuilder", "Examples\SceneBuilder\SceneBuilder.vcproj", "{75D5BBFF-B4AB-4567-95D1-FB43EB35AF6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
