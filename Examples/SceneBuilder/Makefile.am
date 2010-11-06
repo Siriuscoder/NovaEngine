@@ -1,2 +1,2 @@
 SUBDIRS = src
-EXTRA_DIST = 3dsSceneBuilder.vcproj
+EXTRA_DIST = SceneBuilder.vcproj

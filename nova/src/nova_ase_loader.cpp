@@ -469,12 +469,11 @@ nInt32 CASELoader::LoadAseInternal(void)
 					{
 		    			count = sscanf ( next, "%s%n", word2, &width );
 		    			next = next + width;
-
-		    			count = sscanf ( next, "%d%n", &i, &width );
-		    			next = next + width;
 		
 						if(	strcmp ( word2, "*MESH_MTLID" ) == 0 )
 						{
+							count = sscanf ( next, "%d%n", &i, &width );
+		    				next = next + width;
 							mat_alias.nMatSubID = i;
 							break;
 						}

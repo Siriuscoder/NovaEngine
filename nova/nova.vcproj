@@ -475,38 +475,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="RenderSystem"
-				>
-				<File
-					RelativePath=".\src\nova_glsupport.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\nova_render_system.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\nova_sdl_support.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\nova_sdl_workspace.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\nova_wgl_support.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\nova_win32_context.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\nova_win32_workspace.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="MeshLoaders"
 				>
 				<File
@@ -555,6 +523,38 @@
 				</File>
 				<File
 					RelativePath=".\src\nova_winnie_allocator.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="RenderSystem"
+				>
+				<File
+					RelativePath=".\src\nova_glsupport.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\nova_render_system.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\nova_sdl_support.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\nova_sdl_workspace.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\nova_wgl_support.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\nova_win32_context.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\nova_win32_workspace.cpp"
 					>
 				</File>
 			</Filter>

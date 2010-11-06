@@ -51,7 +51,7 @@ public:
 		nova::CASELoader loader;
 		nova::CFileStream ase_file;
 
-		ase_file.Open("test_plane.ASE", false, false);
+		ase_file.Open("minigun.ASE", false, false);
 
 		mTimer.Reset();
 		loader.LoadImmediately(&ase_file);
