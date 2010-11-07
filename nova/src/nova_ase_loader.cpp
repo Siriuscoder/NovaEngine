@@ -129,6 +129,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 	TMaterialContainer *LastMaterial = NULL;
 	TMaterialContainer *LastSubMaterial = NULL;
 	TTextureContainer *LastTexture = NULL;
+	nInt32 mat_count = 0;
+	nInt32 submat_count = 0;
 
 	strcpy ( word, " " );
 	strcpy ( wordm1, " " );
@@ -916,6 +918,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					level = nlbrack - nrbrack;
 					LastMaterial = NULL;
 					LastSubMaterial = NULL;
+					submat_count = 0;
 					continue;
 				}
 				else if ( strcmp ( word, "*MATERIAL_NAME" ) == 0 )
@@ -928,6 +931,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					memset(&mat, 0, sizeof(TMaterialContainer));
 
 					mat.nName = nMatName;
+					mat.nID = mat_count;
+					mat_count++;
+
 					mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nMatName, mat));
 					LastMaterial = &(mMaterialsMap[nMatName]);
 
@@ -1071,10 +1077,6 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					continue;
 				}
-				else if ( strcmp ( word, "*MAP_GENERIC" ) == 0 )
-				{
-					continue;
-				}
 				else
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MATERIAL part, line: ") + 
@@ -1107,6 +1109,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 					memset(&mat, 0, sizeof(TMaterialContainer));
 
 					mat.nName = nMatName;
+					mat.nID = submat_count;
+					submat_count++;
 					mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nMatName, mat));
 
 					if(LastMaterial)
@@ -1429,6 +1433,10 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					break;
 				}
+				else if ( strcmp ( word, "*MAP_GENERIC" ) == 0 )
+				{
+					continue;
+				}
 				else
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in ") + level_name[level] + " part, line: " + 
@@ -1577,9 +1585,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 
 void CASELoader::LoadImpl(void)
 {
-	InitLoader();
 	LoadAseInternal();
-	CloseLoader();
 }
 
 void CASELoader::InitLoader(void)
@@ -1591,9 +1597,53 @@ void CASELoader::InitLoader(void)
 		throw NOVA_EXP("void CASELoader::LoadAseInternal(void): mpStream is not opened..", MEM_ERROR);
 }
 
+CSceneContentLoaderBase::TMaterialContainer CASELoader::FindMatByID(nInt32 id)
+{
+	stl<nstring, TMaterialContainer>::map::iterator it;
+	for(it = mMaterialsMap.begin(); it != mMaterialsMap.end(); it++)
+	{
+		if(it->second.nID == id)
+			return it->second;
+	}
+
+	return TMaterialContainer();
+}
+
 void CASELoader::CloseLoader(void)
 {
+	stl<nstring, TMeshContainer>::map::iterator it;
+	for(it = mMeshesMap.begin(); it != mMeshesMap.end(); it++)
+	{
+		TMeshContainer *mesh_def = &((*it).second);
+		TMaterialContainer matref = FindMatByID(mesh_def->MatID);
+// Preparing sub mat indexes
+		for(nUInt32 i = 0; i < mesh_def->nMatGroupsList.size(); i++)
+		{
+			if(mesh_def->nMatGroupsList[i].nMatSubID >= matref.nSubMats.size())
+			{
+				mesh_def->nMatGroupsList[i].nMatSubID = 0;
+				mesh_def->nMatGroupsList[i].nMatName = matref.nName;
+			}
+			else
+			{
+				mesh_def->nMatGroupsList[i].nMatName = matref.nSubMats[mesh_def->nMatGroupsList[i].nMatSubID];
+			}
+		}
+// Calculating real uv from texture faces
+		mesh_def->nMappingFacesList.resize(mesh_def->nVertexList.size());
+		for(nUInt32 i = 0; i < mesh_def->nTVIndexList.size(); i++)
+		{
+			TFaceIndex face = mesh_def->nIndexList[i];
+			TFaceIndex tex_face =  mesh_def->nTVIndexList[i];
 
+			mesh_def->nMappingFacesList[face.a] = mesh_def->nTVMappingList[tex_face.a];
+			mesh_def->nMappingFacesList[face.b] = mesh_def->nTVMappingList[tex_face.b];
+			mesh_def->nMappingFacesList[face.c] = mesh_def->nTVMappingList[tex_face.c];
+		}
+
+		mesh_def->nTVMappingList.clear();
+		mesh_def->nTVIndexList.clear();
+	}
 }
 
 }

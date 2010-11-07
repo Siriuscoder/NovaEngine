@@ -42,6 +42,8 @@ protected:
 
 	void LoadImpl(void);
 
+	TMaterialContainer FindMatByID(nInt32 id);
+
 private:
 
 	bool mSelfOpenFlag;

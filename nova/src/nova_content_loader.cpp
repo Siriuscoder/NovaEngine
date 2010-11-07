@@ -39,10 +39,12 @@ CSceneContentLoaderBase::~CSceneContentLoaderBase()
 void CSceneContentLoaderBase::LoadImmediately(CDataStream *stream)
 {
 	mpStream = stream;
+	InitLoader();
 	LoadImpl();
+	CloseLoader();
 }
 
-void CSceneContentLoaderBase::LoadAsync(CDataStream & stream, nInt32 timeout)
+void CSceneContentLoaderBase::LoadAsync(CDataStream *stream, nInt32 timeout)
 {
 
 }

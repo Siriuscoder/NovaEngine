@@ -36,8 +36,8 @@ public:
 	typedef struct _MatGroupInfo
 	{
 		nstring nMatName;
-		nInt32 nFace;
-		nInt32 nMatSubID;
+		nUInt32 nFace;
+		nUInt32 nMatSubID;
 	} TMatGroupInfo;
 
 	typedef nova::stl<TMatGroupInfo>::vector TMatGroups;
@@ -61,6 +61,7 @@ public:
 	typedef struct _MaterialContainer
 	{
 		nstring nName;
+		nInt32 nID;
 		nova::CColorRGB nAmbientColor;
 		nova::CColorRGB nDiffuseColor;
 		nova::CColorRGB nSpecularColor;
@@ -138,7 +139,7 @@ public:
 
 	void LoadImmediately(CDataStream *stream);
 
-	void LoadAsync(CDataStream & stream, nInt32 timeout);
+	void LoadAsync(CDataStream *stream, nInt32 timeout);
 
 	stl<nstring>::vector GetMeshList(void);
 
