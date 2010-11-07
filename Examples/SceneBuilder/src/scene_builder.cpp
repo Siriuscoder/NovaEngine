@@ -51,7 +51,7 @@ public:
 		nova::CASELoader loader;
 		nova::CFileStream ase_file;
 
-		ase_file.Open("minigun.ASE", false, false);
+		ase_file.Open("test_map.ASE", false, false);
 
 		mTimer.Reset();
 		loader.LoadImmediately(&ase_file);
@@ -63,8 +63,16 @@ public:
 		nova::stl<nstring>::vector meshes = loader.GetMeshList();
 		std::cout << "Objects list: " << std::endl;
 		for(nova::nUInt32 i = 0; i < meshes.size(); i++)
+		{
 			std::cout << meshes[i] << std::endl;
+			std::cout << "Mesh info: " << std::endl;
+			nova::CSceneContentLoaderBase::TMeshContainer geom = loader.GetMesh(meshes[i]);
 
+			std::cout << "Vertex count: " << nova::CStringUtils::IntToString(geom.nVertexList.size()) << std::endl;
+			std::cout << "Face count: " << nova::CStringUtils::IntToString(geom.nIndexList.size()) << std::endl;
+			std::cout << "Mat ID: " << nova::CStringUtils::IntToString(geom.MatID) << std::endl;
+		}
+	
 		nova::stl<nstring>::vector materials = loader.GetMaterialList();
 		std::cout << std::endl << "Materials list: " << std::endl;
 		for(nova::nUInt32 i = 0; i < materials.size(); i++)

@@ -276,7 +276,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in GEOMOBJECT part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -353,7 +353,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 		        {
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MESH part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 		        }
 			}
 //
@@ -378,7 +378,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MESH_CFACELIST part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -416,7 +416,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    	{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MESH_CVERTLIST part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-		    		break;
+		    		continue;
 		    	}
 		    }
 //
@@ -492,7 +492,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    	{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MESH_FACE_LIST part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-		    		break;
+		    		continue;
 		    	}
 		    }
 //
@@ -546,7 +546,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MESH_NORMALS part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -590,7 +590,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MESH_TFACELIST part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -634,7 +634,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MESH_TVERTLIST part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-				  break;
+					continue;
 				}
 			}
 //
@@ -678,7 +678,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MESH_VERTEX_LIST part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -821,7 +821,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in NODE_TM part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -870,7 +870,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in SCENE part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -893,6 +893,12 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*MATERIAL" ) == 0 )
 				{
+					continue;
+				}
+				else
+				{
+					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MATERIAL_LIST part, line: ") + 
+						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
 					continue;
 				}
 			}
@@ -1065,6 +1071,16 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					continue;
 				}
+				else if ( strcmp ( word, "*MAP_GENERIC" ) == 0 )
+				{
+					continue;
+				}
+				else
+				{
+					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in MATERIAL part, line: ") + 
+						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
+					continue;
+				}
 			}
 //
 //  *SUBMATERIAL
@@ -1083,7 +1099,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word, "*MATERIAL_NAME" ) == 0 )
 				{
-					count = sscanf ( next, "%s%n", word2, &width );
+					count = sscanf ( next, "%*[^\"]%*c%[^\"]%n", word2, &width );
 		    		next = next + width;
 // Добавляем новый материал в кеш объектов, сохраняем на него ссылку
 					nstring nMatName(word2);
@@ -1235,7 +1251,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in SUBMATERIAL part, line: ") + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -1413,15 +1429,11 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					break;
 				}
-				else if ( strcmp ( word, "*MAP_GENERIC" ) == 0 )
-				{
-					continue;
-				}
 				else
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in ") + level_name[level] + " part, line: " + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 //
@@ -1554,7 +1566,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				{
 					CLog::GetInstance().PrintMessage(nstring("void CASELoader::LoadAseInternal(void) warning: find unknown section in ") + level_name[level] + " part, line: " + 
 						CStringUtils::IntToString(text_num), CLog::LG_WITH_TIME_WARNING);
-					break;
+					continue;
 				}
 			}
 		}
