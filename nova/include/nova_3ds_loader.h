@@ -55,12 +55,6 @@ class NOVA_EXPORT C3DSLoader : public CSceneContentLoaderBase
 {
 private:
 
-	//std::ifstream m3dsStream;
-
-	bool mGeometry;
-
-	bool mOwerThread;
-
 	C3DSChunk ReadChunk();
 
 	bool FindChunk(C3DSChunk & target, C3DSChunk & parent);
@@ -74,24 +68,31 @@ private:
 
 	float ReadPercentage(const C3DSChunk &chunk);
 
-	CMeshBoxPtr LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_name);
+	TMeshContainer *LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_name);
 
-	void ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes, 
-		CMeshBox::TFacesInfo & mat_groups, stl<nstring>::vector & mat_names);
+	void ReadFaceList(const C3DSChunk &chunk, TMeshContainer *mesh);
 
-	CMaterialPtr ReadMaterial(const C3DSChunk &parent);
+	TMaterialContainer *ReadMaterial(const C3DSChunk &parent);
 
-	CTexturePtr ReadMap(const C3DSChunk &chunk);
+	TTextureContainer *ReadMap(const C3DSChunk &chunk);
+
+protected:
+
+	void InitLoader(void);
+
+	void CloseLoader(void);
+
+	void LoadImpl(void);
+
+	void LoadMeshList(void);
+
+	void LoadMaterialList(void);
 
 public:
 
-	C3DSLoader(CDataStream & stream, bool geom, bool mult_thread);
+	C3DSLoader();
 
 	~C3DSLoader();
-
-	stl<CMeshBoxPtr>::vector LoadMeshList(void);
-
-	stl<CMaterialPtr>::vector LoadMaterialList(void);
 };
 
 

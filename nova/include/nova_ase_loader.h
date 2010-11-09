@@ -30,7 +30,7 @@ class NOVA_EXPORT CASELoader : public CSceneContentLoaderBase
 {
 public:
 
-	CASELoader() : mSelfOpenFlag(false) {}
+	CASELoader() {}
 
 	~CASELoader() {}
 
@@ -46,7 +46,6 @@ protected:
 
 private:
 
-	bool mSelfOpenFlag;
 	nInt32 LoadAseInternal(void);
 
 };

@@ -75,6 +75,8 @@ T3DS_MAT_SPECULAR			=0xA030,
 T3DS_MAT_SHININESS			=0xA040,
 T3DS_MAT_SHIN2PCT			=0xA041,
 T3DS_MAT_TRANSPARENCY		=0xA050,
+T3DS_MAT_XPFALL				=0xA052,
+T3DS_MAT_REFBLUR			=0xA053,
 T3DS_MAT_SHADING			=0xA100,
 T3DS_MAT_TWO_SIDE			=0xA081,
 T3DS_MAT_ADDITIVE			=0xA083,
@@ -82,7 +84,6 @@ T3DS_MAT_WIRE				=0xA085,
 T3DS_MAT_FACEMAP			=0xA088,
 T3DS_MAT_WIRESIZE			=0xA087,
 T3DS_MAT_DECAL				=0xA082,
-T3DS_MAT_TEXMAP				=0xA200,
 T3DS_MAT_MAPNAME			=0xA300,
 T3DS_MAT_MAP_TILING			=0xA351,
 T3DS_MAT_MAP_USCALE			=0xA354,
@@ -90,13 +91,6 @@ T3DS_MAT_MAP_VSCALE			=0xA356,
 T3DS_MAT_MAP_UOFFSET		=0xA358,
 T3DS_MAT_MAP_VOFFSET		=0xA35A,
 T3DS_MAT_MAP_ANG    		=0xA35C,
-T3DS_MAT_TEX2MAP    		=0xA33A,
-T3DS_MAT_OPACMAP    		=0xA210,
-T3DS_MAT_BUMPMAP    		=0xA230,
-T3DS_MAT_SPECMAP    		=0xA204,
-T3DS_MAT_SHINMAP    		=0xA33C,
-T3DS_MAT_REFLMAP    		=0xA220,
-T3DS_MAT_ACUBIC     		=0xA310,
 
 T3DS_EDIT_OBJECT    		=0x4000,
 T3DS_OBJ_TRIMESH    		=0x4100,
@@ -118,7 +112,25 @@ T3DS_TRI_SMOOTH_GROUP		=0x4150,
 T3DS_TRI_FACEMAPPING		=0x4140,
 T3DS_TRI_MATRIX				=0x4160,
 
-T3DS_SPOTLIGHT				=0x4610
+T3DS_SPOTLIGHT				=0x4610,
+
+T3DS_MAT_TEXMAP             =0xA200,
+T3DS_MAT_TEXMASK            =0xA33E,
+T3DS_MAT_TEX2MAP            =0xA33A,
+T3DS_MAT_TEX2MASK           =0xA340,
+T3DS_MAT_OPACMAP            =0xA210,
+T3DS_MAT_OPACMASK           =0xA342,
+T3DS_MAT_BUMPMAP            =0xA230,
+T3DS_MAT_BUMPMASK           =0xA344,
+T3DS_MAT_SPECMAP            =0xA204,
+T3DS_MAT_SPECMASK           =0xA348,
+T3DS_MAT_SHINMAP            =0xA33C,
+T3DS_MAT_SHINMASK           =0xA346,
+T3DS_MAT_SELFIMAP           =0xA33D,
+T3DS_MAT_SELFIMASK          =0xA34A,
+T3DS_MAT_REFLMAP            =0xA220,
+T3DS_MAT_REFLMASK           =0xA34C,
+T3DS_MAT_ACUBIC             =0xA310
 };
 
 
@@ -157,11 +169,9 @@ nova::nUInt32 C3DSChunk::GetEnd(void) const
 	return mEnd;
 }
 
-C3DSLoader::C3DSLoader(CDataStream & stream, bool geom, bool mult_thread)
+C3DSLoader::C3DSLoader()
 {
-	mpStream = &stream;
-	mGeometry = geom;
-	mOwerThread = mult_thread;
+
 }
 
 
@@ -274,20 +284,17 @@ float C3DSLoader::ReadPercentage(const C3DSChunk &chunk)
     return 0;
 }
 
-CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_name)
+CSceneContentLoaderBase::TMeshContainer * C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_name)
 {
-	unsigned short count = 0;
-	CMemoryBuffer	vertexes,
-					mat_coords,
-					indexes,
-					mat_groups,
-					normals;
+	nUInt16 count = 0;
+	TMeshContainer tMesh;
+	TMeshContainer *pMesh = NULL;
+	memset(&tMesh, 0, sizeof(TMeshContainer));
 
-	CMeshBox::TFacesInfo mat_indexes;
-
-	nova::Matrix3f matrix = Matrix3f::IDENTITY;
-	nova::Vector3f pos = Vector3f::ZERO;
-	stl<nstring>::vector mat_names;
+	mMeshesMap.insert(std::pair<nstring, TMeshContainer>(obj_name, tMesh));
+	pMesh = &(mMeshesMap[obj_name]);
+	if(!pMesh)
+		return NULL;
 
 	GotoChunk(chunk);
 
@@ -298,42 +305,47 @@ CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_nam
 		{
 		case T3DS_TRI_VERTEXLIST:
 			{
-				count = mpStream->ReadMemOfType<nova::nUInt16>();
-				vertexes.AllocBuffer(count * sizeof(TVertex3d));
+				count = mpStream->ReadMemOfType<nUInt16>();
+				for(nUInt16 ic = 0; ic < count; ic++)
+				{
+					TVertex3d vertex;
+					vertex.x = mpStream->ReadMemOfType<float>();
+					vertex.y = mpStream->ReadMemOfType<float>();
+					vertex.z = mpStream->ReadMemOfType<float>();
 
-				mpStream->Read(vertexes);
+					pMesh->nVertexList.push_back(vertex);
+				}
 			}
 			break;
 		case T3DS_TRI_FACEMAPPING:
 			{
 				count = mpStream->ReadMemOfType<nova::nUInt16>();
-				mat_coords.AllocBuffer(count * sizeof(TUVMapping));
+				for(nUInt16 ic = 0; ic < count; ic++)
+				{
+					TUVMapping uv;
+					uv.s = mpStream->ReadMemOfType<float>();
+					uv.t = mpStream->ReadMemOfType<float>();
+					uv.w = 0;
 
-				mpStream->Read(mat_coords);
+					pMesh->nMappingFacesList.push_back(uv);
+				}
 			}
 			break;
 		case T3DS_TRI_FACELIST:
 			{
-				ReadFaceList(_ch, indexes, mat_indexes, mat_names);
+				ReadFaceList(_ch, pMesh);
 			}
 			break;
 		case T3DS_TRI_MATRIX:
 			{
-				matrix(0, 0) = mpStream->ReadMemOfTypeInSize<float>(4);
-				matrix(0, 1) = mpStream->ReadMemOfTypeInSize<float>(4);
-				matrix(0, 2) = mpStream->ReadMemOfTypeInSize<float>(4);
-
-				matrix(1, 0) = mpStream->ReadMemOfTypeInSize<float>(4);
-				matrix(1, 1) = mpStream->ReadMemOfTypeInSize<float>(4);
-				matrix(1, 2) = mpStream->ReadMemOfTypeInSize<float>(4);
-
-				matrix(2, 0) = mpStream->ReadMemOfTypeInSize<float>(4);
-				matrix(2, 1) = mpStream->ReadMemOfTypeInSize<float>(4);
-				matrix(2, 2) = mpStream->ReadMemOfTypeInSize<float>(4);
-
-				pos.X() = mpStream->ReadMemOfTypeInSize<float>(4);
-				pos.Y() = mpStream->ReadMemOfTypeInSize<float>(4);
-				pos.Z() = mpStream->ReadMemOfTypeInSize<float>(4);
+				pMesh->nTMatrix = Matrix4f::IDENTITY;
+				for (nUInt16 ic = 0; ic < 4; ic++) 
+				{
+                    for (nUInt16 jc = 0; jc < 3; jc++) 
+					{
+                        pMesh->nTMatrix(ic, jc) = mpStream->ReadMemOfTypeInSize<float>(4);
+                    }
+                }
 			}
 			break;
 		default:
@@ -347,43 +359,24 @@ CMeshBoxPtr C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_nam
         _ch = ReadChunk();
 	}
 
-	nstring group("Mesh3dsSection");
-	CMeshBoxPtr mesh;
-	if(	mOwerThread )
-		mesh = CMeshManager::GetSingelton().CreateMeshAsync(obj_name,
-			group, vertexes, normals, mat_coords, indexes, mat_names, mat_indexes, matrix, pos);
-	else
-		mesh = CMeshManager::GetSingelton().CreateMesh(obj_name,
-			group, vertexes, normals, mat_coords, indexes, mat_names, mat_indexes, matrix, pos);
-
-	vertexes.FreeBuffer();
-	mat_coords.FreeBuffer();
-	indexes.FreeBuffer();
-	mat_names.clear();
-	mat_indexes.clear();
-
-	return mesh;
+	return pMesh;
 }
 
-void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
-	CMeshBox::TFacesInfo & mat_groups, stl<nstring>::vector & mat_names)
+void C3DSLoader::ReadFaceList(const C3DSChunk &chunk,  TMeshContainer *mesh)
 {
 	nova::nUInt16 count;
 	GotoChunk(chunk);
 
 	count = mpStream->ReadMemOfType<nova::nUInt16>();
-
-	indexes.AllocBuffer(count * sizeof(TFaceIndex));
-	TFaceIndex *tri = static_cast<TFaceIndex *>(indexes.GetBegin());
-	for(nInt32 i = 0; i < count; ++i)
+	for(nUInt16 i = 0; i < count; ++i)
 	{
-		tri->a = mpStream->ReadMemOfType<nova::nUInt16>();
-		tri->b = mpStream->ReadMemOfType<nova::nUInt16>();
-		tri->c = mpStream->ReadMemOfType<nova::nUInt16>();
+		TFaceIndex index;
+		index.a = mpStream->ReadMemOfType<nova::nUInt16>();
+		index.b = mpStream->ReadMemOfType<nova::nUInt16>();
+		index.c = mpStream->ReadMemOfType<nova::nUInt16>();
+		mpStream->ReadMemOfType<nova::nUInt16>();
 
-		//memcpy(indexes.GetWritePtr(), &tri, sizeof(TFaceIndex));
-		//indexes.SetWritePos(indexes.GetWritePos() + sizeof(TFaceIndex));
-		tri++;
+		mesh->nIndexList.push_back(index);
 	}
 
 	// now read the optional chunks
@@ -396,22 +389,18 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
         case T3DS_TRI_MAT_GROUP:
 			{
 				nInt32 mat_id = 0;
-				char str[30] = "\0";
-				mpStream->ReadASCIIZ(str, 30);
-
-				mat_names.push_back(nstring(str));
-				mat_id = mat_names.size() -1;
+				char str[128] = "\0";
+				mpStream->ReadASCIIZ(str, 128);
 
 				count = mpStream->ReadMemOfType<nova::nUInt16>();
 				for (nova::nUInt16 i = 0; i < count; i++)
 				{
-					TTriangleInfo info;
-					nova::nUInt16 index = mpStream->ReadMemOfType<nova::nUInt16>();
+					TMatGroupInfo info;
 
-					info.mat_id = mat_id;
-					info.tri_id = index;
+					info.nMatName = nstring(str);
+					info.nFace = mpStream->ReadMemOfType<nova::nUInt16>();
 
-					mat_groups.push_back(info);
+					mesh->nMatGroupsList.push_back(info);
 				}
 			}
             break;
@@ -430,7 +419,7 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk, CMemoryBuffer & indexes,
 	}
 }
 
-stl<CMeshBoxPtr>::vector C3DSLoader::LoadMeshList(void)
+void C3DSLoader::LoadMeshList(void)
 {
 	stl<CMeshBoxPtr>::vector result;
 
@@ -449,7 +438,7 @@ stl<CMeshBoxPtr>::vector C3DSLoader::LoadMeshList(void)
 
 	object_block.SetID(T3DS_EDIT3DS);
     if (!FindChunk(object_block, mainchunk))
-        return result;
+        return;
 
 	GotoChunk(object_block);
 
@@ -463,27 +452,17 @@ stl<CMeshBoxPtr>::vector C3DSLoader::LoadMeshList(void)
 
 		C3DSChunk _ch = ReadChunk();
 		if(_ch.GetID() == T3DS_OBJ_TRIMESH)
-			result.push_back(LoadSingleMesh(_ch, ob_name));
+			LoadSingleMesh(_ch, ob_name);
 
 		SkipChunk(scene_object);
 	}
-
-	return result;
 }
 
-CMaterialPtr C3DSLoader::ReadMaterial(const C3DSChunk &parent)
+CSceneContentLoaderBase::TMaterialContainer * C3DSLoader::ReadMaterial(const C3DSChunk &parent)
 {
-	nova::CColorRGB AmbientColor = CColorRGB::BLACK;
-	nova::CColorRGB DiffuseColor = CColorRGB::BLACK;
-	nova::CColorRGB SpecularColor = CColorRGB::BLACK;
-	nReal Shininess;
-	nReal Transparency;
-	nstring TexMap;
-	nstring MultiTexMap;
-	nstring SpecMap;
-	nstring BumpMap;
-	nstring ReflectionMap;
-	nstring mat_name;
+	TMaterialContainer tMat;
+	memset(&tMat, 0, sizeof(TMaterialContainer));
+	TMaterialContainer *pMat = NULL;
 	C3DSChunk chunk;
 	C3DSChunk child;
 
@@ -499,216 +478,244 @@ CMaterialPtr C3DSLoader::ReadMaterial(const C3DSChunk &parent)
 				char str[255] = "\0";
 				mpStream->ReadASCIIZ(str, 255);
 
-				mat_name.append(str);
+				mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nstring(str), tMat));
+				pMat = &(mMaterialsMap[nstring(str)]);
 			}
             break;
         case T3DS_MAT_AMBIENT:
             child = ReadChunk();
-            AmbientColor = ReadColor(child);
+			if(pMat)
+				pMat->nAmbientColor = ReadColor(child);
             break;
         case T3DS_MAT_DIFFUSE:
             child = ReadChunk();
-            DiffuseColor = ReadColor(child);
+			if(pMat)
+				pMat->nDiffuseColor = ReadColor(child);
             break;
         case T3DS_MAT_SPECULAR:
             child = ReadChunk();
-            SpecularColor = ReadColor(child);
+			if(pMat)
+				pMat->nSpecularColor = ReadColor(child);
             break;
         case T3DS_MAT_SHININESS:
             child = ReadChunk();
-            Shininess = ReadPercentage(child);
+			if(pMat)
+				pMat->nShininess = ReadPercentage(child);
             break;
         case T3DS_MAT_TRANSPARENCY:
             child = ReadChunk();
-            Transparency = ReadPercentage(child);
+			if(pMat)
+				pMat->nTransparency = ReadPercentage(child);
             break;
-/*        case T3DS_MAT_SHADING:
-            sh = ReadShort();
-            switch (sh)
-            {
-            case 0:
-                mat.SetShadingType(sWireframe);
-                break;
-            case 1:
-                mat.SetShadingType(sFlat);
-                break;
-            case 2:
-                mat.SetShadingType(sGouraud);
-                break;
-            case 3:
-                mat.SetShadingType(sPhong);
-                break;
-            case 4:
-                mat.SetShadingType(sMetal);
-                break;
-            }
-            break;
-        case T3DS_MAT_WIRE:
-            mat.SetShadingType(sWireframe);
-            break;
-
-*/
+        case T3DS_MAT_SHADING:
+			if(pMat)
+				pMat->nShading = (nReal)mpStream->ReadMemOfType<nova::nUInt16>();
+			break;
+		case T3DS_MAT_XPFALL:
+			{
+            child = ReadChunk();
+			if(pMat)
+				pMat->nFalloff = ReadPercentage(child);
+			}
+			break;
+		case T3DS_MAT_REFBLUR:
+			{
+            child = ReadChunk();
+			if(pMat)
+				pMat->nBlur = ReadPercentage(child);
+			}
+			break;
         case T3DS_MAT_TEXMAP:
 			{
-				CTexturePtr texture = ReadMap(chunk);
-				if(!texture.IsNull())
-					TexMap = texture->GetResName();
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nDiffuseMap1 = texture->nName;
 			}
             break;
         case T3DS_MAT_TEX2MAP:
 			{
-				CTexturePtr texture = ReadMap(chunk);
-				if(!texture.IsNull())
-					MultiTexMap = texture->GetResName();
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nDiffuseMap2 = texture->nName;
 			}
             break;
-/*        case T3DS_MAT_OPACMAP:
-			CTexturePtr texture = ReadMap(chunk);
-			if(!texture.IsNull())
-				TexMap = texture->GetResName();
-            break;
-*/
         case T3DS_MAT_BUMPMAP:
 			{
-				CTexturePtr texture = ReadMap(chunk);
-				if(!texture.IsNull())
-					BumpMap = texture->GetResName();
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nBumpMap = texture->nName;
 			}
             break;
         case T3DS_MAT_SPECMAP:
 			{
-				CTexturePtr texture = ReadMap(chunk);
-				if(!texture.IsNull())
-					SpecMap = texture->GetResName();
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nSpecMap = texture->nName;
 			}
             break;
-/*        case T3DS_MAT_REFLMAP:
-            child = ReadChunk();
-            mat.GetReflectionMap().strength = ReadPercentage(child);
-            SkipChunk(child);
-            child = ReadChunk();
-            if (child.id != MAT_MAPNAME)
-            {
-                ErrorMsg("L3DS::ReadMaterial - error, expected chunk not found");
-                return;
-            }
-            ReadASCIIZ(str, 30);
-            if (strcmp(str, "") == 0)
-                strcpy(mat.GetReflectionMap().mapName, "auto");
-            break;
-*/
+		case T3DS_MAT_TEXMASK:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nDiffuseMap1Mask = texture->nName;
+			}
+			break;
+		case T3DS_MAT_TEX2MASK:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nDiffuseMap2Mask = texture->nName;
+			}
+			break;
+		case T3DS_MAT_OPACMAP:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nOpacMap = texture->nName;
+			}
+			break;
+		case T3DS_MAT_OPACMASK:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nOpacMapMask = texture->nName;
+			}
+			break;
+		case T3DS_MAT_BUMPMASK:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nBumpMapMask = texture->nName;
+			}
+		case T3DS_MAT_SPECMASK:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nSpecMapMask = texture->nName;
+			}
+			break;
+		case T3DS_MAT_SHINMAP:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nShinMap = texture->nName;
+			}
+			break;
+		case T3DS_MAT_SHINMASK:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nShinMapMask = texture->nName;
+			}
+			break;
+		case T3DS_MAT_SELFIMAP:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nSelfIlMap = texture->nName;
+			}
+			break;
+		case T3DS_MAT_SELFIMASK:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nSelfIlMapMask = texture->nName;
+			}
+			break;
+		case T3DS_MAT_REFLMAP:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nReflectionMap = texture->nName;
+			}
+			break;
+		case T3DS_MAT_REFLMASK:
+			{
+				TTextureContainer * texture = ReadMap(chunk);
+				if(texture && pMat)
+					pMat->nReflectionMapMask = texture->nName;
+			}
+			break;
+		case T3DS_MAT_ACUBIC:
+			{
+				if(pMat)
+				{
+					pMat->nAutoreflMapAntiAlias = mpStream->ReadMemOfType<nByte>();
+					pMat->nAutoreflMapFlags = mpStream->ReadMemOfType<nUInt16>();
+					pMat->nAutoreflMapSize = mpStream->ReadMemOfType<nInt32>();
+					pMat->nAutoreflMapFrameStep = mpStream->ReadMemOfType<nInt32>();
+				}
+			}
+			break;
         }
 
         SkipChunk(chunk);
         chunk = ReadChunk();
     }
 
-	nstring group("Material3dsSection");
-	CMaterialPtr material;
-	if(	mOwerThread )
-		material = CMaterialManager::GetSingelton().CreateMaterialAsync(mat_name,
-			group, AmbientColor, DiffuseColor, SpecularColor, Shininess, Transparency,
-			TexMap, MultiTexMap, SpecMap, BumpMap, ReflectionMap);
-	else
-		material = CMaterialManager::GetSingelton().CreateMaterial(mat_name,
-			group, AmbientColor, DiffuseColor, SpecularColor, Shininess, Transparency,
-			TexMap, MultiTexMap, SpecMap, BumpMap, ReflectionMap);
 
-	return material;
+
+	return pMat;
 }
 
-CTexturePtr C3DSLoader::ReadMap(const C3DSChunk &chunk)
+CSceneContentLoaderBase::TTextureContainer * C3DSLoader::ReadMap(const C3DSChunk &chunk)
 {
+	TTextureContainer tMap;
+	memset(&tMap, 0, sizeof(TTextureContainer));
+	TTextureContainer *pMap = NULL;
 	C3DSChunk child;
-	nstring tex_name("Texture_");
-	nstring image_name;
-
 	GotoChunk(chunk);
     child = ReadChunk();
-
-	nova::nReal uScale;
-	nova::nReal vScale;
-	nova::nReal uOffset;
-	nova::nReal vOffset;
-	nova::nReal Angle;
 
 	while (child.GetEnd() <= chunk.GetEnd())
     {
 		switch (child.GetID())
         {
-/*        case T3DS_INT_PERCENTAGE:
-            map.strength = ReadPercentage(child);
-            break;
-*/
         case T3DS_MAT_MAPNAME:
 			{
 				char str[255] = "\0";
 				mpStream->ReadASCIIZ(str, 255);
 
-				image_name.append(str);
+				stl<nstring, TTextureContainer>::map::iterator it = mTexturesMap.find(nstring(str));
+				if(it != mTexturesMap.end())
+					pMap = &(it->second);
+				else
+				{
+					mTexturesMap.insert(std::pair<nstring, TTextureContainer>(nstring(str), tMap));
+					pMap = &(mTexturesMap[nstring(str)]);
+				}
 			}
             break;
         case T3DS_MAT_MAP_USCALE:
-            uScale = mpStream->ReadMemOfTypeInSize<float>(4);
+			if(pMap)
+				pMap->nUScale = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         case T3DS_MAT_MAP_VSCALE:
-            vScale = mpStream->ReadMemOfTypeInSize<float>(4);
+			if(pMap)
+				pMap->nVScale = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         case T3DS_MAT_MAP_UOFFSET:
-            uOffset = mpStream->ReadMemOfTypeInSize<float>(4);
+			if(pMap)
+				pMap->nUOffset = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         case T3DS_MAT_MAP_VOFFSET:
-            vOffset = mpStream->ReadMemOfTypeInSize<float>(4);
+			if(pMap)
+				pMap->nVOffset = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         case T3DS_MAT_MAP_ANG:
-            Angle = mpStream->ReadMemOfTypeInSize<float>(4);
+			if(pMap)
+				pMap->nRotation = mpStream->ReadMemOfTypeInSize<float>(4);
             break;
         }
         SkipChunk(child);
         child = ReadChunk();
     }
 
-	nstring im_group("Image3dsSection");
-	nstring path = CImageManager::GetSingelton().GetResourceLocation();
-	CImagePtr image;
-	nstring image_file = path + image_name;
-	if(	mOwerThread )
-		image = CImageManager::GetSingelton().CreateNewImageAsync(image_name, im_group,
-			image_file, CImageFormats::NF_DEFAULT);
-	else
-		image = CImageManager::GetSingelton().CreateNewImage(image_name, im_group,
-			image_file, CImageFormats::NF_DEFAULT);
 
-	nstring tex_group("Texture3dsSection");
-	tex_name.append(image_name);
-
-	bool mip = true;
-	CTextureSurfaceList::MipMapTagertType miptype = CTextureManager::GetSingelton().GetDefaultAutoMipmap();
-	if(miptype == CTextureSurfaceList::DO_NOT_USE_MIPMAPS)
-		mip = false;
-
-	CTexturePtr texture;
-	if(	mOwerThread )
-		texture = CTextureManager::GetSingelton().CreateNewTextureAsync(tex_name, tex_name,
-			image, CHardwarePixelBuffer::USE_TEXTURE_2D, CTextureManager::GetSingelton().GetDefaultAutoMipmap(),
-			CTexture::CLAMP_TO_EDGE, CTexture::CLAMP_TO_EDGE, CTexture::EV_MODULATE);
-	else
-		texture = CTextureManager::GetSingelton().CreateNewTexture(tex_name, tex_name,
-			image, CHardwarePixelBuffer::USE_TEXTURE_2D, CTextureManager::GetSingelton().GetDefaultAutoMipmap(),
-			CTexture::CLAMP_TO_EDGE, CTexture::CLAMP_TO_EDGE, CTexture::EV_MODULATE);
-
-	CImageManager::GetSingelton().UnloadResourceFromHash(image_name);
-
-	texture->SetAngle(Angle);
-	texture->SetSOffset(uOffset);
-	texture->SetTOffset(vOffset);
-	texture->SetSTiling(uScale);
-	texture->SetTTiling(vScale);
-
-	return texture;
+	return pMap;
 }
 
-stl<CMaterialPtr>::vector C3DSLoader::LoadMaterialList()
+void C3DSLoader::LoadMaterialList()
 {
 	stl<CMaterialPtr>::vector result;
 
@@ -728,20 +735,35 @@ stl<CMaterialPtr>::vector C3DSLoader::LoadMaterialList()
 
 	object_block.SetID(T3DS_EDIT3DS);
     if (!FindChunk(object_block, mainchunk))
-        return result;
+        return;
 
 	GotoChunk(object_block);
 	mat.SetID(T3DS_MAT_ENTRY);
     while (FindChunk(mat, object_block))
     {
-        CMaterialPtr material = ReadMaterial(mat);
+        ReadMaterial(mat);
         SkipChunk(mat);
-
-		if(!material.IsNull())
-			result.push_back(material);
     }
+}
 
-	return result;
+void C3DSLoader::LoadImpl(void)
+{
+	LoadMeshList();
+	LoadMaterialList();
+}
+
+void C3DSLoader::InitLoader(void)
+{
+	if(!mpStream)
+		throw NOVA_EXP("void CASELoader::LoadAseInternal(void): mpStream is bad ptr..", MEM_ERROR);
+
+	if(!mpStream->IsOpened())
+		throw NOVA_EXP("void CASELoader::LoadAseInternal(void): mpStream is not opened..", MEM_ERROR);
+}
+
+void C3DSLoader::CloseLoader(void)
+{
+
 }
 
 
