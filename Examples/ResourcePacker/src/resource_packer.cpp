@@ -103,14 +103,20 @@ public:
 		else
 			StartPack(package, files);
 	}
+
+	void PrintHelp(void)
+	{
+		cout << "Usage: [-pack | -unpack] PackageName.pack | SourceFile1, SourceFile2..." << endl;
+	}
 };
 
 
 ENTRY_POINT	
 {
+	ResourcePackerTool packer;
+
 	try
 	{
-		ResourcePackerTool packer;
 /////// Parsing unput args //////////////
 		CParser rParser;
 		stl<nstring>::vector args;
@@ -140,7 +146,7 @@ ENTRY_POINT
 				packer.Launch(args[1], files, false);
 			}
 			else
-				throw NOVA_EXP("ResourcePacker: bad arguments", BAD_OPERATION);
+				packer.PrintHelp();
 		}
 		else if(args[0] == nstring("-unpack"))
 		{
@@ -150,10 +156,10 @@ ENTRY_POINT
 				packer.Launch(args[1], files, true);
 			}
 			else
-				throw NOVA_EXP("ResourcePacker: bad arguments", BAD_OPERATION);
+				packer.PrintHelp();
 		}
 		else
-			throw NOVA_EXP("ResourcePacker: bad arguments", BAD_OPERATION);
+			packer.PrintHelp();
 /////////////////////////////////////////
 
 	}
