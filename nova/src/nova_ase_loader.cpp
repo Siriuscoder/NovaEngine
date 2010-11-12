@@ -125,7 +125,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 	nlbrack = 0;
 	nrbrack = 0;
 
-	TMeshContainer *LastGeomObject = NULL;
+	CMeshBox::TMeshContainer *LastGeomObject = NULL;
 	TMaterialContainer *LastMaterial = NULL;
 	TMaterialContainer *LastSubMaterial = NULL;
 	TTextureContainer *LastTexture = NULL;
@@ -237,11 +237,11 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		next = next + width;
 // Добавляем новый каркас в кеш объектов, сохраняем на него ссылку
 					nstring nObjName(word2);
-					TMeshContainer mesh;
-					memset(&mesh, 0, sizeof(TMeshContainer));
+					CMeshBox::TMeshContainer mesh;
+					memset(&mesh, 0, sizeof(CMeshBox::TMeshContainer));
 
 					mesh.nName = nObjName;
-					mMeshesMap.insert(std::pair<nstring, TMeshContainer>(nObjName, mesh));
+					mMeshesMap.insert(std::pair<nstring, CMeshBox::TMeshContainer>(nObjName, mesh));
 					LastGeomObject = &(mMeshesMap[nObjName]);
 					break;
 				}
@@ -439,7 +439,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    	else if ( strcmp ( word, "*MESH_FACE" ) == 0 )
 		    	{
 					TFaceIndex index;
-					TMatGroupInfo mat_alias;
+					TTriangleInfo mat_alias;
 
 					count = sscanf ( next, "%d%n", &mat_alias.nFace, &width );
 		    		next = next + width;
@@ -484,7 +484,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					if(LastGeomObject)
 					{
 						LastGeomObject->nIndexList.push_back(index);
-						LastGeomObject->nMatGroupsList.push_back(mat_alias);
+						LastGeomObject->nMeshInfoList.push_back(mat_alias);
 					}
 					
 
@@ -1611,22 +1611,22 @@ CSceneContentLoaderBase::TMaterialContainer CASELoader::FindMatByID(nInt32 id)
 
 void CASELoader::CloseLoader(void)
 {
-	stl<nstring, TMeshContainer>::map::iterator it;
+	stl<nstring, CMeshBox::TMeshContainer>::map::iterator it;
 	for(it = mMeshesMap.begin(); it != mMeshesMap.end(); it++)
 	{
-		TMeshContainer *mesh_def = &((*it).second);
+		CMeshBox::TMeshContainer *mesh_def = &((*it).second);
 		TMaterialContainer matref = FindMatByID(mesh_def->MatID);
 // Preparing sub mat indexes
-		for(nUInt32 i = 0; i < mesh_def->nMatGroupsList.size(); i++)
+		for(nUInt32 i = 0; i < mesh_def->nMeshInfoList.size(); i++)
 		{
-			if(mesh_def->nMatGroupsList[i].nMatSubID >= matref.nSubMats.size())
+			if(mesh_def->nMeshInfoList[i].nMatSubID >= matref.nSubMats.size())
 			{
-				mesh_def->nMatGroupsList[i].nMatSubID = 0;
-				mesh_def->nMatGroupsList[i].nMatName = matref.nName;
+				mesh_def->nMeshInfoList[i].nMatSubID = 0;
+				mesh_def->nMeshInfoList[i].nMatName = matref.nName;
 			}
 			else
 			{
-				mesh_def->nMatGroupsList[i].nMatName = matref.nSubMats[mesh_def->nMatGroupsList[i].nMatSubID];
+				mesh_def->nMeshInfoList[i].nMatName = matref.nSubMats[mesh_def->nMeshInfoList[i].nMatSubID];
 			}
 		}
 // Calculating real uv from texture faces

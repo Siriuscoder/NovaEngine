@@ -33,31 +33,6 @@ class NOVA_EXPORT CSceneContentLoaderBase : public CObjectConstructor
 {
 public:
 
-	typedef struct _MatGroupInfo
-	{
-		nstring nMatName;
-		nUInt32 nFace;
-		nUInt32 nMatSubID;
-	} TMatGroupInfo;
-
-	typedef nova::stl<TMatGroupInfo>::vector TMatGroups;
-
-	typedef struct _MeshContainer
-	{
-		nstring nName;
-		nova::CColorRGB mMeshColor;
-		CMeshBox::TVertexes nVertexList;
-		CMeshBox::TTexCoords nMappingFacesList;
-		CMeshBox::TNormals nNormalList;
-		CMeshBox::TIndexes nIndexList;
-		TMatGroups nMatGroupsList;
-		Matrix4f nTMatrix;
-		nInt32 MatID;
-// Reserved buffers
-		CMeshBox::TIndexes nTVIndexList;
-		CMeshBox::TTexCoords nTVMappingList;
-	} TMeshContainer;
-
 	typedef struct _MaterialContainer
 	{
 		nstring nName;
@@ -147,7 +122,7 @@ public:
 
 	stl<nstring>::vector GetTextureList(void);
 
-	TMeshContainer GetMesh(nstring name);
+	CMeshBox::TMeshContainer GetMesh(nstring name);
 
 	TMaterialContainer GetMaterial(nstring name);
 
@@ -155,7 +130,7 @@ public:
 
 protected:
 
-	nova::stl<nstring, TMeshContainer>::map mMeshesMap;
+	nova::stl<nstring, CMeshBox::TMeshContainer>::map mMeshesMap;
 	nova::stl<nstring, TMaterialContainer>::map mMaterialsMap;
 	nova::stl<nstring, TTextureContainer>::map mTexturesMap;
 	nova::CDataStream *mpStream;

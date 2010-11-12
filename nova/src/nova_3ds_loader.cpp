@@ -284,14 +284,14 @@ float C3DSLoader::ReadPercentage(const C3DSChunk &chunk)
     return 0;
 }
 
-CSceneContentLoaderBase::TMeshContainer * C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_name)
+CMeshBox::TMeshContainer * C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_name)
 {
 	nUInt16 count = 0;
-	TMeshContainer tMesh;
-	TMeshContainer *pMesh = NULL;
-	memset(&tMesh, 0, sizeof(TMeshContainer));
+	CMeshBox::TMeshContainer tMesh;
+	CMeshBox::TMeshContainer *pMesh = NULL;
+	memset(&tMesh, 0, sizeof(CMeshBox::TMeshContainer));
 
-	mMeshesMap.insert(std::pair<nstring, TMeshContainer>(obj_name, tMesh));
+	mMeshesMap.insert(std::pair<nstring, CMeshBox::TMeshContainer>(obj_name, tMesh));
 	pMesh = &(mMeshesMap[obj_name]);
 	if(!pMesh)
 		return NULL;
@@ -362,9 +362,10 @@ CSceneContentLoaderBase::TMeshContainer * C3DSLoader::LoadSingleMesh(const C3DSC
 	return pMesh;
 }
 
-void C3DSLoader::ReadFaceList(const C3DSChunk &chunk,  TMeshContainer *mesh)
+void C3DSLoader::ReadFaceList(const C3DSChunk &chunk,  CMeshBox::TMeshContainer *mesh)
 {
 	nova::nUInt16 count;
+	nova::nUInt16 mat_id = 0;
 	GotoChunk(chunk);
 
 	count = mpStream->ReadMemOfType<nova::nUInt16>();
@@ -391,16 +392,18 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk,  TMeshContainer *mesh)
 				nInt32 mat_id = 0;
 				char str[128] = "\0";
 				mpStream->ReadASCIIZ(str, 128);
+				mat_id++;
 
 				count = mpStream->ReadMemOfType<nova::nUInt16>();
 				for (nova::nUInt16 i = 0; i < count; i++)
 				{
-					TMatGroupInfo info;
+					TTriangleInfo info;
 
 					info.nMatName = nstring(str);
 					info.nFace = mpStream->ReadMemOfType<nova::nUInt16>();
+					info.nMatSubID = mat_id;
 
-					mesh->nMatGroupsList.push_back(info);
+					mesh->nMeshInfoList.push_back(info);
 				}
 			}
             break;

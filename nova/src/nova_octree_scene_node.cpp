@@ -38,13 +38,10 @@ COctreeSceneNode::~COctreeSceneNode()
 
 bool COctreeSceneNode::TestingMeshBox(void)
 {
-	if(mMeshBox->GetVertexesLen() == 0)
+	if(mMeshBox->GetMeshDefinition().nVertexList.size() == 0)
 		return false;
 
-	if(mMeshBox->GetTrianglesLen() == 0)
-		return false;
-
-	if(mMeshBox->GetMaterials().size() == 0)
+	if(mMeshBox->GetMeshDefinition().nIndexList.size() == 0)
 		return false;
 
 	return true;
@@ -58,7 +55,7 @@ void COctreeSceneNode::PrepareNodeImpl(void)
 	// Preparing mesh
 	// Generating normals to faces and sub mats info
 	mMeshBox->GenerateNormalsToFaces();
-	if(mMeshBox->GetNormalsLen() == 0)
+	if(mMeshBox->GetMeshDefinition().nNormalList.size() == 0)
 		//Generating normals to vertexes
 		mMeshBox->CalculateNormals();
 

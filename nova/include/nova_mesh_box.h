@@ -25,7 +25,9 @@
 #include "nova_bounding_box.h"
 #include "nova_streams.h"
 #include "nova_singelton.h"
+#include "nova_matrix4d.h"
 #include "nova_matrix3d.h"
+#include "nova_color.h"
 
 namespace nova
 {
@@ -110,9 +112,10 @@ union TFaceIndex
 
 struct TTriangleInfo
 {
-	nInt32 mat_id;
-	nInt32 tri_id;
-	TNormal3d normal;
+	nstring nMatName;
+	nUInt32 nMatSubID;
+	nUInt32 nFace;
+	TNormal3d nFaceNormal;
 };
 
 #pragma pack(pop)
@@ -141,8 +144,21 @@ public:
 	typedef nova::stl<TTriangleInfo>::vector TFacesInfo;
 	typedef nova::stl<nInt32>::vector TSubMats;
 
-	nova::Matrix3f mRotationMatrix;
-	nova::Vector3f mRealPosition;
+	typedef struct _MeshContainer
+	{
+		nstring nName;
+		nova::CColorRGB mMeshColor;
+		TVertexes nVertexList;
+		TTexCoords nMappingFacesList;
+		TNormals nNormalList;
+		TIndexes nIndexList;
+		TFacesInfo nMeshInfoList;
+		Matrix4f nTMatrix;
+		nInt32 MatID;
+// Reserved buffers
+		TIndexes nTVIndexList;
+		TTexCoords nTVMappingList;
+	} TMeshContainer;
 
 	static void QSortFaces(TIndexes &index, TFacesInfo &faces);
 
@@ -152,43 +168,19 @@ private:
 
 protected:
 
-	stl<nstring>::vector mMatNames;
-
-	TVertexes mVertexes;
-	TNormals mNormals;
-	TTexCoords mTexCoords;
-	TIndexes mIndexes;
-	TFacesInfo mInfo;
-	TSubMats mSubMats;
+	TMeshContainer mMeshDef;
 
 public:
 
 	CMeshBox(CResourceManager * rm, nstring & name, nstring & group, TAttach state);
 	~CMeshBox();
 
+	TMeshContainer &GetMeshDefinition(void);
+
 	void CalculateNormals(void/* Simple method calc normals or not? 
 							  i want to use smoothing groups in future*/);
 
-	// loading data arrays
-	void FillMeshBuffer(CMemoryBuffer & vertexes); 
-
-	void FillNornalBuffer(CMemoryBuffer & normals); 
-
-	void FillTexCoordBuffer(CMemoryBuffer & coords); 
-
-	void FillIndexBuffer(CMemoryBuffer & indexes); 
-
 	bool CheckValidLength();
-
-	nova::nUInt32 GetVertexesLen(void);
-
-	nova::nUInt32 GetTrianglesLen(void);
-
-	nova::nUInt32 GetNormalsLen(void);
-
-	size_t GetVertexesLenInBytes(void);
-
-	size_t GetTrianglesLenInBytes(void);
 
 	CBoundingBox GenerateBoundingBox(void);
 
@@ -208,33 +200,16 @@ public:
 
 	virtual void PrepareResource(void);
 //-----------------------------------
-	nInt32 GetMaterialID(nova::nUInt32 face);
 
-	void SetMaterialID(nova::nUInt32 face, nInt32 id);
+	void * GetVertexPointer(size_t *count);
 
-	nInt32 GetMaterialIDByName(nstring & name);
+	void * GetNormalsPointer(size_t *count);
 
-	nstring GetMeterialNameByID(nova::nUInt32 id);
+	void * GetUVPointer(size_t *count);
 
-	stl<nstring>::vector GetMaterials();
-
-	nInt32 AddNewSubMaterial(nstring & resource_name);
-
-	void * GetMesh(void);
-
-	void * GetNormals(void);
-
-	void * GetTexCoord(void);
-
-	void * GetIndexes(void);
-
-	TTriangleInfo GetFaceInfo(nova::nUInt32 face);
+	void * GetIndexesPointer(size_t *count);
 
 	void ToWorldCoord(void);
-
-	void SetRotationMatrix(const nova::Matrix3f & mat);
-
-	void SetPosition(const nova::Vector3f & vec);
 };
 
 typedef CSmartPtr<CMeshBox> CMeshBoxPtr;
@@ -260,13 +235,6 @@ public:
 		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
 		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
 		CResource::TAttach state = CResource::NV_ATTACHED); 
-
-	CMeshBoxPtr CreateMeshAsync(nstring & name, nstring & group, 
-		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
-		CMemoryBuffer & coords, CMemoryBuffer & indexes,
-		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
-		CResource::TAttach state = CResource::NV_ATTACHED);
 };
 
 }
