@@ -123,6 +123,11 @@ CMeshBox::TMeshContainer &CMeshBox::GetMeshDefinition(void)
 	return mMeshDef;
 }
 
+void CMeshBox::SetMeshDefinition(TMeshContainer *_mesh)
+{
+	if(_mesh)
+		mMeshDef = *_mesh;
+}
 
 void CMeshBox::SortFaceIndexByMaterials(void)
 {
@@ -351,26 +356,33 @@ CResourcePtr CMeshManager::CreateInstance(nstring & name,
 	return ptr;
 }
 
-CMeshBoxPtr CMeshManager::CreateMesh(nstring & name, nstring & group,
-		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
-		CMemoryBuffer & coords, CMemoryBuffer & indexes,
-		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
+CMeshBoxPtr CMeshManager::CreateMesh(CMeshBox::TMeshContainer *def, const nstring &group,
 		CResource::TAttach state)
 {
-	CMeshBoxPtr mesh = CResourceManager::AddNewResource(name, group, state);
+	CMeshBoxPtr mesh = CResourceManager::AddNewResource(def->nName, group, state);
 	if(mesh.IsNull())
 		throw NOVA_EXP("CMeshManager::CreateMesh - resource factory return \
 							Null pointer...", MEM_ERROR);
 
-
-
+	mesh->SetMeshDefinition(def);
 	mesh->PrepareResource();
-	CResourceManager::BuildNextResource(mesh->GetResName());
 
 	nova::nstringstream str;
-	str << "Mesh Factory: mesh object name: " << name << " group: " << group << " created...";
+	str << "Mesh Factory: mesh object name: " << def->nName << " group: " << group << " created...";
 	LOG_MESSAGE(str.str());
+
+	return mesh;
+}
+
+
+CMeshBoxPtr CMeshManager::CreateMeshFromFile(const nstring &file, const nstring &group,
+		CResource::TAttach state)
+{
+	CMeshBoxPtr mesh = CResourceManager::AddNewResource("test", group, state);
+	if(mesh.IsNull())
+		throw NOVA_EXP("CMeshManager::CreateMesh - resource factory return \
+							Null pointer...", MEM_ERROR);
+	
 
 	return mesh;
 }

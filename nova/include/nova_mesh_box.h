@@ -177,6 +177,8 @@ public:
 
 	TMeshContainer &GetMeshDefinition(void);
 
+	void SetMeshDefinition(TMeshContainer *_mesh);
+
 	void CalculateNormals(void/* Simple method calc normals or not? 
 							  i want to use smoothing groups in future*/);
 
@@ -229,11 +231,10 @@ public:
 	virtual CResourcePtr CreateInstance(nstring & name, 
 		nstring & group, CResource::TAttach state);
 
-	CMeshBoxPtr CreateMesh(nstring & name, nstring & group, 
-		CMemoryBuffer & vertexes, CMemoryBuffer & normals,
-		CMemoryBuffer & coords, CMemoryBuffer & indexes,
-		stl<nstring>::vector & sub_mats, CMeshBox::TFacesInfo & mat_indexes,
-		nova::Matrix3f & trans_mat, nova::Vector3f & trans_vec,
+	CMeshBoxPtr CreateMesh(CMeshBox::TMeshContainer *def, const nstring &group,
+		CResource::TAttach state = CResource::NV_ATTACHED); 
+ 
+	CMeshBoxPtr CreateMeshFromFile(const nstring &file, const nstring &group,
 		CResource::TAttach state = CResource::NV_ATTACHED); 
 };
 
