@@ -27,7 +27,7 @@
 namespace nova
 {
 
-stl<StringList, CImageCodec*>::map CImageCodec::gCodecs;
+stl<nstring, CImageCodec*>::map CImageCodec::gCodecs;
 
 CImageCodec::CImageCodec() : CBase("CImageCodec") 
 {
@@ -37,68 +37,45 @@ CImageCodec::CImageCodec() : CBase("CImageCodec")
 
 CImageCodec::~CImageCodec()
 {
-	UnregisterCodec(this);
+
 }
 
-void CImageCodec::RegisterCodec(CImageCodec* codec)
+void CImageCodec::RegisterCodec(CImageCodec* codec, const nstring &name)
 {
 	if(codec)
 	{
-		std::pair<StringList, CImageCodec*> codecpair;
-		codecpair.first = codec->mExtentions;
+		std::pair<nstring, CImageCodec*> codecpair;
+		codecpair.first = name;
 		codecpair.second = codec;
 
-		gCodecs.insert(codecpair);
+		stl<nstring, CImageCodec*>::map::iterator it;
+		if((it = gCodecs.find(name)) != gCodecs.end())
+			gCodecs.insert(codecpair);
+		else
+			throw NOVA_EXP(nstring("CImageCodec::RegisterCodec - codec ") + name + " already registered..", BAD_OPERATION);
+
+		codec->Initialize();
+		LOG_MESSAGE(nstring("Codec ") + name + " successfully registered.");
 	}
 }
 
-void CImageCodec::UnregisterCodec(CImageCodec* codec)
+void CImageCodec::UnRegisterCodec(const nstring &name)
 {
-	if(codec)
+	stl<nstring, CImageCodec*>::map::iterator it;
+	if((it = gCodecs.find(name)) != gCodecs.end())
 	{
-		stl<StringList, CImageCodec*>::map::iterator it;
-
-		if((it = gCodecs.find(codec->mExtentions)) != gCodecs.end())
-		{
-			gCodecs.erase(it);
-		}
+		it->second->Shutdown();
+		gCodecs.erase(it);
+		LOG_MESSAGE(nstring("Codec ") + name + " successfully unregistered.");
 	}
 }
 
-CImageCodec * CImageCodec::GetCodecForExtention(const nstring & filename)
+CImageCodec * CImageCodec::GetCodec(const nstring & name)
 {
-	stl<StringList, CImageCodec*>::map::iterator it;
-	it = gCodecs.begin();
-
-	for(; it != gCodecs.end(); ++it)
+	stl<nstring, CImageCodec*>::map::iterator it;
+	if((it = gCodecs.find(name)) != gCodecs.end())
 	{
-		for(nova::nUInt32 i = 0; i < (*it).first.size(); ++i)
-		{
-			const char *file = CStringUtils::ToLowerCase(filename).c_str();
-			const char *ex = CStringUtils::ToLowerCase((*it).first[i]).c_str();
-
-			if(strstr(file, ex))
-			{
-				return (*it).second;
-			}
-		}
-	}
-
-	return NULL;
-}
-
-CImageCodec * CImageCodec::GetCodecForCompressor(ESaveFormats ext)
-{	
-	stl<StringList, CImageCodec*>::map::iterator it;
-	it = gCodecs.begin();
-
-	for(; it != gCodecs.end(); ++it)
-	{
-		for(nova::nUInt32 i = 0; i < (*it).second->mCompressorList.size(); ++i)
-		{
-			if((*it).second->mCompressorList[i] == ext)
-				return (*it).second;
-		}
+		return it->second;
 	}
 
 	return NULL;

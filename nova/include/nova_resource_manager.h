@@ -198,6 +198,11 @@ public:
 
 	virtual void UnloadAllManagerResources() = 0;
 
+	/* for force loading form packages */
+	virtual void LoadResourceFromXml(const nstring &filename, const CFilesPackage &package) = 0;
+
+	virtual void LoadResourceFromXml(const nstring &filename) = 0;
+
 	void BuildNextResource(const nstring & name);
 
 	nInt32 LoadResourcesForce(const CFilesPackage &rPack);

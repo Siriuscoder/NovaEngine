@@ -140,8 +140,12 @@ void CDevILCodec::Initialize()
 		throw NOVA_EXP(str.c_str(), BAD_OPERATION);
 	}
 
-	RegisterCodec(this);
 	mInit = true;
+}
+
+void CDevILCodec::Shutdown()
+{
+
 }
 
 CDevILCodec::CDevILCodec()

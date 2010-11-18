@@ -58,17 +58,10 @@ private:
 
 protected:
 
-	void SetParam(const nstring & file,
-		CImageFormats::NovaPixelFormats format);
-
-	void SetParam(const CMemoryBuffer & bits,
+	void SetBits(const CMemoryBuffer & bits,
 		nova::nUInt32 width,
 		nova::nUInt32 height,
 		nova::nUInt32 depth,
-		CImageFormats::NovaPixelFormats format);
-
-	void SetParam(const CMemoryBuffer & buffer,
-		ESaveFormats compressor,
 		CImageFormats::NovaPixelFormats format);
 
 public:
@@ -184,26 +177,7 @@ public:
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
 	virtual CImagePtr CreateNewImage(const nstring & name, const nstring & group,
-		const CMemoryBuffer & bits,
-		ESaveFormats compressor,
-		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
-		CResource::TAttach state = CResource::NV_ATTACHED);
-
-	virtual CImagePtr CreateNewImageAsync(const nstring & name, const nstring & group,
-		const nstring & file,
-		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
-		CResource::TAttach state = CResource::NV_ATTACHED);
-
-	virtual CImagePtr CreateNewImageAsync(const nstring & name, const nstring & group,
-		const CMemoryBuffer & bits,
-		nova::nUInt32 width,
-		nova::nUInt32 height,
-		nova::nUInt32 depth,
-		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
-		CResource::TAttach state = CResource::NV_ATTACHED);
-
-	virtual CImagePtr CreateNewImageAsync(const nstring & name, const nstring & group,
-		const CMemoryBuffer & bits,
+		const CMemoryBuffer & buffer,
 		ESaveFormats compressor,
 		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
 		CResource::TAttach state = CResource::NV_ATTACHED);

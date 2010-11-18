@@ -114,9 +114,21 @@ public:
 /// \param line номер строки в исходном файле
 	NovaExp(nCChar file[], nInt32 line, nCChar * mes, nInt32 _code);
 
+/// \brief Конструктор
+///
+/// \param mes Сообщение об ошибке
+/// \param _code Код ошибки
+/// \param file исходный файл
+/// \param line номер строки в исходном файле
+	NovaExp(nCChar file[], nInt32 line, const nstring & mes, nInt32 _code);
+
 /// \param mes Сообщение об ошибке
 /// \param _code Код ошибки
 	NovaExp(nCChar * mes, nInt32 _code);
+
+/// \param mes Сообщение об ошибке
+/// \param _code Код ошибки
+	NovaExp(const nstring & mes, nInt32 _code);
 
 /// \brief Конструктор
 ///

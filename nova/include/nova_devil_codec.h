@@ -82,6 +82,8 @@ public:
 
 	virtual void Initialize();
 
+	void Shutdown();
+
 	void SetEffect(const TDevILEffects &effect);
 
 	virtual void CodeToBuffer(CMemoryBuffer & out, const CImage &image,

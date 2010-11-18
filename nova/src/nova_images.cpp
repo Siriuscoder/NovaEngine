@@ -41,24 +41,7 @@ CImage::~CImage()
 	FreeResource();
 }
 
-void CImage::SetParam(const nstring & file,
-		CImageFormats::NovaPixelFormats format)
-{
-	if(isReady)
-		throw NOVA_EXP("CImage::LoadImage - Image already created.", BAD_OPERATION);
-
-	mPixelFormat = format;
-	mFilename = file;
-
-	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
-	{
-		CImageListener * lis =
-			dynamic_cast<CImageListener *>(GetListener(i));
-		lis->LoadImageListener(this);
-	}
-}
-
-void CImage::SetParam(const CMemoryBuffer & bits,
+void CImage::SetBits(const CMemoryBuffer & bits,
 		nova::nUInt32 width,
 		nova::nUInt32 height,
 		nova::nUInt32 depth,
@@ -79,33 +62,6 @@ void CImage::SetParam(const CMemoryBuffer & bits,
 
 	data.AllocBuffer(bits.GetBufferSize());
 	bits.CopyTo(data, data.GetBufferSize(), 0);
-
-	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
-	{
-		CImageListener * lis =
-			dynamic_cast<CImageListener *>(GetListener(i));
-		lis->LoadImageListener(this);
-	}
-}
-
-void CImage::SetParam(const CMemoryBuffer & buffer,
-		ESaveFormats compressor,
-		CImageFormats::NovaPixelFormats format)
-{
-	if(isReady)
-		throw NOVA_EXP("CImage::LoadImage - Image already created.", BAD_OPERATION);
-
-	mPixelFormat = format;
-
-/*	if(bits.GetStreamSize() != mSize)
-		throw NOVA_EXP("CImage::LoadImage - Image size value incorrect!", BAD_OPERATION);
-*/
-
-	data.AllocBuffer(buffer.GetBufferSize());
-	buffer.CopyTo(data, data.GetBufferSize(), 0);
-
-	mCompressedStream = true;
-	mCompressor = compressor;
 
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
@@ -181,6 +137,9 @@ void CImage::FreeResource()
 	mWidth = 0;
 	mHeight = 0;
 	mDepth = 0;
+	mSize = 0;
+	mStride = 0;
+	mhStride = 0;
 
 	data.FreeBuffer();
 }
@@ -481,9 +440,8 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 							Null pointer...", MEM_ERROR);
 
 	// Попробуем загрузить изображение
-	imgp->SetParam(file, p);
+	//imgp->SetParam(file, p);
 	imgp->PrepareResource();
-	CResourceManager::BuildNextResource(name);
 
 	nova::nstringstream str;
 	str << "Image Factory: image object name: " << name << " group: " << group << " created...";
@@ -507,64 +465,18 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 							Null pointer...", MEM_ERROR);
 
 	// Попробуем загрузить изображение
-	imgp->SetParam(bits, width, height, depth, p);
+	imgp->SetBits(bits, width, height, depth, p);
 	imgp->PrepareResource();
-	CResourceManager::BuildNextResource(name);
 
 	nova::nstringstream str;
 	str << "Image Factory: image object name: " << name << " group: " << group << " created...";
-	LOG_MESSAGE(str.str());
-
-	return imgp;
-}
-
-CImagePtr CImageManager::CreateNewImageAsync(const nstring & name,
-	const nstring & group,
-	const nstring & file,
-	CImageFormats::NovaPixelFormats p,
-	CResource::TAttach state)
-{
-	CImagePtr imgp = CResourceManager::AddNewResource(name, group, state);
-	if(imgp.IsNull())
-		throw NOVA_EXP("CImageManager::CreateNewImage - resource factory return \
-							Null pointer...", MEM_ERROR);
-
-	imgp->SetParam(file, p);
-	imgp->PrepareResource();
-	mResourceBuildQueue.AddToQueue(imgp.GetPtr());
-	nova::nstringstream str;
-	str << "Image Factory: image object name: " << name << " group: " << group << " async created...";
-	LOG_MESSAGE(str.str());
-
-	return imgp;
-}
-
-CImagePtr CImageManager::CreateNewImageAsync(const nstring & name,
-	const nstring & group,
-	const CMemoryBuffer & bits,
-	nova::nUInt32 width,
-	nova::nUInt32 height,
-	nova::nUInt32 depth,
-	CImageFormats::NovaPixelFormats p,
-	CResource::TAttach state)
-{
-	CImagePtr imgp = CResourceManager::AddNewResource(name, group, state);
-	if(imgp.IsNull())
-		throw NOVA_EXP("CImageManager::CreateNewImage - resource factory return \
-							Null pointer...", MEM_ERROR);
-
-	imgp->SetParam(bits, width, height, depth, p);
-	imgp->PrepareResource();
-	mResourceBuildQueue.AddToQueue(imgp.GetPtr());
-	nova::nstringstream str;
-	str << "Image Factory: image object name: " << name << " group: " << group << " async created...";
 	LOG_MESSAGE(str.str());
 
 	return imgp;
 }
 
 CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & group,
-	const CMemoryBuffer & bits,
+	const CMemoryBuffer & buffer,
 	ESaveFormats compressor,
 	CImageFormats::NovaPixelFormats p,
 	CResource::TAttach state)
@@ -575,35 +487,11 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & gr
 							Null pointer...", MEM_ERROR);
 
 	// Попробуем загрузить изображение
-	imgp->SetParam(bits, compressor, p);
+	//imgp->SetParam(bits, compressor, p);
 	imgp->PrepareResource();
-	CResourceManager::BuildNextResource(name);
 
 	nova::nstringstream str;
 	str << "Image Factory: image object name: " << name << " group: " << group << " created...";
-	LOG_MESSAGE(str.str());
-
-	return imgp;
-}
-
-CImagePtr CImageManager::CreateNewImageAsync(const nstring & name, const nstring & group,
-	const CMemoryBuffer & bits,
-	ESaveFormats compressor,
-	CImageFormats::NovaPixelFormats p,
-	CResource::TAttach state)
-{
-	CImagePtr imgp = CResourceManager::AddNewResource(name, group, state);
-	if(imgp.IsNull())
-		throw NOVA_EXP("CImageManager::CreateNewImage - resource factory return \
-							Null pointer...", MEM_ERROR);
-
-	// Попробуем загрузить изображение
-	imgp->SetParam(bits, compressor, p);
-	imgp->PrepareResource();
-	mResourceBuildQueue.AddToQueue(imgp.GetPtr());
-
-	nova::nstringstream str;
-	str << "Image Factory: image object name: " << name << " group: " << group << " async created...";
 	LOG_MESSAGE(str.str());
 
 	return imgp;

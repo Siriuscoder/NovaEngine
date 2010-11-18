@@ -151,10 +151,10 @@ void CFilesPackage::ClosePackage(void)
 }
 
 
-nova::stl<nstring>::vector CFilesPackage::GetFileList(void)
+nova::stl<nstring>::vector CFilesPackage::GetFileList(void) const
 {
 	nova::stl<nstring>::vector result;
-	stl<nstring, FileHeader>::map::iterator it;
+	stl<nstring, FileHeader>::map::const_iterator it;
 	if(!mIsOpened)
 		throw NOVA_EXP("CFilesPackage::GetFileList: package not opened, open package file first!", BAD_OPERATION);
 
@@ -166,9 +166,9 @@ nova::stl<nstring>::vector CFilesPackage::GetFileList(void)
 	return result;
 }
 
-nova::nstring CFilesPackage::GetFileExt(const nstring & name)
+nova::nstring CFilesPackage::GetFileExt(const nstring & name) const 
 {
-	stl<nstring, FileHeader>::map::iterator it;
+	stl<nstring, FileHeader>::map::const_iterator it;
 	if(!mIsOpened)
 		throw NOVA_EXP("CFilesPackage::GetFileExt: package not opened, open package file first!", BAD_OPERATION);
 
@@ -178,9 +178,9 @@ nova::nstring CFilesPackage::GetFileExt(const nstring & name)
 	return nstring();
 }
 
-CMemoryBuffer CFilesPackage::GetFile(const nstring & name)
+CMemoryBuffer CFilesPackage::GetFile(const nstring & name) const 
 {
-	stl<nstring, FileHeader>::map::iterator it;
+	stl<nstring, FileHeader>::map::const_iterator it;
 	TFileHeader header;
 	
 	if(!mIsOpened)
@@ -202,7 +202,7 @@ CMemoryBuffer CFilesPackage::GetFile(const nstring & name)
 	return result;
 }
 
-bool CFilesPackage::IsOpened(void)
+bool CFilesPackage::IsOpened(void) const
 {
 	return mIsOpened;
 }
