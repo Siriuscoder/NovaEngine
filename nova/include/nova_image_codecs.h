@@ -46,7 +46,21 @@ SF_PIX,
 SF_HDR
 };
 	
-
+enum ELoadFormats
+{
+LF_BMP = 0xDD,
+LF_ICO,
+LF_JPG,
+LF_PCX,
+LF_PIC,
+LF_PNG,
+LF_TGA,
+LF_TIF,
+LF_GIF,
+LF_DDS,
+LF_PIX,
+LF_HDR
+};
 
 class NOVA_EXPORT CImage;
 
@@ -55,7 +69,7 @@ class NOVA_EXPORT CImageCodec : public CBase
 {
 protected:
 
-	static stl<StringList, CImageCodec*>::map gCodecs;
+	static stl<nstring, CImageCodec*>::map gCodecs;
 	StringList mExtentions;
 	stl<ESaveFormats>::vector mCompressorList;
 
@@ -63,19 +77,19 @@ protected:
 
 public:
 
-	static void RegisterCodec(CImageCodec* codec);
+	static void RegisterCodec(CImageCodec* codec, const nstring &name);
 
-	static void UnregisterCodec(CImageCodec* codec);
+	static void UnRegisterCodec(const nstring &name);
 
-	static CImageCodec * GetCodecForExtention(const nstring & filename);
-
-	static CImageCodec * GetCodecForCompressor(ESaveFormats ext);
+	static CImageCodec * GetCodec(const nstring & name);
 
 	CImageCodec();
 
-	~CImageCodec();
+	virtual ~CImageCodec();
 
 	virtual void Initialize() = 0;
+
+	virtual void Shutdown() = 0;
 
 	virtual void CodeToBuffer(CMemoryBuffer & out, const CImage &image,
 		ESaveFormats ext = SF_BMP) = 0;

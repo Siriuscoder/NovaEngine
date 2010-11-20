@@ -79,13 +79,13 @@ public:
 
 	void ClosePackage(void);
 
-	nova::stl<nstring>::vector GetFileList(void);
+	nova::stl<nstring>::vector GetFileList(void) const;
 
-	nova::nstring GetFileExt(const nstring & name);
+	nova::nstring GetFileExt(const nstring & name) const ;
 
-	CMemoryBuffer GetFile(const nstring & name);
+	CMemoryBuffer GetFile(const nstring & name) const ;
 
-	bool IsOpened(void);
+	bool IsOpened(void) const;
 
 	void PutFile(const CMemoryBuffer &buf , const nstring & name, const nstring & ext, const nstring &grs); 
 

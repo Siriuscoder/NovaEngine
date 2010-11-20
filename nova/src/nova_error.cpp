@@ -150,6 +150,24 @@ NovaExp::NovaExp() : CBase("NovaExp")
 	code = 0;
 }
 
+NovaExp::NovaExp(nCChar file[], nInt32 line, const nstring & mes, nInt32 _code) : CBase("NovaExp")
+{
+	e_mes.clear();
+	e_mes.append(mes);
+	e_mes.append(" file: ");
+	e_mes.append(file);
+	e_mes.append(" line: ");
+	e_mes.append(CStringUtils::IntToString(line));
+	code = _code;
+}
+
+NovaExp::NovaExp(const nstring & mes, nInt32 _code): CBase("NovaExp")
+{
+	e_mes.clear();
+	e_mes = mes;
+	code = _code;
+}
+
 NovaExp::NovaExp(nInt32 _code) : CBase("NovaExp")
 {
 	e_mes.clear();

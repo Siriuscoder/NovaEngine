@@ -133,7 +133,6 @@ protected:
 //	CResourceManager * ResourceManager;
 	CTextureManager * mTextureManager;
 	CImageManager * mImageManager;
-	CDevILCodec * mDevILCodec;
 	CRenderSystem * mRenderer;
 	CScene * mScene;
 	CLog * mSystemLog;
@@ -215,6 +214,11 @@ public:
 
 	void MakeRenderWindow(void);
 
+	void RegisterResourceFactory(CResourceManager *factory, const nstring &name);
+
+	void UnRegisterResourceFactory(const nstring &name);
+
+	CResourceManager * GetResourceFactory(const nstring &name);
 };
 
 /**

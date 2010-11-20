@@ -49,7 +49,6 @@ CNovaEngine::CNovaEngine() : CBase("CNovaEngine")
 	mFontManager = NULL;
 	mTextureManager = NULL;
 	mImageManager = NULL;
-	mDevILCodec = NULL;
 	mScene = NULL;
 	mRenderer = NULL;
 }
@@ -66,32 +65,34 @@ CNovaEngine::~CNovaEngine()
 
 void CNovaEngine::Release(void)
 {
+/* Scene unload */
 	if(mScene)
 		delete mScene;
-
+/* Renderer shutdown */
 	if(mRenderer)
 		mRenderer->ShutDown();
-
+/* Resource manager unloads */
 	if(mFontManager)
 		delete mFontManager;
-
 	if(mTextureManager)
 		delete mTextureManager;
-
 	if(mImageManager)
 		delete mImageManager;
 
+/* Unloading codecs */
 #ifdef USING_DEVIL
-	if(mDevILCodec)
-		delete mDevILCodec;
+	CDevILCodec *devilcodec = dynamic_cast<CDevILCodec *>(CImageCodec::GetCodec("DevIL"));
+	CImageCodec::UnRegisterCodec("DevIL");
+	delete devilcodec;
 #endif
+
+/* unload renderer */
 	if(mRenderer)
 		delete mRenderer;
 
 	mFontManager = NULL;
 	mTextureManager = NULL;
 	mImageManager = NULL;
-	mDevILCodec = NULL;
 	mScene = NULL;
 	mRenderer = NULL;
 
@@ -100,23 +101,23 @@ void CNovaEngine::Release(void)
 
 nInt32 CNovaEngine::Init(StartInit flag)
 {
-	//RenderManager->SetGraphicManager(new CGraphicManager(initst.draw_sys));
-	//ConsoleManager = new CConsoleManager();
+/* Resource managers */
 	mFontManager = new CFontManager();
-	//ResourceManager = new CResourceManager();
 	mTextureManager = new CTextureManager();
-
 	mImageManager = new CImageManager();
-
-	mDevILCodec = new CDevILCodec();
-	mDevILCodec->Initialize();
-
+/* Renderer */
 	mRenderer = new CRenderSystem();
-
+/* Global Scene */
 	mScene = new CScene();
-
+/* Codecs */
+#ifdef USING_DEVIL
+	CDevILCodec *devilcodec = new CDevILCodec();
+	CImageCodec::RegisterCodec(devilcodec, "DevIL");
+#endif
+/* Init Stats */
 	ResetStats();
 
+/* Start up renderer */
 	if(flag == ST_INIT_AUTOMATICALY)
 	{
 		mRenderer->StartUp(SF_START_AUTO_XML_CONFIG);
@@ -319,6 +320,21 @@ void CNovaEngine::MakeRenderWindow(void)
 	else
 		throw NOVA_EXP("CNovaEngine::MakeRenderWindow \
 			Can not make render target.. Render system not created!", BAD_OPERATION);
+}
+
+void CNovaEngine::RegisterResourceFactory(CResourceManager *factory, const nstring &name)
+{
+
+}
+
+void CNovaEngine::UnRegisterResourceFactory(const nstring &name)
+{
+
+}
+
+CResourceManager * CNovaEngine::GetResourceFactory(const nstring &name)
+{
+	return NULL;
 }
 
 
