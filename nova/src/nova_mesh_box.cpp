@@ -387,4 +387,14 @@ CMeshBoxPtr CMeshManager::CreateMeshFromFile(const nstring &file, const nstring 
 	return mesh;
 }
 
+CResourcePtr CMeshManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
+{
+	return CResourcePtr();
+}
+
+CResourcePtr CMeshManager::LoadResourceFromXml(const nstring &filename)
+{
+	return CResourcePtr();
+}
+
 }

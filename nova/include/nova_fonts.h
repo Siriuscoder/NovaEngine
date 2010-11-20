@@ -263,9 +263,13 @@ public:
 		nova::nUInt32 height, const nstring & ttffile, nova::nUInt32 coord_grid,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
-	CFontPtr CreateNewFontAsync(const nstring & name, const nstring & group,
-		nova::nUInt32 height, const nstring & ttffile, nova::nUInt32 coord_grid,
+	CFontPtr CreateNewFont(const nstring & name, const nstring & group,
+		nova::nUInt32 height, const CMemoryBuffer & ttf, nova::nUInt32 coord_grid,
 		CResource::TAttach state = CResource::NV_ATTACHED);
+
+	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
+
+	CResourcePtr LoadResourceFromXml(const nstring &filename);
 };
 
 }

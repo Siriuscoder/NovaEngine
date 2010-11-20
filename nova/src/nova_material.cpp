@@ -153,11 +153,6 @@ void CMaterial::BuildResource(void)
 	if(isReady)
 		return;
 
-	CResource::BuildResource();
-}
-
-void CMaterial::PrepareResource(void)
-{
 	if(mTexMap.size() != 0)
 		mTexMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mTexMap);
 	if(mMultiTexMap.size() != 0)
@@ -169,6 +164,11 @@ void CMaterial::PrepareResource(void)
 	if(mReflectionMap.size() != 0)
 		mReflectionMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mReflectionMap);
 
+	CResource::BuildResource();
+}
+
+void CMaterial::PrepareResource(void)
+{
 	CResource::PrepareResource();
 }
 
@@ -276,42 +276,15 @@ CMaterialPtr CMaterialManager::CreateMaterial(nstring & name, nstring & group,
 	return mat;
 }
 
-CMaterialPtr CMaterialManager::CreateMaterialAsync(nstring & name, nstring & group,
-	nova::CColorRGB AmbientColor,
-	nova::CColorRGB DiffuseColor,
-	nova::CColorRGB SpecularColor,
-	nReal Shininess,
-	nReal Transparency,
-	nstring TexMap,
-	nstring MultiTexMap,
-	nstring SpecMap,
-	nstring BumpMap,
-	nstring ReflectionMap,
-	CResource::TAttach state)
+
+CResourcePtr CMaterialManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
 {
-	CMaterialPtr mat = CResourceManager::AddNewResource(name, group, state);
-	if(mat.IsNull())
-		throw NOVA_EXP("CMaterialManager::CreateMaterial - resource factory return \
-							Null pointer...", MEM_ERROR);
+	return CResourcePtr();
+}
 
-	mat->SetAmbientColor(AmbientColor);
-	mat->SetDiffuseColor(DiffuseColor);
-	mat->SetSpecularColor(SpecularColor);
-	mat->SetShininess(Shininess);
-	mat->SetTransparency(Transparency);
-	mat->SetTexMap(TexMap);
-	mat->SetMultiTexMap(MultiTexMap);
-	mat->SetSpecMap(SpecMap);
-	mat->SetBumpMap(BumpMap);
-	mat->SetReflectionMap(ReflectionMap);
-
-	mat->PrepareResource();
-	mResourceBuildQueue.AddToQueue(mat.GetPtr());
-	nova::nstringstream str;
-	str << "Material Factory: material name: " << name << " group: " << group << " async created..";
-	LOG_MESSAGE(str.str());
-
-	return mat;
+CResourcePtr CMaterialManager::LoadResourceFromXml(const nstring &filename)
+{
+	return CResourcePtr();
 }
 
 }

@@ -81,6 +81,7 @@ void CImage::BuildResource(void)
 
 void CImage::PrepareResource(void)
 {
+/*
 	if(mFilename.size() > 0)
 	{
 		// Грузим из файла //
@@ -127,6 +128,7 @@ void CImage::PrepareResource(void)
 			mhStride = mHeight * inf.GetInternalChannels();
 		}
 	}
+*/
 
 	CResource::PrepareResource();
 }
@@ -495,6 +497,16 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & gr
 	LOG_MESSAGE(str.str());
 
 	return imgp;
+}
+
+CResourcePtr CImageManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
+{
+	return CResourcePtr();
+}
+
+CResourcePtr CImageManager::LoadResourceFromXml(const nstring &filename)
+{
+	return CResourcePtr();
 }
 
 }

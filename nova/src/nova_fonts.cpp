@@ -84,6 +84,7 @@ CFreeFont::CFreeFont(CResourceManager * rm,
 
 void CFreeFont::PrepareResource(void)
 {
+	BuildFont();
 	CResource::PrepareResource();
 }
 
@@ -91,8 +92,6 @@ void CFreeFont::BuildResource(void)
 {
 	if(isReady)
 		return;
-
-	BuildFont();
 
 	CResource::PrepareResource();
 }
@@ -387,30 +386,26 @@ CFontPtr CFontManager::CreateNewFont(const nstring & name, const nstring & group
 							Null pointer...", MEM_ERROR);
 
 	fontp->SetFontParam(library, height, ttffile, coord_grid);
-	CResourceManager::BuildNextResource(name);
 
 	nova::nstringstream str;
-	str << "Font Factory: font object name: " << name << " group: " << group << " created...";
+	str << "Font Factory: font object name: " << name << " group: " << group << " loaded...";
 	LOG_MESSAGE(str.str().c_str());
 
 	return fontp;
 }
 
-CFontPtr CFontManager::CreateNewFontAsync(const nstring & name, const nstring & group,
-	nova::nUInt32 height, const nstring & ttffile, nova::nUInt32 coord_grid,
-	CResource::TAttach state)
+CFontPtr CFontManager::CreateNewFont(const nstring & name, const nstring & group,
+		nova::nUInt32 height, const CMemoryBuffer & ttf, nova::nUInt32 coord_grid,
+		CResource::TAttach state)
 {
 	CFontPtr fontp = CResourceManager::AddNewResource(name, group, state);
 	if(fontp.IsNull())
 		throw NOVA_EXP("CFontManager::CreateNewFont - resource factory return \
 							Null pointer...", MEM_ERROR);
 
-	fontp->SetFontParam(library, height, ttffile, coord_grid);
-	mResourceBuildQueue.AddToQueue(fontp.GetPtr());
 	nova::nstringstream str;
-	str << "Font Factory: font object name: " << name << " group: " << group << " async created...";
+	str << "Font Factory: font object name: " << name << " group: " << group << " loaded...";
 	LOG_MESSAGE(str.str().c_str());
-
 	return fontp;
 }
 
@@ -419,5 +414,14 @@ void CFontManager::UnloadAllManagerResources()
 	UnloadResourceFromHash(this);
 }
 
+CResourcePtr CFontManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
+{
+	return CResourcePtr();
+}
+
+CResourcePtr CFontManager::LoadResourceFromXml(const nstring &filename)
+{
+	return CResourcePtr();
+}
 
 }

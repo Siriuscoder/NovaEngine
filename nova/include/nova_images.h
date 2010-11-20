@@ -181,6 +181,12 @@ public:
 		ESaveFormats compressor,
 		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
 		CResource::TAttach state = CResource::NV_ATTACHED);
+
+	/* for force loading form packages */
+	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
+
+	CResourcePtr LoadResourceFromXml(const nstring &filename);
 };
+
 
 }

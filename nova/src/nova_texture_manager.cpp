@@ -78,7 +78,6 @@ CTexturePtr CTextureManager::CreateNewTexture
 
 	texp->SetImageList(templ);
 	texp->PrepareResource();
-	CResourceManager::BuildNextResource(texp->GetResName());
 
 	nova::nstringstream str;
 	str << "Texture Factory: texture object name: " << name << " group: " << group << " created...";
@@ -110,7 +109,6 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 
 	texp->SetImageList(list);
 	texp->PrepareResource();
-	CResourceManager::BuildNextResource(texp->GetResName());
 
 	nova::nstringstream str;
 	str << "Texture Factory: texture cube object name: " << name << " group: " << group << " created...";
@@ -120,75 +118,16 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 	return texp;
 }
 
-//-------------------------------------------------------------------------
-CTexturePtr CTextureManager::CreateNewTextureAsync
-(
-	const nstring & name,
-	const nstring & group,
-	const CImagePtr & image,
-	CHardwarePixelBuffer::TargetType type,
-	CTextureSurfaceList::MipMapTagertType mip,
-	CTexture::TWrap wrapS,
-	CTexture::TWrap wrapT,
-	CTexture::TEnv env,
-	CResource::TAttach state
-)
+CResourcePtr CTextureManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
 {
-	CTexturePtr texp = CResourceManager::AddNewResource(name, group, state);
-	if(texp.IsNull())
-		throw NOVA_EXP("CTextureManager::CreateNewTexture - resource factory return \
-							Null pointer...", MEM_ERROR);
-
-	texp->SetType(type);
-	texp->UseMipMaps(mip);
-	texp->SetEnvType(env);
-	texp->SetWrapS(wrapS);
-	texp->SetWrapT(wrapT);
-	TImageList templ;
-	templ.push_back(image);
-	texp->SetImageList(templ);
-	texp->PrepareResource();
-	mResourceBuildQueue.AddToQueue(texp.GetPtr());
-
-	nova::nstringstream str;
-	str << "Texture Factory: texture object name: " << name << " group: " << group << " async created...";
-	LOG_MESSAGE(str.str());
-
-
-	return texp;
+	return CResourcePtr();
 }
 
-CTexturePtr CTextureManager::CreateNewTexturesCubeAsync
-(
-	const nstring & name,
-	const nstring & group,
-	const TImageList & list,
-	CTextureSurfaceList::MipMapTagertType mip,
-	CTexture::TEnv env,
-	CResource::TAttach state
-)
+CResourcePtr CTextureManager::LoadResourceFromXml(const nstring &filename)
 {
-	CTexturePtr texp = CResourceManager::AddNewResource(name, group, state);
-	if(texp.IsNull())
-		throw NOVA_EXP("CTextureManager::CreateNewTexture - resource factory return \
-							Null pointer...", MEM_ERROR);
-
-	texp->SetType(CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE);
-	texp->UseMipMaps(mip);
-	texp->SetEnvType(env);
-	texp->SetWrapS(CTexture::CLAMP);
-	texp->SetWrapT(CTexture::CLAMP);
-	texp->SetImageList(list);
-	texp->PrepareResource();
-	mResourceBuildQueue.AddToQueue(texp.GetPtr());
-
-	nova::nstringstream str;
-	str << "Texture Factory: texture cube object name: " << name << " group: " << group << " async created...";
-	LOG_MESSAGE(str.str());
-
-
-	return texp;
+	return CResourcePtr();
 }
+
 //--------------------------------------------------------------------------
 
 void CTextureManager::UnloadAllManagerResources()

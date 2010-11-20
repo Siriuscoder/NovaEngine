@@ -141,18 +141,11 @@ public:
 		nstring ReflectionMap,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
-	virtual CMaterialPtr CreateMaterialAsync(nstring & name, nstring & group, 
-		nova::CColorRGB AmbientColor,
-		nova::CColorRGB DiffuseColor,
-		nova::CColorRGB SpecularColor,
-		nReal Shininess,
-		nReal Transparency,
-		nstring TexMap,
-		nstring MultiTexMap,
-		nstring SpecMap,
-		nstring BumpMap,
-		nstring ReflectionMap,
-		CResource::TAttach state = CResource::NV_ATTACHED);
+
+	/* for force loading form packages */
+	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
+
+	CResourcePtr LoadResourceFromXml(const nstring &filename);
 };
 
 }

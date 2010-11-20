@@ -63,16 +63,10 @@ public:
 		CTexture::TEnv env = CTexture::EV_REPLACE,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
-	virtual CTexturePtr CreateNewTextureAsync(const nstring & name, const nstring & group, const CImagePtr & image,
-		CHardwarePixelBuffer::TargetType type = CHardwarePixelBuffer::USE_TEXTURE_2D,
-		CTextureSurfaceList::MipMapTagertType mip = CTextureSurfaceList::DO_NOT_USE_MIPMAPS,
-		CTexture::TWrap wrapS = CTexture::CLAMP_TO_EDGE, CTexture::TWrap wrapT = CTexture::CLAMP_TO_EDGE,
-		CTexture::TEnv env = CTexture::EV_MODULATE, CResource::TAttach state = CResource::NV_ATTACHED);
+	/* for force loading form packages */
+	virtual CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
 
-	virtual CTexturePtr CreateNewTexturesCubeAsync(const nstring & name, const nstring & group, const TImageList & list,
-		CTextureSurfaceList::MipMapTagertType mip = CTextureSurfaceList::DO_NOT_USE_MIPMAPS,
-		CTexture::TEnv env = CTexture::EV_REPLACE,
-		CResource::TAttach state = CResource::NV_ATTACHED);
+	virtual CResourcePtr LoadResourceFromXml(const nstring &filename);
 
 	virtual void UnloadAllManagerResources();
 };

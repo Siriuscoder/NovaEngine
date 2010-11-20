@@ -236,6 +236,10 @@ public:
  
 	CMeshBoxPtr CreateMeshFromFile(const nstring &file, const nstring &group,
 		CResource::TAttach state = CResource::NV_ATTACHED); 
+
+	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
+
+	CResourcePtr LoadResourceFromXml(const nstring &filename);
 };
 
 }
