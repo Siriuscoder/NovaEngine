@@ -49,7 +49,7 @@ void CImageCodec::RegisterCodec(CImageCodec* codec, const nstring &name)
 		codecpair.second = codec;
 
 		stl<nstring, CImageCodec*>::map::iterator it;
-		if((it = gCodecs.find(name)) != gCodecs.end())
+		if((it = gCodecs.find(name)) == gCodecs.end())
 			gCodecs.insert(codecpair);
 		else
 			throw NOVA_EXP(nstring("CImageCodec::RegisterCodec - codec ") + name + " already registered..", BAD_OPERATION);
