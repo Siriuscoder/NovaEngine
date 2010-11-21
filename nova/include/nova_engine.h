@@ -137,6 +137,8 @@ protected:
 	CScene * mScene;
 	CLog * mSystemLog;
 
+	stl<CResourceManager *, nstring>::map mResourceFactoryHash;
+
 private:
 	bool	mRenderLoop;
 
