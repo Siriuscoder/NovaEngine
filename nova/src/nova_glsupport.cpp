@@ -72,7 +72,7 @@ void CGLSupport::InitGLExtentions()
 	char *pInfoStr = NULL;
 	mGPUVendor.append(((pInfoStr = (char *)glGetString(GL_VENDOR)) != NULL) ? pInfoStr : "none");
 	mRenderer.append(((pInfoStr = (char *)glGetString(GL_RENDERER)) != NULL) ? pInfoStr : "none");
-	mGlewVersion.append(((pInfoStr = (char *)glGetString(GLEW_VERSION)) != NULL) ? pInfoStr : "none");
+	mGlewVersion.append(((pInfoStr = (char *)glewGetString(GLEW_VERSION)) != NULL) ? pInfoStr : "none");
 	mShadingLang.append(((pInfoStr = (char *)glGetString(GL_SHADING_LANGUAGE_VERSION)) != NULL) ? pInfoStr : "none");
 
 	nstring extensions((char *)glGetString(GL_EXTENSIONS));
