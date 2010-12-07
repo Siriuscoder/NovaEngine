@@ -41,21 +41,6 @@ enum EDevILEffects
 	DE_SHARPERING
 };
 
-
-typedef struct TDevILEffects
-{
-	EDevILEffects effect;
-	union TVal
-	{
-		nova::nReal r;
-		nova::nUInt32 ui;
-	};
-
-	TVal par1;
-	TVal par2;
-	TVal par3;
-} *pTDevILEffects;
-
 class NOVA_EXPORT CDevILFormats : public CImageFormats
 {
 public:
@@ -70,11 +55,6 @@ public:
 
 class NOVA_EXPORT CDevILCodec : public CSingelton<CDevILCodec>, public CImageCodec
 {
-private:
-
-	void ApplyEffect(void);
-	TDevILEffects mEffect;
-
 public:
 
 	CDevILCodec();
@@ -83,8 +63,6 @@ public:
 	virtual void Initialize();
 
 	void Shutdown();
-
-	void SetEffect(const TDevILEffects &effect);
 
 	virtual void CodeToBuffer(CMemoryBuffer & out, const CImage &image,
 		ESaveFormats ext = SF_BMP);
