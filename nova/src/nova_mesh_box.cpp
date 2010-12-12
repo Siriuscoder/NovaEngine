@@ -172,25 +172,12 @@ CBoundingBox CMeshBox::GenerateBoundingBox(void)
 	return testbox;
 }
 
-void CMeshBox::FreeResource()
+void CMeshBox::FreeResourceImpl()
 {
-	CResource::FreeResource();
+
 }
 
-void CMeshBox::PreAddingAction()
-{
-	CResource::PreAddingAction();
-}
 
-void CMeshBox::PostAddingAction()
-{
-	CResource::PostAddingAction();
-}
-
-void CMeshBox::PreUnloadingAction()
-{
-	CResource::PreUnloadingAction();
-}
 
 void CMeshBox::ToWorldCoord()
 {
@@ -205,7 +192,7 @@ void CMeshBox::ToWorldCoord()
 	}
 }
 
-void CMeshBox::PrepareResource(void)
+void CMeshBox::LoadResourceImpl(void)
 {
 /*
 	if(!CheckValidLength())
@@ -221,21 +208,17 @@ void CMeshBox::PrepareResource(void)
 	//CalculateNormals();
 	// Сортируем вершины по материалам
 
-	CResource::PrepareResource();
+
 }
 
-void CMeshBox::BuildResource(void)
+void CMeshBox::BuildResourceImpl(void)
 {
-	if(isReady)
-		return;
-
 	mSize += mMeshDef.nVertexList.size() * sizeof(TVertex3d);
 	mSize += mMeshDef.nNormalList.size() * sizeof(TNormal3d);
 	mSize += mMeshDef.nMappingFacesList.size() * sizeof(TUVMapping);
 	mSize += mMeshDef.nIndexList.size() * sizeof(TFaceIndex);
 	mSize += mMeshDef.nMeshInfoList.size() * sizeof(TTriangleInfo);
 
-	CResource::BuildResource();
 }
 
 bool CMeshBox::CheckValidLength()
@@ -365,7 +348,7 @@ CMeshBoxPtr CMeshManager::CreateMesh(CMeshBox::TMeshContainer *def, const nstrin
 							Null pointer...", MEM_ERROR);
 
 	mesh->SetMeshDefinition(def);
-	mesh->PrepareResource();
+	//mesh->PrepareResource();
 
 	nova::nstringstream str;
 	str << "Mesh Factory: mesh object name: " << def->nName << " group: " << group << " created...";

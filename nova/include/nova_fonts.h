@@ -96,15 +96,6 @@ const nova::nUInt16 rus_end = 0x044F;
 
 class CFreeFont;
 
-class NOVA_EXPORT CFontListener : public CResourceListener
-{
-public:
-
-	virtual void CreateFontListener(CFreeFont * object) {}
-
-	virtual void BuildFontListener(CFreeFont * object) {}
-};
-
 class NOVA_EXPORT CNormalUnicode
 {
 private:
@@ -224,12 +215,16 @@ private:
 	void MakeLetter(wchar_t code);
 	void BuildFont();
 
+protected:
+
+	void LoadResourceImpl(void);
+
+	void FreeResourceImpl(void);
+
+	void BuildResourceImpl(void); 
+
 public:
 	CFreeFont(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
-
-	virtual void BuildResource(void);
-
-	virtual void PrepareResource(void);
 
 	void SetFontParam(FT_Library library,
 		nova::nUInt32 height,
@@ -239,7 +234,7 @@ public:
 	~CFreeFont();
 
 	void Draw(POINT & pos, const CColorRGB & pc, const wchar_t code);
-	virtual void FreeResource();
+
 };
 
 typedef CSmartPtr<CFreeFont> CFontPtr;

@@ -40,7 +40,7 @@ CResource::CResource(CResourceManager * rm, const nstring & name, const nstring 
 
 void CResource::FreeResource()
 {
-	if(isReady || isLoaded)
+	if(isReady || isLoaded || isBuilded)
 	{
 		for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 		{
@@ -88,6 +88,9 @@ void CResource::PreUnloadingAction()
 
 void CResource::LoadResource(void)
 {
+	if(isLoaded)
+		return;
+
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
@@ -97,10 +100,20 @@ void CResource::LoadResource(void)
 
 	LoadResourceImpl();
 	isLoaded = true;
+
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
+	{
+		CResourceListener * lis =
+			dynamic_cast<CResourceListener *>(GetListener(i));
+		lis->PostLoadResourceListener(this);
+	}
 }
 
 void CResource::BuildResource(void)
 {
+	if(isBuilded || isReady)
+		return;
+
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
@@ -108,8 +121,16 @@ void CResource::BuildResource(void)
 		lis->PreBuildResourceListener(this);
 	}
 
+	BuildResourceImpl();
 	isReady = true;
 	isBuilded = true;
+
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
+	{
+		CResourceListener * lis =
+			dynamic_cast<CResourceListener *>(GetListener(i));
+		lis->PostBuildResourceListener(this);
+	}
 }
 
 void CResource::RebuildResource(void)

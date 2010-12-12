@@ -23,18 +23,9 @@ class ImageExample : public CExampleApplication
 {
 protected:
 
-class MyImageExampleListener : public CImageListener
+class MyImageExampleListener : public CResourceListener
 {
 public:
-
-	void LoadImageListener(CImage * object)
-	{
-		nstringstream str;
-
-		str << "Image: " << object->GetResName() << " successfully loaded!";
-
-		LOG_MESSAGE(str.str());
-	}
 
 	void FreeResourceListener(CResource * object)
 	{
@@ -45,7 +36,7 @@ public:
 		LOG_MESSAGE(str.str());
 	}
 
-	void PrepareResourceListener(CResource * object)
+	void PostLoadResourceListener(CResource * object)
 	{
 		nstringstream str;
 
@@ -54,7 +45,7 @@ public:
 		LOG_MESSAGE(str.str());
 	}
 
-	void BuildResourceListener(CResource * object)
+	void PostBuildResourceListener(CResource * object)
 	{
 		nstringstream str;
 
@@ -94,7 +85,7 @@ public:
 	CImagePtr LoadImageFromFile(const nstring & file)
 	{
 		CImagePtr image = CImageManager::GetSingelton().CreateNewImage(file, nstring("manual"),
-			file, CImageFormats::NF_DEFAULT);
+			file, "DevIL", CImageFormats::NF_DEFAULT);
 
 		image->BackHeigth();
 		return image;
@@ -103,7 +94,7 @@ public:
 	CImagePtr LoadImageFromMemory(const nstring &name, const CMemoryBuffer & buffer, ESaveFormats comp)
 	{
 		CImagePtr image = CImageManager::GetSingelton().CreateNewImage(name, nstring("manual"),
-			buffer, comp, CImageFormats::NF_DEFAULT);
+			buffer, comp, "DevIL", CImageFormats::NF_DEFAULT);
 
 		return image;
 	}

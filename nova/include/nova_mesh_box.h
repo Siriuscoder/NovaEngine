@@ -170,6 +170,12 @@ protected:
 
 	TMeshContainer mMeshDef;
 
+	void LoadResourceImpl(void);
+
+	void FreeResourceImpl(void);
+
+	void BuildResourceImpl(void);
+
 public:
 
 	CMeshBox(CResourceManager * rm, nstring & name, nstring & group, TAttach state);
@@ -189,19 +195,6 @@ public:
 	void GenerateNormalsToFaces(void);
 
 	void SortFaceIndexByMaterials(void);
-//----------------------------------
-	virtual void FreeResource(void);
-
-	virtual void PreAddingAction(void);
-
-	virtual void PostAddingAction(void);
-
-	virtual void PreUnloadingAction(void);
-
-	virtual void BuildResource(void);
-
-	virtual void PrepareResource(void);
-//-----------------------------------
 
 	void * GetVertexPointer(size_t *count);
 

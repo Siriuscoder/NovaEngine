@@ -82,18 +82,14 @@ CFreeFont::CFreeFont(CResourceManager * rm,
 
 }
 
-void CFreeFont::PrepareResource(void)
+void CFreeFont::LoadResourceImpl(void)
 {
-	BuildFont();
-	CResource::PrepareResource();
+
 }
 
-void CFreeFont::BuildResource(void)
+void CFreeFont::BuildResourceImpl(void)
 {
-	if(isReady)
-		return;
-
-	CResource::PrepareResource();
+	BuildFont();
 }
 
 void CFreeFont::SetFontParam(FT_Library library,
@@ -108,13 +104,6 @@ void CFreeFont::SetFontParam(FT_Library library,
 	if(!library)
 		throw NOVA_EXP("CFreeFont::CreateFont - FreeFont library object is bad", MEM_ERROR);
 	this->library = library;
-
-	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
-	{
-		CFontListener * lis =
-			dynamic_cast<CFontListener *>(GetListener(i));
-		lis->CreateFontListener(this);
-	}
 }
 
 void CFreeFont::BuildFont()
@@ -139,14 +128,6 @@ void CFreeFont::BuildFont()
 
 	// Уничтожим шрифт.
 	FT_Done_Face(face);
-	isReady = true;
-
-	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
-	{
-		CFontListener * lis =
-			dynamic_cast<CFontListener *>(GetListener(i));
-		lis->BuildFontListener(this);
-	}
 }
 
 nInt32 NextP2(nInt32 a)
@@ -330,21 +311,19 @@ CFreeFont::~CFreeFont()
 	FreeResource();
 }
 
-void CFreeFont::FreeResource()
+void CFreeFont::FreeResourceImpl()
 {
 /*
 	nova::stl<wchar_t, CLetter>::map::iterator it;
 	for(it = letters_map.begin(); it != letters_map.end(); it++)
 		CTextureManager::GetSingeltonPtr()->DeleteTexture((*it).second.GetTex().GetPtr());
 */
-
-	CResource::FreeResource();
 	nova::stl<wchar_t, CLetter>::map::iterator it;
 	for(it = letters_map.begin(); it != letters_map.end(); it++)
 		(*it).second.GetDispList().DestroyList();
 
 	//letters_map[code]
-	CTextureManager::GetSingelton().UnloadResourceGroupFromHash(mName);
+	//CTextureManager::GetSingelton().UnloadResourceGroupFromHash(mName);
 	letters_map.clear();
 }
 

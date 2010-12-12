@@ -77,7 +77,7 @@ CTexturePtr CTextureManager::CreateNewTexture
 	templ.push_back(image);
 
 	texp->SetImageList(templ);
-	texp->PrepareResource();
+	//texp->PrepareResource();
 
 	nova::nstringstream str;
 	str << "Texture Factory: texture object name: " << name << " group: " << group << " created...";
@@ -108,7 +108,7 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 	// Выделяем место в видео памяти под текстуру...
 
 	texp->SetImageList(list);
-	texp->PrepareResource();
+	//texp->PrepareResource();
 
 	nova::nstringstream str;
 	str << "Texture Factory: texture cube object name: " << name << " group: " << group << " created...";

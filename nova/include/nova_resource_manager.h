@@ -46,7 +46,11 @@ public:
 
 	virtual void PreLoadResourceListener(CResource * object) {}
 
+	virtual void PostLoadResourceListener(CResource * object) {}
+
 	virtual void PreBuildResourceListener(CResource * object) {}
+
+	virtual void PostBuildResourceListener(CResource * object) {}
 };
 
 class NOVA_EXPORT CResource : public CBase, public CListenerInterface

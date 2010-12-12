@@ -28,10 +28,6 @@ class NOVA_EXPORT CTextureListener : public CResourceListener
 {
 public:
 
-	virtual void CreateTextureListener(CTexture * object) {}
-
-	virtual void AddSubTextureListener(CTexture * object) {}
-
 	virtual void ApplyTextureListener(CTexture * object) {}
 };
 
@@ -103,11 +99,15 @@ protected:
 
 	TImageList mList;
 
+	void LoadResourceImpl(void);
+
+	void FreeResourceImpl(void);
+
+	void BuildResourceImpl(void);
+
 public:
 
 	CTexture(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
-
-	virtual void FreeResource();
 
 	~CTexture();
 
@@ -216,21 +216,12 @@ public:
 	void SetImageList(const TImageList & list);
 	void CreateTexture();
 
-	virtual void BuildResource(void);
-
-	virtual void PrepareResource(void);
-
 	void AddSubTexture(CImagePtr & image, nova::nUInt32 level, nInt32 face,
 		nova::nUInt32 xoff, nova::nUInt32 yoff = 0, nova::nUInt32 zoff = 0);
 
 	CTextureSurfaceListPtr GetSurfaceList(nova::nUInt32 face);
 
 	CImageFormats::NovaPixelFormats GetPixelFormat();
-
-	virtual void PreAddingAction();
-	virtual void PostAddindAction();
-
-	virtual void PreUnloadingAction();
 };
 
 typedef CSmartPtr<CTexture> CTexturePtr;
