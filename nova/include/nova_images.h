@@ -27,68 +27,92 @@ namespace nova
 class CImage;
 class CImageManager;
 
-class NOVA_EXPORT CImageListener : public CResourceListener
+// For multiple image formats data store
+class NOVA_EXPORT CImageBox : public CBase
 {
 public:
-
-	virtual void LoadImageListener(CImage * object) {}
-
-};
-
-class NOVA_EXPORT CImage : public CResource
-{
-friend CDevILCodec;
-friend CImageManager;
-
-private:
-	CMemoryBuffer data;
 
 	nova::nUInt32 mWidth;
 	nova::nUInt32 mHeight;
 	CImageFormats::NovaPixelFormats mPixelFormat;
 	nova::nUInt32 mDepth;
-	nova::nUInt32 mStride;
-	nova::nUInt32 mhStride;
+
+
 	nstring mFilename;
-	CImageCodec * mCodec;
+	nstring mCodecName;
 
 	// compress info
 	bool mCompressedStream;
 	ESaveFormats mCompressor;
 
-protected:
+	CMemoryBuffer mSourceImageBits;
 
-	void SetBits(const CMemoryBuffer & bits,
+public:
+
+	CImageBox();
+
+	void CleanData(void);
+
+	void SetData(const CMemoryBuffer & bits,
 		nova::nUInt32 width,
 		nova::nUInt32 height,
 		nova::nUInt32 depth,
 		CImageFormats::NovaPixelFormats format);
 
+	void SetData(const nstring & file,
+		CImageFormats::NovaPixelFormats format,
+		const nstring & codec);
+
+	void SetData(const CMemoryBuffer & buffer,
+		ESaveFormats compressor,
+		CImageFormats::NovaPixelFormats format,
+		const nstring & codec);
+};
+
+class NOVA_EXPORT CImage : public CResource
+{
+friend CImageManager;
+
+private:
+	CMemoryBuffer mImage;
+
+	nova::nUInt32 mStride;
+	nova::nUInt32 mhStride;
+
+	CImageBox mImageSource;
+
+protected:
+
+	void LoadResourceImpl(void);
+
+	void FreeResourceImpl(void);
+
+	void BuildResourceImpl(void);
+
 public:
+
+	void SetImageSource(const CImageBox &source);
+
+	CImageBox & GetImageSource(void);
 
 	inline nova::nUInt32 GetWidth() const
 	{
-		return mWidth;
+		return mImageSource.mWidth;
 	}
 
 	inline nova::nUInt32 GetHeight() const
 	{
-		return mHeight;
+		return mImageSource.mHeight;
 	}
 
 	inline CImageFormats::NovaPixelFormats GetPixelFormat() const 
 	{
-		return mPixelFormat;
+		return mImageSource.mPixelFormat;
 	}
 
 	inline nova::nUInt32 GetDepth() const
 	{
-		return mDepth;
-	}
-
-	inline void SetPixelFormat(CImageFormats::NovaPixelFormats p)
-	{
-		mPixelFormat = p;
+		return mImageSource.mDepth;
 	}
 
 	inline nova::nUInt32 GetStride() const 
@@ -104,10 +128,6 @@ public:
 	CImage(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
 
 	~CImage();
-
-	virtual void BuildResource(void);
-
-	virtual void PrepareResource(void);
 
 #ifdef USING_DEVIL
 
@@ -136,14 +156,7 @@ public:
 
 	void* GetBitsPtr() const;
 
-	CMemoryBuffer GetBits();
-
-	virtual void FreeResource();
-
-	virtual void PreAddingAction();
-	virtual void PostAddindAction();
-
-	virtual void PreUnloadingAction();
+	CMemoryBuffer &GetBits();
 };
 
 typedef CSmartPtr<CImage> CImagePtr;
@@ -165,6 +178,7 @@ public:
 
 	virtual CImagePtr CreateNewImage(const nstring & name, const nstring & group,
 		const nstring & file,
+		const nstring & codec,
 		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
@@ -179,6 +193,7 @@ public:
 	virtual CImagePtr CreateNewImage(const nstring & name, const nstring & group,
 		const CMemoryBuffer & buffer,
 		ESaveFormats compressor,
+		const nstring & codec,
 		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 

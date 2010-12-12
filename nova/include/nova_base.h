@@ -26,7 +26,7 @@
 /// Тут у нас расположен базовый класс
 /// коменчу, так, для общего развития))
 
-#include "nova_object_constructor.h"
+#include "nova_memory_manager.h"
 
 namespace nova {
 
@@ -42,11 +42,11 @@ namespace nova {
 /// наследоватся от него (если есть желание), а есть случаи
 /// когда это необходимо!
 /// \attention Наследуясь от этого класса вы перенимаете наследование от 
-/// класса CObjectConstructor, в котором перегруженны операторы new/delete
+/// класса CMemoryManaged, в котором перегруженны операторы new/delete
 /// тем самым вы используете для конструирования памяти Винни аллокатор
 /// \see nova_allocator.h
 
-class NOVA_EXPORT CBase : public nova::CObjectConstructor
+class NOVA_EXPORT CBase : public nova::CMemoryManaged
 {
 protected:
 /// \brief Идентификатор объекта

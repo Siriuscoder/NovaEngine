@@ -41,7 +41,7 @@ namespace nova
 {
 
 template <class nReal>
-class CSphere: public CObjectConstructor
+class CSphere: public CMemoryManaged
 {
 public:
     // The sphere is represented as |X-C| = R where C is the center and R is

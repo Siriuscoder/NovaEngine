@@ -41,7 +41,7 @@ namespace nova
 {
 
 template <class nReal>
-class CPlane: public CObjectConstructor
+class CPlane: public CMemoryManaged
 {
 public:
     // The plane is represented as Dot(N,X) = c where N is a unit-length

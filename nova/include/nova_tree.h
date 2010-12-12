@@ -35,7 +35,7 @@ namespace nova {
 ///
 /// Дерево состоит из такий вершин, причем в кажной 
 /// вершине хранится лист указателей на все ее потомки.
-template <class usertype> class CTreeNode : public CObjectConstructor
+template <class usertype> class CTreeNode : public CMemoryManaged
 {
 protected:
 

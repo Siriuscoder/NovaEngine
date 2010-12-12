@@ -29,7 +29,7 @@ namespace nova
 {
 
 CResource::CResource(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
-	mState(state), CBase("CResource")
+	mState(state), isLoaded(false), isBuilded(false), CBase("CResource")
 {
 	mName = name;
 	mGroup = group;
@@ -40,14 +40,20 @@ CResource::CResource(CResourceManager * rm, const nstring & name, const nstring 
 
 void CResource::FreeResource()
 {
-	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
+	if(isReady || isLoaded)
 	{
-		CResourceListener * lis =
-			dynamic_cast<CResourceListener *>(GetListener(i));
-		lis->FreeResourceListener(this);
-	}
+		for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
+		{
+			CResourceListener * lis =
+				dynamic_cast<CResourceListener *>(GetListener(i));
+			lis->FreeResourceListener(this);
+		}
 
-	isReady = false;
+		FreeResourceImpl();
+		isReady = false;
+		isLoaded = false;
+		isBuilded = false;
+	}
 }
 
 void CResource::PreAddingAction()
@@ -80,14 +86,17 @@ void CResource::PreUnloadingAction()
 	}
 }
 
-void CResource::PrepareResource(void)
+void CResource::LoadResource(void)
 {
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CResourceListener * lis =
 			dynamic_cast<CResourceListener *>(GetListener(i));
-		lis->PrepareResourceListener(this);
+		lis->PreLoadResourceListener(this);
 	}
+
+	LoadResourceImpl();
+	isLoaded = true;
 }
 
 void CResource::BuildResource(void)
@@ -96,10 +105,18 @@ void CResource::BuildResource(void)
 	{
 		CResourceListener * lis =
 			dynamic_cast<CResourceListener *>(GetListener(i));
-		lis->BuildResourceListener(this);
+		lis->PreBuildResourceListener(this);
 	}
 
 	isReady = true;
+	isBuilded = true;
+}
+
+void CResource::RebuildResource(void)
+{
+	FreeResource();
+	LoadResource();
+	BuildResource();
 }
 
 ////////////////// Resource global hash //////////////////////////
@@ -397,13 +414,6 @@ CResourcePtr CResourceManager::GetResourceFromHash(nova::nUInt32 handle)
 	RESOURCE_MUTEX_SECTION_UNLOCK;
 
 	return res;
-}
-
-void CResourceManager::BuildNextResource(const nstring & name)
-{
-	CResourcePtr res = GetResourceFromHash(name);
-	if(!res.IsNull())
-		res->BuildResource();
 }
 
 void CResourceManager::SetResourceLocation(const nstring & path)

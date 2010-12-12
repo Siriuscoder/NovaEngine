@@ -25,11 +25,66 @@
 namespace nova
 {
 
+CImageBox::CImageBox() : CBase("CImageBox")
+{
+	CleanData();
+}
+
+void CImageBox::CleanData(void)
+{
+	mWidth = 0;
+	mHeight = 0;
+	mDepth = 0;
+	mPixelFormat = CImageFormats::NF_RGB;
+	mFilename.clear();
+	mCodecName.clear();
+
+	// compress info
+	mCompressedStream = false;
+	mCompressor = SF_BMP;
+}
+
+void CImageBox::SetData(const CMemoryBuffer & bits,
+		nova::nUInt32 width,
+		nova::nUInt32 height,
+		nova::nUInt32 depth,
+		CImageFormats::NovaPixelFormats format)
+{
+	CleanData();
+	mSourceImageBits = bits;
+	mWidth = width;
+	mHeight = height;
+	mDepth = depth;
+
+	mPixelFormat = format;
+}
+
+void CImageBox::SetData(const nstring & file,
+		CImageFormats::NovaPixelFormats format,
+		const nstring & codec)
+{
+	CleanData();
+	mPixelFormat = format;
+	mFilename = file;
+	mCodecName = codec;
+}
+
+void CImageBox::SetData(const CMemoryBuffer & buffer,
+		ESaveFormats compressor,
+		CImageFormats::NovaPixelFormats format,
+		const nstring & codec)
+{
+	CleanData();
+	mSourceImageBits = buffer;
+	mCodecName = codec;
+	mPixelFormat = format;
+	mCompressedStream = true;
+}
+
 CImage::CImage(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
-	mWidth(0), mHeight(0), mDepth(0), mCompressedStream(false), mCompressor(SF_BMP),
 	CResource(rm, name, group, state)
 {
-	mCodec = NULL;
+
 }
 
 CImage::~CImage()
@@ -40,7 +95,7 @@ CImage::~CImage()
 
 	FreeResource();
 }
-
+/*
 void CImage::SetBits(const CMemoryBuffer & bits,
 		nova::nUInt32 width,
 		nova::nUInt32 height,
@@ -56,104 +111,99 @@ void CImage::SetBits(const CMemoryBuffer & bits,
 	this->mHeight = height;
 	this->mDepth = depth;
 
-/*	if(bits.GetStreamSize() != mSize)
-		throw NOVA_EXP("CImage::LoadImage - Image size value incorrect!", BAD_OPERATION);
+
+	mImage.AllocBuffer(bits.GetBufferSize());
+	bits.CopyTo(mImage, mImage.GetBufferSize(), 0);
+}
+
 */
 
-	data.AllocBuffer(bits.GetBufferSize());
-	bits.CopyTo(data, data.GetBufferSize(), 0);
-
-	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
-	{
-		CImageListener * lis =
-			dynamic_cast<CImageListener *>(GetListener(i));
-		lis->LoadImageListener(this);
-	}
+void CImage::SetImageSource(const CImageBox &source)
+{
+	mImageSource = source;
 }
 
-void CImage::BuildResource(void)
+void CImage::BuildResourceImpl(void)
 {
-	if(Ready())
-		return ;
 
-	CResource::BuildResource();
+
 }
 
-void CImage::PrepareResource(void)
+void CImage::LoadResourceImpl(void)
 {
-/*
-	if(mFilename.size() > 0)
+	if(mImageSource.mFilename.size() > 0)
 	{
 		// Грузим из файла //
 
-		CImageCodec * codec = CImageCodec::GetCodecForExtention(mFilename);
+		CImageCodec * codec = CImageCodec::GetCodec(mImageSource.mCodecName);
 		if(codec)
 		{
-			mCodec = codec;
-			mCodec->DecodeFromFile(mFilename, this, mPixelFormat);
+			codec->DecodeFromFile(mImageSource.mFilename, this, mImageSource.mPixelFormat);
 		}
 		else
 		{
 			char str[256];
-			sprintf(str, "CImage::PrepareResource(): Can not find image codec for %s file", mFilename.c_str());  
+			sprintf(str, "CImage::LoadResourceImpl(): Can not load file %s (for image %s), reason: codec name %s not registered..", 
+				mImageSource.mFilename.c_str(), this->GetResName(), mImageSource.mCodecName.c_str());  
 			throw NOVA_EXP(str, BAD_OPERATION);
 		}
 	}
 	else
 	{
 		// Используем буфер памяти с сжатым растром//
-		if(mCompressedStream)
+		if(mImageSource.mCompressedStream)
 		{
-			CImageCodec * codec = CImageCodec::GetCodecForCompressor(mCompressor);
+			CImageCodec * codec = CImageCodec::GetCodec(mImageSource.mCodecName);
 			if(codec)
 			{
-				mCodec = codec;
-				mCodec->DecodeFromBuffer(data, this, mPixelFormat, mCompressor);
+				codec->DecodeFromBuffer(mImage, this, mImageSource.mPixelFormat, mImageSource.mCompressor);
 			}
 			else
 			{
 				char str[256];
-				sprintf(str, "CImage::PrepareResource(): Can not find image codec for %d compressor", mCompressor);  
+				sprintf(str, "CImage::LoadResourceImpl(): Can not load image %s from compressed stream, reason: codec name %s not registered..", 
+					this->GetResName(), mImageSource.mCodecName);  
 				throw NOVA_EXP(str, BAD_OPERATION);
 			}
 		}
 		else
 		{
 			// Используем буфер памяти с готовым растром//
-			CImageFormats inf;
-			inf.SetExFormat(mPixelFormat);
-
-			mSize = mWidth * mHeight * mDepth * inf.GetInternalChannels();
-			mStride = mWidth * inf.GetInternalChannels();
-			mhStride = mHeight * inf.GetInternalChannels();
+			mImage.AllocBuffer(mImageSource.mSourceImageBits.GetBufferSize());
+			mImageSource.mSourceImageBits.CopyTo(mImage, mImage.GetBufferSize(), 0);
 		}
 	}
-*/
 
-	CResource::PrepareResource();
+	CImageFormats inf;
+	inf.SetExFormat(mImageSource.mPixelFormat);
+
+	mSize =  mImageSource.mWidth *  mImageSource.mHeight *  mImageSource.mDepth * inf.GetInternalChannels();
+	mStride =  mImageSource.mWidth * inf.GetInternalChannels();
+	mhStride =  mImageSource.mHeight * inf.GetInternalChannels();
 }
 
-void CImage::FreeResource()
+void CImage::FreeResourceImpl()
 {
-	CResource::FreeResource();
-	mWidth = 0;
-	mHeight = 0;
-	mDepth = 0;
 	mSize = 0;
 	mStride = 0;
 	mhStride = 0;
 
-	data.FreeBuffer();
+	mImage.FreeBuffer();
 }
 
 void* CImage::GetBitsPtr() const
 {
-	return data.GetBegin();
+	return mImage.GetBegin();
 }
 
-CMemoryBuffer CImage::GetBits()
+CMemoryBuffer &CImage::GetBits()
 {
-	return data;
+	return mImage;
+}
+
+CImageBox & CImage::GetImageSource(void)
+{
+	return mImageSource;
 }
 
 #ifdef USING_DEVIL
@@ -162,20 +212,20 @@ void CImage::Alienifying()
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluAlienify();
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -184,20 +234,20 @@ void CImage::Blurring(nInt32 iter)
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluBlurGaussian(iter);
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -206,20 +256,20 @@ void CImage::Contrast(nReal level)
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluContrast(level);
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -228,20 +278,20 @@ void CImage::Equalization()
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluEqualize();
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -250,20 +300,20 @@ void CImage::Gamma(nReal correct)
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluGammaCorrect(correct);
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -273,20 +323,20 @@ void CImage::Negativity()
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluNegative();
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -295,20 +345,20 @@ void CImage::Noise(nReal tolerance)
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluNoisify(tolerance);
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -317,20 +367,20 @@ void CImage::Pixelization(nova::nUInt32 pix_size)
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluPixelize(pix_size);
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -339,20 +389,20 @@ void CImage::Sharpering(nReal factor, nInt32 iter)
 {
 	ILuint image;
 	CDevILFormats informat;
-	informat.SetExFormat(mPixelFormat);
+	informat.SetExFormat(mImageSource.mPixelFormat);
 	// Generate the main image name to use.
 	ilGenImages(1, &image);
 
 	// Bind this image name.
 	ilBindImage(image);
 
-	ilTexImage(mWidth, mHeight, mDepth, informat.GetInternalChannels(),
-		informat.GetFormat(), IL_UNSIGNED_BYTE, data.GetBegin());
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	iluSharpen(factor, iter);
 
-	ilCopyPixels(0, 0, 0, mWidth, mHeight, mDepth, informat.GetFormat(),
-		IL_UNSIGNED_BYTE, data.GetBegin());
+	ilCopyPixels(0, 0, 0, mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, mImage.GetBegin());
 
 	ilDeleteImages(1, &image);
 }
@@ -362,46 +412,34 @@ void CImage::Sharpering(nReal factor, nInt32 iter)
 void CImage::BackHeigth()
 {
 	CMemoryBuffer buf;
-	buf.AllocBuffer(data.GetBufferSize());
+	buf.AllocBuffer(mImage.GetBufferSize());
 
-	for(nova::nUInt32 i = 0; i < mHeight; i++)
+	for(nova::nUInt32 i = 0; i < mImageSource.mHeight; i++)
 	{
 		memcpy((nova::nByte *)buf.GetBegin() + i * mStride,
-			(nova::nByte *)data.GetBegin() + mStride * (mHeight - 1 - i), mStride);
+			(nova::nByte *)mImage.GetBegin() + mStride * (mImageSource.mHeight - 1 - i), mStride);
 	}
 
-	buf.CopyTo(data, buf.GetBufferSize(), 0);
+	buf.CopyTo(mImage, buf.GetBufferSize(), 0);
 	buf.FreeBuffer();
 }
 
 void CImage::BackWidth()
 {
-	CMemoryBuffer buf;
-	buf.AllocBuffer(data.GetBufferSize());
+	if(!IsLoaded())
+		return;
 
-	for(nova::nUInt32 i = 0; i < mWidth; i++)
+	CMemoryBuffer buf;
+	buf.AllocBuffer(mImage.GetBufferSize());
+
+	for(nova::nUInt32 i = 0; i < mImageSource.mWidth; i++)
 	{
 		memcpy((nova::nByte *)buf.GetBegin() + i * mhStride,
-				(nova::nByte *)data.GetBegin() + mhStride * (mWidth - 1 - i),  mhStride);
+				(nova::nByte *)mImage.GetBegin() + mhStride * (mImageSource.mWidth - 1 - i),  mhStride);
 	}
 
-	buf.CopyTo(data, buf.GetBufferSize(), 0);
+	buf.CopyTo(mImage, buf.GetBufferSize(), 0);
 	buf.FreeBuffer();
-}
-
-void CImage::PreAddingAction()
-{
-	CResource::PreAddingAction();
-}
-
-void CImage::PostAddindAction()
-{
-	CResource::PostAddingAction();
-}
-
-void CImage::PreUnloadingAction()
-{
-	CResource::PreUnloadingAction();
 }
 
 
@@ -433,6 +471,7 @@ void CImageManager::UnloadAllManagerResources()
 CImagePtr CImageManager::CreateNewImage(const nstring & name,
 	const nstring & group,
 	const nstring & file,
+	const nstring & codec,
 	CImageFormats::NovaPixelFormats p,
 	CResource::TAttach state)
 {
@@ -443,7 +482,9 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 
 	// Попробуем загрузить изображение
 	//imgp->SetParam(file, p);
-	imgp->PrepareResource();
+	CImageBox storage;
+	storage.SetData(file, p, codec);
+	imgp->SetImageSource(storage);
 
 	nova::nstringstream str;
 	str << "Image Factory: image object name: " << name << " group: " << group << " created...";
@@ -467,8 +508,10 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 							Null pointer...", MEM_ERROR);
 
 	// Попробуем загрузить изображение
-	imgp->SetBits(bits, width, height, depth, p);
-	imgp->PrepareResource();
+//	imgp->SetBits(bits, width, height, depth, p);
+	CImageBox storage;
+	storage.SetData(bits, width, height, depth, p);
+	imgp->SetImageSource(storage);
 
 	nova::nstringstream str;
 	str << "Image Factory: image object name: " << name << " group: " << group << " created...";
@@ -480,6 +523,7 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & group,
 	const CMemoryBuffer & buffer,
 	ESaveFormats compressor,
+	const nstring & codec,
 	CImageFormats::NovaPixelFormats p,
 	CResource::TAttach state)
 {
@@ -490,7 +534,9 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & gr
 
 	// Попробуем загрузить изображение
 	//imgp->SetParam(bits, compressor, p);
-	imgp->PrepareResource();
+	CImageBox storage;
+	storage.SetData(buffer, compressor, p, codec);
+	imgp->SetImageSource(storage);
 
 	nova::nstringstream str;
 	str << "Image Factory: image object name: " << name << " group: " << group << " created...";

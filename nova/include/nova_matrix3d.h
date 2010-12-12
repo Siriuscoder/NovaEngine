@@ -39,7 +39,7 @@ namespace nova
 {
 
 template <class nReal>
-class CMatrix3: public CObjectConstructor
+class CMatrix3: public CMemoryManaged
 {
 public:
     // If bZero is true, create the zero matrix.  Otherwise, create the

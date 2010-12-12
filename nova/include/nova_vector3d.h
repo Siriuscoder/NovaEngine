@@ -39,7 +39,7 @@ namespace nova
 {
 
 template <class nReal>
-class CVector3 : public CObjectConstructor
+class CVector3 : public CMemoryManaged
 {
 public:
     // construction

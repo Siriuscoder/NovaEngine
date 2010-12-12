@@ -29,7 +29,7 @@
 namespace nova
 {
 
-class NOVA_EXPORT CSceneContentLoaderBase : public CObjectConstructor
+class NOVA_EXPORT CSceneContentLoaderBase : public CMemoryManaged
 {
 public:
 
@@ -136,7 +136,7 @@ protected:
 	nova::CDataStream *mpStream;
 };
 
-class NOVA_EXPORT CMeshLoaderFactory : public CObjectConstructor
+class NOVA_EXPORT CMeshLoaderFactory : public CMemoryManaged
 {
 public:
 	
