@@ -442,7 +442,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\nova_object_constructor.cpp"
+					RelativePath=".\src\nova_memory_manager.cpp"
 					>
 				</File>
 				<File

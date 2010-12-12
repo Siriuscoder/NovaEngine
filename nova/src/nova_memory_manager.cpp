@@ -17,7 +17,7 @@
  ***************************************************************************/
 #include "nova_stable_precompiled_headers.h"
 
-#include "nova_object_constructor.h"
+#include "nova_memory_manager.h"
 
 namespace nova {
 
