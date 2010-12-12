@@ -59,9 +59,14 @@ void CGLSupport::InitGLExtentions()
 {
 	GLenum err = glewInit();
 	if(err != GLEW_OK)
-		throw NOVA_EXP("CGLSupport::InitGLExtentions() - \
-		Detecting problem with using glewInit(). Can not initialize \
-		OpenGL Extension Wrangler Library", BAD_OPERATION);
+	{
+		char errstr[255];
+		sprintf(errstr, "CGLSupport::InitGLExtentions() - \
+			Detecting problem with using glewInit(). Can not initialize \
+			OpenGL Extension Wrangler Library, reason %s", glewGetErrorString(err));
+
+		throw NOVA_EXP(errstr, BAD_OPERATION);
+	}
 
 	char * vers = (char *)glGetString(GL_VERSION);
 	if(!vers)
