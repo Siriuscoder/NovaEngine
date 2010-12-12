@@ -31,14 +31,14 @@ namespace nova
 
 template<> CDevILCodec * CSingelton<CDevILCodec>::SingeltonObject = NULL;
 
-void* STDCALL__ DevILAlloc(const ILsizei size)
+static void* STDCALL__ DevILAlloc(const ILsizei size)
 {
 	//return winnie_allocator::Alloc(size);
 	nova::nByte *pblock = NULL;
 	return getmem<nova::nByte>(pblock, size);
 }
 
-void STDCALL__ DevILFree(const void *p)
+static void STDCALL__ DevILFree(const void *p)
 {
 	//return winnie_allocator::Free(const_cast<void*>(p));
 	void *cp = const_cast<void *>(p);
@@ -150,54 +150,12 @@ void CDevILCodec::Shutdown()
 
 CDevILCodec::CDevILCodec()
 {
-	memset(&mEffect, NULL, sizeof(TDevILEffects));
+	//memset(&mEffect, NULL, sizeof(TDevILEffects));
 }
 
 CDevILCodec::~CDevILCodec()
 {
 	LOG_MESSAGE("CDevILCodec destroyed..");
-}
-
-void CDevILCodec::ApplyEffect()
-{
-	switch(mEffect.effect)
-	{
-	case DE_ALIENIFYING:
-		iluAlienify();
-		break;
-
-	case DE_BLURRING:
-		iluBlurGaussian(mEffect.par1.ui);
-		break;
-
-	case DE_CONTRAST:
-		iluContrast(mEffect.par1.r);
-		break;
-
-	case DE_EQUALIZATION:
-		iluEqualize();
-		break;
-
-	case DE_GAMMA:
-		iluGammaCorrect(mEffect.par1.r);
-		break;
-
-	case DE_NEGATIVITY:
-		iluNegative();
-		break;
-
-	case DE_NOISE:
-		iluNoisify(mEffect.par1.r);
-		break;
-
-	case DE_PIXELIZATION:
-		iluPixelize(mEffect.par1.ui);
-		break;
-
-	case DE_SHARPERING:
-		iluSharpen(mEffect.par1.r, mEffect.par2.ui);
-		break;
-	}
 }
 
 void CDevILCodec::CodeToBuffer(CMemoryBuffer & out, const CImage &image,
@@ -214,8 +172,6 @@ void CDevILCodec::CodeToBuffer(CMemoryBuffer & out, const CImage &image,
 
 	ilTexImage(image.GetWidth(), image.GetHeight(), image.GetDepth(), informat.GetInternalChannels(),
 		informat.GetFormat(), IL_UNSIGNED_BYTE, image.GetBitsPtr());
-
-	ApplyEffect();
 
 	ILenum type = 0;
 	switch(ext)
@@ -289,8 +245,6 @@ void CDevILCodec::CodeToFile(const nstring & filename, const CImage &image)
 	ilTexImage(image.GetWidth(), image.GetHeight(), image.GetDepth(), informat.GetInternalChannels(),
 		informat.GetFormat(), IL_UNSIGNED_BYTE, image.GetBitsPtr());
 
-	ApplyEffect();
-
 	ilSaveImage(filename.c_str());
 
 	ilDeleteImages(1, &imageid);
@@ -324,8 +278,6 @@ void CDevILCodec::DecodeFromFile(const nstring & filename, CImage *image,
 			throw NOVA_EXP(str.c_str(), BAD_OPERATION);
 		}
 	}
-
-	ApplyEffect();
 
 	image->mHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 	image->mWidth = ilGetInteger(IL_IMAGE_WIDTH);
@@ -429,8 +381,6 @@ void CDevILCodec::DecodeFromBuffer(const CMemoryBuffer & input, CImage *image,
 		}
 	}
 
-	ApplyEffect();
-
 	image->mHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 	image->mWidth = ilGetInteger(IL_IMAGE_WIDTH);
 	image->mDepth = ilGetInteger(IL_IMAGE_DEPTH);
@@ -466,11 +416,6 @@ void CDevILCodec::DecodeFromBuffer(const CMemoryBuffer & input, CImage *image,
 		str.append(iluErrorString(Error));
 		throw NOVA_EXP(str.c_str(), BAD_OPERATION);
 	}
-}
-
-void CDevILCodec::SetEffect(const TDevILEffects &effect)
-{
-	memcpy(&mEffect, &effect, sizeof(TDevILEffects));
 }
 
 /*void CDevILCodec::LoadImage(nstring & file, CImageFormats::NovaPixelFormats format)
