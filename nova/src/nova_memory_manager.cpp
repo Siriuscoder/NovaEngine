@@ -17,63 +17,63 @@
  ***************************************************************************/
 #include "nova_stable_precompiled_headers.h"
 
-#include "nova_object_constructor.h"
+#include "nova_memory_manager.h"
 
 namespace nova {
 
-void *CObjectConstructor::operator new(size_t size)
+void *CMemoryManaged::operator new(size_t size)
 {
 	//return winnie_allocator::Alloc(size);
 	nova::nByte *pblock = NULL;
 	return getmem<nova::nByte>(pblock, size);
 }
 
-void CObjectConstructor::operator delete(void *p)
+void CMemoryManaged::operator delete(void *p)
 {
 	//winnie_allocator::Free(p);
 	freemem<nova::nByte>(static_cast<nova::nByte*>(p));
 }
 
-void *CObjectConstructor::operator new[](size_t size)
+void *CMemoryManaged::operator new[](size_t size)
 {
 	//return winnie_allocator::Alloc(size);
 	nova::nByte *pblock = NULL;
 	return getmem<nova::nByte>(pblock, size);
 }
 
-void CObjectConstructor::operator delete[](void *p)
+void CMemoryManaged::operator delete[](void *p)
 {
 	//winnie_allocator::Free(p);
 	freemems<nova::nByte>(static_cast<nova::nByte*>(p));
 }
 
-void *CObjectConstructor::operator new(size_t size, const std::nothrow_t & n)
+void *CMemoryManaged::operator new(size_t size, const std::nothrow_t & n)
 {
 	//return winnie_allocator::Alloc(size);
 	nova::nByte *pblock = NULL;
 	return getmem<nova::nByte>(pblock, size);
 }
 
-void CObjectConstructor::operator delete(void *p, const std::nothrow_t & n)
+void CMemoryManaged::operator delete(void *p, const std::nothrow_t & n)
 {
 	//winnie_allocator::Free(p);
 	freemem<nova::nByte>(static_cast<nova::nByte*>(p));
 }
 
-void *CObjectConstructor::operator new[](size_t size, const std::nothrow_t & n)
+void *CMemoryManaged::operator new[](size_t size, const std::nothrow_t & n)
 {
 	//return winnie_allocator::Alloc(size);
 	nova::nByte *pblock = NULL;
 	return getmem<nova::nByte>(pblock, size);
 }
 
-void CObjectConstructor::operator delete[](void *p, const std::nothrow_t & n)
+void CMemoryManaged::operator delete[](void *p, const std::nothrow_t & n)
 {
 	//winnie_allocator::Free(p);
 	freemems<nova::nByte>(static_cast<nova::nByte*>(p));
 }
 
-nova::nUInt64 CObjectConstructor::GetMaxBlockSize(void)
+nova::nUInt64 CMemoryManaged::GetMaxBlockSize(void)
 {
 	return std::numeric_limits<size_t>::max();
 }

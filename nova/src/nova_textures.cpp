@@ -37,8 +37,6 @@ void CTexture::CreateTexture(void)
 {
 //	if(!stream.GetBeginPtr())
 //		NOVA_EXP("CTexture::CreateTexture - imagebuff NULL ptr, can`t create texture!", BAD_OPERATION);
-	if(isReady)
-		throw NOVA_EXP("CTexture::CreateTexture - resource already created!", BAD_OPERATION);
 	mSize = 0;
 
 	TImageList::iterator it;
@@ -92,18 +90,10 @@ void CTexture::CreateTexture(void)
 void CTexture::SetImageList(const TImageList & list)
 {
 	mList = list;
-
-	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
-	{
-		CTextureListener * lis =
-			dynamic_cast<CTextureListener *>(GetListener(i));
-		lis->CreateTextureListener(this);
-	}
 }
 
-void CTexture::FreeResource()
+void CTexture::FreeResourceImpl()
 {
-	CResource::FreeResource();
 //	glDeleteTextures(1, &mTexture);
 	stl<CTextureSurfaceListPtr>::vector::iterator it;
 	for(it = mSurfaceList.begin(); it != mSurfaceList.end(); ++it)
@@ -157,14 +147,6 @@ void CTexture::AddSubTexture(CImagePtr & image, nova::nUInt32 level, nInt32 face
 
 	image->GetBits().CopyTo(lock, image->GetBits().GetBufferSize(), 0);
 	surface->Unlock(lock);
-
-
-	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
-	{
-		CTextureListener * lis =
-			dynamic_cast<CTextureListener *>(GetListener(i));
-		lis->AddSubTextureListener(this);
-	}
 }
 
 CTextureSurfaceListPtr CTexture::GetSurfaceList(nova::nUInt32 face)
@@ -192,34 +174,14 @@ CImageFormats::NovaPixelFormats CTexture::GetPixelFormat()
 	return static_cast<CImageFormats::NovaPixelFormats>(0);
 }
 
-void CTexture::PreAddingAction()
+void CTexture::LoadResourceImpl(void)
 {
-	CResource::PreAddingAction();
+
 }
 
-void CTexture::PostAddindAction()
+void CTexture::BuildResourceImpl(void)
 {
-	CResource::PostAddingAction();
-}
-
-void CTexture::PreUnloadingAction()
-{
-	CResource::PreUnloadingAction();
-}
-
-void CTexture::PrepareResource(void)
-{
-	CResource::PrepareResource();
-}
-
-void CTexture::BuildResource(void)
-{
-	if(isReady)
-		return;
-
 	CreateTexture( );
-
-	CResource::BuildResource();
 }
 
 

@@ -57,17 +57,18 @@ protected:
 	CTexturePtr mBumpMapPtr;
 	CTexturePtr mReflectionMapPtr;
 
+
+	void LoadResourceImpl(void);
+
+	void FreeResourceImpl(void);
+
+	void BuildResourceImpl(void); 
+
 public:
 
 	CMaterial(CResourceManager * rm, nstring & name, nstring & group, TAttach state);
 
 	~CMaterial();
-
-	virtual void FreeResource(void);
-
-	virtual void BuildResource(void);
-
-	virtual void PrepareResource(void);
 
 	nova::CColorRGB GetAmbientColor(void);
 

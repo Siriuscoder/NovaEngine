@@ -26,7 +26,7 @@
 namespace nova
 {
 
-class NOVA_EXPORT C3DSChunk : public CObjectConstructor
+class NOVA_EXPORT C3DSChunk : public CMemoryManaged
 {
 private:
 

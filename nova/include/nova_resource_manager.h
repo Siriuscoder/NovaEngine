@@ -44,9 +44,13 @@ public:
 
 	virtual void FreeResourceListener(CResource * object) {}
 
-	virtual void PrepareResourceListener(CResource * object) {}
+	virtual void PreLoadResourceListener(CResource * object) {}
 
-	virtual void BuildResourceListener(CResource * object) {}
+	virtual void PostLoadResourceListener(CResource * object) {}
+
+	virtual void PreBuildResourceListener(CResource * object) {}
+
+	virtual void PostBuildResourceListener(CResource * object) {}
 };
 
 class NOVA_EXPORT CResource : public CBase, public CListenerInterface
@@ -69,6 +73,14 @@ protected:
 	CResourceManager * mCreator;
 	nova::nUInt32 mSize;
 	bool isReady;
+	bool isLoaded;
+	bool isBuilded;
+
+	virtual void LoadResourceImpl(void) = 0;
+
+	virtual void FreeResourceImpl(void) = 0;
+
+	virtual void BuildResourceImpl(void) = 0;
 
 public:
 
@@ -101,9 +113,19 @@ public:
 		return mResourceHandle;
 	}
 
-	inline bool Ready() const
+	inline bool IsReady() const
 	{
 		return isReady;
+	}
+
+	inline bool IsLoaded() const
+	{
+		return isLoaded;
+	}
+
+	inline bool IsBuilded() const
+	{
+		return isBuilded;
 	}
 
 	inline CResourceManager * GetCreator() const
@@ -111,16 +133,19 @@ public:
 		return mCreator;
 	}
 
-	virtual void FreeResource(void);
+	void FreeResource(void);
 
-	virtual void PreAddingAction(void);
-	virtual void PostAddingAction(void);
+	void PreAddingAction(void);
 
-	virtual void PreUnloadingAction(void);
+	void PostAddingAction(void);
 
-	virtual void PrepareResource(void);
+	void PreUnloadingAction(void);
 
-	virtual void BuildResource(void);
+	void LoadResource(void);
+
+	void BuildResource(void);
+
+	void RebuildResource(void);
 };
 
 typedef CSmartPtr<CResource> CResourcePtr;
@@ -202,8 +227,6 @@ public:
 	virtual CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package) = 0;
 
 	virtual CResourcePtr LoadResourceFromXml(const nstring &filename) = 0;
-
-	void BuildNextResource(const nstring & name);
 
 	nInt32 LoadResourcesForce(const CFilesPackage &rPack);
 

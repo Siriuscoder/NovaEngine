@@ -39,7 +39,7 @@ namespace nova
 {
 
 template <class nReal>
-class CQuaternion: public CObjectConstructor
+class CQuaternion: public CMemoryManaged
 {
 public:
     // A CQuaternion is q = w + x*i + y*j + z*k where (w,x,y,z) is not

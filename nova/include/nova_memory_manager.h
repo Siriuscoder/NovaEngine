@@ -26,19 +26,19 @@
 
 namespace nova {
 
-/// \class CObjectConstructor
+/// \class CMemoryManaged
 /// \brief Конструктор объектов
 ///
 /// Наследуясь от класса CBase вы автоматически получаете
 /// перегруженые new/delete для вашего класса (но это делать совсем не обязательно)
-class NOVA_EXPORT CObjectConstructor
+class NOVA_EXPORT CMemoryManaged
 {
 public:
 
 /// \brief Конструктор
-	CObjectConstructor() {};
+	CMemoryManaged() {};
 /// \brief Деструктор
-	~CObjectConstructor() {};
+	~CMemoryManaged() {};
 
 /// \brief Оператор new
 	void *operator new(size_t size);

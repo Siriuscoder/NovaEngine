@@ -44,7 +44,7 @@ namespace nova {
 /// Мне встала неоходимость заменить аллокатор памяти в stl на аллокатор винни.
 /// тут есть 2 варианта или мы перегружаем new/delete или пишем stl аллокатор.
 /// так как глобально перешружать new/delete не очень красиво (Эту проблему я решил
-/// используя корневой аллокатор CObjectConstructor), то я всетаки решил наследовать std::allocator
+/// используя корневой аллокатор CMemoryManaged), то я всетаки решил наследовать std::allocator
 template<class usertype> class NOVA_EXPORT CNovaAlloc : public std::allocator<usertype>
 {
 public:

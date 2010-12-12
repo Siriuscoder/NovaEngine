@@ -21,12 +21,12 @@
  ***************************************************************************/
 #pragma once
 
-#include "nova_object_constructor.h"
+#include "nova_memory_manager.h"
 
 namespace nova
 {
 
-class NOVA_EXPORT CEventListener : public CObjectConstructor
+class NOVA_EXPORT CEventListener : public CMemoryManaged
 {
 public:
 

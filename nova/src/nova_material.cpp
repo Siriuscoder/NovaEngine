@@ -143,16 +143,13 @@ void CMaterial::SetReflectionMap(nstring & nmap)
 	mReflectionMap = nmap;
 }
 
-void CMaterial::FreeResource(void)
+void CMaterial::FreeResourceImpl(void)
 {
-	CResource::FreeResource();
+
 }
 
-void CMaterial::BuildResource(void)
+void CMaterial::BuildResourceImpl(void)
 {
-	if(isReady)
-		return;
-
 	if(mTexMap.size() != 0)
 		mTexMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mTexMap);
 	if(mMultiTexMap.size() != 0)
@@ -163,13 +160,11 @@ void CMaterial::BuildResource(void)
 		mBumpMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mBumpMap);
 	if(mReflectionMap.size() != 0)
 		mReflectionMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mReflectionMap);
-
-	CResource::BuildResource();
 }
 
-void CMaterial::PrepareResource(void)
+void CMaterial::LoadResourceImpl(void)
 {
-	CResource::PrepareResource();
+
 }
 
 void CMaterial::ApplyMaterial(void)
@@ -264,9 +259,6 @@ CMaterialPtr CMaterialManager::CreateMaterial(nstring & name, nstring & group,
 	mat->SetSpecMap(SpecMap);
 	mat->SetBumpMap(BumpMap);
 	mat->SetReflectionMap(ReflectionMap);
-
-	mat->PrepareResource();
-	mat->BuildResource();
 
 
 	nova::nstringstream str;

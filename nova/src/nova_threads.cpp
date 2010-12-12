@@ -27,7 +27,7 @@ pthread_mutex_t LOG_MUTEX_SECTION = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t RESOURCE_MUTEX_SECTION = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t OBJECT_MUTEX_SECTION = PTHREAD_MUTEX_INITIALIZER;
 
-struct _in_data : public CObjectConstructor
+struct _in_data : public CMemoryManaged
 {
 	CThread * pth;
 	void * buffer;
