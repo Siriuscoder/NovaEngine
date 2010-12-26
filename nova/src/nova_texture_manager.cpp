@@ -28,17 +28,15 @@ namespace nova
 
 template<> CTextureManager * CSingelton<CTextureManager>::SingeltonObject = NULL;
 
-CTextureManager::CTextureManager()
+CTextureManager::CTextureManager(nstring resourceFactoryName) : CResourceManager(resourceFactoryName)
 {
 	mAutoMipmap = CTextureSurfaceList::USE_HARDWARE_MIPMAPS;
-	LOG_MESSAGE("Texture manager created..");
 }
 
 
 CTextureManager::~CTextureManager()
 {
 	UnloadAllManagerResources();
-	LOG_MESSAGE("Texture manager destroyed..");
 }
 
 CResourcePtr CTextureManager::CreateInstance(const nstring & name,
@@ -118,12 +116,7 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 	return texp;
 }
 
-CResourcePtr CTextureManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
-{
-	return CResourcePtr();
-}
-
-CResourcePtr CTextureManager::LoadResourceFromXml(const nstring &filename)
+CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 {
 	return CResourcePtr();
 }

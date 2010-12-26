@@ -445,15 +445,14 @@ void CImage::BackWidth()
 
 template<> CImageManager * CSingelton<CImageManager>::SingeltonObject = NULL;
 
-CImageManager::CImageManager()
+CImageManager::CImageManager(nstring resourceFactoryName) : CResourceManager(resourceFactoryName)
 {
-	LOG_MESSAGE("Image manager created..");
+
 }
 
 CImageManager::~CImageManager()
 {
 	UnloadAllManagerResources();
-	LOG_MESSAGE("Image manager destroyed..");
 }
 
 CResourcePtr CImageManager::CreateInstance(const nstring & name,
@@ -545,14 +544,10 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & gr
 	return imgp;
 }
 
-CResourcePtr CImageManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
+CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 {
 	return CResourcePtr();
 }
 
-CResourcePtr CImageManager::LoadResourceFromXml(const nstring &filename)
-{
-	return CResourcePtr();
-}
 
 }

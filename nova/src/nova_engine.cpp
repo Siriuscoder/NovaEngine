@@ -45,12 +45,15 @@ CNovaEngine::CNovaEngine() : CBase("CNovaEngine")
 	mes += " (c) sirius 2009\n\n";
 
 	LOG_MESSAGE(mes);
+	xmlInitParser();
 
 	mFontManager = NULL;
 	mTextureManager = NULL;
 	mImageManager = NULL;
 	mScene = NULL;
 	mRenderer = NULL;
+	mMeshManager = NULL;
+	mMaterialManager = NULL;
 }
 
 CNovaEngine::~CNovaEngine()
@@ -61,6 +64,7 @@ CNovaEngine::~CNovaEngine()
 	LOG_MESSAGE("Thank you for using NovaEngine, good bye ))");
 
 	delete mSystemLog;
+	mSystemLog = NULL;
 }
 
 void CNovaEngine::Release(void)
@@ -72,12 +76,21 @@ void CNovaEngine::Release(void)
 	if(mRenderer)
 		mRenderer->ShutDown();
 /* Resource manager unloads */
+	UnRegisterResourceFactory(mFontManager);
 	if(mFontManager)
 		delete mFontManager;
+
+	UnRegisterResourceFactory(mTextureManager);
 	if(mTextureManager)
 		delete mTextureManager;
-	if(mImageManager)
-		delete mImageManager;
+
+	UnRegisterResourceFactory(mMeshManager);
+	if(mMeshManager)
+		delete mMeshManager;
+
+	UnRegisterResourceFactory(mMaterialManager);
+	if(mMaterialManager)
+		delete mMaterialManager;
 
 /* Unloading codecs */
 #ifdef USING_DEVIL
@@ -97,14 +110,28 @@ void CNovaEngine::Release(void)
 	mRenderer = NULL;
 
 	ResetStats();
+
+	xmlCleanupParser();
 }
 
 nInt32 CNovaEngine::Init(StartInit flag)
 {
 /* Resource managers */
-	mFontManager = new CFontManager();
-	mTextureManager = new CTextureManager();
-	mImageManager = new CImageManager();
+	mFontManager = new CFontManager("FontResourceFactory");
+	RegisterResourceFactory(mFontManager);
+
+	mTextureManager = new CTextureManager("TextureResourceFactory");
+	RegisterResourceFactory(mTextureManager);
+
+	mImageManager = new CImageManager("ImageResourceFactory");
+	RegisterResourceFactory(mImageManager);
+
+	mMeshManager = new CMeshManager("MeshResourceFactory");
+	RegisterResourceFactory(mMeshManager);
+
+	mMaterialManager = new CMaterialManager("MaterialResourceFactory");
+	RegisterResourceFactory(mMaterialManager);
+
 /* Renderer */
 	mRenderer = new CRenderSystem();
 /* Global Scene */
@@ -270,21 +297,6 @@ void CNovaEngine::GetStats(TRenderStats & stat)
 	memcpy(&stat, &mStats, sizeof(TRenderStats));
 }
 
-CTextureManager * CNovaEngine::GetTextureManager()
-{
-	return mTextureManager;
-}
-
-CImageManager * CNovaEngine::GetImageManager()
-{
-	return mImageManager;
-}
-
-CFontManager * CNovaEngine::GetFontManager()
-{
-	return mFontManager;
-}
-
 CRenderSystem * CNovaEngine::GetRenderSystem(void)
 {
 	return mRenderer;
@@ -322,18 +334,44 @@ void CNovaEngine::MakeRenderWindow(void)
 			Can not make render target.. Render system not created!", BAD_OPERATION);
 }
 
-void CNovaEngine::RegisterResourceFactory(CResourceManager *factory, const nstring &name)
+void CNovaEngine::RegisterResourceFactory(CResourceManager *factory)
 {
+	stl<nstring, CResourceManager *>::map::iterator it;
 
-}
+	if(factory)
+	{
+		if((it = mResourceFactoryHash.find(factory->GetResourceFactoryName())) == mResourceFactoryHash.end())
+		{
+			mResourceFactoryHash.insert(std::pair<nstring, CResourceManager *>(factory->GetResourceFactoryName(), factory));
+			LOG_MESSAGE(nstring("CNovaEngine::RegisterResourceFactory: ") + 
+				factory->GetResourceFactoryName() + " resource factory registered.");
+		}
+	}
+}	
 
-void CNovaEngine::UnRegisterResourceFactory(const nstring &name)
+void CNovaEngine::UnRegisterResourceFactory(CResourceManager *factory)
 {
+	stl<nstring, CResourceManager *>::map::iterator it; 
 
+	if(factory)
+	{
+		if((it = mResourceFactoryHash.find(factory->GetResourceFactoryName())) != mResourceFactoryHash.end())
+		{
+			mResourceFactoryHash.erase(it);
+			LOG_MESSAGE(nstring("CNovaEngine::UnRegisterResourceFactory: ") + 
+				factory->GetResourceFactoryName() + " resource factory unregistered.");
+		}
+	}
 }
 
 CResourceManager * CNovaEngine::GetResourceFactory(const nstring &name)
 {
+	stl<nstring, CResourceManager *>::map::iterator it; 
+	if((it = mResourceFactoryHash.find(name)) != mResourceFactoryHash.end())
+	{
+		return it->second;
+	}
+
 	return NULL;
 }
 

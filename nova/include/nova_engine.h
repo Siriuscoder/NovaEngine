@@ -133,11 +133,13 @@ protected:
 //	CResourceManager * ResourceManager;
 	CTextureManager * mTextureManager;
 	CImageManager * mImageManager;
+	CMeshManager * mMeshManager;
+	CMaterialManager *mMaterialManager;
 	CRenderSystem * mRenderer;
 	CScene * mScene;
 	CLog * mSystemLog;
 
-	stl<CResourceManager *, nstring>::map mResourceFactoryHash;
+	stl<nstring, CResourceManager *>::map mResourceFactoryHash;
 
 private:
 	bool	mRenderLoop;
@@ -162,8 +164,6 @@ public:
 
 /// \brief Деструктор
 	~CNovaEngine();
-/// \brief Функция получения Менеджера шрифтов.
-	CFontManager * GetFontManager();
 
 //	inline CConsoleManager * GetConsoleManager()
 //	{
@@ -175,10 +175,6 @@ public:
 		return ResourceManager;
 	}
 */
-
-	CTextureManager * GetTextureManager();
-
-	CImageManager * GetImageManager();
 
 /// \brief Инициализация
 ///
@@ -216,9 +212,9 @@ public:
 
 	void MakeRenderWindow(void);
 
-	void RegisterResourceFactory(CResourceManager *factory, const nstring &name);
+	void RegisterResourceFactory(CResourceManager *factory);
 
-	void UnRegisterResourceFactory(const nstring &name);
+	void UnRegisterResourceFactory(CResourceManager *factory);
 
 	CResourceManager * GetResourceFactory(const nstring &name);
 };

@@ -26,7 +26,7 @@
 namespace nova
 {
 
-CMeshBox::CMeshBox(CResourceManager * rm, nstring & name, nstring & group, TAttach state) :
+CMeshBox::CMeshBox(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
 	CResource(rm, name, group, state)
 {
 	memset(&mMeshDef, 0, sizeof(TMeshContainer));
@@ -316,15 +316,15 @@ void CMeshBox::GenerateNormalsToFaces(void)
 
 template<> CMeshManager * CSingelton<CMeshManager>::SingeltonObject = NULL;
 
-CMeshManager::CMeshManager()
+CMeshManager::CMeshManager(nstring resourceFactoryName) : CResourceManager(resourceFactoryName)
 {
-	LOG_MESSAGE("Mesh manager created..");
+
 }
 
 CMeshManager::~CMeshManager()
 {
 	UnloadAllManagerResources();
-	LOG_MESSAGE("Mesh manager destroyed..");
+
 }
 
 void CMeshManager::UnloadAllManagerResources()
@@ -332,8 +332,8 @@ void CMeshManager::UnloadAllManagerResources()
 	UnloadResourceFromHash(this);
 }
 
-CResourcePtr CMeshManager::CreateInstance(nstring & name,
-		nstring & group, CResource::TAttach state)
+CResourcePtr CMeshManager::CreateInstance(const nstring & name,
+		const nstring & group, CResource::TAttach state)
 {
 	CResourcePtr ptr(new CMeshBox(this, name, group, state));
 	return ptr;
@@ -370,12 +370,7 @@ CMeshBoxPtr CMeshManager::CreateMeshFromFile(const nstring &file, const nstring 
 	return mesh;
 }
 
-CResourcePtr CMeshManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
-{
-	return CResourcePtr();
-}
-
-CResourcePtr CMeshManager::LoadResourceFromXml(const nstring &filename)
+CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 {
 	return CResourcePtr();
 }

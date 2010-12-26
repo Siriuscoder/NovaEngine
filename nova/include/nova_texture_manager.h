@@ -38,7 +38,7 @@ protected:
 
 public:
 
-	CTextureManager();
+	CTextureManager(nstring resourceFactoryName);
 	~CTextureManager();
 
 	virtual CResourcePtr CreateInstance(const nstring & name,
@@ -63,12 +63,11 @@ public:
 		CTexture::TEnv env = CTexture::EV_REPLACE,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
-	/* for force loading form packages */
-	virtual CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
-
-	virtual CResourcePtr LoadResourceFromXml(const nstring &filename);
-
 	virtual void UnloadAllManagerResources();
+
+protected:
+
+	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node);
 };
 
 
