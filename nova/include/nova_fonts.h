@@ -244,9 +244,12 @@ class NOVA_EXPORT CFontManager : public CSingelton<CFontManager>, public CResour
 protected:
 
 	FT_Library library;
+
+	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node);
+
 public:
 
-	CFontManager(/* texture manager */);
+	CFontManager(nstring resourceFactoryName);
 	~CFontManager();
 
 	virtual void UnloadAllManagerResources();
@@ -261,10 +264,6 @@ public:
 	CFontPtr CreateNewFont(const nstring & name, const nstring & group,
 		nova::nUInt32 height, const CMemoryBuffer & ttf, nova::nUInt32 coord_grid,
 		CResource::TAttach state = CResource::NV_ATTACHED);
-
-	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
-
-	CResourcePtr LoadResourceFromXml(const nstring &filename);
 };
 
 }

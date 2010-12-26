@@ -178,7 +178,7 @@ protected:
 
 public:
 
-	CMeshBox(CResourceManager * rm, nstring & name, nstring & group, TAttach state);
+	CMeshBox(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
 	~CMeshBox();
 
 	TMeshContainer &GetMeshDefinition(void);
@@ -213,16 +213,17 @@ class NOVA_EXPORT CMeshManager : public CSingelton<CMeshManager>, public CResour
 {
 protected:
 
+	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node);
 
 public:
 
-	CMeshManager();
+	CMeshManager(nstring resourceFactoryName);
 	~CMeshManager();
 
 	virtual void UnloadAllManagerResources();
 
-	virtual CResourcePtr CreateInstance(nstring & name, 
-		nstring & group, CResource::TAttach state);
+	virtual CResourcePtr CreateInstance(const nstring & name, 
+		const nstring & group, CResource::TAttach state);
 
 	CMeshBoxPtr CreateMesh(CMeshBox::TMeshContainer *def, const nstring &group,
 		CResource::TAttach state = CResource::NV_ATTACHED); 
@@ -230,9 +231,6 @@ public:
 	CMeshBoxPtr CreateMeshFromFile(const nstring &file, const nstring &group,
 		CResource::TAttach state = CResource::NV_ATTACHED); 
 
-	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
-
-	CResourcePtr LoadResourceFromXml(const nstring &filename);
 };
 
 }

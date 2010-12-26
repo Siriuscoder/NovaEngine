@@ -180,12 +180,16 @@ protected:
 
 	CResourceListener * mpDefListener;
 	nstring mResourceLocation;
+	nstring mResourceFactoryName;
 
 public:
 
-	CResourceManager() : mpDefListener(NULL), CBase("CResourceManager") {}
+	CResourceManager(nstring resourceFactoryName) : mpDefListener(NULL), CBase("CResourceManager"), 
+		mResourceFactoryName(resourceFactoryName) {}
 
 	~CResourceManager() {}
+
+	nstring GetResourceFactoryName(void) { return mResourceFactoryName; }
 
 	void SetResourceLocation(const nstring & path);
 
@@ -224,13 +228,19 @@ public:
 	virtual void UnloadAllManagerResources() = 0;
 
 	/* for force loading form packages */
-	virtual CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package) = 0;
+	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
 
-	virtual CResourcePtr LoadResourceFromXml(const nstring &filename) = 0;
+	CResourcePtr LoadResourceFromXml(const nstring &filename);
+
+	CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node);
 
 	nInt32 LoadResourcesForce(const CFilesPackage &rPack);
 
 	nInt32 LoadResourcesInBackgroundMode(const CFilesPackage &rPack);
+
+protected:
+
+	virtual CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node) = 0;
 
 };
 

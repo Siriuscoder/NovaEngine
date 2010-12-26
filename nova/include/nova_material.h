@@ -66,29 +66,29 @@ protected:
 
 public:
 
-	CMaterial(CResourceManager * rm, nstring & name, nstring & group, TAttach state);
+	CMaterial(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
 
 	~CMaterial();
 
-	nova::CColorRGB GetAmbientColor(void);
+	nova::CColorRGB GetAmbientColor(void) const ;
 
-	nova::CColorRGB GetDiffuseColor(void);
+	nova::CColorRGB GetDiffuseColor(void) const ;
 
-	nova::CColorRGB GetSpecularColor(void);
+	nova::CColorRGB GetSpecularColor(void) const ;
 
-	nReal GetShininess(void);
+	nReal GetShininess(void) const ;
 
-	nReal GetTransparency(void);
+	nReal GetTransparency(void) const ;
 
-	nstring GetTexMap(void);
+	nstring GetTexMap(void) const ;
 
-	nstring GetMultiTexMap(void);
+	nstring GetMultiTexMap(void) const ;
 
-	nstring GetSpecMap(void);
+	nstring GetSpecMap(void) const ;
 
-	nstring GetBumpMap(void);
+	nstring GetBumpMap(void) const ;
 
-	nstring GetReflectionMap(void);
+	nstring GetReflectionMap(void) const ;
 
 
 	void SetAmbientColor(CColorRGB & nmap);
@@ -101,15 +101,15 @@ public:
 
 	void SetTransparency(nReal val);
 
-	void SetTexMap(nstring & nmap);
+	void SetTexMap(const nstring & nmap);
 
-	void SetMultiTexMap(nstring & nmap);
+	void SetMultiTexMap(const nstring & nmap);
 
-	void SetSpecMap(nstring & nmap);
+	void SetSpecMap(const nstring & nmap);
 
-	void SetBumpMap(nstring & nmap);
+	void SetBumpMap(const nstring & nmap);
 
-	void SetReflectionMap(nstring & nmap);
+	void SetReflectionMap(const nstring & nmap);
 
 	void ApplyMaterial(void);
 };
@@ -120,33 +120,32 @@ class NOVA_EXPORT CMaterialManager : public CSingelton<CMaterialManager>, public
 {
 protected:
 
+	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node);
+
 public:
-	CMaterialManager();
+	CMaterialManager(nstring resourceFactoryName);
 	~CMaterialManager();
 
-	virtual CResourcePtr CreateInstance(nstring & name, 
-		nstring & group, CResource::TAttach state);
+	virtual CResourcePtr CreateInstance(const nstring & name, 
+		const nstring & group, CResource::TAttach state);
 
 	virtual void UnloadAllManagerResources();
 
-	virtual CMaterialPtr CreateMaterial(nstring & name, nstring & group, 
+	virtual CMaterialPtr CreateMaterial(const nstring & name, const nstring & group, 
 		nova::CColorRGB AmbientColor,
 		nova::CColorRGB DiffuseColor,
 		nova::CColorRGB SpecularColor,
 		nReal Shininess,
 		nReal Transparency,
-		nstring TexMap,
-		nstring MultiTexMap,
-		nstring SpecMap,
-		nstring BumpMap,
-		nstring ReflectionMap,
+		const nstring TexMap,
+		const nstring MultiTexMap,
+		const nstring SpecMap,
+		const nstring BumpMap,
+		const nstring ReflectionMap,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
 
-	/* for force loading form packages */
-	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
 
-	CResourcePtr LoadResourceFromXml(const nstring &filename);
 };
 
 }

@@ -330,13 +330,11 @@ void CFreeFont::FreeResourceImpl()
 
 template<> CFontManager * CSingelton<CFontManager>::SingeltonObject = NULL;
 
-CFontManager::CFontManager()
+CFontManager::CFontManager(nstring resourceFactoryName) : CResourceManager(resourceFactoryName)
 {
 	// Инициализация библиотеки FreeType.
 	if(FT_Init_FreeType(&library))
 		throw NOVA_EXP("CFontManager::CFontManager() - Error Init freetype fonts..", BAD_OPERATION);
-
-	LOG_MESSAGE("Font manager created..");
 }
 
 CFontManager::~CFontManager()
@@ -344,8 +342,6 @@ CFontManager::~CFontManager()
 	UnloadAllManagerResources();
 	if(FT_Done_FreeType(library))
 		throw NOVA_EXP("CFontManager::CFontManager() - Error done freetype lib..", BAD_OPERATION);
-
-	LOG_MESSAGE("Font manager destroyed..");
 }
 
 CResourcePtr CFontManager::CreateInstance(const nstring & name,
@@ -393,14 +389,10 @@ void CFontManager::UnloadAllManagerResources()
 	UnloadResourceFromHash(this);
 }
 
-CResourcePtr CFontManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
+CResourcePtr CFontManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 {
 	return CResourcePtr();
 }
 
-CResourcePtr CFontManager::LoadResourceFromXml(const nstring &filename)
-{
-	return CResourcePtr();
-}
 
 }

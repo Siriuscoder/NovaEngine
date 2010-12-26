@@ -36,58 +36,58 @@ CMaterial::~CMaterial()
 	FreeResource();
 }
 
-CMaterial::CMaterial(CResourceManager * rm, nstring & name, nstring & group, TAttach state) :
+CMaterial::CMaterial(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
 	CResource(rm, name, group, state)
 {
 
 }
 
-nova::CColorRGB CMaterial::GetAmbientColor(void)
+nova::CColorRGB CMaterial::GetAmbientColor(void) const 
 {
 	return mAmbientColor;
 }
 
-nova::CColorRGB CMaterial::GetDiffuseColor(void)
+nova::CColorRGB CMaterial::GetDiffuseColor(void) const 
 {
 	return mDiffuseColor;
 }
 
-nova::CColorRGB CMaterial::GetSpecularColor(void)
+nova::CColorRGB CMaterial::GetSpecularColor(void) const 
 {
 	return mSpecularColor;
 }
 
-nReal CMaterial::GetShininess(void)
+nReal CMaterial::GetShininess(void) const 
 {
 	return mShininess;
 }
 
-nReal CMaterial::GetTransparency(void)
+nReal CMaterial::GetTransparency(void) const 
 {
 	return mTransparency;
 }
 
-nstring CMaterial::GetTexMap(void)
+nstring CMaterial::GetTexMap(void) const 
 {
 	return mTexMap;
 }
 
-nstring CMaterial::GetMultiTexMap(void)
+nstring CMaterial::GetMultiTexMap(void) const 
 {
 	return mMultiTexMap;
 }
 
-nstring CMaterial::GetBumpMap(void)
+nstring CMaterial::GetBumpMap(void) const 
 {
 	return mBumpMap;
 }
 
-nstring CMaterial::GetSpecMap(void)
+nstring CMaterial::GetSpecMap(void) const 
 {
 	return mSpecMap;
 }
 
-nstring CMaterial::GetReflectionMap(void)
+nstring CMaterial::GetReflectionMap(void) const 
 {
 	return mReflectionMap;
 }
@@ -118,27 +118,27 @@ void CMaterial::SetTransparency(nReal val)
 	mTransparency = val;
 }
 
-void CMaterial::SetTexMap(nstring & nmap)
+void CMaterial::SetTexMap(const nstring & nmap)
 {
 	mTexMap = nmap;
 }
 
-void CMaterial::SetMultiTexMap(nstring & nmap)
+void CMaterial::SetMultiTexMap(const nstring & nmap)
 {
 	mMultiTexMap = nmap;
 }
 
-void CMaterial::SetSpecMap(nstring & nmap)
+void CMaterial::SetSpecMap(const nstring & nmap)
 {
 	mSpecMap = nmap;
 }
 
-void CMaterial::SetBumpMap(nstring & nmap)
+void CMaterial::SetBumpMap(const nstring & nmap)
 {
 	mBumpMap = nmap;
 }
 
-void CMaterial::SetReflectionMap(nstring & nmap)
+void CMaterial::SetReflectionMap(const nstring & nmap)
 {
 	mReflectionMap = nmap;
 }
@@ -208,19 +208,18 @@ void CMaterial::ApplyMaterial(void)
 
 template<> CMaterialManager * CSingelton<CMaterialManager>::SingeltonObject = NULL;
 
-CMaterialManager::CMaterialManager()
+CMaterialManager::CMaterialManager(nstring resourceFactoryName) : CResourceManager(resourceFactoryName)
 {
-	LOG_MESSAGE("Material manager started..");
+
 }
 
 CMaterialManager::~CMaterialManager()
 {
 	UnloadAllManagerResources();
-	LOG_MESSAGE("Texture manager destroyed..");
 }
 
-CResourcePtr CMaterialManager::CreateInstance(nstring & name,
-	nstring & group, CResource::TAttach state)
+CResourcePtr CMaterialManager::CreateInstance(const nstring & name,
+	const nstring & group, CResource::TAttach state)
 {
 	CResourcePtr ptr(new CMaterial(this, name, group, state));
 	return ptr;
@@ -231,17 +230,17 @@ void CMaterialManager::UnloadAllManagerResources()
 	UnloadResourceFromHash(this);
 }
 
-CMaterialPtr CMaterialManager::CreateMaterial(nstring & name, nstring & group,
+CMaterialPtr CMaterialManager::CreateMaterial(const nstring & name, const nstring & group,
 	nova::CColorRGB AmbientColor,
 	nova::CColorRGB DiffuseColor,
 	nova::CColorRGB SpecularColor,
 	nReal Shininess,
 	nReal Transparency,
-	nstring TexMap,
-	nstring MultiTexMap,
-	nstring SpecMap,
-	nstring BumpMap,
-	nstring ReflectionMap,
+	const nstring TexMap,
+	const nstring MultiTexMap,
+	const nstring SpecMap,
+	const nstring BumpMap,
+	const nstring ReflectionMap,
 	CResource::TAttach state)
 {
 	CMaterialPtr mat = CResourceManager::AddNewResource(name, group, state);
@@ -269,14 +268,10 @@ CMaterialPtr CMaterialManager::CreateMaterial(nstring & name, nstring & group,
 }
 
 
-CResourcePtr CMaterialManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
+CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 {
 	return CResourcePtr();
 }
 
-CResourcePtr CMaterialManager::LoadResourceFromXml(const nstring &filename)
-{
-	return CResourcePtr();
-}
 
 }

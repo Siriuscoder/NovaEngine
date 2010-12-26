@@ -91,8 +91,6 @@ void CRenderSystem::InitializeFromConfigFile()
 #ifdef USE_XML
 	if(mFlags == SF_START_AUTO_XML_CONFIG)
 	{
-		xmlInitParser();
-
 		xmlDocPtr doc;
 		doc = xmlParseFile(mPrivateConfigFile.c_str());
 
@@ -197,7 +195,6 @@ void CRenderSystem::InitializeFromConfigFile()
 		}
 
 		xmlFreeDoc(doc);
-		xmlCleanupParser();
 
 		if(ren && vid)
 			mConfigIsReady = true;
