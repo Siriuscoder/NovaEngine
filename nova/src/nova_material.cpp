@@ -273,5 +273,9 @@ CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 	return CResourcePtr();
 }
 
+CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+{
+	return CResourcePtr();
+}
 
 }

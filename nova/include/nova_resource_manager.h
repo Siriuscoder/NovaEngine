@@ -172,6 +172,7 @@ class NOVA_EXPORT CResourceManager : public CBase
 {
 protected:
 	static stl<nstring, CResourcePtr>::map mResourceHash;
+	static stl<nstring, CResourceManager *>::map mResourceFactoryHash;
 	static CAsyncLockingQueue mResourceBuildQueue;
 //	CImageCodecsManager * ImageCodecsManager;
 //	CTextureManager * TextureManager;
@@ -189,35 +190,29 @@ public:
 
 	~CResourceManager() {}
 
-	nstring GetResourceFactoryName(void) { return mResourceFactoryName; }
+	inline nstring GetResourceFactoryName(void) const { return mResourceFactoryName; }
 
 	void SetResourceLocation(const nstring & path);
 
-	nstring GetResourceLocation();
+	nstring GetResourceLocation() const;
 
 	void AddDefaultListener(CResourceListener * listener);
 
-	void LoadResourceIntoHash(const CResourcePtr & resource);
+	static void LoadResourceIntoHash(const CResourcePtr & resource);
 
-	void UnloadResourceFromHash(const CResourcePtr & resource);
+	static void UnloadResourceFromHash(const CResourcePtr & resource);
 
-	void UnloadResourceFromHash(const nstring & name);
+	static void UnloadResourceFromHash(const nstring & name);
 
-	void UnloadResourceGroupFromHash(const nstring & group);
+	static void UnloadResourceGroupFromHash(const nstring & group);
 
-	void UnloadResourceFromHash(nova::nUInt32 handle);
-
-	static size_t GetHashSize();
-
-	void UnloadAllResources();
-
-	void FreeAllResource();
+	static void UnloadResourceFromHash(nova::nUInt32 handle);
 
 	void UnloadResourceFromHash(CResourceManager * rm);
 
-	CResourcePtr GetResourceFromHash(const nstring & name);
+	static CResourcePtr GetResourceFromHash(const nstring & name);
 
-	CResourcePtr GetResourceFromHash(nova::nUInt32 handle);
+	static CResourcePtr GetResourceFromHash(nova::nUInt32 handle);
 
 	CResourcePtr AddNewResource(const nstring & name,
 		const nstring & group, CResource::TAttach state);
@@ -234,13 +229,35 @@ public:
 
 	CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node);
 
-	nInt32 LoadResourcesForce(const CFilesPackage &rPack);
+	CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node, const CFilesPackage &package);
 
-	nInt32 LoadResourcesInBackgroundMode(const CFilesPackage &rPack);
+	static void BuildAllManagedResources(void);
+
+	static void ReLoadAllManagedResources(void);
+
+	static void ReBuildAllManagedResources(void);
+
+	static void LoadAllManagedResources(void);
+
+	static size_t GetHashSize(void);
+
+	static void UnloadAllResources(void);
+
+	static void FreeAllResource(void);
+
+//// Managing Resource factories
+
+	static void RegisterResourceFactory(CResourceManager *factory);
+
+	static void UnRegisterResourceFactory(CResourceManager *factory);
+
+	static CResourceManager * GetResourceFactory(const nstring &name);
 
 protected:
 
 	virtual CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node) = 0;
+
+	virtual CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package) = 0;
 
 };
 

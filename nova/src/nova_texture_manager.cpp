@@ -121,6 +121,11 @@ CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 	return CResourcePtr();
 }
 
+CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+{
+	return CResourcePtr();
+}
+
 //--------------------------------------------------------------------------
 
 void CTextureManager::UnloadAllManagerResources()

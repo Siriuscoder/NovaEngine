@@ -139,8 +139,6 @@ protected:
 	CScene * mScene;
 	CLog * mSystemLog;
 
-	stl<nstring, CResourceManager *>::map mResourceFactoryHash;
-
 private:
 	bool	mRenderLoop;
 
@@ -211,12 +209,6 @@ public:
 	void AttachEventHandlerToMainWindow(CEventConveyor * handler);
 
 	void MakeRenderWindow(void);
-
-	void RegisterResourceFactory(CResourceManager *factory);
-
-	void UnRegisterResourceFactory(CResourceManager *factory);
-
-	CResourceManager * GetResourceFactory(const nstring &name);
 };
 
 /**

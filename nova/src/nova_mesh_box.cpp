@@ -375,4 +375,9 @@ CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 	return CResourcePtr();
 }
 
+CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+{
+	return CResourcePtr();
+}
+
 }

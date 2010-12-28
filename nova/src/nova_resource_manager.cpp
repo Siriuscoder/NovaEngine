@@ -142,6 +142,7 @@ void CResource::RebuildResource(void)
 
 ////////////////// Resource global hash //////////////////////////
 stl<nstring, CResourcePtr>::map CResourceManager::mResourceHash;
+stl<nstring, CResourceManager *>::map CResourceManager::mResourceFactoryHash;
 ////////////////// Resource global building queue ////////////////
 CAsyncLockingQueue CResourceManager::mResourceBuildQueue;
 /*CImageCodecsManager * CResourceManager::GetImageCodecsManager()
@@ -234,7 +235,7 @@ void CResourceManager::UnloadResourceGroupFromHash(const nstring & group)
 			res[i]->PreUnloadingAction();
 	res.clear();
 }
-
+ 
 size_t CResourceManager::GetHashSize()
 {
 	size_t result = 0;
@@ -444,7 +445,7 @@ void CResourceManager::SetResourceLocation(const nstring & path)
 	mResourceLocation = path;
 }
 
-nstring CResourceManager::GetResourceLocation()
+nstring CResourceManager::GetResourceLocation() const
 {
 	return mResourceLocation;
 }
@@ -498,14 +499,132 @@ void CAsyncLockingQueue::ClearQueue(void)
 	pthread_mutex_unlock(&mLockMutex);
 }
 
-nInt32 CResourceManager::LoadResourcesForce(const CFilesPackage &rPack)
+/* for force loading form packages */
+CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
 {
-	return 0;
+	CResourcePtr res;
+
+	return res;
 }
 
-nInt32 CResourceManager::LoadResourcesInBackgroundMode(const CFilesPackage &rPack)
+/* for force loading from file system */
+CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 {
-	return 0;
+	CResourcePtr res;
+
+	return res;
+}
+
+CResourcePtr CResourceManager::LoadResourceFromXmlNode(xmlNodePtr node)
+{
+	CResourcePtr res;
+
+	return res;
+}
+
+CResourcePtr CResourceManager::LoadResourceFromXmlNode(xmlNodePtr node, const CFilesPackage &package)
+{
+	CResourcePtr res;
+
+	return res;
+}
+
+void CResourceManager::BuildAllManagedResources(void)
+{
+	stl<nstring, CResourcePtr>::map::iterator it;
+
+	RESOURCE_MUTEX_SECTION_LOCK;
+
+	for(it = mResourceHash.begin(); it !=  mResourceHash.end(); it++)
+	{
+		it->second->BuildResource();
+	}
+
+	RESOURCE_MUTEX_SECTION_UNLOCK;
+}
+
+void CResourceManager::ReLoadAllManagedResources(void)
+{
+	stl<nstring, CResourcePtr>::map::iterator it;
+
+	RESOURCE_MUTEX_SECTION_LOCK;
+
+	for(it = mResourceHash.begin(); it !=  mResourceHash.end(); it++)
+	{
+		it->second->FreeResource();
+		it->second->LoadResource();
+	}
+
+	RESOURCE_MUTEX_SECTION_UNLOCK;
+}
+
+void CResourceManager::ReBuildAllManagedResources(void)
+{
+	stl<nstring, CResourcePtr>::map::iterator it;
+
+	RESOURCE_MUTEX_SECTION_LOCK;
+
+	for(it = mResourceHash.begin(); it !=  mResourceHash.end(); it++)
+	{
+		it->second->RebuildResource();
+	}
+
+	RESOURCE_MUTEX_SECTION_UNLOCK;
+}
+
+void CResourceManager::LoadAllManagedResources(void)
+{
+	stl<nstring, CResourcePtr>::map::iterator it;
+
+	RESOURCE_MUTEX_SECTION_LOCK;
+
+	for(it = mResourceHash.begin(); it !=  mResourceHash.end(); it++)
+	{
+		it->second->LoadResource();
+	}
+
+	RESOURCE_MUTEX_SECTION_UNLOCK;
+}
+
+void CResourceManager::RegisterResourceFactory(CResourceManager *factory)
+{
+	stl<nstring, CResourceManager *>::map::iterator it;
+
+	if(factory)
+	{
+		if((it = mResourceFactoryHash.find(factory->GetResourceFactoryName())) == mResourceFactoryHash.end())
+		{
+			mResourceFactoryHash.insert(std::pair<nstring, CResourceManager *>(factory->GetResourceFactoryName(), factory));
+			LOG_MESSAGE(nstring("CResourceManager::RegisterResourceFactory: ") + 
+				factory->GetResourceFactoryName() + " resource factory registered.");
+		}
+	}
+}	
+
+void CResourceManager::UnRegisterResourceFactory(CResourceManager *factory)
+{
+	stl<nstring, CResourceManager *>::map::iterator it; 
+
+	if(factory)
+	{
+		if((it = mResourceFactoryHash.find(factory->GetResourceFactoryName())) != mResourceFactoryHash.end())
+		{
+			mResourceFactoryHash.erase(it);
+			LOG_MESSAGE(nstring("CResourceManager::UnRegisterResourceFactory: ") + 
+				factory->GetResourceFactoryName() + " resource factory unregistered.");
+		}
+	}
+}
+
+CResourceManager * CResourceManager::GetResourceFactory(const nstring &name)
+{
+	stl<nstring, CResourceManager *>::map::iterator it; 
+	if((it = mResourceFactoryHash.find(name)) != mResourceFactoryHash.end())
+	{
+		return it->second;
+	}
+
+	return NULL;
 }
 
 }

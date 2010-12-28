@@ -394,5 +394,9 @@ CResourcePtr CFontManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 	return CResourcePtr();
 }
 
+CResourcePtr CFontManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+{
+	return CResourcePtr();
+}
 
 }

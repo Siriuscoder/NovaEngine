@@ -549,5 +549,9 @@ CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
 	return CResourcePtr();
 }
 
+CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+{
+	return CResourcePtr();
+}
 
 }

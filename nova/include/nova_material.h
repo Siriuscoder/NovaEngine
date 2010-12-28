@@ -122,6 +122,8 @@ protected:
 
 	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node);
 
+	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package);
+
 public:
 	CMaterialManager(nstring resourceFactoryName);
 	~CMaterialManager();

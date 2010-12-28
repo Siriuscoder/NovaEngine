@@ -76,19 +76,19 @@ void CNovaEngine::Release(void)
 	if(mRenderer)
 		mRenderer->ShutDown();
 /* Resource manager unloads */
-	UnRegisterResourceFactory(mFontManager);
+	CResourceManager::UnRegisterResourceFactory(mFontManager);
 	if(mFontManager)
 		delete mFontManager;
 
-	UnRegisterResourceFactory(mTextureManager);
+	CResourceManager::UnRegisterResourceFactory(mTextureManager);
 	if(mTextureManager)
 		delete mTextureManager;
 
-	UnRegisterResourceFactory(mMeshManager);
+	CResourceManager::UnRegisterResourceFactory(mMeshManager);
 	if(mMeshManager)
 		delete mMeshManager;
 
-	UnRegisterResourceFactory(mMaterialManager);
+	CResourceManager::UnRegisterResourceFactory(mMaterialManager);
 	if(mMaterialManager)
 		delete mMaterialManager;
 
@@ -118,19 +118,19 @@ nInt32 CNovaEngine::Init(StartInit flag)
 {
 /* Resource managers */
 	mFontManager = new CFontManager("FontResourceFactory");
-	RegisterResourceFactory(mFontManager);
+	CResourceManager::RegisterResourceFactory(mFontManager);
 
 	mTextureManager = new CTextureManager("TextureResourceFactory");
-	RegisterResourceFactory(mTextureManager);
+	CResourceManager::RegisterResourceFactory(mTextureManager);
 
 	mImageManager = new CImageManager("ImageResourceFactory");
-	RegisterResourceFactory(mImageManager);
+	CResourceManager::RegisterResourceFactory(mImageManager);
 
 	mMeshManager = new CMeshManager("MeshResourceFactory");
-	RegisterResourceFactory(mMeshManager);
+	CResourceManager::RegisterResourceFactory(mMeshManager);
 
 	mMaterialManager = new CMaterialManager("MaterialResourceFactory");
-	RegisterResourceFactory(mMaterialManager);
+	CResourceManager::RegisterResourceFactory(mMaterialManager);
 
 /* Renderer */
 	mRenderer = new CRenderSystem();
@@ -332,47 +332,6 @@ void CNovaEngine::MakeRenderWindow(void)
 	else
 		throw NOVA_EXP("CNovaEngine::MakeRenderWindow \
 			Can not make render target.. Render system not created!", BAD_OPERATION);
-}
-
-void CNovaEngine::RegisterResourceFactory(CResourceManager *factory)
-{
-	stl<nstring, CResourceManager *>::map::iterator it;
-
-	if(factory)
-	{
-		if((it = mResourceFactoryHash.find(factory->GetResourceFactoryName())) == mResourceFactoryHash.end())
-		{
-			mResourceFactoryHash.insert(std::pair<nstring, CResourceManager *>(factory->GetResourceFactoryName(), factory));
-			LOG_MESSAGE(nstring("CNovaEngine::RegisterResourceFactory: ") + 
-				factory->GetResourceFactoryName() + " resource factory registered.");
-		}
-	}
-}	
-
-void CNovaEngine::UnRegisterResourceFactory(CResourceManager *factory)
-{
-	stl<nstring, CResourceManager *>::map::iterator it; 
-
-	if(factory)
-	{
-		if((it = mResourceFactoryHash.find(factory->GetResourceFactoryName())) != mResourceFactoryHash.end())
-		{
-			mResourceFactoryHash.erase(it);
-			LOG_MESSAGE(nstring("CNovaEngine::UnRegisterResourceFactory: ") + 
-				factory->GetResourceFactoryName() + " resource factory unregistered.");
-		}
-	}
-}
-
-CResourceManager * CNovaEngine::GetResourceFactory(const nstring &name)
-{
-	stl<nstring, CResourceManager *>::map::iterator it; 
-	if((it = mResourceFactoryHash.find(name)) != mResourceFactoryHash.end())
-	{
-		return it->second;
-	}
-
-	return NULL;
 }
 
 
