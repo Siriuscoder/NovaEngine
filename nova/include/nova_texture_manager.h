@@ -38,7 +38,7 @@ protected:
 
 public:
 
-	CTextureManager(nstring resourceFactoryName);
+	CTextureManager(const nstring &resourceFactoryName);
 	~CTextureManager();
 
 	virtual CResourcePtr CreateInstance(const nstring & name,
@@ -52,14 +52,15 @@ public:
 
 	CTexturePtr GetThisTexture(nova::nUInt32 handle);
 
-	virtual CTexturePtr CreateNewTexture(const nstring & name, const nstring & group, const CImagePtr & image,
+	virtual CTexturePtr CreateNewTexture(const nstring & name, const nstring & group,
+		const CTexture::TTextureContainer & param, 
 		CHardwarePixelBuffer::TargetType type = CHardwarePixelBuffer::USE_TEXTURE_2D,
-		CTextureSurfaceList::MipMapTagertType mip = CTextureSurfaceList::DO_NOT_USE_MIPMAPS,
 		CTexture::TWrap wrapS = CTexture::CLAMP_TO_EDGE, CTexture::TWrap wrapT = CTexture::CLAMP_TO_EDGE,
 		CTexture::TEnv env = CTexture::EV_MODULATE, CResource::TAttach state = CResource::NV_ATTACHED);
 
-	virtual CTexturePtr CreateNewTexturesCube(const nstring & name, const nstring & group, const TImageList & list,
-		CTextureSurfaceList::MipMapTagertType mip = CTextureSurfaceList::DO_NOT_USE_MIPMAPS,
+	virtual CTexturePtr CreateNewTexturesCube(const nstring & name, const nstring & group, 
+		const stl<nstring>::vector & list,
+		const CTexture::TTextureContainer & param,
 		CTexture::TEnv env = CTexture::EV_REPLACE,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 

@@ -215,7 +215,7 @@ void CFreeFont::MakeLetter(wchar_t code)
 	CImagePtr pImage = CImageManager::GetSingelton().CreateNewImage(resnamei, mName, mem,
 		bwidth, bheight, 1, CImageFormats::NF_LUMINANCE_ALPHA, CResource::NV_FREE);
 // На базе изображения создаем текстуру
-	CTexturePtr texp = CTextureManager::GetSingelton().CreateNewTexture(resnamet, mName, pImage);
+	CTexturePtr texp ;//= CTextureManager::GetSingelton().CreateNewTexture(resnamet, mName, pImage);
 
 	// После создания текстуры, мы больше не нуждаемся в промежуточных данных.
 	mem.FreeBuffer();

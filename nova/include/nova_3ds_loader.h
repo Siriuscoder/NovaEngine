@@ -74,7 +74,7 @@ private:
 
 	TMaterialContainer *ReadMaterial(const C3DSChunk &parent);
 
-	TTextureContainer *ReadMap(const C3DSChunk &chunk);
+	CTexture::TTextureContainer *ReadMap(const C3DSChunk &chunk);
 
 protected:
 

@@ -530,111 +530,111 @@ CSceneContentLoaderBase::TMaterialContainer * C3DSLoader::ReadMaterial(const C3D
 			break;
         case T3DS_MAT_TEXMAP:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nDiffuseMap1 = texture->nName;
 			}
             break;
         case T3DS_MAT_TEX2MAP:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nDiffuseMap2 = texture->nName;
 			}
             break;
         case T3DS_MAT_BUMPMAP:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nBumpMap = texture->nName;
 			}
             break;
         case T3DS_MAT_SPECMAP:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nSpecMap = texture->nName;
 			}
             break;
 		case T3DS_MAT_TEXMASK:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nDiffuseMap1Mask = texture->nName;
 			}
 			break;
 		case T3DS_MAT_TEX2MASK:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nDiffuseMap2Mask = texture->nName;
 			}
 			break;
 		case T3DS_MAT_OPACMAP:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nOpacMap = texture->nName;
 			}
 			break;
 		case T3DS_MAT_OPACMASK:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nOpacMapMask = texture->nName;
 			}
 			break;
 		case T3DS_MAT_BUMPMASK:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nBumpMapMask = texture->nName;
 			}
 		case T3DS_MAT_SPECMASK:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nSpecMapMask = texture->nName;
 			}
 			break;
 		case T3DS_MAT_SHINMAP:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nShinMap = texture->nName;
 			}
 			break;
 		case T3DS_MAT_SHINMASK:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nShinMapMask = texture->nName;
 			}
 			break;
 		case T3DS_MAT_SELFIMAP:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nSelfIlMap = texture->nName;
 			}
 			break;
 		case T3DS_MAT_SELFIMASK:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nSelfIlMapMask = texture->nName;
 			}
 			break;
 		case T3DS_MAT_REFLMAP:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nReflectionMap = texture->nName;
 			}
 			break;
 		case T3DS_MAT_REFLMASK:
 			{
-				TTextureContainer * texture = ReadMap(chunk);
+				CTexture::TTextureContainer * texture = ReadMap(chunk);
 				if(texture && pMat)
 					pMat->nReflectionMapMask = texture->nName;
 			}
@@ -661,11 +661,11 @@ CSceneContentLoaderBase::TMaterialContainer * C3DSLoader::ReadMaterial(const C3D
 	return pMat;
 }
 
-CSceneContentLoaderBase::TTextureContainer * C3DSLoader::ReadMap(const C3DSChunk &chunk)
+CTexture::TTextureContainer * C3DSLoader::ReadMap(const C3DSChunk &chunk)
 {
-	TTextureContainer tMap;
-	memset(&tMap, 0, sizeof(TTextureContainer));
-	TTextureContainer *pMap = NULL;
+	CTexture::TTextureContainer tMap;
+	memset(&tMap, 0, sizeof(CTexture::TTextureContainer));
+	CTexture::TTextureContainer *pMap = NULL;
 	C3DSChunk child;
 	GotoChunk(chunk);
     child = ReadChunk();
@@ -679,12 +679,12 @@ CSceneContentLoaderBase::TTextureContainer * C3DSLoader::ReadMap(const C3DSChunk
 				char str[255] = "\0";
 				mpStream->ReadASCIIZ(str, 255);
 
-				stl<nstring, TTextureContainer>::map::iterator it = mTexturesMap.find(nstring(str));
+				stl<nstring, CTexture::TTextureContainer>::map::iterator it = mTexturesMap.find(nstring(str));
 				if(it != mTexturesMap.end())
 					pMap = &(it->second);
 				else
 				{
-					mTexturesMap.insert(std::pair<nstring, TTextureContainer>(nstring(str), tMap));
+					mTexturesMap.insert(std::pair<nstring, CTexture::TTextureContainer>(nstring(str), tMap));
 					pMap = &(mTexturesMap[nstring(str)]);
 				}
 			}

@@ -219,7 +219,7 @@ protected:
 
 public:
 
-	CMeshManager(nstring resourceFactoryName);
+	CMeshManager(const nstring & resourceFactoryName);
 	~CMeshManager();
 
 	virtual void UnloadAllManagerResources();

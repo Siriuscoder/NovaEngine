@@ -316,7 +316,7 @@ void CMeshBox::GenerateNormalsToFaces(void)
 
 template<> CMeshManager * CSingelton<CMeshManager>::SingeltonObject = NULL;
 
-CMeshManager::CMeshManager(nstring resourceFactoryName) : CResourceManager(resourceFactoryName)
+CMeshManager::CMeshManager(const nstring & resourceFactoryName) : CResourceManager(resourceFactoryName)
 {
 
 }

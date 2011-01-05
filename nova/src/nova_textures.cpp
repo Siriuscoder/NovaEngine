@@ -24,72 +24,19 @@ namespace nova {
 
 
 CTexture::CTexture(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
-	mEnvType(EV_MODULATE), mTexture(0), mSOffset(0), mTOffset(0), mSTiling(1),
-	mTTiling(1), mAngle(0), mMipMap(CTextureSurfaceList::DO_NOT_USE_MIPMAPS),
+	mEnvType(EV_MODULATE), mTexture(0), mMipMap(CTextureSurfaceList::DO_NOT_USE_MIPMAPS),
 	mType(CHardwarePixelBuffer::USE_TEXTURE_2D), mWrapTypeS(CLAMP_TO_EDGE), mWrapTypeT(CLAMP_TO_EDGE),
 	mMagFilter(FL_MAG_LINEAR), mMinFilter(FL_LINEAR),
 	CResource(rm, name, group, state)
 {
-
+	memset(&mTextureParam, 0, sizeof(TTextureContainer));
+	mTextureParam.nUScale = 1;
+	mTextureParam.nVScale = 1;
 }
 
-void CTexture::CreateTexture(void)
+void CTexture::SetImageList(const stl<nstring>::vector &list)
 {
-//	if(!stream.GetBeginPtr())
-//		NOVA_EXP("CTexture::CreateTexture - imagebuff NULL ptr, can`t create texture!", BAD_OPERATION);
-	mSize = 0;
-
-	TImageList::iterator it;
-	nInt32 face;
-
-	if(mType == CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE)
-	{
-		bool use = CRenderSystem::GetSingelton().CheckCapabilities(TEXTURE_CATEGORY, CAP_CUBEMAPPING);
-		if(!use)
-			throw NOVA_EXP("CTexture::CreateTexture - Your graphic card do not \
-								support cubemapping!", BAD_OPERATION);
-	}
-
-	if(mType == CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE && mList.size() != 6)
-		throw NOVA_EXP("CTexture::CreateTexture - if you using \
-			CUBEMAP_TEXTURE, you must send six texture faces!", BAD_OPERATION);
-
-	if(mType != CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE && mList.size() > 1)
-		throw NOVA_EXP("CTexture::CreateTexture - if don`t using \
-			CUBEMAP_TEXTURE, you must send one texture face!", BAD_OPERATION);
-
-	if(mList.size() == 0)
-		throw NOVA_EXP("CTexture::CreateTexture - you must send one \
-			or more texture faces!", BAD_OPERATION);
-	GLuint cubeid = 0;
-
-	for(it = mList.begin(), face = 0; it != mList.end(); ++it, ++face)
-	{
-		if((*it).IsNull())
-			throw NOVA_EXP("CTexture::CreateTexture - detected null face..", BAD_OPERATION);
-
-		CTextureSurfaceListPtr TexturePlane(new CTextureSurfaceList(
-			mType, mMipMap, face, (*it)->GetPixelFormat(), cubeid));
-
-		TexturePlane->BuildSurfaceList((*it)->GetBits(), (*it)->GetWidth(), (*it)->GetHeight(), (*it)->GetDepth());
-
-		for(nInt32 i = 0; i < TexturePlane->GetMaxLevels(); ++i)
-			mSize += TexturePlane->GetSurface(i)->GetHDSize();
-
-		if(mType == CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE && face == 0)
-			cubeid = TexturePlane->GetTargetId();
-
-		mSurfaceList.push_back(TexturePlane);
-	}
-
-	mTexture = mSurfaceList[0]->GetTargetId();
-	mMagFilter = (TMagFilters)mSurfaceList[0]->GetRecomendedMagFilter();
-	mMinFilter = (TMinFilters)mSurfaceList[0]->GetRecomendedMinFilter();
-}
-
-void CTexture::SetImageList(const TImageList & list)
-{
-	mList = list;
+	mImageList = list;
 }
 
 void CTexture::FreeResourceImpl()
@@ -107,12 +54,19 @@ void CTexture::ApplyTexture()
 	if(!isReady)
 		return;
 
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
+	{
+		CTextureListener * lis =
+			dynamic_cast<CTextureListener *>(GetListener(i));
+		lis->PreApplyTextureListener(this);
+	}
+
 	glMatrixMode(GL_TEXTURE);
 
 	glLoadIdentity();
-	glTranslatef(mSOffset, mTOffset, 0.0f);
-	glScalef(mSTiling, mTTiling, 1.0f);
-	glRotatef(mAngle, 0, 0, 1);
+	glTranslatef(mTextureParam.nUOffset, mTextureParam.nVOffset, 0.0f);
+	glScalef(mTextureParam.nUScale, mTextureParam.nVScale, 1.0f);
+	glRotatef(mTextureParam.nRotation, 0, 0, 1);
 
 	glEnable(CHardwarePixelBuffer::TextureTarget(mType));
 	glBindTexture(CHardwarePixelBuffer::TextureTarget(mType), mTexture);
@@ -127,7 +81,7 @@ void CTexture::ApplyTexture()
 	{
 		CTextureListener * lis =
 			dynamic_cast<CTextureListener *>(GetListener(i));
-		lis->ApplyTextureListener(this);
+		lis->PostApplyTextureListener(this);
 	}
 
 }
@@ -176,12 +130,68 @@ CImageFormats::NovaPixelFormats CTexture::GetPixelFormat()
 
 void CTexture::LoadResourceImpl(void)
 {
-
+	for(nova::nUInt32 i = 0; i < mImageList.size(); i++)
+	{
+		// Trying to load images
+		CResourcePtr resource = CResourceManager::GetResourceFromHash(mImageList[i]);
+		if(!resource.IsNull())
+			resource->LoadResource();
+	}
 }
 
 void CTexture::BuildResourceImpl(void)
 {
-	CreateTexture( );
+//	if(!stream.GetBeginPtr())
+//		NOVA_EXP("CTexture::CreateTexture - imagebuff NULL ptr, can`t create texture!", BAD_OPERATION);
+	mSize = 0;
+
+	stl<nstring>::vector::iterator it;
+	nInt32 face;
+
+	if(mType == CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE)
+	{
+		bool use = CRenderSystem::GetSingelton().CheckCapabilities(TEXTURE_CATEGORY, CAP_CUBEMAPPING);
+		if(!use)
+			throw NOVA_EXP("CTexture::BuildResourceImpl - Your graphic card do not \
+								support cubemapping!", BAD_OPERATION);
+	}
+
+	if(mType == CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE && mImageList.size() != 6)
+		throw NOVA_EXP("CTexture::BuildResourceImpl - if you using \
+			CUBEMAP_TEXTURE, you must send six texture faces!", BAD_OPERATION);
+
+	if(mType != CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE && mImageList.size() > 1)
+		throw NOVA_EXP("CTexture::BuildResourceImpl - if don`t using \
+			CUBEMAP_TEXTURE, you must send one texture face!", BAD_OPERATION);
+
+	if(mImageList.size() == 0)
+		throw NOVA_EXP("CTexture::CreateTexture - you must send one \
+			or more texture faces!", BAD_OPERATION);
+	GLuint cubeid = 0;
+
+	for(it = mImageList.begin(), face = 0; it != mImageList.end(); ++it, ++face)
+	{
+		CImagePtr image = CResourceManager::GetResourceFromHash(*it);
+		if(image.IsNull())
+			throw NOVA_EXP(nstring("CTexture::BuildResourceImpl - source image not found: ") + (*it), BAD_OPERATION);
+
+		CTextureSurfaceListPtr TexturePlane(new CTextureSurfaceList(
+			mType, mMipMap, face, image->GetPixelFormat(), cubeid));
+
+		TexturePlane->BuildSurfaceList(image->GetBits(), image->GetWidth(), image->GetHeight(), image->GetDepth());
+
+		for(nInt32 i = 0; i < TexturePlane->GetMaxLevels(); ++i)
+			mSize += TexturePlane->GetSurface(i)->GetHDSize();
+
+		if(mType == CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE && face == 0)
+			cubeid = TexturePlane->GetTargetId();
+
+		mSurfaceList.push_back(TexturePlane);
+	}
+
+	mTexture = mSurfaceList[0]->GetTargetId();
+	mMagFilter = (TMagFilters)mSurfaceList[0]->GetRecomendedMagFilter();
+	mMinFilter = (TMinFilters)mSurfaceList[0]->GetRecomendedMinFilter();
 }
 
 

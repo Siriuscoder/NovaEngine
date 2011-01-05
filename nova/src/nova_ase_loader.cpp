@@ -128,7 +128,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 	CMeshBox::TMeshContainer *LastGeomObject = NULL;
 	TMaterialContainer *LastMaterial = NULL;
 	TMaterialContainer *LastSubMaterial = NULL;
-	TTextureContainer *LastTexture = NULL;
+	CTexture::TTextureContainer *LastTexture = NULL;
 	nInt32 mat_count = 0;
 	nInt32 submat_count = 0;
 
@@ -1282,17 +1282,17 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		next = next + width;
 // Добавляем новую текстуру в кеш объектов, сохраняем на него ссылку
 					nstring nMapName(word2);
-					TTextureContainer tmap;
-					memset(&tmap, 0, sizeof(TTextureContainer));
+					CTexture::TTextureContainer tmap;
+					memset(&tmap, 0, sizeof(CTexture::TTextureContainer));
 
 					tmap.nName = nMapName;
 
-					stl<nstring, TTextureContainer>::map::iterator it = mTexturesMap.find(nMapName);
+					stl<nstring, CTexture::TTextureContainer>::map::iterator it = mTexturesMap.find(nMapName);
 					if(it != mTexturesMap.end())
 						LastTexture = &(it->second);
 					else
 					{
-						mTexturesMap.insert(std::pair<nstring, TTextureContainer>(nMapName, tmap));
+						mTexturesMap.insert(std::pair<nstring, CTexture::TTextureContainer>(nMapName, tmap));
 						LastTexture = &(mTexturesMap[nMapName]);
 					}
 

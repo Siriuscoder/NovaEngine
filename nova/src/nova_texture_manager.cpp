@@ -28,7 +28,7 @@ namespace nova
 
 template<> CTextureManager * CSingelton<CTextureManager>::SingeltonObject = NULL;
 
-CTextureManager::CTextureManager(nstring resourceFactoryName) : CResourceManager(resourceFactoryName)
+CTextureManager::CTextureManager(const nstring & resourceFactoryName) : CResourceManager(resourceFactoryName)
 {
 	mAutoMipmap = CTextureSurfaceList::USE_HARDWARE_MIPMAPS;
 }
@@ -50,9 +50,8 @@ CTexturePtr CTextureManager::CreateNewTexture
 (
 	const nstring & name,
 	const nstring & group,
-	const CImagePtr & image,
+	const CTexture::TTextureContainer & param, 
 	CHardwarePixelBuffer::TargetType type,
-	CTextureSurfaceList::MipMapTagertType mip,
 	CTexture::TWrap wrapS,
 	CTexture::TWrap wrapT,
 	CTexture::TEnv env,
@@ -65,16 +64,16 @@ CTexturePtr CTextureManager::CreateNewTexture
 							Null pointer...", MEM_ERROR);
 
 	texp->SetType(type);
-	texp->UseMipMaps(mip);
+	texp->UseMipMaps(mAutoMipmap);
 	texp->SetEnvType(env);
-	texp->SetWrapS(wrapS);
-	texp->SetWrapT(wrapT);
+	texp->WrapS() = wrapS;
+	texp->WrapT() = wrapT;
+	texp->SetTextureParams(param);
 
-	// Выделяем место в видео памяти под текстуру...
-	TImageList templ;
-	templ.push_back(image);
+	stl<nstring>::vector tmpimage;
+	tmpimage.push_back(param.nBitMap);
 
-	texp->SetImageList(templ);
+	texp->SetImageList(tmpimage);
 	//texp->PrepareResource();
 
 	nova::nstringstream str;
@@ -87,8 +86,8 @@ CTexturePtr CTextureManager::CreateNewTexture
 CTexturePtr CTextureManager::CreateNewTexturesCube(
 	const nstring & name,
 	const nstring & group,
-	const TImageList & list,
-	CTextureSurfaceList::MipMapTagertType mip,
+	const stl<nstring>::vector & list,
+	const CTexture::TTextureContainer & param,
 	CTexture::TEnv env,
 	CResource::TAttach state)
 {
@@ -98,12 +97,11 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 							Null pointer...", MEM_ERROR);
 
 	texp->SetType(CHardwarePixelBuffer::USE_CUBEMAP_TEXTURE);
-	texp->UseMipMaps(mip);
+	texp->UseMipMaps(mAutoMipmap);
 	texp->SetEnvType(env);
-	texp->SetWrapS(CTexture::CLAMP);
-	texp->SetWrapT(CTexture::CLAMP);
-
-	// Выделяем место в видео памяти под текстуру...
+	texp->WrapS() = (CTexture::CLAMP);
+	texp->WrapS() = (CTexture::CLAMP);
+	texp->SetTextureParams(param);
 
 	texp->SetImageList(list);
 	//texp->PrepareResource();

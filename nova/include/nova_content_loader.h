@@ -83,22 +83,6 @@ public:
 
 	} TMaterialContainer;
 
-	typedef struct _TextureContainer
-	{
-		nstring nName;
-		nstring nBitMap;
-		nReal nPercent;
-		nReal nRotation;
-		nReal nBlur;
-		nReal nUScale;
-		nReal nVScale;
-		nReal nUOffset;
-		nReal nVOffset;
-		nReal nNoiseSize;
-		nReal nNoiseLevel;
-
-	} TTextureContainer;
-
 protected:
 
 	virtual void InitLoader(void) = 0;
@@ -122,17 +106,17 @@ public:
 
 	stl<nstring>::vector GetTextureList(void);
 
-	CMeshBox::TMeshContainer GetMesh(nstring name);
+	CMeshBox::TMeshContainer GetMesh(const nstring &name);
 
-	TMaterialContainer GetMaterial(nstring name);
+	TMaterialContainer GetMaterial(const nstring & name);
 
-	TTextureContainer GetTextureList(nstring name);
+	CTexture::TTextureContainer GetTextureList(const nstring & name);
 
 protected:
 
 	nova::stl<nstring, CMeshBox::TMeshContainer>::map mMeshesMap;
 	nova::stl<nstring, TMaterialContainer>::map mMaterialsMap;
-	nova::stl<nstring, TTextureContainer>::map mTexturesMap;
+	nova::stl<nstring, CTexture::TTextureContainer>::map mTexturesMap;
 	nova::CDataStream *mpStream;
 };
 

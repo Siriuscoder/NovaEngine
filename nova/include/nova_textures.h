@@ -28,7 +28,9 @@ class NOVA_EXPORT CTextureListener : public CResourceListener
 {
 public:
 
-	virtual void ApplyTextureListener(CTexture * object) {}
+	virtual void PreApplyTextureListener(CTexture * object) {}
+
+	virtual void PostApplyTextureListener(CTexture * object) {}
 };
 
 typedef stl<CImagePtr>::vector TImageList;
@@ -77,6 +79,22 @@ public:
 		EV_REPLACE = GL_REPLACE
 	};
 
+	typedef struct _TextureContainer
+	{
+		nstring nName;
+		nstring nBitMap;
+		nReal nPercent;
+		nReal nRotation;
+		nReal nBlur;
+		nReal nUScale;
+		nReal nVScale;
+		nReal nUOffset;
+		nReal nVOffset;
+		nReal nNoiseSize;
+		nReal nNoiseLevel;
+
+	} TTextureContainer;
+
 protected:
 
 	TEnv mEnvType;
@@ -84,20 +102,14 @@ protected:
 	TWrap mWrapTypeT;
 	TMagFilters mMagFilter;
 	TMinFilters mMinFilter;
-
 	CHardwarePixelBuffer::TargetType mType;
 	GLuint mTexture;
 	CTextureSurfaceList::MipMapTagertType mMipMap;
-
-	nReal mSOffset;         //смещение по оси s
-	nReal mTOffset;         //смещение по оси t
-	nReal mSTiling;         //масштабирование по оси s
-	nReal mTTiling;         //масштабирование по оси t
-	nReal mAngle;            //угол поворота вокруг оси r (градусов)
-
+	TTextureContainer mTextureParam;
 	stl<CTextureSurfaceListPtr>::vector mSurfaceList;
+	//TImageList mList;
+	stl<nstring>::vector mImageList;
 
-	TImageList mList;
 
 	void LoadResourceImpl(void);
 
@@ -111,6 +123,16 @@ public:
 
 	~CTexture();
 
+	inline TTextureContainer & GetTextureParams(void)
+	{
+		return mTextureParam;
+	}
+
+	inline void SetTextureParams(const TTextureContainer &param)
+	{
+		mTextureParam = param;
+	}
+
 	void ApplyTexture();
 
 	inline void SetType(CHardwarePixelBuffer::TargetType type)
@@ -118,34 +140,9 @@ public:
 		mType = type;
 	}
 
-	inline CHardwarePixelBuffer::TargetType GetType()
+	inline CHardwarePixelBuffer::TargetType GetType() const
 	{
 		return mType;
-	}
-
-	inline void SetSOffset(nReal s)
-	{
-		mSOffset = s;
-	}
-
-	inline void SetTOffset(nReal t)
-	{
-		mTOffset = t;
-	}
-
-	inline void SetSTiling(nReal s)
-	{
-		mSTiling = s;
-	}
-
-	inline void SetTTiling(nReal t)
-	{
-		mTTiling = t;
-	}
-
-	inline void SetAngle(nReal a)
-	{
-		mAngle = a;
 	}
 
 	inline void SetEnvType(TEnv a)
@@ -153,68 +150,32 @@ public:
 		mEnvType = a;
 	}
 
-	inline nReal GetSOffset()
-	{
-		return mSOffset;
-	}
-
-	inline nReal GetTOffset()
-	{
-		return mTOffset;
-	}
-
-	inline nReal GetSTiling()
-	{
-		return mSTiling;
-	}
-
-	inline nReal GetTTiling()
-	{
-		return mTTiling;
-	}
-
-	inline nReal GetAngle()
-	{
-		return mAngle;
-	}
-
 	inline void UseMipMaps(CTextureSurfaceList::MipMapTagertType state)
 	{
 		mMipMap = state;
 	}
 
-	inline void SetWrapS(TWrap wrap)
-	{
-		mWrapTypeS = wrap;
-	}
-
-	inline void SetWrapT(TWrap wrap)
-	{
-		mWrapTypeT = wrap;
-	}
-
-	inline TWrap GetWrapS(void)
-	{
-		return mWrapTypeS;
-	}
-
-	inline TWrap GetWrapT(void)
-	{
-		return mWrapTypeT;
-	}
-
-	inline TMagFilters GetMagFilters(void)
+	inline TMagFilters GetMagFilters(void) const
 	{
 		return mMagFilter;
 	}
 
-	inline TMinFilters GetMinFilters(void)
+	inline TMinFilters GetMinFilters(void) const
 	{
 		return mMinFilter;
 	}
 
-	void SetImageList(const TImageList & list);
-	void CreateTexture();
+	inline TWrap & WrapS(void)
+	{
+		return mWrapTypeS;
+	}
+
+	inline TWrap & WrapT(void)
+	{
+		return mWrapTypeT;
+	} 
+
+	void SetImageList(const stl<nstring>::vector &list);
 
 	void AddSubTexture(CImagePtr & image, nova::nUInt32 level, nInt32 face,
 		nova::nUInt32 xoff, nova::nUInt32 yoff = 0, nova::nUInt32 zoff = 0);
