@@ -22,6 +22,7 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_mesh_box.h"
+#include "nova_msh_loader.h"
 
 namespace nova
 {
@@ -211,6 +212,8 @@ void CMesh::LoadResourceImpl(void)
 	if(mMeshDef.nInternalLoading)
 	{
 // use to load mesh with internal format 
+		mMeshDef = CGlobalMshLoader::LoadMeshFromStream(mMeshDef.pMeshStream);
+		mMeshDef.nInternalLoading = true;
 	}
 }
 

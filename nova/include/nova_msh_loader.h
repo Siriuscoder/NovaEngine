@@ -1,5 +1,5 @@
-﻿/***************************************************************************
- *   Copyright (C) 2010 by Sirius										   *
+/***************************************************************************
+ *   Copyright (C) 2009 by Sirius										   *
  *	 Vdov Nikita Sergeevich	(c)											   *
  *	 siriusnick@gmail.com												   *
  *																		   *
@@ -21,52 +21,48 @@
  ***************************************************************************/
 #pragma once
 
-#include "nova_streams.h"
+#include "nova_mesh_box.h"
 
 namespace nova
 {
 
-class NOVA_EXPORT CFileStream : public CDataStream
-{
-protected:
+#define MSH_VERTEX_BIT		0x00000001
+#define MSH_INDEX_BIT		0x00000002
+#define MSH_MAPPING_BIT		0x00000004
+#define MSH_NORMALS_BIT		0x00000008
+#define MSH_MAT_GROUP_BIT	0x00000010
 
-	FILE * mIOFile;
+class NOVA_EXPORT CGlobalMshLoader : public CMemoryManaged
+{
+private:
+
+#pragma pack(push, 1)
+	typedef struct _msh_header
+	{
+		nova::nUInt32 nSignature;
+		nova::nUInt32 nVersion;
+		nova::nUInt32 nVersionSgn;
+
+// Data presence bits mask
+		nova::nByte nDataMask;
+		char nName[256];
+	} TMSHHeader;
+
+#pragma pack(pop)
+
+private:
+
+	static CMesh::TMeshContainer gMeshBuffer;
 
 public:
 
-	CFileStream() : mIOFile(NULL) {}
+	static CMesh::TMeshContainer &LoadMeshFromFile(const nstring &file);
 
-	~CFileStream() {}
+	static CMesh::TMeshContainer &LoadMeshFromStream(CDataStream *stream);
 
-	virtual size_t Read (const CMemoryBuffer & dest);
+	static void SaveMeshToStream(const CMesh::TMeshContainer &mesh, CDataStream *stream);
 
-	virtual size_t Read (void *dest, const size_t count);
-
-	virtual size_t Write (const CMemoryBuffer & source);
-
-	virtual size_t Write (void *source, const size_t count);
-
-	virtual nstring ReadLine (const size_t count);
-
-	virtual nstring ReadLine (const char delim);
-
-	virtual size_t WriteLine (const nstring & str, const size_t count);
-
-	virtual size_t WriteLine (const nstring & str, const char delim);
-
-	virtual void Skip (long count);
-
-	virtual void Seek (size_t pos);
-
-	virtual size_t Tell (void) const;
-
-	virtual bool Eof (void) const;
-
-	virtual void Flush(void);
- 
-	virtual void Close (void);
-
-	void Open(const nstring & file, bool wr = false, bool app = false);
+	static void SaveMeshToFile(const CMesh::TMeshContainer &mesh, const nstring &file);
 };
 
 }

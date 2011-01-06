@@ -493,6 +493,10 @@
 					RelativePath=".\src\nova_content_loader.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\nova_msh_loader.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="OctreeSceneManager"
@@ -901,6 +905,10 @@
 				</File>
 				<File
 					RelativePath=".\include\nova_content_loader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\nova_msh_loader.h"
 					>
 				</File>
 			</Filter>
