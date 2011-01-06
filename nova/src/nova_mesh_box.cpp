@@ -208,7 +208,10 @@ void CMeshBox::LoadResourceImpl(void)
 	//CalculateNormals();
 	// Сортируем вершины по материалам
 
-
+	if(mMeshDef.nInternalLoading)
+	{
+// use to load mesh with internal format 
+	}
 }
 
 void CMeshBox::BuildResourceImpl(void)
@@ -353,19 +356,6 @@ CMeshBoxPtr CMeshManager::CreateMesh(CMeshBox::TMeshContainer *def, const nstrin
 	nova::nstringstream str;
 	str << "Mesh Factory: mesh object name: " << def->nName << " group: " << group << " created...";
 	LOG_MESSAGE(str.str());
-
-	return mesh;
-}
-
-
-CMeshBoxPtr CMeshManager::CreateMeshFromFile(const nstring &file, const nstring &group,
-		CResource::TAttach state)
-{
-	CMeshBoxPtr mesh = CResourceManager::AddNewResource("test", group, state);
-	if(mesh.IsNull())
-		throw NOVA_EXP("CMeshManager::CreateMesh - resource factory return \
-							Null pointer...", MEM_ERROR);
-	
 
 	return mesh;
 }

@@ -158,6 +158,9 @@ public:
 // Reserved buffers
 		TIndexes nTVIndexList;
 		TTexCoords nTVMappingList;
+// For mesh internal loading
+		CDataStream *pMeshStream;
+		bool nInternalLoading;
 	} TMeshContainer;
 
 	static void QSortFaces(TIndexes &index, TFacesInfo &faces);
@@ -228,10 +231,7 @@ public:
 		const nstring & group, CResource::TAttach state);
 
 	CMeshBoxPtr CreateMesh(CMeshBox::TMeshContainer *def, const nstring &group,
-		CResource::TAttach state = CResource::NV_ATTACHED); 
- 
-	CMeshBoxPtr CreateMeshFromFile(const nstring &file, const nstring &group,
-		CResource::TAttach state = CResource::NV_ATTACHED); 
+		CResource::TAttach state = CResource::NV_ATTACHED);
 
 };
 

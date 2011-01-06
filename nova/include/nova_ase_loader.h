@@ -42,7 +42,7 @@ protected:
 
 	void LoadImpl(void);
 
-	TMaterialContainer FindMatByID(nInt32 id);
+	CMaterial::TMaterialContainer FindMatByID(nInt32 id);
 
 private:
 

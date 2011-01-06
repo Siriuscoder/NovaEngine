@@ -33,30 +33,87 @@ class NOVA_EXPORT CMaterialListener : public CResourceListener
 {
 public:
 
-	virtual void ApplyMaterialListener(CMaterial * material) {}
+	virtual void PreApplyMaterialListener(CMaterial * material) {}
+
+	virtual void PostApplyMaterialListener(CMaterial * material) {}
 };
 
 class NOVA_EXPORT CMaterial : public CResource
 {
+public:
+
+	typedef struct _MaterialContainer
+	{
+		nstring nName;
+		nInt32 nID;
+		nova::CColorRGB nAmbientColor;
+		nova::CColorRGB nDiffuseColor;
+		nova::CColorRGB nSpecularColor;
+		nReal nShininess;
+		nReal nShinStrength;
+		nReal nTransparency;
+		nReal nFalloff;
+		nReal nSelfIllum;
+		nReal nBlur;
+		nReal nShading;
+
+		bool nSelfIllumFlag;
+		bool nTwoSided;
+		bool nMapDecal;
+		bool nIsAdditive;
+		bool nSoften;
+/* Texture Maps */
+		nstring nDiffuseMap1;
+		nstring nDiffuseMap2;
+		nstring nAmbientMap;
+		nstring nOpacMap;
+		nstring nSpecMap;
+		nstring nBumpMap;
+		nstring nShinMap;
+		nstring nSelfIlMap;
+		nstring nReflectionMap;
+/* Mask Maps */
+		nstring nDiffuseMap1Mask;
+		nstring nDiffuseMap2Mask;
+		nstring nAmbientMapMask;
+		nstring nOpacMapMask;
+		nstring nSpecMapMask;
+		nstring nBumpMapMask;
+		nstring nShinMapMask;
+		nstring nSelfIlMapMask;
+		nstring nReflectionMapMask;
+/* Acubic opt */
+		nInt32 nAutoreflMapAntiAlias;
+		nova::nUInt32 nAutoreflMapFlags;
+        nInt32 nAutoreflMapSize;
+        nInt32 nAutoreflMapFrameStep;
+
+		nova::stl<nstring>::vector nSubMats;
+
+	} TMaterialContainer;
+
 protected:
 
-	nova::CColorRGB mAmbientColor;
-	nova::CColorRGB mDiffuseColor;
-	nova::CColorRGB mSpecularColor;
-	nReal mShininess;
-	nReal mTransparency;
-	nstring mTexMap;
-	nstring mMultiTexMap;
-	nstring mSpecMap;
-	nstring mBumpMap;
-	nstring mReflectionMap;
+	TMaterialContainer mMaterialSource;
 
-	CTexturePtr mTexMapPtr;
-	CTexturePtr mMultiTexMapPtr;
-	CTexturePtr mSpecMapPtr;
-	CTexturePtr mBumpMapPtr;
-	CTexturePtr mReflectionMapPtr;
-
+	CTexturePtr mDiffuseMap1;
+	CTexturePtr mDiffuseMap2;
+	CTexturePtr mAmbientMap;
+	CTexturePtr mOpacMap;
+	CTexturePtr mSpecMap;
+	CTexturePtr mBumpMap;
+	CTexturePtr mShinMap;
+	CTexturePtr mSelfIlMap;
+	CTexturePtr mReflectionMap;
+	CTexturePtr mDiffuseMap1Mask;
+	CTexturePtr mDiffuseMap2Mask;
+	CTexturePtr mAmbientMapMask;
+	CTexturePtr mOpacMapMask;
+	CTexturePtr mSpecMapMask;
+	CTexturePtr mBumpMapMask;
+	CTexturePtr mShinMapMask;
+	CTexturePtr mSelfIlMapMask;
+	CTexturePtr mReflectionMapMask; 
 
 	void LoadResourceImpl(void);
 
@@ -70,46 +127,9 @@ public:
 
 	~CMaterial();
 
-	nova::CColorRGB GetAmbientColor(void) const ;
+	TMaterialContainer &GetMaterialSource(void);
 
-	nova::CColorRGB GetDiffuseColor(void) const ;
-
-	nova::CColorRGB GetSpecularColor(void) const ;
-
-	nReal GetShininess(void) const ;
-
-	nReal GetTransparency(void) const ;
-
-	nstring GetTexMap(void) const ;
-
-	nstring GetMultiTexMap(void) const ;
-
-	nstring GetSpecMap(void) const ;
-
-	nstring GetBumpMap(void) const ;
-
-	nstring GetReflectionMap(void) const ;
-
-
-	void SetAmbientColor(CColorRGB & nmap);
-
-	void SetDiffuseColor(CColorRGB & nmap);
-	
-	void SetSpecularColor(CColorRGB & nmap);
-
-	void SetShininess(nReal val);
-
-	void SetTransparency(nReal val);
-
-	void SetTexMap(const nstring & nmap);
-
-	void SetMultiTexMap(const nstring & nmap);
-
-	void SetSpecMap(const nstring & nmap);
-
-	void SetBumpMap(const nstring & nmap);
-
-	void SetReflectionMap(const nstring & nmap);
+	void SetMaterialSource(const TMaterialContainer &source); 
 
 	void ApplyMaterial(void);
 };
@@ -125,7 +145,7 @@ protected:
 	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package);
 
 public:
-	CMaterialManager(nstring resourceFactoryName);
+	CMaterialManager(const nstring & resourceFactoryName);
 	~CMaterialManager();
 
 	virtual CResourcePtr CreateInstance(const nstring & name, 
@@ -134,16 +154,7 @@ public:
 	virtual void UnloadAllManagerResources();
 
 	virtual CMaterialPtr CreateMaterial(const nstring & name, const nstring & group, 
-		nova::CColorRGB AmbientColor,
-		nova::CColorRGB DiffuseColor,
-		nova::CColorRGB SpecularColor,
-		nReal Shininess,
-		nReal Transparency,
-		const nstring TexMap,
-		const nstring MultiTexMap,
-		const nstring SpecMap,
-		const nstring BumpMap,
-		const nstring ReflectionMap,
+		const CMaterial::TMaterialContainer &params,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
 

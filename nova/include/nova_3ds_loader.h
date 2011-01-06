@@ -72,7 +72,7 @@ private:
 
 	void ReadFaceList(const C3DSChunk &chunk, CMeshBox::TMeshContainer *mesh);
 
-	TMaterialContainer *ReadMaterial(const C3DSChunk &parent);
+	CMaterial::TMaterialContainer *ReadMaterial(const C3DSChunk &parent);
 
 	CTexture::TTextureContainer *ReadMap(const C3DSChunk &chunk);
 

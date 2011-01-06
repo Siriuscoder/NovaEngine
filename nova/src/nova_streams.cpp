@@ -165,6 +165,18 @@ void CMemoryStream::Open (void *buf, const size_t maxsize, bool write)
 	mIsOpened = true; 
 }
 
+void CMemoryStream::Open (const CMemoryBuffer &buffer, bool write)
+{
+	if(mIsOpened)
+		throw NOVA_EXP("CMemoryStream::ReadLine - stream is already opened!", BAD_OPERATION);
+
+	mPos = 0;
+	mSize = buffer.GetBufferSize();
+	mWrite = write;
+	mStreamBuffer = buffer;
+	mIsOpened = true; 
+}
+
 nstring CMemoryStream::ReadLine (const size_t count)
 {
 	if(!mIsOpened)

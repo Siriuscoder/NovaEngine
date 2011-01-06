@@ -461,11 +461,11 @@ void C3DSLoader::LoadMeshList(void)
 	}
 }
 
-CSceneContentLoaderBase::TMaterialContainer * C3DSLoader::ReadMaterial(const C3DSChunk &parent)
+CMaterial::TMaterialContainer * C3DSLoader::ReadMaterial(const C3DSChunk &parent)
 {
-	TMaterialContainer tMat;
-	memset(&tMat, 0, sizeof(TMaterialContainer));
-	TMaterialContainer *pMat = NULL;
+	CMaterial::TMaterialContainer tMat;
+	memset(&tMat, 0, sizeof(CMaterial::TMaterialContainer));
+	CMaterial::TMaterialContainer *pMat = NULL;
 	C3DSChunk chunk;
 	C3DSChunk child;
 
@@ -481,7 +481,7 @@ CSceneContentLoaderBase::TMaterialContainer * C3DSLoader::ReadMaterial(const C3D
 				char str[255] = "\0";
 				mpStream->ReadASCIIZ(str, 255);
 
-				mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nstring(str), tMat));
+				mMaterialsMap.insert(std::pair<nstring, CMaterial::TMaterialContainer>(nstring(str), tMat));
 				pMat = &(mMaterialsMap[nstring(str)]);
 			}
             break;

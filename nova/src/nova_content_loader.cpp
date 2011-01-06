@@ -63,7 +63,7 @@ stl<nstring>::vector CSceneContentLoaderBase::GetMeshList(void)
 stl<nstring>::vector CSceneContentLoaderBase::GetMaterialList(void)
 {
 	stl<nstring>::vector result;
-	nova::stl<nstring, TMaterialContainer>::map::const_iterator it;
+	nova::stl<nstring, CMaterial::TMaterialContainer>::map::const_iterator it;
 
 	for(it = mMaterialsMap.begin(); it != mMaterialsMap.end(); it++)
 		result.push_back((*it).first);
@@ -91,13 +91,13 @@ CMeshBox::TMeshContainer CSceneContentLoaderBase::GetMesh(const nstring & name)
 	return CMeshBox::TMeshContainer();
 }
 
-CSceneContentLoaderBase::TMaterialContainer CSceneContentLoaderBase::GetMaterial(const nstring & name)
+CMaterial::TMaterialContainer CSceneContentLoaderBase::GetMaterial(const nstring & name)
 {
-	nova::stl<nstring, TMaterialContainer>::map::const_iterator it;
+	nova::stl<nstring, CMaterial::TMaterialContainer>::map::const_iterator it;
 	if((it = mMaterialsMap.find(name)) != mMaterialsMap.end())
 		return (*it).second;
 
-	return TMaterialContainer();
+	return CMaterial::TMaterialContainer();
 }
 
 CTexture::TTextureContainer CSceneContentLoaderBase::GetTextureList(const nstring & name)

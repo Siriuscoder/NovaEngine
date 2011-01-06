@@ -42,105 +42,14 @@ CMaterial::CMaterial(CResourceManager * rm, const nstring & name, const nstring 
 
 }
 
-nova::CColorRGB CMaterial::GetAmbientColor(void) const 
+CMaterial::TMaterialContainer &CMaterial::GetMaterialSource(void)
 {
-	return mAmbientColor;
+	return mMaterialSource;
 }
 
-nova::CColorRGB CMaterial::GetDiffuseColor(void) const 
+void CMaterial::SetMaterialSource(const CMaterial::TMaterialContainer &source)
 {
-	return mDiffuseColor;
-}
-
-nova::CColorRGB CMaterial::GetSpecularColor(void) const 
-{
-	return mSpecularColor;
-}
-
-nReal CMaterial::GetShininess(void) const 
-{
-	return mShininess;
-}
-
-nReal CMaterial::GetTransparency(void) const 
-{
-	return mTransparency;
-}
-
-nstring CMaterial::GetTexMap(void) const 
-{
-	return mTexMap;
-}
-
-nstring CMaterial::GetMultiTexMap(void) const 
-{
-	return mMultiTexMap;
-}
-
-nstring CMaterial::GetBumpMap(void) const 
-{
-	return mBumpMap;
-}
-
-nstring CMaterial::GetSpecMap(void) const 
-{
-	return mSpecMap;
-}
-
-nstring CMaterial::GetReflectionMap(void) const 
-{
-	return mReflectionMap;
-}
-
-
-void CMaterial::SetAmbientColor(CColorRGB & nmap)
-{
-	mAmbientColor = nmap;
-}
-
-void CMaterial::SetDiffuseColor(CColorRGB & nmap)
-{
-	mDiffuseColor = nmap;
-}
-
-void CMaterial::SetSpecularColor(CColorRGB & nmap)
-{
-	mSpecularColor = nmap;
-}
-
-void CMaterial::SetShininess(nReal val)
-{
-	mShininess = val;
-}
-
-void CMaterial::SetTransparency(nReal val)
-{
-	mTransparency = val;
-}
-
-void CMaterial::SetTexMap(const nstring & nmap)
-{
-	mTexMap = nmap;
-}
-
-void CMaterial::SetMultiTexMap(const nstring & nmap)
-{
-	mMultiTexMap = nmap;
-}
-
-void CMaterial::SetSpecMap(const nstring & nmap)
-{
-	mSpecMap = nmap;
-}
-
-void CMaterial::SetBumpMap(const nstring & nmap)
-{
-	mBumpMap = nmap;
-}
-
-void CMaterial::SetReflectionMap(const nstring & nmap)
-{
-	mReflectionMap = nmap;
+	mMaterialSource = source;
 }
 
 void CMaterial::FreeResourceImpl(void)
@@ -150,16 +59,43 @@ void CMaterial::FreeResourceImpl(void)
 
 void CMaterial::BuildResourceImpl(void)
 {
-	if(mTexMap.size() != 0)
-		mTexMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mTexMap);
-	if(mMultiTexMap.size() != 0)
-		mMultiTexMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mMultiTexMap);
-	if(mSpecMap.size() != 0)
-		mSpecMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mSpecMap);
-	if(mBumpMap.size() != 0)
-		mBumpMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mBumpMap);
-	if(mReflectionMap.size() != 0)
-		mReflectionMapPtr = CTextureManager::GetSingelton().GetResourceFromHash(mReflectionMap);
+	if(mMaterialSource.nDiffuseMap1.size() != 0)
+		mDiffuseMap1 = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nDiffuseMap1);
+	if(mMaterialSource.nDiffuseMap2.size() != 0)
+		mDiffuseMap2 = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nDiffuseMap2);
+	if(mMaterialSource.nAmbientMap.size() != 0)
+		mAmbientMap = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nAmbientMap);
+	if(mMaterialSource.nOpacMap.size() != 0)
+		mOpacMap = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nOpacMap);
+	if(mMaterialSource.nSpecMap.size() != 0)
+		mSpecMap = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nSpecMap);
+	if(mMaterialSource.nBumpMap.size() != 0)
+		mBumpMap = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nBumpMap);
+	if(mMaterialSource.nShinMap.size() != 0)
+		mShinMap = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nShinMap);
+	if(mMaterialSource.nSelfIlMap.size() != 0)
+		mSelfIlMap = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nSelfIlMap);
+	if(mMaterialSource.nReflectionMap.size() != 0)
+		mReflectionMap = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nReflectionMap);
+
+	if(mMaterialSource.nDiffuseMap1Mask.size() != 0)
+		mDiffuseMap1Mask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nDiffuseMap1Mask);
+	if(mMaterialSource.nDiffuseMap2Mask.size() != 0)
+		mDiffuseMap2Mask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nDiffuseMap2Mask);
+	if(mMaterialSource.nAmbientMapMask.size() != 0)
+		mAmbientMapMask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nAmbientMapMask);
+	if(mMaterialSource.nOpacMapMask.size() != 0)
+		mOpacMapMask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nOpacMapMask);
+	if(mMaterialSource.nSpecMapMask.size() != 0)
+		mSpecMapMask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nSpecMapMask);
+	if(mMaterialSource.nBumpMapMask.size() != 0)
+		mBumpMapMask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nBumpMapMask);
+	if(mMaterialSource.nShinMapMask.size() != 0)
+		mShinMapMask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nShinMapMask);
+	if(mMaterialSource.nSelfIlMapMask.size() != 0)
+		mSelfIlMapMask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nSelfIlMapMask);
+	if(mMaterialSource.nReflectionMapMask.size() != 0)
+		mReflectionMapMask = CTextureManager::GetSingelton().GetResourceFromHash(mMaterialSource.nReflectionMapMask);
 }
 
 void CMaterial::LoadResourceImpl(void)
@@ -170,45 +106,52 @@ void CMaterial::LoadResourceImpl(void)
 void CMaterial::ApplyMaterial(void)
 {
 	//glPushAttrib(GL_LIGHTING_BIT);
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
+	{
+		CMaterialListener * lis =
+			dynamic_cast<CMaterialListener *>(GetListener(i));
+		lis->PreApplyMaterialListener(this);
+	}
+
 	glEnable(GL_COLOR_MATERIAL);
 
-	if(mTransparency > 0.0f)
+	if(mMaterialSource.nTransparency > 0.0f)
 		CRenderSystem::GetSingelton().SetBlend(true);
 
 
-	if(!mTexMapPtr.IsNull())
+	if(!mDiffuseMap1.IsNull())
 	{
-		if(mTexMapPtr->GetPixelFormat() == CImageFormats::NF_ALPHA ||
-			mTexMapPtr->GetPixelFormat() == CImageFormats::NF_BGRA ||
-			mTexMapPtr->GetPixelFormat() == CImageFormats::NF_LUMINANCE_ALPHA ||
-			mTexMapPtr->GetPixelFormat() == CImageFormats::NF_RGBA)
+		if(mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_ALPHA ||
+			mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_BGRA ||
+			mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_LUMINANCE_ALPHA ||
+			mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_RGBA)
 			CRenderSystem::GetSingelton().SetBlend(true);
 
-		mTexMapPtr->ApplyTexture();
+		mDiffuseMap1->ApplyTexture();
 	}
 
 	glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-	glColor4f(mDiffuseColor.R(), mDiffuseColor.G(), mDiffuseColor.B(), mTransparency);
+	glColor4f(mMaterialSource.nDiffuseColor.R(), mMaterialSource.nDiffuseColor.G(), mMaterialSource.nDiffuseColor.B(), mMaterialSource.nTransparency);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
-	glColor3fv(mAmbientColor);
+	glColor3fv(mMaterialSource.nAmbientColor);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_SPECULAR);
-	glColor3fv(mSpecularColor);
+	glColor3fv(mMaterialSource.nSpecularColor);
 
-	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mShininess);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mAmbientColor);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mSpecularColor);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mMaterialSource.nShininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mMaterialSource.nAmbientColor);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mMaterialSource.nSpecularColor);
 
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CMaterialListener * lis =
 			dynamic_cast<CMaterialListener *>(GetListener(i));
-		lis->ApplyMaterialListener(this);
+		lis->PostApplyMaterialListener(this);
 	}
 }
 
 template<> CMaterialManager * CSingelton<CMaterialManager>::SingeltonObject = NULL;
 
-CMaterialManager::CMaterialManager(nstring resourceFactoryName) : CResourceManager(resourceFactoryName)
+CMaterialManager::CMaterialManager(const nstring & resourceFactoryName) : CResourceManager(resourceFactoryName)
 {
 
 }
@@ -231,16 +174,7 @@ void CMaterialManager::UnloadAllManagerResources()
 }
 
 CMaterialPtr CMaterialManager::CreateMaterial(const nstring & name, const nstring & group,
-	nova::CColorRGB AmbientColor,
-	nova::CColorRGB DiffuseColor,
-	nova::CColorRGB SpecularColor,
-	nReal Shininess,
-	nReal Transparency,
-	const nstring TexMap,
-	const nstring MultiTexMap,
-	const nstring SpecMap,
-	const nstring BumpMap,
-	const nstring ReflectionMap,
+	const CMaterial::TMaterialContainer &params,
 	CResource::TAttach state)
 {
 	CMaterialPtr mat = CResourceManager::AddNewResource(name, group, state);
@@ -248,17 +182,8 @@ CMaterialPtr CMaterialManager::CreateMaterial(const nstring & name, const nstrin
 		throw NOVA_EXP("CMaterialManager::CreateMaterial - resource factory return \
 							Null pointer...", MEM_ERROR);
 
-	mat->SetAmbientColor(AmbientColor);
-	mat->SetDiffuseColor(DiffuseColor);
-	mat->SetSpecularColor(SpecularColor);
-	mat->SetShininess(Shininess);
-	mat->SetTransparency(Transparency);
-	mat->SetTexMap(TexMap);
-	mat->SetMultiTexMap(MultiTexMap);
-	mat->SetSpecMap(SpecMap);
-	mat->SetBumpMap(BumpMap);
-	mat->SetReflectionMap(ReflectionMap);
-
+	
+	mat->SetMaterialSource(params);
 
 	nova::nstringstream str;
 	str << "Material Factory: material name: " << name << " group: " << group << " created..";

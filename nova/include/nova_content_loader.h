@@ -31,58 +31,6 @@ namespace nova
 
 class NOVA_EXPORT CSceneContentLoaderBase : public CMemoryManaged
 {
-public:
-
-	typedef struct _MaterialContainer
-	{
-		nstring nName;
-		nInt32 nID;
-		nova::CColorRGB nAmbientColor;
-		nova::CColorRGB nDiffuseColor;
-		nova::CColorRGB nSpecularColor;
-		nReal nShininess;
-		nReal nShinStrength;
-		nReal nTransparency;
-		nReal nFalloff;
-		nReal nSelfIllum;
-		nReal nBlur;
-		nReal nShading;
-
-		bool nSelfIllumFlag;
-		bool nTwoSided;
-		bool nMapDecal;
-		bool nIsAdditive;
-		bool nSoften;
-/* Texture Maps */
-		nstring nDiffuseMap1;
-		nstring nDiffuseMap2;
-		nstring nAmbientMap;
-		nstring nOpacMap;
-		nstring nSpecMap;
-		nstring nBumpMap;
-		nstring nShinMap;
-		nstring nSelfIlMap;
-		nstring nReflectionMap;
-/* Mask Maps */
-		nstring nDiffuseMap1Mask;
-		nstring nDiffuseMap2Mask;
-		nstring nAmbientMapMask;
-		nstring nOpacMapMask;
-		nstring nSpecMapMask;
-		nstring nBumpMapMask;
-		nstring nShinMapMask;
-		nstring nSelfIlMapMask;
-		nstring nReflectionMapMask;
-/* Acubic opt */
-		nInt32 nAutoreflMapAntiAlias;
-		nova::nUInt32 nAutoreflMapFlags;
-        nInt32 nAutoreflMapSize;
-        nInt32 nAutoreflMapFrameStep;
-
-		nova::stl<nstring>::vector nSubMats;
-
-	} TMaterialContainer;
-
 protected:
 
 	virtual void InitLoader(void) = 0;
@@ -108,14 +56,14 @@ public:
 
 	CMeshBox::TMeshContainer GetMesh(const nstring &name);
 
-	TMaterialContainer GetMaterial(const nstring & name);
+	CMaterial::TMaterialContainer GetMaterial(const nstring & name);
 
 	CTexture::TTextureContainer GetTextureList(const nstring & name);
 
 protected:
 
 	nova::stl<nstring, CMeshBox::TMeshContainer>::map mMeshesMap;
-	nova::stl<nstring, TMaterialContainer>::map mMaterialsMap;
+	nova::stl<nstring, CMaterial::TMaterialContainer>::map mMaterialsMap;
 	nova::stl<nstring, CTexture::TTextureContainer>::map mTexturesMap;
 	nova::CDataStream *mpStream;
 };

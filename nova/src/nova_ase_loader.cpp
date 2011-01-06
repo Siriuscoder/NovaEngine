@@ -126,8 +126,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 	nrbrack = 0;
 
 	CMeshBox::TMeshContainer *LastGeomObject = NULL;
-	TMaterialContainer *LastMaterial = NULL;
-	TMaterialContainer *LastSubMaterial = NULL;
+	CMaterial::TMaterialContainer *LastMaterial = NULL;
+	CMaterial::TMaterialContainer *LastSubMaterial = NULL;
 	CTexture::TTextureContainer *LastTexture = NULL;
 	nInt32 mat_count = 0;
 	nInt32 submat_count = 0;
@@ -927,14 +927,14 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		next = next + width;
 // Добавляем новый материал в кеш объектов, сохраняем на него ссылку
 					nstring nMatName(word2);
-					TMaterialContainer mat;
-					memset(&mat, 0, sizeof(TMaterialContainer));
+					CMaterial::TMaterialContainer mat;
+					memset(&mat, 0, sizeof(CMaterial::TMaterialContainer));
 
 					mat.nName = nMatName;
 					mat.nID = mat_count;
 					mat_count++;
 
-					mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nMatName, mat));
+					mMaterialsMap.insert(std::pair<nstring, CMaterial::TMaterialContainer>(nMatName, mat));
 					LastMaterial = &(mMaterialsMap[nMatName]);
 
 					break;
@@ -1105,13 +1105,13 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		next = next + width;
 // Добавляем новый материал в кеш объектов, сохраняем на него ссылку
 					nstring nMatName(word2);
-					TMaterialContainer mat;
-					memset(&mat, 0, sizeof(TMaterialContainer));
+					CMaterial::TMaterialContainer mat;
+					memset(&mat, 0, sizeof(CMaterial::TMaterialContainer));
 
 					mat.nName = nMatName;
 					mat.nID = submat_count;
 					submat_count++;
-					mMaterialsMap.insert(std::pair<nstring, TMaterialContainer>(nMatName, mat));
+					mMaterialsMap.insert(std::pair<nstring, CMaterial::TMaterialContainer>(nMatName, mat));
 
 					if(LastMaterial)
 						LastMaterial->nSubMats.push_back(nMatName);
@@ -1597,16 +1597,16 @@ void CASELoader::InitLoader(void)
 		throw NOVA_EXP("void CASELoader::LoadAseInternal(void): mpStream is not opened..", MEM_ERROR);
 }
 
-CSceneContentLoaderBase::TMaterialContainer CASELoader::FindMatByID(nInt32 id)
+CMaterial::TMaterialContainer CASELoader::FindMatByID(nInt32 id)
 {
-	stl<nstring, TMaterialContainer>::map::iterator it;
+	stl<nstring, CMaterial::TMaterialContainer>::map::iterator it;
 	for(it = mMaterialsMap.begin(); it != mMaterialsMap.end(); it++)
 	{
 		if(it->second.nID == id)
 			return it->second;
 	}
 
-	return TMaterialContainer();
+	return CMaterial::TMaterialContainer();
 }
 
 void CASELoader::CloseLoader(void)
@@ -1615,7 +1615,7 @@ void CASELoader::CloseLoader(void)
 	for(it = mMeshesMap.begin(); it != mMeshesMap.end(); it++)
 	{
 		CMeshBox::TMeshContainer *mesh_def = &((*it).second);
-		TMaterialContainer matref = FindMatByID(mesh_def->MatID);
+		CMaterial::TMaterialContainer matref = FindMatByID(mesh_def->MatID);
 // Preparing sub mat indexes
 		for(nUInt32 i = 0; i < mesh_def->nMeshInfoList.size(); i++)
 		{
