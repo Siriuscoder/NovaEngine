@@ -494,7 +494,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\nova_msh_loader.cpp"
+					RelativePath=".\src\nova_msh_loader.cpp"
 					>
 				</File>
 			</Filter>
@@ -908,7 +908,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\nova_msh_loader.h"
+					RelativePath=".\include\nova_msh_loader.h"
 					>
 				</File>
 			</Filter>
