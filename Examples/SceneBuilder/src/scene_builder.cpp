@@ -73,7 +73,7 @@ public:
 		{
 			std::cout << meshes[i] << std::endl;
 			std::cout << "Mesh info: " << std::endl;
-			nova::CMeshBox::TMeshContainer geom = mLoader.GetMesh(meshes[i]);
+			nova::CMesh::TMeshContainer geom = mLoader.GetMesh(meshes[i]);
 
 			std::cout << "Vertex count: " << nova::CStringUtils::IntToString(geom.nVertexList.size()) << std::endl;
 			std::cout << "Face count: " << nova::CStringUtils::IntToString(geom.nIndexList.size()) << std::endl;

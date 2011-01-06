@@ -68,9 +68,9 @@ private:
 
 	float ReadPercentage(const C3DSChunk &chunk);
 
-	CMeshBox::TMeshContainer *LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_name);
+	CMesh::TMeshContainer *LoadSingleMesh(const C3DSChunk &chunk, nstring & obj_name);
 
-	void ReadFaceList(const C3DSChunk &chunk, CMeshBox::TMeshContainer *mesh);
+	void ReadFaceList(const C3DSChunk &chunk, CMesh::TMeshContainer *mesh);
 
 	CMaterial::TMaterialContainer *ReadMaterial(const C3DSChunk &parent);
 

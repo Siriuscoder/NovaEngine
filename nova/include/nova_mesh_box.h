@@ -32,7 +32,7 @@
 namespace nova
 {
 
-class CMeshBox;
+class CMesh;
 
 #pragma pack(push, 1)
 
@@ -124,16 +124,16 @@ class NOVA_EXPORT CMeshBoxListener : public CResourceListener
 {
 public:
 
-	virtual void BuildMeshListener(CMeshBox * object) {}
+	virtual void BuildMeshListener(CMesh * object) {}
 
-	virtual void CalculateNormalsListener(CMeshBox * object) {}
+	virtual void CalculateNormalsListener(CMesh * object) {}
 
-	virtual void GenerateBoundingBoxListener(CMeshBox * object) {}
+	virtual void GenerateBoundingBoxListener(CMesh * object) {}
 };
 
 
 
-class NOVA_EXPORT CMeshBox : public CResource
+class NOVA_EXPORT CMesh : public CResource
 {
 public:
 
@@ -181,8 +181,8 @@ protected:
 
 public:
 
-	CMeshBox(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
-	~CMeshBox();
+	CMesh(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
+	~CMesh();
 
 	TMeshContainer &GetMeshDefinition(void);
 
@@ -210,7 +210,7 @@ public:
 	void ToWorldCoord(void);
 };
 
-typedef CSmartPtr<CMeshBox> CMeshBoxPtr;
+typedef CSmartPtr<CMesh> CMeshBoxPtr;
 
 class NOVA_EXPORT CMeshManager : public CSingelton<CMeshManager>, public CResourceManager
 {
@@ -230,7 +230,7 @@ public:
 	virtual CResourcePtr CreateInstance(const nstring & name, 
 		const nstring & group, CResource::TAttach state);
 
-	CMeshBoxPtr CreateMesh(CMeshBox::TMeshContainer *def, const nstring &group,
+	CMeshBoxPtr CreateMesh(CMesh::TMeshContainer *def, const nstring &group,
 		CResource::TAttach state = CResource::NV_ATTACHED);
 
 };

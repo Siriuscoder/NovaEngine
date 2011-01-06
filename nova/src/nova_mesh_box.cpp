@@ -26,23 +26,23 @@
 namespace nova
 {
 
-CMeshBox::CMeshBox(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
+CMesh::CMesh(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
 	CResource(rm, name, group, state)
 {
 	memset(&mMeshDef, 0, sizeof(TMeshContainer));
 	mMeshDef.nTMatrix = Matrix4f::IDENTITY;
 }
 
-CMeshBox::~CMeshBox()
+CMesh::~CMesh()
 {
 	this->FreeResource();
 
 	nova::nstringstream str;
-	str << "CMeshBox::~CMeshBox() " << "name: " << mName << " group: " << mGroup;
+	str << "CMesh::~CMesh() " << "name: " << mName << " group: " << mGroup;
 	LOG_MESSAGE(str.str());
 }
 
-void CMeshBox::CalculateNormals(void/* Simple method */)
+void CMesh::CalculateNormals(void/* Simple method */)
 {
 	if(mMeshDef.nMeshInfoList.size() == 0)
 		return ;
@@ -93,7 +93,7 @@ void CMeshBox::CalculateNormals(void/* Simple method */)
 	}
 }
 
-nInt32 CMeshBox::QComparer(const void * a, const void * b)
+nInt32 CMesh::QComparer(const void * a, const void * b)
 {
 	TTriangleInfo *right = (TTriangleInfo *)b;
 	TTriangleInfo *left = (TTriangleInfo *)a;
@@ -101,7 +101,7 @@ nInt32 CMeshBox::QComparer(const void * a, const void * b)
 	return left->nMatSubID - right->nMatSubID;
 }
 
-void CMeshBox::QSortFaces(TIndexes &index, TFacesInfo &faces)
+void CMesh::QSortFaces(TIndexes &index, TFacesInfo &faces)
 {
 	qsort(&(faces[0]), faces.size(), sizeof(TTriangleInfo), QComparer);
 
@@ -118,23 +118,23 @@ void CMeshBox::QSortFaces(TIndexes &index, TFacesInfo &faces)
 	tmp.clear();
 }
 
-CMeshBox::TMeshContainer &CMeshBox::GetMeshDefinition(void)
+CMesh::TMeshContainer &CMesh::GetMeshDefinition(void)
 {
 	return mMeshDef;
 }
 
-void CMeshBox::SetMeshDefinition(TMeshContainer *_mesh)
+void CMesh::SetMeshDefinition(TMeshContainer *_mesh)
 {
 	if(_mesh)
 		mMeshDef = *_mesh;
 }
 
-void CMeshBox::SortFaceIndexByMaterials(void)
+void CMesh::SortFaceIndexByMaterials(void)
 {
 	QSortFaces(mMeshDef.nIndexList, mMeshDef.nMeshInfoList);
 }
 
-CBoundingBox CMeshBox::GenerateBoundingBox(void)
+CBoundingBox CMesh::GenerateBoundingBox(void)
 {
 	CBoundingBox testbox;
 
@@ -172,14 +172,14 @@ CBoundingBox CMeshBox::GenerateBoundingBox(void)
 	return testbox;
 }
 
-void CMeshBox::FreeResourceImpl()
+void CMesh::FreeResourceImpl()
 {
 
 }
 
 
 
-void CMeshBox::ToWorldCoord()
+void CMesh::ToWorldCoord()
 {
 	for(nUInt32 i = 0; i < mMeshDef.nVertexList.size(); i++)
 	{
@@ -192,11 +192,11 @@ void CMeshBox::ToWorldCoord()
 	}
 }
 
-void CMeshBox::LoadResourceImpl(void)
+void CMesh::LoadResourceImpl(void)
 {
 /*
 	if(!CheckValidLength())
-		throw NOVA_EXP("CMeshBox::BuildResource - detected incorrect \
+		throw NOVA_EXP("CMesh::BuildResource - detected incorrect \
 		mesh size.. do not resolved the conflict((", BAD_OPERATION);
 */
 
@@ -214,7 +214,7 @@ void CMeshBox::LoadResourceImpl(void)
 	}
 }
 
-void CMeshBox::BuildResourceImpl(void)
+void CMesh::BuildResourceImpl(void)
 {
 	mSize += mMeshDef.nVertexList.size() * sizeof(TVertex3d);
 	mSize += mMeshDef.nNormalList.size() * sizeof(TNormal3d);
@@ -224,7 +224,7 @@ void CMeshBox::BuildResourceImpl(void)
 
 }
 
-bool CMeshBox::CheckValidLength()
+bool CMesh::CheckValidLength()
 {
 	if(mMeshDef.nVertexList.size() == mMeshDef.nNormalList.size() == mMeshDef.nMappingFacesList.size())
 		return true;
@@ -232,7 +232,7 @@ bool CMeshBox::CheckValidLength()
 	return false;
 }
 
-void * CMeshBox::GetVertexPointer(size_t *count)
+void * CMesh::GetVertexPointer(size_t *count)
 {
 	*count = mMeshDef.nVertexList.size();
 	if(*count > 0)
@@ -243,7 +243,7 @@ void * CMeshBox::GetVertexPointer(size_t *count)
 	return NULL;
 }
 
-void * CMeshBox::GetNormalsPointer(size_t *count)
+void * CMesh::GetNormalsPointer(size_t *count)
 {
 	*count = mMeshDef.nNormalList.size();
 	if(*count > 0)
@@ -254,7 +254,7 @@ void * CMeshBox::GetNormalsPointer(size_t *count)
 	return NULL;
 }
 
-void * CMeshBox::GetUVPointer(size_t *count)
+void * CMesh::GetUVPointer(size_t *count)
 {
 	*count = mMeshDef.nMappingFacesList.size();
 	if(*count > 0)
@@ -265,7 +265,7 @@ void * CMeshBox::GetUVPointer(size_t *count)
 	return NULL;
 }
 
-void * CMeshBox::GetIndexesPointer(size_t *count)
+void * CMesh::GetIndexesPointer(size_t *count)
 {
 	*count = mMeshDef.nIndexList.size();
 	if(*count > 0)
@@ -276,7 +276,7 @@ void * CMeshBox::GetIndexesPointer(size_t *count)
 	return NULL;
 }
 
-void CMeshBox::GenerateNormalsToFaces(void)
+void CMesh::GenerateNormalsToFaces(void)
 {
 	TFacesInfo::iterator it;
 	it = mMeshDef.nMeshInfoList.begin();
@@ -311,7 +311,7 @@ void CMeshBox::GenerateNormalsToFaces(void)
 	}
 	catch(std::exception & ex)
 	{
-		nstring str("CMeshBox::CreateInfo - rased std::exception: ");
+		nstring str("CMesh::CreateInfo - rased std::exception: ");
 		str = str + ex.what();
 		throw NOVA_EXP(str.c_str(), BAD_OPERATION);
 	}
@@ -338,11 +338,11 @@ void CMeshManager::UnloadAllManagerResources()
 CResourcePtr CMeshManager::CreateInstance(const nstring & name,
 		const nstring & group, CResource::TAttach state)
 {
-	CResourcePtr ptr(new CMeshBox(this, name, group, state));
+	CResourcePtr ptr(new CMesh(this, name, group, state));
 	return ptr;
 }
 
-CMeshBoxPtr CMeshManager::CreateMesh(CMeshBox::TMeshContainer *def, const nstring &group,
+CMeshBoxPtr CMeshManager::CreateMesh(CMesh::TMeshContainer *def, const nstring &group,
 		CResource::TAttach state)
 {
 	CMeshBoxPtr mesh = CResourceManager::AddNewResource(def->nName, group, state);

@@ -52,7 +52,7 @@ void CSceneContentLoaderBase::LoadAsync(CDataStream *stream, nInt32 timeout)
 stl<nstring>::vector CSceneContentLoaderBase::GetMeshList(void)
 {
 	stl<nstring>::vector result;
-	nova::stl<nstring, CMeshBox::TMeshContainer>::map::const_iterator it;
+	nova::stl<nstring, CMesh::TMeshContainer>::map::const_iterator it;
 
 	for(it = mMeshesMap.begin(); it != mMeshesMap.end(); it++)
 		result.push_back((*it).first);
@@ -82,13 +82,13 @@ stl<nstring>::vector CSceneContentLoaderBase::GetTextureList(void)
 	return result;
 }
 
-CMeshBox::TMeshContainer CSceneContentLoaderBase::GetMesh(const nstring & name)
+CMesh::TMeshContainer CSceneContentLoaderBase::GetMesh(const nstring & name)
 {
-	nova::stl<nstring, CMeshBox::TMeshContainer>::map::const_iterator it;
+	nova::stl<nstring, CMesh::TMeshContainer>::map::const_iterator it;
 	if((it = mMeshesMap.find(name)) != mMeshesMap.end())
 		return (*it).second;
 
-	return CMeshBox::TMeshContainer();
+	return CMesh::TMeshContainer();
 }
 
 CMaterial::TMaterialContainer CSceneContentLoaderBase::GetMaterial(const nstring & name)

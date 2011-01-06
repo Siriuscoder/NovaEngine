@@ -54,7 +54,7 @@ public:
 
 	stl<nstring>::vector GetTextureList(void);
 
-	CMeshBox::TMeshContainer GetMesh(const nstring &name);
+	CMesh::TMeshContainer GetMesh(const nstring &name);
 
 	CMaterial::TMaterialContainer GetMaterial(const nstring & name);
 
@@ -62,7 +62,7 @@ public:
 
 protected:
 
-	nova::stl<nstring, CMeshBox::TMeshContainer>::map mMeshesMap;
+	nova::stl<nstring, CMesh::TMeshContainer>::map mMeshesMap;
 	nova::stl<nstring, CMaterial::TMaterialContainer>::map mMaterialsMap;
 	nova::stl<nstring, CTexture::TTextureContainer>::map mTexturesMap;
 	nova::CDataStream *mpStream;

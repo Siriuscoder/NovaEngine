@@ -125,7 +125,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 	nlbrack = 0;
 	nrbrack = 0;
 
-	CMeshBox::TMeshContainer *LastGeomObject = NULL;
+	CMesh::TMeshContainer *LastGeomObject = NULL;
 	CMaterial::TMaterialContainer *LastMaterial = NULL;
 	CMaterial::TMaterialContainer *LastSubMaterial = NULL;
 	CTexture::TTextureContainer *LastTexture = NULL;
@@ -237,11 +237,11 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		next = next + width;
 // Добавляем новый каркас в кеш объектов, сохраняем на него ссылку
 					nstring nObjName(word2);
-					CMeshBox::TMeshContainer mesh;
-					memset(&mesh, 0, sizeof(CMeshBox::TMeshContainer));
+					CMesh::TMeshContainer mesh;
+					memset(&mesh, 0, sizeof(CMesh::TMeshContainer));
 
 					mesh.nName = nObjName;
-					mMeshesMap.insert(std::pair<nstring, CMeshBox::TMeshContainer>(nObjName, mesh));
+					mMeshesMap.insert(std::pair<nstring, CMesh::TMeshContainer>(nObjName, mesh));
 					LastGeomObject = &(mMeshesMap[nObjName]);
 					break;
 				}
@@ -1611,10 +1611,10 @@ CMaterial::TMaterialContainer CASELoader::FindMatByID(nInt32 id)
 
 void CASELoader::CloseLoader(void)
 {
-	stl<nstring, CMeshBox::TMeshContainer>::map::iterator it;
+	stl<nstring, CMesh::TMeshContainer>::map::iterator it;
 	for(it = mMeshesMap.begin(); it != mMeshesMap.end(); it++)
 	{
-		CMeshBox::TMeshContainer *mesh_def = &((*it).second);
+		CMesh::TMeshContainer *mesh_def = &((*it).second);
 		CMaterial::TMaterialContainer matref = FindMatByID(mesh_def->MatID);
 // Preparing sub mat indexes
 		for(nUInt32 i = 0; i < mesh_def->nMeshInfoList.size(); i++)
