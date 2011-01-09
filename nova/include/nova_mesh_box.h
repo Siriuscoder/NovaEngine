@@ -216,9 +216,9 @@ class NOVA_EXPORT CMeshManager : public CSingelton<CMeshManager>, public CResour
 {
 protected:
 
-	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node);
+	CResourcePtr LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node);
 
-	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package);
+	CResourcePtr LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package);
 
 public:
 

@@ -363,12 +363,12 @@ CMeshBoxPtr CMeshManager::CreateMesh(CMesh::TMeshContainer *def, const nstring &
 	return mesh;
 }
 
-CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
+CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
 	return CResourcePtr();
 }
 
-CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
 	return CResourcePtr();
 }

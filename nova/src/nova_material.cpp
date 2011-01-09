@@ -193,12 +193,12 @@ CMaterialPtr CMaterialManager::CreateMaterial(const nstring & name, const nstrin
 }
 
 
-CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
+CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
 	return CResourcePtr();
 }
 
-CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
 	return CResourcePtr();
 }

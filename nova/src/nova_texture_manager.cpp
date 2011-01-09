@@ -114,12 +114,12 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 	return texp;
 }
 
-CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
+CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
 	return CResourcePtr();
 }
 
-CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
 	return CResourcePtr();
 }

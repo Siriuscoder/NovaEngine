@@ -245,9 +245,9 @@ protected:
 
 	FT_Library library;
 
-	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node);
+	CResourcePtr LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node);
 
-	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package);
+	CResourcePtr LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package);
 
 public:
 

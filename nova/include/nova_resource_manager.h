@@ -223,13 +223,14 @@ public:
 	virtual void UnloadAllManagerResources() = 0;
 
 	/* for force loading form packages */
-	CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
+	static CResourcePtr LoadResourceFromXml(const nstring &filename, const CFilesPackage &package);
 
-	CResourcePtr LoadResourceFromXml(const nstring &filename);
+	static CResourcePtr LoadResourceFromXml(const nstring &filename);
 
-	CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node);
-
-	CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node, const CFilesPackage &package);
+	// ResourceData node input onty
+	static CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node);
+	// ResourceData node input only
+	static CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node, const CFilesPackage &package);
 
 	static void BuildAllManagedResources(void);
 
@@ -255,9 +256,9 @@ public:
 
 protected:
 
-	virtual CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node) = 0;
+	virtual CResourcePtr LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node) = 0;
 
-	virtual CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package) = 0;
+	virtual CResourcePtr LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package) = 0;
 
 };
 

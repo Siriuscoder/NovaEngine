@@ -31,6 +31,8 @@
 namespace nova
 {
 
+CMesh::TMeshContainer CGlobalMshLoader::gMeshBuffer;
+
 CMesh::TMeshContainer &CGlobalMshLoader::LoadMeshFromFile(const nstring &file)
 {
 	CFileStream sfile;

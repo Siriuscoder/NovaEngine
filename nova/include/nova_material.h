@@ -140,9 +140,9 @@ class NOVA_EXPORT CMaterialManager : public CSingelton<CMaterialManager>, public
 {
 protected:
 
-	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node);
+	CResourcePtr LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node);
 
-	CResourcePtr LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package);
+	CResourcePtr LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package);
 
 public:
 	CMaterialManager(const nstring & resourceFactoryName);

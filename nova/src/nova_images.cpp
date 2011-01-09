@@ -544,12 +544,12 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & gr
 	return imgp;
 }
 
-CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
+CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
 	return CResourcePtr();
 }
 
-CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
 	return CResourcePtr();
 }

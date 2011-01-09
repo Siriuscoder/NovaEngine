@@ -389,12 +389,12 @@ void CFontManager::UnloadAllManagerResources()
 	UnloadResourceFromHash(this);
 }
 
-CResourcePtr CFontManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node)
+CResourcePtr CFontManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
 	return CResourcePtr();
 }
 
-CResourcePtr CFontManager::LoadResourceFromXmlNodeImpl(xmlNodePtr node, const CFilesPackage &package)
+CResourcePtr CFontManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
 	return CResourcePtr();
 }
