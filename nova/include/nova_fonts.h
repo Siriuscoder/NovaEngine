@@ -223,6 +223,8 @@ protected:
 
 	void BuildResourceImpl(void); 
 
+	void SerializeToXmlFileImpl(xmlTextWriterPtr writer);
+
 public:
 	CFreeFont(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
 

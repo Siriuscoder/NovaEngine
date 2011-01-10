@@ -28,8 +28,11 @@ template<> CNovaEngine * CSingelton<CNovaEngine>::SingeltonObject = NULL;
 HINSTANCE ghInstance = NULL;
 #endif
 
+
 CNovaEngine::CNovaEngine() : CBase("CNovaEngine")
 {
+	CMemoryManaged::GlobalMemoryInit();
+
 	nstring str(SYSTEM_LOG_FILE);
 	mSystemLog = new CLog(str);
 
@@ -45,7 +48,6 @@ CNovaEngine::CNovaEngine() : CBase("CNovaEngine")
 	mes += " (c) sirius 2009\n\n";
 
 	LOG_MESSAGE(mes);
-	xmlInitParser();
 
 	mFontManager = NULL;
 	mTextureManager = NULL;
@@ -112,6 +114,7 @@ void CNovaEngine::Release(void)
 	ResetStats();
 
 	xmlCleanupParser();
+	xmlMemoryDump();
 }
 
 nInt32 CNovaEngine::Init(StartInit flag)

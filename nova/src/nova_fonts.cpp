@@ -327,6 +327,11 @@ void CFreeFont::FreeResourceImpl()
 	letters_map.clear();
 }
 
+void CFreeFont::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
+{
+
+}
+
 
 template<> CFontManager * CSingelton<CFontManager>::SingeltonObject = NULL;
 

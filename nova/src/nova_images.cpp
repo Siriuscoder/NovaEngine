@@ -442,6 +442,57 @@ void CImage::BackWidth()
 	buf.FreeBuffer();
 }
 
+void CImage::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
+{
+	if(!writer)
+		return;
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "ImageFile", BAD_CAST mImageSource.mFilename.c_str()) < 0)
+		NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "ImageCodec", BAD_CAST mImageSource.mCodecName.c_str()) < 0)
+		NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	std::stringstream str;
+	str << "Compressor info: "	
+		<< "SF_BMP = " << (int)SF_BMP 
+		<< ", SF_ICO = " << (int)SF_ICO
+		<< ", SF_JPG = " << (int)SF_JPG
+		<< ", SF_PCX = " << (int)SF_PCX
+		<< ", SF_PIC = " << (int)SF_PIC
+		<< ", SF_PNG = " << (int)SF_PNG
+		<< ", SF_TGA = " << (int)SF_TGA
+		<< ", SF_TIF = " << (int)SF_TIF
+		<< ", SF_GIF = " << (int)SF_GIF
+		<< ", SF_DDS = " << (int)SF_DDS
+		<< ", SF_PIX = " << (int)SF_PIX
+		<< ", SF_HDR = " << (int)SF_HDR;
+
+	if(xmlTextWriterWriteComment(writer, BAD_CAST str.str().c_str()) < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Compressor", "%d", (int)mImageSource.mCompressor) < 0)
+		NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	str.clear();
+	str << "Optional inmage format (default RGB): "
+		<< "NF_RED = " << (int)CImageFormats::NF_RED
+		<< ", NF_GREEN = " << (int)CImageFormats::NF_GREEN
+		<< ", NF_BLUE = " << (int)CImageFormats::NF_BLUE
+		<< ", NF_ALPHA = " << (int)CImageFormats::NF_ALPHA
+		<< ", NF_RGB = " << (int)CImageFormats::NF_RGB
+		<< ", NF_RGBA = " << (int)CImageFormats::NF_RGBA
+		<< ", NF_BGR = " << (int)CImageFormats::NF_BGR
+		<< ", NF_BGRA = " << (int)CImageFormats::NF_BGRA
+		<< ", NF_LUMINANCE = " << (int)CImageFormats::NF_LUMINANCE
+		<< ", NF_LUMINANCE_ALPHA = " << (int)CImageFormats::NF_LUMINANCE_ALPHA;
+
+	if(xmlTextWriterWriteComment(writer, BAD_CAST str.str().c_str()) < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "ImageFormat", "%d", (int)mImageSource.mPixelFormat) < 0)
+		NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+}
+
 
 template<> CImageManager * CSingelton<CImageManager>::SingeltonObject = NULL;
 

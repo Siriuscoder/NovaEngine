@@ -121,6 +121,8 @@ protected:
 
 	void BuildResourceImpl(void); 
 
+	void SerializeToXmlFileImpl(xmlTextWriterPtr writer);
+
 public:
 
 	CMaterial(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);

@@ -149,6 +149,12 @@ void CMaterial::ApplyMaterial(void)
 	}
 }
 
+void CMaterial::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
+{
+
+
+}
+
 template<> CMaterialManager * CSingelton<CMaterialManager>::SingeltonObject = NULL;
 
 CMaterialManager::CMaterialManager(const nstring & resourceFactoryName) : CResourceManager(resourceFactoryName)

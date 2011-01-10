@@ -140,6 +140,48 @@ void CResource::RebuildResource(void)
 	BuildResource();
 }
 
+void CResource::SerializeToXmlFile(const nstring &file)
+{
+    xmlTextWriterPtr writer = NULL;
+
+    /* Create a new XmlWriter for uri, with no compression. */
+    if((writer = xmlNewTextWriterFilename(file.c_str(), 0)) == NULL)
+		NOVA_EXP("CResource::SerializeToXmlFile: Error creating the xml writer", BAD_OPERATION);
+
+	// automatic indentation for readability
+	xmlTextWriterSetIndent(writer, 1);
+
+	if(xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL) < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartDocument fail", BAD_OPERATION);
+
+	if(xmlTextWriterStartElement(writer, BAD_CAST "NovaResource") < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+
+    if(xmlTextWriterWriteComment(writer, BAD_CAST "Common resource header") < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
+
+	if(xmlTextWriterStartElement(writer, BAD_CAST "ResourceHeader") < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "ResourceName", BAD_CAST mName.c_str()) < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "ResourceGroup", BAD_CAST mGroup.c_str()) < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterStartElement(writer, BAD_CAST "ResourceData") < 0)
+		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+
+// Resource manager attribute
+	if(xmlTextWriterWriteAttribute(writer, BAD_CAST "ResourceFactory", BAD_CAST GetCreator()->GetResourceFactoryName().c_str()) < 0)
+		NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+
+	SerializeToXmlFileImpl(writer);
+
+    xmlTextWriterEndDocument(writer);
+	xmlFreeTextWriter(writer);
+}
+
 ////////////////// Resource global hash //////////////////////////
 stl<nstring, CResourcePtr>::map CResourceManager::mResourceHash;
 stl<nstring, CResourceManager *>::map CResourceManager::mResourceFactoryHash;

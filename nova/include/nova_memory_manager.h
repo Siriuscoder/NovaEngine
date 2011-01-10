@@ -69,6 +69,8 @@ public:
 	void operator delete[](void *p, const std::nothrow_t & n);
 /// \brief Максимальный размер блока памяти
 	nova::nUInt64 GetMaxBlockSize(void);
+
+	static void GlobalMemoryInit(void);
 };
 
 

@@ -82,6 +82,8 @@ protected:
 
 	virtual void BuildResourceImpl(void) = 0;
 
+	virtual void SerializeToXmlFileImpl(xmlTextWriterPtr writer) = 0;
+
 public:
 
 	CResource(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);
@@ -146,6 +148,8 @@ public:
 	void BuildResource(void);
 
 	void RebuildResource(void);
+
+	void SerializeToXmlFile(const nstring &file);
 };
 
 typedef CSmartPtr<CResource> CResourcePtr;

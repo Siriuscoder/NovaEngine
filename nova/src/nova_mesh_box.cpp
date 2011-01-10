@@ -320,6 +320,12 @@ void CMesh::GenerateNormalsToFaces(void)
 	}
 }
 
+void CMesh::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
+{
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "Meshfile", BAD_CAST mMeshDef.nMeshfile.c_str()) < 0)
+		NOVA_EXP("CMesh::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+}
+
 template<> CMeshManager * CSingelton<CMeshManager>::SingeltonObject = NULL;
 
 CMeshManager::CMeshManager(const nstring & resourceFactoryName) : CResourceManager(resourceFactoryName)

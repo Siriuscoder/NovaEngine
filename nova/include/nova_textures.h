@@ -117,6 +117,8 @@ protected:
 
 	void BuildResourceImpl(void);
 
+	void SerializeToXmlFileImpl(xmlTextWriterPtr writer);
+
 public:
 
 	CTexture(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state);

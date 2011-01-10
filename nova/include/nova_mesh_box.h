@@ -161,6 +161,7 @@ public:
 // For mesh internal loading
 		CDataStream *pMeshStream;
 		bool nInternalLoading;
+		nstring nMeshfile;
 	} TMeshContainer;
 
 	static void QSortFaces(TIndexes &index, TFacesInfo &faces);
@@ -178,6 +179,8 @@ protected:
 	void FreeResourceImpl(void);
 
 	void BuildResourceImpl(void);
+
+	void SerializeToXmlFileImpl(xmlTextWriterPtr writer);
 
 public:
 

@@ -89,6 +89,8 @@ protected:
 
 	void BuildResourceImpl(void);
 
+	void SerializeToXmlFileImpl(xmlTextWriterPtr writer);
+
 public:
 
 	void SetImageSource(const CImageBox &source);

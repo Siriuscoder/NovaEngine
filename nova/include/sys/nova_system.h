@@ -268,10 +268,12 @@ using namespace std;
 #include <freetype/fttrigon.h>
 
 #ifdef USE_XML
-#ifdef HAVE_LIBXML2_LIBXML_TREE_H
+#	ifdef HAVE_LIBXML2_LIBXML_TREE_H
 #		include <libxml/parser.h>
 #		include <libxml/tree.h>
-#endif
+#		include <libxml/encoding.h>
+#		include <libxml/xmlwriter.h>
+#	endif
 #endif
 
 #ifdef USE_THREADS

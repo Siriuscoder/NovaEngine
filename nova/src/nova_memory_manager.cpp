@@ -21,11 +21,36 @@
 
 namespace nova {
 
+/* Memory managed for libxml2 */
+void xmlnFree(void *mem)
+{
+	freemem<nova::nByte>(static_cast<nova::nByte*>(mem));
+}
+
+void *xmlnMalloc(size_t size)
+{
+	nova::nByte *pblock = NULL;
+	return getmem<nova::nByte>(pblock, size);
+}
+
 void *CMemoryManaged::operator new(size_t size)
 {
 	//return winnie_allocator::Alloc(size);
 	nova::nByte *pblock = NULL;
 	return getmem<nova::nByte>(pblock, size);
+}
+
+void *xmlnRealloc(void * mem, size_t size)
+{
+	return gDefaultAllocator.ReallocMemory(mem, size);
+}
+
+char *xmlnStrdup(const char * str)
+{
+	char *heap = static_cast<char *>(gDefaultAllocator.AllocMemory(strlen(str)+1));
+	strcpy(heap, str);
+
+	return heap;
 }
 
 void CMemoryManaged::operator delete(void *p)
@@ -76,6 +101,13 @@ void CMemoryManaged::operator delete[](void *p, const std::nothrow_t & n)
 nova::nUInt64 CMemoryManaged::GetMaxBlockSize(void)
 {
 	return std::numeric_limits<size_t>::max();
+}
+
+void CMemoryManaged::GlobalMemoryInit(void)
+{
+	xmlMemSetup(&xmlnFree, &xmlnMalloc, &xmlnRealloc, &xmlnStrdup);
+	xmlInitMemory();
+	xmlInitParser();
 }
 
 }
