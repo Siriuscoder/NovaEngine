@@ -151,8 +151,139 @@ void CMaterial::ApplyMaterial(void)
 
 void CMaterial::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 {
+	if(!writer)
+		return;
 
+	if(xmlTextWriterStartElement(writer, BAD_CAST "AmbientColor") < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterStartElement fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "R", "%f", mMaterialSource.nAmbientColor.R()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "G", "%f", mMaterialSource.nAmbientColor.G()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "B", "%f", mMaterialSource.nAmbientColor.B()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterEndElement(writer) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterEndElement fail", BAD_OPERATION);
 
+	if(xmlTextWriterStartElement(writer, BAD_CAST "DiffuseColor") < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterStartElement fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "R", "%f", mMaterialSource.nDiffuseColor.R()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "G", "%f", mMaterialSource.nDiffuseColor.G()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "B", "%f", mMaterialSource.nDiffuseColor.B()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterEndElement(writer) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterEndElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterStartElement(writer, BAD_CAST "SpecularColor") < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterStartElement fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "R", "%f", mMaterialSource.nSpecularColor.R()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "G", "%f", mMaterialSource.nSpecularColor.G()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterWriteFormatAttribute(writer, BAD_CAST "B", "%f", mMaterialSource.nSpecularColor.B()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+	if(xmlTextWriterEndElement(writer) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterEndElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Shininess", "%f", mMaterialSource.nShininess) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "ShinStrength", "%f", mMaterialSource.nShinStrength) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+	
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Transparency", "%f", mMaterialSource.nTransparency) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+	
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Falloff", "%f", mMaterialSource.nFalloff) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+	
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "SelfIllum", "%f", mMaterialSource.nSelfIllum) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+	
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Blur", "%f", mMaterialSource.nBlur) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Shading", "%f", mMaterialSource.nShading) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SelfIllumFlag", BAD_CAST (mMaterialSource.nSelfIllumFlag ? "true" : "false")) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "TwoSided", BAD_CAST (mMaterialSource.nTwoSided ? "true" : "false")) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "MapDecal", BAD_CAST (mMaterialSource.nMapDecal ? "true" : "false")) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "IsAdditive", BAD_CAST (mMaterialSource.nIsAdditive ? "true" : "false")) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "Soften", BAD_CAST (mMaterialSource.nSoften ? "true" : "false")) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+///// Texture maps 
+	if(xmlTextWriterWriteComment(writer, BAD_CAST "Texture maps") < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteComment fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "DiffuseMap1", BAD_CAST mMaterialSource.nDiffuseMap1.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "DiffuseMap2", BAD_CAST mMaterialSource.nDiffuseMap2.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "AmbientMap", BAD_CAST mMaterialSource.nAmbientMap.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "OpacMap", BAD_CAST mMaterialSource.nOpacMap.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SpecMap", BAD_CAST mMaterialSource.nSpecMap.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "BumpMap", BAD_CAST mMaterialSource.nBumpMap.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "ShinMap", BAD_CAST mMaterialSource.nShinMap.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SelfIlMap", BAD_CAST mMaterialSource.nSelfIlMap.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "ReflectionMap", BAD_CAST mMaterialSource.nReflectionMap.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+///// Mask maps 
+	if(xmlTextWriterWriteComment(writer, BAD_CAST "Mask maps") < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteComment fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "DiffuseMap1Mask", BAD_CAST mMaterialSource.nDiffuseMap1Mask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "DiffuseMap2Mask", BAD_CAST mMaterialSource.nDiffuseMap2Mask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "AmbientMapMask", BAD_CAST mMaterialSource.nAmbientMapMask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "OpacMapMask", BAD_CAST mMaterialSource.nOpacMapMask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SpecMapMask", BAD_CAST mMaterialSource.nSpecMapMask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "BumpMapMask", BAD_CAST mMaterialSource.nBumpMapMask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "ShinMapMask", BAD_CAST mMaterialSource.nShinMapMask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SelfIlMapMask", BAD_CAST mMaterialSource.nSelfIlMapMask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "ReflectionMapMask", BAD_CAST mMaterialSource.nReflectionMapMask.c_str()) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
 }
 
 template<> CMaterialManager * CSingelton<CMaterialManager>::SingeltonObject = NULL;

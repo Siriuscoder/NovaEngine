@@ -210,17 +210,17 @@ void CTexture::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 	if(xmlTextWriterWriteComment(writer, BAD_CAST str.str().c_str()) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
 
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage1", BAD_CAST mImageList[0].c_str()) < 0)
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage1", BAD_CAST (mImageList[0].size() ? mImageList[0].c_str() : "none")) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage2", BAD_CAST mImageList[1].c_str()) < 0)
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage2", BAD_CAST (mImageList[1].size() ? mImageList[1].c_str() : "none")) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage3", BAD_CAST mImageList[2].c_str()) < 0)
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage3", BAD_CAST (mImageList[2].size() ? mImageList[2].c_str() : "none")) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage4", BAD_CAST mImageList[3].c_str()) < 0)
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage4", BAD_CAST (mImageList[3].size() ? mImageList[3].c_str() : "none")) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage5", BAD_CAST mImageList[4].c_str()) < 0)
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage5", BAD_CAST (mImageList[4].size() ? mImageList[4].c_str() : "none")) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage6", BAD_CAST mImageList[5].c_str()) < 0)
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage6", BAD_CAST (mImageList[5].size() ? mImageList[5].c_str() : "none")) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
 
 
