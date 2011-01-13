@@ -231,11 +231,6 @@ public:
 
 	static CResourcePtr LoadResourceFromXml(const nstring &filename);
 
-	// ResourceData node input onty
-	static CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node);
-	// ResourceData node input only
-	static CResourcePtr LoadResourceFromXmlNode(xmlNodePtr node, const CFilesPackage &package);
-
 	static void BuildAllManagedResources(void);
 
 	static void ReLoadAllManagedResources(void);
