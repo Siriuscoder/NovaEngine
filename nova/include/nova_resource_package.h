@@ -89,6 +89,8 @@ public:
 
 	void PutFile(const CMemoryBuffer &buf , const nstring & name, const nstring & ext, const nstring &grs); 
 
+	nstring GetPackageName(void) const;
+
 };
 
 

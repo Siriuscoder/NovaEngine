@@ -631,8 +631,7 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 		xmlFreeDoc(doc);
 	}
 
-	if(!res.IsNull())
-		res->LoadResource();
+	xmlfile.FreeBuffer();
 
 	return res;
 }
@@ -719,9 +718,6 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 		res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, data);
 
 	xmlFreeDoc(doc);
-
-	if(!res.IsNull())
-		res->LoadResource();
 
 	return res;
 }

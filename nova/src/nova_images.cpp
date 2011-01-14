@@ -18,6 +18,7 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_images.h"
+#include "nova_string_utils.h"
 
 #include <IL/il.h>
 #include <IL/ilu.h>
@@ -597,12 +598,99 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & gr
 
 CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
-	return CResourcePtr();
+	if(!node)
+		return CResourcePtr();
+
+	nstring nfile, ncodec;
+	ESaveFormats comp;
+	CImageFormats::NovaPixelFormats format = CImageFormats::NF_RGB;
+	CFileStream ifile;
+	CMemoryBuffer image_buf;
+
+
+	while(node != NULL)
+	{
+		if(xmlIsBlankNode(node))
+		{
+			node = node->next;
+			continue;
+		}
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "ImageFile"))
+			nfile.append(reinterpret_cast<char *>(node->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ImageCodec"))
+			ncodec.append(reinterpret_cast<char *>(node->content));
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "Compressor"))
+			comp = (ESaveFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ImageFormat"))
+			format = (CImageFormats::NovaPixelFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->content));
+
+		node = node->next;
+	}
+
+// Open image file
+	ifile.Open(nfile);
+	image_buf.AllocBuffer(ifile.Size());
+
+// Read all file to memory buffer
+	ifile.Read(image_buf);
+	ifile.Close();
+
+	CResourcePtr image = CreateNewImage(name, group, image_buf, comp, ncodec, format);
+	image->LoadResource();
+
+// Dealloc image buffer
+	image_buf.FreeBuffer();
+
+	return image;
 }
 
 CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
-	return CResourcePtr();
+	if(!node)
+		return CResourcePtr();
+
+	nstring nfile, ncodec;
+	ESaveFormats comp;
+	CImageFormats::NovaPixelFormats format = CImageFormats::NF_RGB;
+	CMemoryBuffer image_buf;
+
+
+	while(node != NULL)
+	{
+		if(xmlIsBlankNode(node))
+		{
+			node = node->next;
+			continue;
+		}
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "ImageFile"))
+			nfile.append(reinterpret_cast<char *>(node->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ImageCodec"))
+			ncodec.append(reinterpret_cast<char *>(node->content));
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "Compressor"))
+			comp = (ESaveFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ImageFormat"))
+			format = (CImageFormats::NovaPixelFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->content));
+
+		node = node->next;
+	}
+
+// Copy image file to memory buffer
+	image_buf = package.GetFile(nfile);
+	if(!image_buf.GetBufferSize())
+		throw NOVA_EXP(nstring("CImageManager::LoadResourceFromXmlNodeImpl - Can not find image file ") + nfile + 
+			" in package " + package.GetPackageName(), BAD_OPERATION);
+
+	CResourcePtr image = CreateNewImage(name, group, image_buf, comp, ncodec, format);
+	image->LoadResource();
+
+// Dealloc image buffer
+	image_buf.FreeBuffer();
+
+	return image;
 }
 
 }
