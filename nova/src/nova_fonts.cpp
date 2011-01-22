@@ -308,7 +308,7 @@ CFreeFont::~CFreeFont()
 	str << "CFreeFont::~CFreeFont() " << "name: " << mName << " group: " << mGroup;
 	LOG_MESSAGE(str.str().c_str());
 
-	FreeResource();
+	//FreeResource();
 }
 
 void CFreeFont::FreeResourceImpl()

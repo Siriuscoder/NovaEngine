@@ -107,10 +107,12 @@ nstring CStringUtils::FloatToString(float nReal)
 
 nstring CStringUtils::DoubleToString(double nReal)
 {
-	nova::nstringstream stream;
+	//nova::nstringstream stream;
+	char num[60];
 
-	stream << nReal;
-	return stream.str();
+	sprintf(num, "%f", nReal); 
+	//stream << nReal;
+	return nstring(num);
 }
 
 nInt32 CStringUtils::StringToInt(const char * str)

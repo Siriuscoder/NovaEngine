@@ -78,6 +78,7 @@ void CNovaEngine::Release(void)
 /* Renderer shutdown */
 	if(mRenderer)
 		mRenderer->ShutDown();
+	CResourceManager::FreeAllResource();
 /* Resource manager unloads */
 	CResourceManager::UnRegisterResourceFactory(mFontManager);
 	if(mFontManager)
@@ -94,6 +95,11 @@ void CNovaEngine::Release(void)
 	CResourceManager::UnRegisterResourceFactory(mMaterialManager);
 	if(mMaterialManager)
 		delete mMaterialManager;
+
+	CResourceManager::UnRegisterResourceFactory(mImageManager);
+	if(mImageManager)
+		delete mImageManager;
+
 
 /* Unloading codecs */
 #ifdef USING_DEVIL
@@ -243,7 +249,7 @@ void CNovaEngine::ResetStats()
 void CNovaEngine::UpdateStatistic()
 {
 	mFrameCount++;
-	nova::nReal ps = (nova::nReal)mFrameTimer.GetKernelMicroseconds() * 0.001f;
+	nova::nReal ps = (nova::nReal)mFrameTimer.GetKernelMilliseconds();
 	nova::nUInt32 sec = mCPUTimer.GetMilliseconds();
 
 	mStats.best_frame_time = std::min(mStats.best_frame_time, ps);

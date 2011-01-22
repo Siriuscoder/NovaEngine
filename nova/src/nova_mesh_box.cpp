@@ -36,7 +36,7 @@ CMesh::CMesh(CResourceManager * rm, const nstring & name, const nstring & group,
 
 CMesh::~CMesh()
 {
-	this->FreeResource();
+	//this->FreeResource();
 
 	nova::nstringstream str;
 	str << "CMesh::~CMesh() " << "name: " << mName << " group: " << mGroup;

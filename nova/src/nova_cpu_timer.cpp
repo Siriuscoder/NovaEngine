@@ -82,7 +82,7 @@ nova::nUInt32 CCPUTimer::GetMicroseconds()
 
 #ifdef WIN_BUILD
 
-nova::nUInt32 CCPUTimer::GetKernelMilliseconds()
+double CCPUTimer::GetKernelMilliseconds()
 {
 	LARGE_INTEGER endcount;
     QueryPerformanceCounter(&endcount);
@@ -90,10 +90,10 @@ nova::nUInt32 CCPUTimer::GetKernelMilliseconds()
     double startTimeInMicroSec = mStartCount.QuadPart * (1000000.0 / mFrequency.QuadPart);
     double endTimeInMicroSec = endcount.QuadPart * (1000000.0 / mFrequency.QuadPart);
 
-	return (nova::nUInt32)((endTimeInMicroSec - startTimeInMicroSec) * 0.001);
+	return ((endTimeInMicroSec - startTimeInMicroSec) * 0.001);
 }
 
-nova::nUInt32 CCPUTimer::GetKernelMicroseconds()
+double CCPUTimer::GetKernelMicroseconds()
 {
 	LARGE_INTEGER endcount;
     QueryPerformanceCounter(&endcount);
@@ -101,12 +101,24 @@ nova::nUInt32 CCPUTimer::GetKernelMicroseconds()
     double startTimeInMicroSec = mStartCount.QuadPart * (1000000.0 / mFrequency.QuadPart);
     double endTimeInMicroSec = endcount.QuadPart * (1000000.0 / mFrequency.QuadPart);
 
-	return (nova::nUInt32)((endTimeInMicroSec - startTimeInMicroSec));
+	return ((endTimeInMicroSec - startTimeInMicroSec));
+}
+
+double CCPUTimer::GetMillisecondsSinceStart()
+{
+	LARGE_INTEGER now;
+	LARGE_INTEGER frequency;
+    QueryPerformanceCounter(&now);
+	QueryPerformanceFrequency(&frequency);
+
+    double nowMicroSec = now.QuadPart * (1000000.0 / frequency.QuadPart);
+
+	return nowMicroSec * 0.001;
 }
 
 #else
 
-nova::nUInt32 CCPUTimer::GetKernelMilliseconds()
+double CCPUTimer::GetKernelMilliseconds()
 {
 	timeval endcount;
     gettimeofday(&endcount, NULL);
@@ -114,10 +126,10 @@ nova::nUInt32 CCPUTimer::GetKernelMilliseconds()
     double startTimeInMicroSec = (mStartCount.tv_sec * 1000000.0) + mStartCount.tv_usec;
     double endTimeInMicroSec = (endcount.tv_sec * 1000000.0) + endcount.tv_usec;
 
-	return (nova::nUInt32)((endTimeInMicroSec - startTimeInMicroSec) * 0.001);
+	return ((endTimeInMicroSec - startTimeInMicroSec) * 0.001);
 }
 
-nova::nUInt32 CCPUTimer::GetKernelMicroseconds()
+double CCPUTimer::GetKernelMicroseconds()
 {
 	timeval endcount;
     gettimeofday(&endcount, NULL);
@@ -125,7 +137,17 @@ nova::nUInt32 CCPUTimer::GetKernelMicroseconds()
     double startTimeInMicroSec = (mStartCount.tv_sec * 1000000.0) + mStartCount.tv_usec;
     double endTimeInMicroSec = (endcount.tv_sec * 1000000.0) + endcount.tv_usec;
 
-	return (nova::nUInt32)((endTimeInMicroSec - startTimeInMicroSec));
+	return ((endTimeInMicroSec - startTimeInMicroSec));
+}
+
+double CCPUTimer::GetMillisecondsSinceStart()
+{
+	timeval now;
+    gettimeofday(&now, NULL);
+
+    double NowInMicroSec = (endcount.tv_sec * 1000000.0) + endcount.tv_usec;
+
+	return NowInMicroSec * 0.001;
 }
 
 #endif

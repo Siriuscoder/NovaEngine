@@ -78,12 +78,13 @@ void CImageBox::SetData(const CMemoryBuffer & buffer,
 	CleanData();
 	mSourceImageBits = buffer;
 	mCodecName = codec;
+	mCompressor = compressor;
 	mPixelFormat = format;
 	mCompressedStream = true;
 }
 
 CImage::CImage(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
-	CResource(rm, name, group, state)
+	mStride(0), mhStride(0), CResource(rm, name, group, state)
 {
 
 }
@@ -94,7 +95,7 @@ CImage::~CImage()
 	str << "CImage::~CImage() " << "name: " << mName << " group: " << mGroup;
 	LOG_MESSAGE(str.str().c_str());
 
-	FreeResource();
+	//FreeResource();
 }
 /*
 void CImage::SetBits(const CMemoryBuffer & bits,
@@ -157,7 +158,7 @@ void CImage::LoadResourceImpl(void)
 			CImageCodec * codec = CImageCodec::GetCodec(mImageSource.mCodecName);
 			if(codec)
 			{
-				codec->DecodeFromBuffer(mImage, this, mImageSource.mPixelFormat, mImageSource.mCompressor);
+				codec->DecodeFromBuffer(mImageSource.mSourceImageBits, this, mImageSource.mPixelFormat, mImageSource.mCompressor);
 			}
 			else
 			{
@@ -474,8 +475,8 @@ void CImage::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Compressor", "%d", (int)mImageSource.mCompressor) < 0)
 		NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
 
-	str.clear();
-	str << "Optional inmage format (default RGB): "
+	std::stringstream str1;
+	str1 << "Optional image format (default RGB): "
 		<< "NF_RED = " << (int)CImageFormats::NF_RED
 		<< ", NF_GREEN = " << (int)CImageFormats::NF_GREEN
 		<< ", NF_BLUE = " << (int)CImageFormats::NF_BLUE
@@ -487,7 +488,7 @@ void CImage::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 		<< ", NF_LUMINANCE = " << (int)CImageFormats::NF_LUMINANCE
 		<< ", NF_LUMINANCE_ALPHA = " << (int)CImageFormats::NF_LUMINANCE_ALPHA;
 
-	if(xmlTextWriterWriteComment(writer, BAD_CAST str.str().c_str()) < 0)
+	if(xmlTextWriterWriteComment(writer, BAD_CAST str1.str().c_str()) < 0)
 		NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
 
 	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "ImageFormat", "%d", (int)mImageSource.mPixelFormat) < 0)
@@ -538,7 +539,7 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 	imgp->SetImageSource(storage);
 
 	nova::nstringstream str;
-	str << "Image Factory: image object name: " << name << " group: " << group << " created...";
+	str << "Image Factory: " << name << " (group: " << group << ") created";
 	LOG_MESSAGE(str.str());
 
 	return imgp;
@@ -565,7 +566,7 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 	imgp->SetImageSource(storage);
 
 	nova::nstringstream str;
-	str << "Image Factory: image object name: " << name << " group: " << group << " created...";
+	str << "Image Factory: " << name << " (group: " << group << ") created";
 	LOG_MESSAGE(str.str());
 
 	return imgp;
@@ -590,7 +591,7 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name, const nstring & gr
 	imgp->SetImageSource(storage);
 
 	nova::nstringstream str;
-	str << "Image Factory: image object name: " << name << " group: " << group << " created...";
+	str << "Image Factory: " << name << " (group: " << group << ") created";
 	LOG_MESSAGE(str.str());
 
 	return imgp;
@@ -617,31 +618,20 @@ CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, con
 		}
 
 		if(!xmlStrcmp(node->name, (xmlChar *) "ImageFile"))
-			nfile.append(reinterpret_cast<char *>(node->content));
+			nfile.append(reinterpret_cast<char *>(node->children->content));
 		if(!xmlStrcmp(node->name, (xmlChar *) "ImageCodec"))
-			ncodec.append(reinterpret_cast<char *>(node->content));
+			ncodec.append(reinterpret_cast<char *>(node->children->content));
 
 		if(!xmlStrcmp(node->name, (xmlChar *) "Compressor"))
-			comp = (ESaveFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->content));
+			comp = (ESaveFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
 		if(!xmlStrcmp(node->name, (xmlChar *) "ImageFormat"))
-			format = (CImageFormats::NovaPixelFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->content));
+			format = (CImageFormats::NovaPixelFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
 
 		node = node->next;
 	}
 
-// Open image file
-	ifile.Open(nfile);
-	image_buf.AllocBuffer(ifile.Size());
-
-// Read all file to memory buffer
-	ifile.Read(image_buf);
-	ifile.Close();
-
-	CResourcePtr image = CreateNewImage(name, group, image_buf, comp, ncodec, format);
+	CResourcePtr image = CreateNewImage(name, group, nfile, ncodec, format);
 	image->LoadResource();
-
-// Dealloc image buffer
-	image_buf.FreeBuffer();
 
 	return image;
 }
@@ -666,14 +656,14 @@ CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, con
 		}
 
 		if(!xmlStrcmp(node->name, (xmlChar *) "ImageFile"))
-			nfile.append(reinterpret_cast<char *>(node->content));
+			nfile.append(reinterpret_cast<char *>(node->children->content));
 		if(!xmlStrcmp(node->name, (xmlChar *) "ImageCodec"))
-			ncodec.append(reinterpret_cast<char *>(node->content));
+			ncodec.append(reinterpret_cast<char *>(node->children->content));
 
 		if(!xmlStrcmp(node->name, (xmlChar *) "Compressor"))
-			comp = (ESaveFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->content));
+			comp = (ESaveFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
 		if(!xmlStrcmp(node->name, (xmlChar *) "ImageFormat"))
-			format = (CImageFormats::NovaPixelFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->content));
+			format = (CImageFormats::NovaPixelFormats)CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
 
 		node = node->next;
 	}

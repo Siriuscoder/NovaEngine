@@ -52,9 +52,11 @@ public:
 
 	nova::nUInt32 GetMicroseconds();
 
-	nova::nUInt32 GetKernelMilliseconds();
+	double GetKernelMilliseconds();
 
-	nova::nUInt32 GetKernelMicroseconds();
+	double GetKernelMicroseconds();
+
+	static double GetMillisecondsSinceStart();
 };
 
 }

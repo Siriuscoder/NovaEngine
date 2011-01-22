@@ -295,9 +295,9 @@ void CDevILCodec::DecodeFromFile(const nstring & filename, CImage *image,
 	informat.SetExFormat(format);
 	image->GetImageSource().mPixelFormat = format;
 
-
+	size_t _size = image->GetWidth() * image->GetHeight() * image->GetDepth() * ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
 	image->GetBits().FreeBuffer();
-	image->GetBits().AllocBuffer(image->GetSize());
+	image->GetBits().AllocBuffer(_size);
 
 	ilCopyPixels(0, 0, 0, image->GetWidth(), image->GetHeight(), 
 		image->GetDepth(), informat.GetFormat(), IL_UNSIGNED_BYTE, image->GetBits().GetBegin());
@@ -382,7 +382,6 @@ void CDevILCodec::DecodeFromBuffer(const CMemoryBuffer & input, CImage *image,
 	image->GetImageSource().mWidth = ilGetInteger(IL_IMAGE_WIDTH);
 	image->GetImageSource().mDepth = ilGetInteger(IL_IMAGE_DEPTH);
 
-//	this->size = ilGetInteger(IL_IMAGE_SIZE_OF_DATA);
 	if(format == CImageFormats::NF_DEFAULT)
 	{
 		CDevILFormats inf;
@@ -395,10 +394,11 @@ void CDevILCodec::DecodeFromBuffer(const CMemoryBuffer & input, CImage *image,
 	image->GetImageSource().mPixelFormat = format;
 
 
+	size_t _size = image->GetWidth() * image->GetHeight() * image->GetDepth() * ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
 	image->GetBits().FreeBuffer();
-	image->GetBits().AllocBuffer(image->GetSize());
+	image->GetBits().AllocBuffer(_size);
 
-	ilCopyPixels(0, 0, 0, image->GetWidth(), image->GetHeight(), 
+	ilCopyPixels(0, 0, 0, image->GetWidth(), image->GetHeight(),
 		image->GetDepth(), informat.GetFormat(), IL_UNSIGNED_BYTE, image->GetBits().GetBegin());
 
 	ilDeleteImages(1, &image_id);

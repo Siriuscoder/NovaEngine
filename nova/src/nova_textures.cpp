@@ -117,7 +117,7 @@ CTexture::~CTexture()
 	str << "CTexture()::~CTexture() " << "name: " << mName << " group: " << mGroup;
 	LOG_MESSAGE(str.str());
 
-	FreeResource();
+	//FreeResource();
 }
 
 CImageFormats::NovaPixelFormats CTexture::GetPixelFormat()

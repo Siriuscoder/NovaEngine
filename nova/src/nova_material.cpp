@@ -33,7 +33,7 @@ CMaterial::~CMaterial()
 	str << "CMaterial::~CMaterial() " << "name: " << mName << " group: " << mGroup;
 	LOG_MESSAGE(str.str());
 
-	FreeResource();
+	//FreeResource();
 }
 
 CMaterial::CMaterial(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :

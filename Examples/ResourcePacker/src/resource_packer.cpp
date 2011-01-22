@@ -135,7 +135,11 @@ ENTRY_POINT
 #endif
 		}
 
-		if(args[0] == nstring("-pack"))
+		if(!args.size())
+		{
+			packer.PrintHelp();
+		}
+		else if(args[0] == nstring("-pack"))
 		{
 			if(args.size() >= 3)
 			{

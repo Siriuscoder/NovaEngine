@@ -31,7 +31,7 @@ public:
 	{
 		nstringstream str;
 
-		str << "Image: " << object->GetResName() << " successfully free!";
+		str << "Image: " << object->GetResName() << " destroyed successfully\n";
 
 		LOG_MESSAGE(str.str());
 	}
@@ -40,7 +40,8 @@ public:
 	{
 		nstringstream str;
 
-		str << "Image: " << object->GetResName() << " successfully prepared!";
+		str << "Image: " << object->GetResName() << " load successfully, ";
+		str << "Total resource hash size: " << CResourceManager::GetHashSize() << " bytes";
 
 		LOG_MESSAGE(str.str());
 	}
@@ -62,24 +63,22 @@ public:
 		nstringstream str;
 
 		str << "Image: " << object->GetResName() << " successfully unloaded!\n";
-		str << "Total resource hash size: " << CResourceManager::GetHashSize();
 
 		LOG_MESSAGE(str.str());
 	}
 
-} *mListener;
+} mListener;
 
 public:
 
 	ImageExample()
 	{
-		mListener = new MyImageExampleListener();
+
 	}
 
 	~ImageExample()
 	{
 		ShutDown();
-		delete mListener;
 	}
 
 	CImagePtr LoadImageFromFile(const nstring & file)
@@ -87,7 +86,7 @@ public:
 		CImagePtr image = CImageManager::GetSingelton().CreateNewImage(file, nstring("manual"),
 			file, "DevIL", CImageFormats::NF_DEFAULT);
 
-		image->BackHeigth();
+		image->LoadResource();
 		return image;
 	}
 
@@ -108,31 +107,55 @@ public:
 			image_ptr->GetBits(), image_ptr->GetWidth(), image_ptr->GetHeight(), 
 			image_ptr->GetDepth(), image_ptr->GetPixelFormat());
 
+		image->LoadResource();
+
 		return image;
 	}
 
 	void SaveImage(const nstring & file, const CImagePtr &image_ptr)
 	{
-		CDevILCodec::GetSingelton().CodeToFile(nstring("image_test\\") + file, *(image_ptr.GetPtr()));
+		CDevILCodec::GetSingelton().CodeToFile(file, *(image_ptr.GetPtr()));
 	}
 
 	void Start()
 	{
 		StartUpEngine(ST_INIT_YOURSELF);
-		MyImageExampleListener *listener = new MyImageExampleListener();
 
-		CImageManager::GetSingelton().AddDefaultListener(listener);
+		CImageManager::GetSingelton().AddDefaultListener(&mListener);
 
 		CImagePtr MainImage = LoadImageFromFile("Test.jpg");
 
 		CImagePtr Image1 = CopyImage(MainImage);
+		SaveImage(nstring("Image1.png"), MainImage);
 
 		Image1->Negativity();
-		SaveImage(nstring("Image1.png"), Image1);
-		SaveImage(nstring("Image1.jpg"), Image1);
-		SaveImage(nstring("Image1.bmp"), Image1);
-		SaveImage(nstring("Image1.tif"), Image1);
-		SaveImage(nstring("Image1.tga"), Image1);
+		SaveImage(nstring("Image2.png"), Image1);
+		SaveImage(nstring("Image2.jpg"), Image1);
+		SaveImage(nstring("Image2.bmp"), Image1);
+		SaveImage(nstring("Image2.tif"), Image1);
+		SaveImage(nstring("Image2.tga"), Image1);
+
+		MainImage->SerializeToXmlFile("image.xml");
+		MainImage->FreeResource();
+		CResourceManager::UnloadResourceFromHash(MainImage);
+
+		CImagePtr Image2 = CResourceManager::LoadResourceFromXml("image.xml");
+		Image2->BackHeigth();
+		Image2->Pixelization(10);
+
+		SaveImage(nstring("Image3.png"), Image2);
+		Image2->FreeResource();
+		CResourceManager::UnloadResourceFromHash(Image2);
+
+		nova::CFilesPackage mPack;
+		mPack.OpenPackage("test.package", false);
+		CImagePtr Image3 = CResourceManager::LoadResourceFromXml("image.xml", mPack);
+
+		mPack.ClosePackage();
+
+		SaveImage(nstring("Image5.png"), Image3);
+
+/*
 
 		CImagePtr Image2 = CopyImage(Image1);
 		Image2->Blurring(3);
@@ -160,11 +183,7 @@ public:
 		SaveImage(nstring("MainImage.bmp"), MainImage);
 		SaveImage(nstring("MainImage.tif"), MainImage);
 		SaveImage(nstring("MainImage.tga"), MainImage);
-
-		CImageManager::GetSingelton().UnloadResourceFromHash(MainImage);
-		CImageManager::GetSingelton().UnloadResourceFromHash(Image1);
-		CImageManager::GetSingelton().UnloadResourceFromHash(Image2);
-		CImageManager::GetSingelton().UnloadResourceFromHash(Image3);
+*/
 	}
 };
 

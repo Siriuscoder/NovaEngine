@@ -23,6 +23,8 @@
 #include "nova_log.h"
 #include "nova_console.h"
 #include "nova_threads.h"
+#include "nova_cpu_timer.h"
+#include "nova_string_utils.h"
 
 
 namespace nova
@@ -107,6 +109,10 @@ nInt32 CLog::PrintMessage(const nova::nstring & mes, LogFormat format)
 
 	strcpy(timebuf, asctime(nowst));
 	timebuf[strlen(timebuf)-1] = 0;
+	//strcpy(timebuf, "(");
+	//strcat(timebuf, CStringUtils::DoubleToString(CCPUTimer::GetMillisecondsSinceStart()).c_str());
+	//strcat(timebuf, ") ");
+
 
 	switch(format)
 	{

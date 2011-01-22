@@ -575,35 +575,30 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 		}
 
 		cur = cur->children;
-		if(!cur)
-			return res;
-
-		caption = cur->name; // resource header
-		if(xmlStrcmp(caption, (xmlChar *)"ResourceHeader"))
-		{
-			xmlFreeDoc(doc);
-			throw NOVA_EXP("CResourceManager::LoadResourceFromXml - this xml file is not a nova resource file.", BAD_OPERATION);
-		}
-
-		xmlNodePtr header = cur->children; 
 		xmlNodePtr data = NULL;
-		while(header != NULL)
+		while(cur != NULL)
 		{
-			if(xmlIsBlankNode(header))
+			if(xmlIsBlankNode(cur))
 			{
-				header = header->next;
+				cur = cur->next;
 				continue;
 			}
 
-			if(!xmlStrcmp(header->name, (xmlChar *) "ResourceName"))
-				rname.append(reinterpret_cast<char *>(header->content));
-			if(!xmlStrcmp(header->name, (xmlChar *) "ResourceGroup"))
-				rgroup.append(reinterpret_cast<char *>(header->content));
-
-			if(!xmlStrcmp(header->name, (xmlChar *) "ResourceData"))
+			if(!xmlStrcmp(cur->name, (xmlChar *)"ResourceHeader"))
 			{
-				xmlChar * managerName = xmlGetProp(header, (xmlChar *) "ResourceFactory");
-				data = header->children;
+				cur = cur->children;
+				continue;
+			}
+
+			if(!xmlStrcmp(cur->name, (xmlChar *) "ResourceName"))
+				rname.append(reinterpret_cast<char *>(cur->children->content));
+			if(!xmlStrcmp(cur->name, (xmlChar *) "ResourceGroup"))
+				rgroup.append(reinterpret_cast<char *>(cur->children->content));
+
+			if(!xmlStrcmp(cur->name, (xmlChar *) "ResourceData"))
+			{
+				xmlChar * managerName = xmlGetProp(cur, (xmlChar *) "ResourceFactory");
+				data = cur->children;
 
 				if(!managerName)
 				{
@@ -622,7 +617,7 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 				}
 			}
 
-			header = header->next;
+			cur = cur->next;
 		}
 
 		if(manager)
@@ -664,35 +659,30 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 	}
 
 	cur = cur->children;
-	if(!cur)
-		return res;
-
-	caption = cur->name; // resource header
-	if(xmlStrcmp(caption, (xmlChar *)"ResourceHeader"))
-	{
-		xmlFreeDoc(doc);
-		throw NOVA_EXP("CResourceManager::LoadResourceFromXml - this xml file is not a nova resource file.", BAD_OPERATION);
-	}
-
-	xmlNodePtr header = cur->children; 
 	xmlNodePtr data = NULL;
-	while(header != NULL)
+	while(cur != NULL)
 	{
-		if(xmlIsBlankNode(header))
+		if(xmlIsBlankNode(cur))
 		{
-			header = header->next;
+			cur = cur->next;
 			continue;
 		}
 
-		if(!xmlStrcmp(header->name, (xmlChar *) "ResourceName"))
-			rname.append(reinterpret_cast<char *>(header->content));
-		if(!xmlStrcmp(header->name, (xmlChar *) "ResourceGroup"))
-			rgroup.append(reinterpret_cast<char *>(header->content));
-
-		if(!xmlStrcmp(header->name, (xmlChar *) "ResourceData"))
+		if(!xmlStrcmp(cur->name, (xmlChar *)"ResourceHeader"))
 		{
-			xmlChar * managerName = xmlGetProp(header, (xmlChar *) "ResourceFactory");
-			data = header->children;
+			cur = cur->children;
+			continue;
+		}
+
+		if(!xmlStrcmp(cur->name, (xmlChar *) "ResourceName"))
+			rname.append(reinterpret_cast<char *>(cur->children->content));
+		if(!xmlStrcmp(cur->name, (xmlChar *) "ResourceGroup"))
+			rgroup.append(reinterpret_cast<char *>(cur->children->content));
+
+		if(!xmlStrcmp(cur->name, (xmlChar *) "ResourceData"))
+		{
+			xmlChar * managerName = xmlGetProp(cur, (xmlChar *) "ResourceFactory");
+			data = cur->children;
 
 			if(!managerName)
 			{
@@ -711,7 +701,7 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 			}
 		}
 
-		header = header->next;
+		cur = cur->next;
 	}
 
 	if(manager)
