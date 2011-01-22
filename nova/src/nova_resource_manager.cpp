@@ -621,7 +621,10 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 		}
 
 		if(manager)
+		{
 			res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, data, package);
+			res->LoadResource();
+		}
 
 		xmlFreeDoc(doc);
 	}
@@ -705,7 +708,10 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 	}
 
 	if(manager)
+	{
 		res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, data);
+		res->LoadResource();
+	}
 
 	xmlFreeDoc(doc);
 

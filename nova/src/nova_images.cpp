@@ -159,6 +159,8 @@ void CImage::LoadResourceImpl(void)
 			if(codec)
 			{
 				codec->DecodeFromBuffer(mImageSource.mSourceImageBits, this, mImageSource.mPixelFormat, mImageSource.mCompressor);
+				// source image buffer free
+				mImageSource.mSourceImageBits.FreeBuffer();
 			}
 			else
 			{
@@ -631,7 +633,6 @@ CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, con
 	}
 
 	CResourcePtr image = CreateNewImage(name, group, nfile, ncodec, format);
-	image->LoadResource();
 
 	return image;
 }
@@ -675,10 +676,6 @@ CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, con
 			" in package " + package.GetPackageName(), BAD_OPERATION);
 
 	CResourcePtr image = CreateNewImage(name, group, image_buf, comp, ncodec, format);
-	image->LoadResource();
-
-// Dealloc image buffer
-	image_buf.FreeBuffer();
 
 	return image;
 }
