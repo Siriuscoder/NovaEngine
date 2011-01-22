@@ -32,6 +32,7 @@ HINSTANCE ghInstance = NULL;
 CNovaEngine::CNovaEngine() : CBase("CNovaEngine")
 {
 	CMemoryManaged::GlobalMemoryInit();
+	LIBXML_TEST_VERSION
 
 	nstring str(SYSTEM_LOG_FILE);
 	mSystemLog = new CLog(str);

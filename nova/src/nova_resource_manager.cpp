@@ -545,6 +545,93 @@ void CAsyncLockingQueue::ClearQueue(void)
 CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, const CFilesPackage &package)
 {
 	CResourcePtr res;
+	nstring rname, rgroup;
+	CResourceManager *manager = NULL;
+
+	if(!package.IsOpened())
+		return res;
+
+	nova::CMemoryBuffer xmlfile = package.GetFile(filename);
+	if(xmlfile.GetBegin() && ( package.GetFileExt(filename) == "xml"))
+	{
+		xmlDocPtr doc = NULL;
+		doc = xmlParseMemory((char *)xmlfile.GetBegin(), xmlfile.GetBufferSize());
+
+		if(doc == NULL)
+			throw NOVA_EXP("CResourceManager::LoadResourceFromXml - Parse error of xml file from memory", BAD_OPERATION);
+
+		xmlNodePtr cur = xmlDocGetRootElement(doc);
+		if(cur == NULL)
+		{
+			xmlFreeDoc(doc);
+			throw NOVA_EXP("CResourceManager::LoadResourceFromXml - Parse error xml root element.", BAD_OPERATION);
+		}
+
+		const xmlChar * caption = cur->name;
+		if(xmlStrcmp(caption, (xmlChar *)"NovaResource"))
+		{
+			xmlFreeDoc(doc);
+			throw NOVA_EXP("CResourceManager::LoadResourceFromXml - this xml file is not a nova resource file.", BAD_OPERATION);
+		}
+
+		cur = cur->children;
+		if(!cur)
+			return res;
+
+		caption = cur->name; // resource header
+		if(xmlStrcmp(caption, (xmlChar *)"ResourceHeader"))
+		{
+			xmlFreeDoc(doc);
+			throw NOVA_EXP("CResourceManager::LoadResourceFromXml - this xml file is not a nova resource file.", BAD_OPERATION);
+		}
+
+		xmlNodePtr header = cur->children; 
+		xmlNodePtr data = NULL;
+		while(header != NULL)
+		{
+			if(xmlIsBlankNode(header))
+			{
+				header = header->next;
+				continue;
+			}
+
+			if(!xmlStrcmp(header->name, (xmlChar *) "ResourceName"))
+				rname.append(reinterpret_cast<char *>(header->content));
+			if(!xmlStrcmp(header->name, (xmlChar *) "ResourceGroup"))
+				rgroup.append(reinterpret_cast<char *>(header->content));
+
+			if(!xmlStrcmp(header->name, (xmlChar *) "ResourceData"))
+			{
+				xmlChar * managerName = xmlGetProp(header, (xmlChar *) "ResourceFactory");
+				data = header->children;
+
+				if(!managerName)
+				{
+					xmlFreeDoc(doc);
+					throw NOVA_EXP("CResourceManager::LoadResourceFromXml - \
+						Resource manager is not set..", BAD_OPERATION);
+				}
+
+				manager = GetResourceFactory(nstring(reinterpret_cast<char *>(managerName)));
+				if(!manager)
+				{
+					xmlFreeDoc(doc);
+					throw NOVA_EXP(nstring("CResourceManager::LoadResourceFromXml - \
+						Resource manager ") + reinterpret_cast<char *>(managerName)
+						+ " is not found..", BAD_OPERATION);
+				}
+			}
+
+			header = header->next;
+		}
+
+		if(manager)
+			res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, data, package);
+
+		xmlFreeDoc(doc);
+	}
+
+	xmlfile.FreeBuffer();
 
 	return res;
 }
@@ -553,20 +640,84 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 {
 	CResourcePtr res;
+	nstring rname, rgroup;
+	CResourceManager *manager = NULL;
 
-	return res;
-}
+	xmlDocPtr doc = NULL;
+	doc = xmlParseFile(filename.c_str());
 
-CResourcePtr CResourceManager::LoadResourceFromXmlNode(xmlNodePtr node)
-{
-	CResourcePtr res;
+	if(doc == NULL)
+		throw NOVA_EXP("CResourceManager::LoadResourceFromXml - Parse error of xml file from memory", BAD_OPERATION);
 
-	return res;
-}
+	xmlNodePtr cur = xmlDocGetRootElement(doc);
+	if(cur == NULL)
+	{
+		xmlFreeDoc(doc);
+		throw NOVA_EXP("CResourceManager::LoadResourceFromXml - Parse error xml root element.", BAD_OPERATION);
+	}
 
-CResourcePtr CResourceManager::LoadResourceFromXmlNode(xmlNodePtr node, const CFilesPackage &package)
-{
-	CResourcePtr res;
+	const xmlChar * caption = cur->name;
+	if(xmlStrcmp(caption, (xmlChar *)"NovaResource"))
+	{
+		xmlFreeDoc(doc);
+		throw NOVA_EXP("CResourceManager::LoadResourceFromXml - this xml file is not a nova resource file.", BAD_OPERATION);
+	}
+
+	cur = cur->children;
+	if(!cur)
+		return res;
+
+	caption = cur->name; // resource header
+	if(xmlStrcmp(caption, (xmlChar *)"ResourceHeader"))
+	{
+		xmlFreeDoc(doc);
+		throw NOVA_EXP("CResourceManager::LoadResourceFromXml - this xml file is not a nova resource file.", BAD_OPERATION);
+	}
+
+	xmlNodePtr header = cur->children; 
+	xmlNodePtr data = NULL;
+	while(header != NULL)
+	{
+		if(xmlIsBlankNode(header))
+		{
+			header = header->next;
+			continue;
+		}
+
+		if(!xmlStrcmp(header->name, (xmlChar *) "ResourceName"))
+			rname.append(reinterpret_cast<char *>(header->content));
+		if(!xmlStrcmp(header->name, (xmlChar *) "ResourceGroup"))
+			rgroup.append(reinterpret_cast<char *>(header->content));
+
+		if(!xmlStrcmp(header->name, (xmlChar *) "ResourceData"))
+		{
+			xmlChar * managerName = xmlGetProp(header, (xmlChar *) "ResourceFactory");
+			data = header->children;
+
+			if(!managerName)
+			{
+				xmlFreeDoc(doc);
+				throw NOVA_EXP("CResourceManager::LoadResourceFromXml - \
+					Resource manager is not set..", BAD_OPERATION);
+			}
+
+			manager = GetResourceFactory(nstring(reinterpret_cast<char *>(managerName)));
+			if(!manager)
+			{
+				xmlFreeDoc(doc);
+				throw NOVA_EXP(nstring("CResourceManager::LoadResourceFromXml - \
+					Resource manager ") + reinterpret_cast<char *>(managerName)
+					+ " is not found..", BAD_OPERATION);
+			}
+		}
+
+		header = header->next;
+	}
+
+	if(manager)
+		res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, data);
+
+	xmlFreeDoc(doc);
 
 	return res;
 }

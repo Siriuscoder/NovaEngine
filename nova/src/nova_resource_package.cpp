@@ -248,4 +248,9 @@ void CFilesPackage::PutFile(const CMemoryBuffer &buf , const nstring & name, con
 	mFile->Flush();
 }
 
+nstring CFilesPackage::GetPackageName(void) const
+{
+	return mPackageName;
+}
+
 }
