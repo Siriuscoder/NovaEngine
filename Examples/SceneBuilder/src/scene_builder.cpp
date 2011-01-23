@@ -36,36 +36,36 @@ protected:
 	nova::nstring mDest;
 	nova::nstring mSource;
 	nova::CASELoader mLoader;
+	nova::stl<nova::nstring>::vector mFiles;
 
 public:
 
 	SceneBuilderTool()
 	{
-		mEngine = new nova::CNovaEngine();
+
 	}
 
 	~SceneBuilderTool()
 	{
-		delete mEngine;
-		mEngine = NULL;
+
 	}
 
-	void Launch(const nova::nstring &file, const nova::nstring &dest_path, bool cpy_image, bool pack)
+	void Launch(const nova::nstring &file, const nova::nstring &dest_path, bool pack)
 	{
 		nova::CFileStream ase_file;
 		ase_file.Open(file, false, false);
 
 		mTimer.Reset();
 		mLoader.LoadImmediately(&ase_file);
-		nova::nReal msec = static_cast<nova::nReal>(mTimer.GetKernelMicroseconds() * 0.001);
+		double msec = mTimer.GetKernelMilliseconds();
 		ase_file.Close();
 
-		std::cout << std::endl << "Ase File parsed with " + nova::CStringUtils::FloatToString(msec) << " ms" << std::endl << std::endl;
+		std::cout << std::endl << "Ase File parsed with " + nova::CStringUtils::DoubleToString(msec) << " ms" << std::endl << std::endl;
 
-		PrintInfo();
+		CreateAndSaveResources();
 	}
 
-	void PrintInfo(void)
+	void CreateAndSaveResources(void)
 	{
 		nova::stl<nstring>::vector meshes = mLoader.GetMeshList();
 		std::cout << "Objects list: " << std::endl;
@@ -78,17 +78,46 @@ public:
 			std::cout << "Vertex count: " << nova::CStringUtils::IntToString(geom.nVertexList.size()) << std::endl;
 			std::cout << "Face count: " << nova::CStringUtils::IntToString(geom.nIndexList.size()) << std::endl;
 			std::cout << "Mat ID: " << nova::CStringUtils::IntToString(geom.MatID) << std::endl << std::endl;
+
+			mFiles.push_back(meshes[i] + ".xml");
+			mFiles.push_back(meshes[i] + ".msh");
+
+			geom.nMeshfile = meshes[i] + ".msh";
+			nova::CMeshBoxPtr mesh = nova::CMeshManager::GetSingelton().CreateMesh(&geom, "default");
+			//mesh->LoadResource();
+
+			CGlobalMshLoader::SaveMeshToFile(geom, meshes[i] + ".msh");
+			mesh->SerializeToXmlFile(meshes[i] + ".xml");
 		}
 	
 		nova::stl<nstring>::vector materials = mLoader.GetMaterialList();
 		std::cout << std::endl << "Materials list: " << std::endl;
 		for(nova::nUInt32 i = 0; i < materials.size(); i++)
+		{
 			std::cout << materials[i] << std::endl;
+			mFiles.push_back(materials[i] + ".xml");
+			CMaterial::TMaterialContainer matdef = mLoader.GetMaterial(materials[i]);
+			
+			nova::CMaterialManager::GetSingelton().CreateMaterial(materials[i], "default", matdef)->SerializeToXmlFile(materials[i] + ".xml");
+		}
 
 		nova::stl<nstring>::vector maps = mLoader.GetTextureList();
 		std::cout << std::endl << "Texture list: " << std::endl;
 		for(nova::nUInt32 i = 0; i < maps.size(); i++)
+		{
 			std::cout << maps[i] << std::endl;
+			mFiles.push_back(maps[i] + ".xml");
+
+			CTexture::TTextureContainer texdef = mLoader.GetTextureList(maps[i]);
+			nova::CImagePtr image = nova::CImageManager::GetSingelton().CreateNewImage(maps[i] + "_i", "default", texdef.nBitMap, "DevIL", nova::CImageFormats::NF_DEFAULT);
+			image->LoadResource();
+			image->SerializeToXmlFile(maps[i] + "_i.xml");
+			image->FreeResource();
+			nova::CResourceManager::UnloadResourceFromHash(image);
+
+			texdef.nBitMap = maps[i] + "_i";
+			nova::CTextureManager::GetSingelton().CreateNewTexture(maps[i], "default", texdef)->SerializeToXmlFile(maps[i] + ".xml");
+		}
 	}
 
 	void PrintHelp(void)
@@ -101,6 +130,7 @@ public:
 ENTRY_POINT	
 {
 	SceneBuilderTool SceneBuilder;
+	SceneBuilder.StartUpEngine(ST_INIT_YOURSELF);
 
 	try
 	{
@@ -123,15 +153,10 @@ ENTRY_POINT
 #endif
 		}
 
-		if(args.size() < 2)
+/*		if(args.size() < 2)
 		{
 			SceneBuilder.PrintHelp();
 			return -1;
-		}
-		if(args[0] == "-i")
-		{
-			try_cpy_image = true;
-			args.erase(args.begin());
 		}
 		if(args[0] == "-pack")
 		{
@@ -143,8 +168,10 @@ ENTRY_POINT
 			SceneBuilder.PrintHelp();
 			return -1;
 		}
+*/
 
-		SceneBuilder.Launch(args[0], args[1], try_cpy_image, pack);
+		//SceneBuilder.Launch(args[0], args[1], pack);
+		SceneBuilder.Launch("BioBox.ase", "Box", pack);
 	}
 	catch(NovaExp & exp)
 	{
@@ -157,6 +184,8 @@ ENTRY_POINT
 	}
 
 	cin.get();
+	SceneBuilder.ShutDown();
 
 	return 0;
 }
+

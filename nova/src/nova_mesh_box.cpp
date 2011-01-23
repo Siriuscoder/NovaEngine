@@ -363,7 +363,7 @@ CMeshBoxPtr CMeshManager::CreateMesh(CMesh::TMeshContainer *def, const nstring &
 	//mesh->PrepareResource();
 
 	nova::nstringstream str;
-	str << "Mesh Factory: mesh object name: " << def->nName << " group: " << group << " created...";
+	str << "Mesh Factory: " << def->nName << " (group: " << group << ") created";
 	LOG_MESSAGE(str.str());
 
 	return mesh;

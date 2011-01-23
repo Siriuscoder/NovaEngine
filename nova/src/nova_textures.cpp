@@ -212,16 +212,20 @@ void CTexture::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 
 	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage1", BAD_CAST (mImageList[0].size() ? mImageList[0].c_str() : "none")) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage2", BAD_CAST (mImageList[1].size() ? mImageList[1].c_str() : "none")) < 0)
-		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage3", BAD_CAST (mImageList[2].size() ? mImageList[2].c_str() : "none")) < 0)
-		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage4", BAD_CAST (mImageList[3].size() ? mImageList[3].c_str() : "none")) < 0)
-		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage5", BAD_CAST (mImageList[4].size() ? mImageList[4].c_str() : "none")) < 0)
-		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage6", BAD_CAST (mImageList[5].size() ? mImageList[5].c_str() : "none")) < 0)
-		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+
+	if(mImageList.size() == 6)
+	{
+		if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage2", BAD_CAST (mImageList[1].size() ? mImageList[1].c_str() : "none")) < 0)
+			NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+		if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage3", BAD_CAST (mImageList[2].size() ? mImageList[2].c_str() : "none")) < 0)
+			NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+		if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage4", BAD_CAST (mImageList[3].size() ? mImageList[3].c_str() : "none")) < 0)
+			NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+		if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage5", BAD_CAST (mImageList[4].size() ? mImageList[4].c_str() : "none")) < 0)
+			NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+		if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage6", BAD_CAST (mImageList[5].size() ? mImageList[5].c_str() : "none")) < 0)
+			NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
+	}
 
 
 	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Percent", "%f", mTextureParam.nPercent) < 0)
@@ -244,23 +248,23 @@ void CTexture::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
 
 
-	str.clear();
-	str << "Texture evironment param info: "	
+	std::stringstream str1;
+	str1 << "Texture evironment param info: "	
 		<< "EV_MODULATE = " << (int)EV_MODULATE 
 		<< ", EV_DECAL = " << (int)EV_DECAL
 		<< ", EV_BLEND = " << (int)EV_BLEND
 		<< ", EV_REPLACE = " << (int)EV_REPLACE;
 
-	if(xmlTextWriterWriteComment(writer, BAD_CAST str.str().c_str()) < 0)
+	if(xmlTextWriterWriteComment(writer, BAD_CAST str1.str().c_str()) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
 
-	str.clear();
-	str << "Texture wrap type info: "	
+	std::stringstream str2;
+	str2 << "Texture wrap type info: "	
 		<< "CLAMP = " << (int)CLAMP 
 		<< ", CLAMP_TO_EDGE = " << (int)CLAMP_TO_EDGE
 		<< ", REPEAT = " << (int)REPEAT;
 
-	if(xmlTextWriterWriteComment(writer, BAD_CAST str.str().c_str()) < 0)
+	if(xmlTextWriterWriteComment(writer, BAD_CAST str2.str().c_str()) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
 
 	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "WrapS", "%d", (int)mWrapTypeS) < 0)
