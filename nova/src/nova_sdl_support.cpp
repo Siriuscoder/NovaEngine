@@ -28,6 +28,8 @@
 namespace nova
 {
 
+CSDLSupport::CSDLSupport() : CGLSupport("SDL") {}
+
 void CSDLSupport::Start()
 {
 	CLog::GetInstance().PrintMessage(

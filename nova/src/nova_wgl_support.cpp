@@ -30,7 +30,8 @@ namespace nova
 {
 
 
-CWGLSupport::CWGLSupport() {}
+CWGLSupport::CWGLSupport() : CGLSupport("WGL") {}
+
 CWGLSupport::~CWGLSupport() 
 {
 	mRootWindow = NULL;

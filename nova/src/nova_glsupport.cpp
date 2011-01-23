@@ -32,7 +32,7 @@ namespace nova
 template<> CGLSupport * CSingelton<CGLSupport>::SingeltonObject = NULL;
 CRenderWindow * CGLSupport::mRootWindow = NULL;
 
-CGLSupport::CGLSupport() : mState(false), CBase("CGLSupport")
+CGLSupport::CGLSupport(const nstring & name) : mName(name), mState(false), CBase("CGLSupport")
 {
 	ClearExtensionList();
 }

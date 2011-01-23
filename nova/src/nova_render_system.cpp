@@ -67,6 +67,58 @@ nova::nUInt32 CRenderCapabilities::GetMaxBuffers()
 }
 //-------------------------------------------------------------------------
 
+void CRenderSystem::RegisterGlSubSystem(CGLSupport *glsup)
+{
+	if(glsup)
+	{
+		std::pair<nstring, CGLSupport*> _pair;
+		_pair.first = glsup->GetName();
+		_pair.second = glsup;
+
+		stl<nstring, CGLSupport*>::map::iterator it;
+		if((it = mGlSupports.find(glsup->GetName())) == mGlSupports.end())
+			mGlSupports.insert(_pair);
+		else
+			throw NOVA_EXP(nstring("CRenderSystem::RegisterGlSubSystem - gl sub system ") + glsup->GetName() + " already registered..", BAD_OPERATION);
+
+		LOG_MESSAGE(nstring("Render Sub System ") + glsup->GetName() + " successfully registered.");
+	}
+}
+
+void CRenderSystem::UnregisterGlSubSystem(CGLSupport *glsup)
+{
+	stl<nstring, CGLSupport*>::map::iterator it;
+	if((it = mGlSupports.find(glsup->GetName())) != mGlSupports.end())
+	{
+		mGlSupports.erase(it);
+		LOG_MESSAGE(nstring("Render sub system ") + glsup->GetName() + " successfully unregistered.");
+	}
+}
+
+CGLSupport *CRenderSystem::GetGlSubSystem(const nstring &name)
+{
+	stl<nstring, CGLSupport*>::map::iterator it;
+	if((it = mGlSupports.find(name)) != mGlSupports.end())
+	{
+		return it->second;
+	}
+
+	return NULL;
+}
+
+void CRenderSystem::UnregisterAndDestroyAllSubSystems(void)
+{
+	stl<nstring, CGLSupport*>::map::iterator it;
+	for(it = mGlSupports.begin(); it != mGlSupports.end(); it++)
+	{
+		delete it->second;
+	}
+
+	mGlSupports.clear();
+}
+
+//-------------------------------------------------------------------------
+
 CRenderSystem::CRenderSystem() : mTargetsBuilded(0), mRootWindow(NULL),
 	mConfigIsReady(false), mSupport(NULL), mScreenShotTarget(NULL), CBase("CRenderSystem")
 {
@@ -77,13 +129,6 @@ CRenderSystem::CRenderSystem() : mTargetsBuilded(0), mRootWindow(NULL),
 void CRenderSystem::SetConfigPath(nstring & config)
 {
 	mPrivateConfigFile = config;
-}
-
-void CRenderSystem::SetVideoSettings(RenderSysType type, TWindowInitialTarget & config)
-{
-	mType = type;
-	memcpy(&mVideoSettings, &config, sizeof(TWindowInitialTarget));
-	mConfigIsReady = true;
 }
 
 void CRenderSystem::InitializeFromConfigFile()
@@ -127,19 +172,11 @@ void CRenderSystem::InitializeFromConfigFile()
 			if(!xmlStrcmp(cur->name, (xmlChar *) "RenderSubSystem"))
 			{
 				ren = true;
-				xmlChar * temp = xmlGetProp(cur, (xmlChar *) "SubSystem");
-				if(!xmlStrcmp(temp, (xmlChar *) "WIN32"))
-					mType = RS_WIN32;
-				else if(!xmlStrcmp(temp, (xmlChar *) "SDL"))
-					mType = RS_SDL;
-				else if(!xmlStrcmp(temp, (xmlChar *) "XGL"))
-					mType = RS_XGL;
-				else if(!xmlStrcmp(temp, (xmlChar *) "RS_GLUT"))
+				xmlChar * subsys = xmlGetProp(cur, (xmlChar *) "SubSystem");
+				if(subsys)
 				{
-					// wtf ??? нету этого у меня ))
-					mType = RS_GLUT;
+					mSupport = GetGlSubSystem(reinterpret_cast<char *>(subsys));
 				}
-				else ren = false;
 			}
 
 			if(!xmlStrcmp(cur->name, (xmlChar *) "Video"))
@@ -231,38 +268,8 @@ void CRenderSystem::StartUp(StartUpFlags flags)
 	if(!mConfigIsReady)
 		return;
 
-	switch(mType)
-	{
-#ifdef WIN_BUILD
-	case RS_WIN32:
-		{
-			mSupport = new CWGLSupport();
-		}
-		break;
-#else
-	case RS_XGL:
-		{
-
-		}
-		break;
-#endif
-	case RS_SDL:
-		{
-			mSupport = new CSDLSupport();
-		}
-		break;
-	case RS_GLUT:
-		{
-			//Шутка
-			throw NOVA_EXP("CRenderSystem::StartUp - Can not \
-				create GLUT SubSystem: not supported!", BAD_OPERATION);
-		}
-		break;
-	default:
-		{
-			mSupport = new CSDLSupport();
-		}
-	}
+	if(!mSupport)
+		throw NOVA_EXP("CRenderSystem::StartUp - Rendering subsystem is not found", BAD_OPERATION);
 	mSupport->Start();
 // Creating render window
 	CreateRenderWindow(workname, 1);
@@ -284,7 +291,6 @@ void CRenderSystem::ShutDown()
 		|===========================================|\n\n");
 
 		ReleaseAllTargets();
-		delete mSupport;
 	}
 }
 

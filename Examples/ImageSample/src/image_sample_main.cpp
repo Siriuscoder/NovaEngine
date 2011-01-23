@@ -148,7 +148,7 @@ public:
 		CResourceManager::UnloadResourceFromHash(Image2);
 
 		nova::CFilesPackage mPack;
-		mPack.OpenPackage("test.package", false);
+		mPack.OpenPackage("test.package");
 		CImagePtr Image3 = CResourceManager::LoadResourceFromXml("image.xml", mPack);
 
 		mPack.ClosePackage();

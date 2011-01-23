@@ -30,7 +30,7 @@ class NOVA_EXPORT CSDLSupport : public CGLSupport
 {
 public:
 
-	CSDLSupport() {}
+	CSDLSupport();
 	~CSDLSupport() {}
 
 	void Start();

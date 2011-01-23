@@ -51,14 +51,6 @@ enum StartUpFlags
 	SF_START_MANUAL
 };
 
-enum RenderSysType
-{
-	RS_WIN32,
-	RS_SDL,
-	RS_XGL,
-	RS_GLUT
-};
-
 enum BasicCapabilities
 {
 	CAP_VBO,
@@ -162,7 +154,6 @@ protected:
 	CRenderCapabilities mCapabilities;
 
 	TWindowInitialTarget mVideoSettings;
-	RenderSysType mType;
 
 	void SwitchToRootContext();
 
@@ -179,6 +170,7 @@ private:
 	StartUpFlags mFlags;
 	bool mConfigIsReady;
 	nstring workname;
+	stl<nstring, CGLSupport*>::map mGlSupports;
 
 	void _DoScreenShot(void);
 
@@ -187,9 +179,15 @@ public:
 	CRenderSystem();
 	~CRenderSystem();
 
-	void SetConfigPath(nstring & config);
+	void RegisterGlSubSystem(CGLSupport *glsup);
 
-	void SetVideoSettings(RenderSysType type, TWindowInitialTarget & config);
+	void UnregisterGlSubSystem(CGLSupport *glsup);
+
+	void UnregisterAndDestroyAllSubSystems(void);
+
+	CGLSupport *GetGlSubSystem(const nstring &name);
+
+	void SetConfigPath(nstring & config);
 
 	nInt32 MessageLoopPump();
 

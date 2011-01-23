@@ -110,11 +110,16 @@ void CNovaEngine::Release(void)
 
 /* unload renderer */
 	if(mRenderer)
+	{
+		mRenderer->UnregisterAndDestroyAllSubSystems();
 		delete mRenderer;
+	}
 
 	mFontManager = NULL;
 	mTextureManager = NULL;
 	mImageManager = NULL;
+	mMaterialManager = NULL;
+	mMeshManager = NULL;
 	mScene = NULL;
 	mRenderer = NULL;
 
@@ -141,9 +146,17 @@ nInt32 CNovaEngine::Init(StartInit flag)
 
 	mMaterialManager = new CMaterialManager("MaterialResourceFactory");
 	CResourceManager::RegisterResourceFactory(mMaterialManager);
+/* GL SubSystems */
+	CSDLSupport *sdlSubSys = new CSDLSupport();
+	CWGLSupport *wglSubSys = new CWGLSupport();
+
+
 
 /* Renderer */
 	mRenderer = new CRenderSystem();
+
+	mRenderer->RegisterGlSubSystem(sdlSubSys);
+	mRenderer->RegisterGlSubSystem(wglSubSys);
 /* Global Scene */
 	mScene = new CScene();
 /* Codecs */

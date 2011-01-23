@@ -44,12 +44,13 @@ private:
 	nstring mGLVersion;
 	nstring mRenderer;
 	nstring mShadingLang;
+	nstring mName;
 
 	bool mState;
 
 public:
 
-	CGLSupport();
+	CGLSupport(const nstring & name);
 	virtual ~CGLSupport();
 
 	bool CheckExtention(nstring & ext);
@@ -77,6 +78,8 @@ public:
 	{
 		return mState;
 	}
+
+	nstring GetName(void) const { return mName; }
 
 
 	virtual void Start() = 0;

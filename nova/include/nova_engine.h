@@ -139,6 +139,7 @@ protected:
 	CScene * mScene;
 	CLog * mSystemLog;
 
+
 private:
 	bool	mRenderLoop;
 

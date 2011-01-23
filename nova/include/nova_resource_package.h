@@ -73,9 +73,9 @@ public:
 
 	~CFilesPackage();
 
-	void OpenPackage(const nstring & pkg, bool write);
+	void OpenPackage(const nstring & pkg, bool write = false);
 
-	void OpenPackage(CDataStream *pkgstream, bool write);
+	void OpenPackage(CDataStream *pkgstream, bool write = false);
 
 	void ClosePackage(void);
 
