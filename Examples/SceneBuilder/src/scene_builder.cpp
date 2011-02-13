@@ -47,7 +47,7 @@ public:
 
 	}
 
-	void Launch(const nova::nstring &aseFileName, const nova::nstring &destFolder, bool pack)
+	void Launch(const nova::nstring &aseFileName, const nova::nstring &destFolder, bool pack, bool copyLocal)
 	{
 		nova::CFileStream aseFile;
 		aseFile.Open(aseFileName, false, false);
@@ -62,10 +62,10 @@ public:
 		std::cout << "Done" << std::endl; std::cout.flush();
 		std::cout << "File parsed with " << msec << " ms" << std::endl << std::endl;std::cout.flush();
 
-		CreateAndSaveResources(destFolder);
+		CreateAndSaveResources(destFolder, copyLocal);
 	}
 
-	void CreateAndSaveResources(const nstring &destFolder)
+	void CreateAndSaveResources(const nstring &destFolder, bool copyLocal)
 	{
 		nova::stl<nstring>::vector meshes = mLoader.GetMeshList();
 		std::cout << "============= Serializing Objects: " << std::endl; std::cout.flush();
@@ -99,7 +99,7 @@ public:
 			std::cout << "Trying to serialize texture " << maps[i] << std::endl;std::cout.flush();
 			CTexture::TTextureContainer *textureInfo = mLoader.GetTexture(maps[i]);
 
-			CopyAndSerializeImage("i" + maps[i], textureInfo->nBitMap, destFolder, false); 
+			CopyAndSerializeImage("i" + maps[i], textureInfo->nBitMap, destFolder, copyLocal); 
 			SerializeTexture(maps[i], *textureInfo, destFolder);
 
 			std::cout << "Texture object " << maps[i] << " serialized successfully" << std::endl;std::cout.flush();
@@ -196,7 +196,7 @@ public:
 
 	void PrintHelp(void)
 	{
-		cout << "Usage: [-i, -pack] Source.ase DestinationFolder/" << endl;
+		cout << "Usage: [-i, -pack, -copylocal] -s Source.ase -folder DestinationFolder/" << endl;
 	}
 };
 
@@ -212,6 +212,10 @@ ENTRY_POINT
 		CParser rParser;
 		stl<nstring>::vector args;
 		bool pack = false;
+		bool copyLocal = false;
+		nstring aseFile;
+		nstring destFolder;
+
 		cout << "Hello, this is Scene Builder tool for Nova engine.." << endl;
 		cout << "Converting ASE file to html Nova engine scene files, and after packing using gz(zlib)" << endl;
 
@@ -227,25 +231,38 @@ ENTRY_POINT
 #endif
 		}
 
-/*		if(args.size() < 2)
+		for(nova::nUInt32 i = 0; i < args.size(); i++)
 		{
-			SceneBuilder.PrintHelp();
-			return -1;
+			if(args[i] == "-i")
+			{
+
+			}
+			else if(args[i] == "-pack")
+				pack = true;
+			else if(args[i] == "-copylocal")
+				copyLocal = true;
+			else if(args[i] == "-s")
+			{
+				aseFile = args[i+1];
+				i++;
+			}
+			else if(args[i] == "-folder")
+			{
+				destFolder = args[i+1];
+				i++;
+			}
+			else
+			{
+				SceneBuilder.PrintHelp();
+				cin.get();
+
+				SceneBuilder.ShutDown();
+				return -1;
+			}
 		}
-		if(args[0] == "-pack")
-		{
-			pack = true;
-			args.erase(args.begin());
-		}
-		if(args.size() < 2)
-		{
-			SceneBuilder.PrintHelp();
-			return -1;
-		}
-*/
 
 		//SceneBuilder.Launch(args[0], args[1], pack);
-		SceneBuilder.Launch("FallOut.ASE", "./test1/", pack);
+		SceneBuilder.Launch(aseFile, destFolder, pack, copyLocal);
 	}
 	catch(NovaExp & exp)
 	{
