@@ -173,7 +173,7 @@ nInt32 CLog::PrintMessage(const nova::nstring & mes, LogFormat format)
 		break;
 	}
 
-	cout << res.str();
+	//cout << res.str();
 
 	// unlocking section
 	LOG_MUTEX_SECTION_UNLOCK;

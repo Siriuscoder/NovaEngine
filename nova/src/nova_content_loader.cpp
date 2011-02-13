@@ -82,31 +82,31 @@ stl<nstring>::vector CSceneContentLoaderBase::GetTextureList(void)
 	return result;
 }
 
-CMesh::TMeshContainer CSceneContentLoaderBase::GetMesh(const nstring & name)
+CMesh::TMeshContainer *CSceneContentLoaderBase::GetMesh(const nstring & name)
 {
-	nova::stl<nstring, CMesh::TMeshContainer>::map::const_iterator it;
+	nova::stl<nstring, CMesh::TMeshContainer>::map::iterator it;
 	if((it = mMeshesMap.find(name)) != mMeshesMap.end())
-		return (*it).second;
+		return &(it->second);
 
-	return CMesh::TMeshContainer();
+	return NULL;
 }
 
-CMaterial::TMaterialContainer CSceneContentLoaderBase::GetMaterial(const nstring & name)
+CMaterial::TMaterialContainer *CSceneContentLoaderBase::GetMaterial(const nstring & name)
 {
-	nova::stl<nstring, CMaterial::TMaterialContainer>::map::const_iterator it;
+	nova::stl<nstring, CMaterial::TMaterialContainer>::map::iterator it;
 	if((it = mMaterialsMap.find(name)) != mMaterialsMap.end())
-		return (*it).second;
+		return &(it->second);
 
-	return CMaterial::TMaterialContainer();
+	return NULL;
 }
 
-CTexture::TTextureContainer CSceneContentLoaderBase::GetTextureList(const nstring & name)
+CTexture::TTextureContainer *CSceneContentLoaderBase::GetTexture(const nstring & name)
 {
-	nova::stl<nstring, CTexture::TTextureContainer>::map::const_iterator it;
+	nova::stl<nstring, CTexture::TTextureContainer>::map::iterator it;
 	if((it = mTexturesMap.find(name)) != mTexturesMap.end())
-		return (*it).second;
+		return &(it->second);
 
-	return CTexture::TTextureContainer();
+	return NULL;
 }
 
 

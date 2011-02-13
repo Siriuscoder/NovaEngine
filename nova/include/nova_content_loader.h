@@ -54,11 +54,11 @@ public:
 
 	stl<nstring>::vector GetTextureList(void);
 
-	CMesh::TMeshContainer GetMesh(const nstring &name);
+	CMesh::TMeshContainer *GetMesh(const nstring &name);
 
-	CMaterial::TMaterialContainer GetMaterial(const nstring & name);
+	CMaterial::TMaterialContainer *GetMaterial(const nstring & name);
 
-	CTexture::TTextureContainer GetTextureList(const nstring & name);
+	CTexture::TTextureContainer *GetTexture(const nstring & name);
 
 protected:
 

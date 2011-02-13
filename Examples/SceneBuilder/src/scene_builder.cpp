@@ -24,9 +24,6 @@
 
 using namespace nova;
 
-nstring gPackage;
-nstring gSourceFile;
-
 class SceneBuilderTool : public CExampleApplication
 {
 protected:
@@ -50,73 +47,150 @@ public:
 
 	}
 
-	void Launch(const nova::nstring &file, const nova::nstring &dest_path, bool pack)
+	void Launch(const nova::nstring &aseFileName, const nova::nstring &destFolder, bool pack)
 	{
-		nova::CFileStream ase_file;
-		ase_file.Open(file, false, false);
+		nova::CFileStream aseFile;
+		aseFile.Open(aseFileName, false, false);
 
+		std::cout << std::endl << "Parsing ASE file " << aseFileName << "...";std::cout.flush();
 		mTimer.Reset();
-		mLoader.LoadImmediately(&ase_file);
+		mLoader.LoadImmediately(&aseFile);
 		double msec = mTimer.GetKernelMilliseconds();
-		ase_file.Close();
 
-		std::cout << std::endl << "Ase File parsed with " + nova::CStringUtils::DoubleToString(msec) << " ms" << std::endl << std::endl;
+		aseFile.Close();
 
-		CreateAndSaveResources();
+		std::cout << "Done" << std::endl; std::cout.flush();
+		std::cout << "File parsed with " << msec << " ms" << std::endl << std::endl;std::cout.flush();
+
+		CreateAndSaveResources(destFolder);
 	}
 
-	void CreateAndSaveResources(void)
+	void CreateAndSaveResources(const nstring &destFolder)
 	{
 		nova::stl<nstring>::vector meshes = mLoader.GetMeshList();
-		std::cout << "Objects list: " << std::endl;
+		std::cout << "============= Serializing Objects: " << std::endl; std::cout.flush();
 		for(nova::nUInt32 i = 0; i < meshes.size(); i++)
 		{
-			std::cout << meshes[i] << std::endl;
-			std::cout << "Mesh info: " << std::endl;
-			nova::CMesh::TMeshContainer geom = mLoader.GetMesh(meshes[i]);
+			std::cout << "Trying to serialize mesh object " << meshes[i] << std::endl;std::cout.flush();
+			nova::CMesh::TMeshContainer *meshInfo = mLoader.GetMesh(meshes[i]);
 
-			std::cout << "Vertex count: " << nova::CStringUtils::IntToString(geom.nVertexList.size()) << std::endl;
-			std::cout << "Face count: " << nova::CStringUtils::IntToString(geom.nIndexList.size()) << std::endl;
-			std::cout << "Mat ID: " << nova::CStringUtils::IntToString(geom.MatID) << std::endl << std::endl;
+			std::cout << "-- Vertex count: " << nova::CStringUtils::IntToString(meshInfo->nVertexList.size()) << std::endl;std::cout.flush();
+			std::cout << "-- Face count: " << nova::CStringUtils::IntToString(meshInfo->nIndexList.size()) << std::endl;std::cout.flush();
+			std::cout << "-- Mat ID: " << nova::CStringUtils::IntToString(meshInfo->MatID) << std::endl << std::endl;std::cout.flush();
+			SerializeMeshObject(meshes[i], *meshInfo, destFolder);
 
-			mFiles.push_back(meshes[i] + ".xml");
-			mFiles.push_back(meshes[i] + ".msh");
-
-			geom.nMeshfile = meshes[i] + ".msh";
-			nova::CMeshBoxPtr mesh = nova::CMeshManager::GetSingelton().CreateMesh(&geom, "default");
-			//mesh->LoadResource();
-
-			CGlobalMshLoader::SaveMeshToFile(geom, meshes[i] + ".msh");
-			mesh->SerializeToXmlFile(meshes[i] + ".xml");
+			std::cout << "Mesh object " << meshes[i] << " serialized successfully" << std::endl;std::cout.flush();
 		}
 	
 		nova::stl<nstring>::vector materials = mLoader.GetMaterialList();
-		std::cout << std::endl << "Materials list: " << std::endl;
+		std::cout << std::endl << "============= Serializing Materials: " << std::endl; std::cout.flush();
 		for(nova::nUInt32 i = 0; i < materials.size(); i++)
 		{
-			std::cout << materials[i] << std::endl;
-			mFiles.push_back(materials[i] + ".xml");
-			CMaterial::TMaterialContainer matdef = mLoader.GetMaterial(materials[i]);
-			
-			nova::CMaterialManager::GetSingelton().CreateMaterial(materials[i], "default", matdef)->SerializeToXmlFile(materials[i] + ".xml");
+			std::cout << "Trying to serialize material " << materials[i] << std::endl;std::cout.flush();
+			SerializeMaterial(materials[i], *mLoader.GetMaterial(materials[i]), destFolder);
+
+			std::cout << "Material object " << materials[i] << " serialized successfully" << std::endl;std::cout.flush();
 		}
 
 		nova::stl<nstring>::vector maps = mLoader.GetTextureList();
-		std::cout << std::endl << "Texture list: " << std::endl;
+		std::cout << std::endl << "============= Serializing Textures: " << std::endl; std::cout.flush();
 		for(nova::nUInt32 i = 0; i < maps.size(); i++)
 		{
-			std::cout << maps[i] << std::endl;
-			mFiles.push_back(maps[i] + ".xml");
+			std::cout << "Trying to serialize texture " << maps[i] << std::endl;std::cout.flush();
+			CTexture::TTextureContainer *textureInfo = mLoader.GetTexture(maps[i]);
 
-			CTexture::TTextureContainer texdef = mLoader.GetTextureList(maps[i]);
-			nova::CImagePtr image = nova::CImageManager::GetSingelton().CreateNewImage(maps[i] + "_i", "default", texdef.nBitMap, "DevIL", nova::CImageFormats::NF_DEFAULT);
-			image->LoadResource();
-			image->SerializeToXmlFile(maps[i] + "_i.xml");
-			image->FreeResource();
-			nova::CResourceManager::UnloadResourceFromHash(image);
+			CopyAndSerializeImage("i" + maps[i], textureInfo->nBitMap, destFolder, false); 
+			SerializeTexture(maps[i], *textureInfo, destFolder);
 
-			texdef.nBitMap = maps[i] + "_i";
-			nova::CTextureManager::GetSingelton().CreateNewTexture(maps[i], "default", texdef)->SerializeToXmlFile(maps[i] + ".xml");
+			std::cout << "Texture object " << maps[i] << " serialized successfully" << std::endl;std::cout.flush();
+		}
+	}
+
+	void SerializeMeshObject(const nstring &meshName, nova::CMesh::TMeshContainer &meshInfo, const nstring &destFolder)
+	{
+		meshInfo.nMeshfile = meshName + ".msh";
+		nova::CMeshBoxPtr meshPtr = nova::CMeshManager::GetSingelton().CreateMesh(&meshInfo, "default");
+
+		if(!meshPtr.IsNull())
+		{
+			nstring xmlMeshFileName = destFolder + meshName + ".xml";
+			nstring meshFileName = destFolder + meshInfo.nMeshfile;
+
+			std::cout << "Saving mesh object to file " << meshFileName << "..."; std::cout.flush();
+			CGlobalMshLoader::SaveMeshToFile(meshInfo, meshFileName);
+			mFiles.push_back(meshFileName);
+			std::cout << "Done" << std::endl; std::cout.flush();
+
+			meshPtr->SerializeToXmlFile(xmlMeshFileName);
+			mFiles.push_back(xmlMeshFileName);
+			nova::CResourceManager::UnloadResourceFromHash(meshInfo.nName);
+		}
+	}
+
+
+
+	void SerializeMaterial(const nstring &materialName, CMaterial::TMaterialContainer materialInfo, const nstring &destFolder)
+	{
+		nova::CMaterialPtr materialPtr = nova::CMaterialManager::GetSingelton().CreateMaterial(materialName, "default", materialInfo);
+			
+		if(!materialPtr.IsNull())
+		{
+			nstring xmlMaterialName = destFolder + materialName + ".xml";
+			materialPtr->SerializeToXmlFile(xmlMaterialName);
+			mFiles.push_back(xmlMaterialName);
+
+			nova::CResourceManager::UnloadResourceFromHash(materialName);
+		}
+	}
+
+	void CopyAndSerializeImage(const nstring &imageName, const nstring &imageFile, const nstring &destFolder, bool copyLocal)
+	{
+		nova::CImagePtr imagePtr = nova::CImageManager::GetSingelton().CreateNewImage(imageName, 
+			"default", imageFile, "DevIL", nova::CImageFormats::NF_DEFAULT);
+
+		if(!imagePtr.IsNull())
+		{
+			nova::nstring xmlfileName = destFolder + imageName + ".xml";
+			imagePtr->LoadResource();
+			imagePtr->BackHeigth();
+
+			if(copyLocal)
+			{
+				// use devil by default
+				// use png file format by default
+				nova::nstring imageFileLocalName = destFolder + imageName + ".png";
+				std::cout << "Encoding image " <<  imageFile << " to " << imageFileLocalName << "..."; std::cout.flush();
+
+				CDevILCodec::GetSingelton().CodeToFile(imageFileLocalName, *(imagePtr.GetPtr()));
+
+				std::cout << "Done" << std::endl; std::cout.flush();
+				imagePtr->GetImageSource().mFilename = imageFileLocalName;
+				imagePtr->GetImageSource().mCompressor = SF_PNG;
+			}
+
+			imagePtr->SerializeToXmlFile(xmlfileName);
+			mFiles.push_back(xmlfileName);
+
+			imagePtr->FreeResource();
+			nova::CResourceManager::UnloadResourceFromHash(imageName);
+		}
+	}
+
+	
+
+	void SerializeTexture(const nstring &textureName, CTexture::TTextureContainer textureInfo, const nstring &destFolder)
+	{
+		textureInfo.nBitMap = "i" + textureName;
+		nova::CTexturePtr texturePtr = nova::CTextureManager::GetSingelton().CreateNewTexture(textureName, "default", textureInfo);
+
+		if(!texturePtr.IsNull())
+		{
+			nova::nstring xmlfileName = destFolder + textureName + ".xml";
+			texturePtr->SerializeToXmlFile(xmlfileName);
+			mFiles.push_back(xmlfileName);
+
+			// unload resource
+			nova::CResourceManager::UnloadResourceFromHash(textureName);
 		}
 	}
 
@@ -137,7 +211,7 @@ ENTRY_POINT
 /////// Parsing unput args //////////////
 		CParser rParser;
 		stl<nstring>::vector args;
-		bool try_cpy_image = false, pack = false;
+		bool pack = false;
 		cout << "Hello, this is Scene Builder tool for Nova engine.." << endl;
 		cout << "Converting ASE file to html Nova engine scene files, and after packing using gz(zlib)" << endl;
 
@@ -171,7 +245,7 @@ ENTRY_POINT
 */
 
 		//SceneBuilder.Launch(args[0], args[1], pack);
-		SceneBuilder.Launch("BioBox.ase", "Box", pack);
+		SceneBuilder.Launch("FallOut.ASE", "./test1/", pack);
 	}
 	catch(NovaExp & exp)
 	{

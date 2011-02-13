@@ -148,7 +148,9 @@ nInt32 CNovaEngine::Init(StartInit flag)
 	CResourceManager::RegisterResourceFactory(mMaterialManager);
 /* GL SubSystems */
 	CSDLSupport *sdlSubSys = new CSDLSupport();
+#ifdef WIN_BUILD
 	CWGLSupport *wglSubSys = new CWGLSupport();
+#endif
 
 
 
@@ -156,7 +158,9 @@ nInt32 CNovaEngine::Init(StartInit flag)
 	mRenderer = new CRenderSystem();
 
 	mRenderer->RegisterGlSubSystem(sdlSubSys);
+#ifdef WIN_BUILD
 	mRenderer->RegisterGlSubSystem(wglSubSys);
+#endif
 /* Global Scene */
 	mScene = new CScene();
 /* Codecs */

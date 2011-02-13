@@ -208,7 +208,10 @@ void CTexture::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 
 
 	if(xmlTextWriterWriteComment(writer, BAD_CAST str.str().c_str()) < 0)
-		NOVA_EXP("CTexture::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
+		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteComment fail", BAD_OPERATION);
+
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "Target", "%d", (int)mType) < 0)
+		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteFormatElement fail", BAD_OPERATION);
 
 	if(xmlTextWriterWriteElement(writer, BAD_CAST "SourceImage1", BAD_CAST (mImageList[0].size() ? mImageList[0].c_str() : "none")) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
@@ -255,9 +258,6 @@ void CTexture::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 		<< ", EV_BLEND = " << (int)EV_BLEND
 		<< ", EV_REPLACE = " << (int)EV_REPLACE;
 
-	if(xmlTextWriterWriteComment(writer, BAD_CAST str1.str().c_str()) < 0)
-		NOVA_EXP("CTexture::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
-
 	std::stringstream str2;
 	str2 << "Texture wrap type info: "	
 		<< "CLAMP = " << (int)CLAMP 
@@ -272,7 +272,8 @@ void CTexture::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "WrapT", "%d", (int)mWrapTypeT) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
 
-
+	if(xmlTextWriterWriteComment(writer, BAD_CAST str1.str().c_str()) < 0)
+		NOVA_EXP("CTexture::SerializeToXmlFile: xmlTextWriterWriteComment fail", BAD_OPERATION);
 	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "TextureEnvironment", "%d", (int)mEnvType) < 0)
 		NOVA_EXP("CTexture::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
 }
