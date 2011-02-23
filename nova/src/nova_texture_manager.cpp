@@ -22,6 +22,7 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_texture_manager.h"
+#include "nova_string_utils.h"
 
 namespace nova
 {
@@ -116,12 +117,66 @@ CTexturePtr CTextureManager::CreateNewTexturesCube(
 
 CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
-	return CResourcePtr();
+	if(!node)
+		return CResourcePtr();
+
+	CTexture::TTextureContainer textureParam;
+	CTexture::TWrap wrapS, wrapT;
+	CTexture::TEnv envType;
+	CHardwarePixelBuffer::TargetType targetType;
+
+	textureParam.nName = name;
+
+	while(node != NULL)
+	{
+		if(xmlIsBlankNode(node))
+		{
+			node = node->next;
+			continue;
+		}
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "Target"))
+			targetType = (CHardwarePixelBuffer::TargetType)CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "SourceImage1"))
+			textureParam.nBitMap.append(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "Percent"))
+			textureParam.nPercent = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "Rotation"))
+			textureParam.nRotation = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "Blur"))
+			textureParam.nBlur = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "UScale"))
+			textureParam.nUScale = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "VScale"))
+			textureParam.nVScale = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "UOffset"))
+			textureParam.nUOffset = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "VOffset"))
+			textureParam.nVOffset = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "NoiseSize"))
+			textureParam.nNoiseSize = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "NoiseLevel"))
+			textureParam.nNoiseLevel = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "WrapS"))
+			wrapS = (CTexture::TWrap)CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "WrapT"))
+			wrapT = (CTexture::TWrap)CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "TextureEnvironment"))
+			envType = (CTexture::TEnv)CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
+
+		node = node->next;
+	}
+
+	CResourcePtr textureRtr = CreateNewTexture(name, group, textureParam, targetType, wrapS, wrapT, envType);
+	return textureRtr;
 }
 
 CResourcePtr CTextureManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
-	return CResourcePtr();
+	CFilesPackage nullPackage;
+	return LoadResourceFromXmlNodeImpl(name, group, node, nullPackage);
 }
 
 //--------------------------------------------------------------------------
