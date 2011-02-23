@@ -18,53 +18,21 @@
 // Compiled in Windows XP 2008
 #pragma once
 
-#define OS						"Windows XP"
-// Programmer 
-#define PR						"SIRIUS"
-// SIRIUS
-#define LS						"GPL"
-// OpenLisense
+#define DEVELOP					"Sirius@Soft (C) 2011"
 
-// DEBUG
+#define TOSTR(x)	#x
 
-// CXX flags and options
-#define CXX						"C++ microsoft compiler"
-#define CXX_FLAGS				""
-/* /Od /I "F:\source\Game\GE\GE\include" 
- /D "WIN32" /D "_DEBUG" /D "_WINDOWS" 
- /D "_MBCS" /Gm /EHsc /RTC1 /MDd /Fo"Debug\\" 
- /Fd"Debug\vc80.pdb" /W3 /nologo /c /Wp64 /ZI /TP /errorReport:prompt
-*/
-#define CXX_LINKER_FLAGS		""
-
-/*
-/OUT:"..\BUILD\GE.exe" /INCREMENTAL /NOLOGO 
-/LIBPATH:"F:\source\Game\GE\GE\lib" 
-/MANIFEST /MANIFESTFILE:"Debug\GE.exe.intermediate.manifest" 
-/DEBUG /PDB:"f:\source\Game\GE\BUILD\GE.pdb" 
-/SUBSYSTEM:WINDOWS /MACHINE:X86 /ERRORREPORT:PROMPT 
-
-OpenGL32.lib GLu32.lib GLaux.lib glew32.lib 
-glew32s.lib Utils.lib  kernel32.lib user32.lib 
-gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
-shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib 
-odbccp32.lib
-
-*/
-
-#define DEVELOP					"Sirius@Soft (C) 2009 "
+#define PACKAGE_NAME			"Nova Graphic Render Engine"
+#define FILE_VERSION			0,0,1,1
+#define PACKAGE_VERSION			"0.0.1.1"
 
 #ifdef _DEBUG
-#	define VERSION_ST				"Nova 0.1.1 alpha debug "
-#	define PACKAGE_STRING			"Nova 0.1.1 alpha debug "
+#	define VERSION_ST				"Nova " PACKAGE_VERSION " develop debug"
+#	define PACKAGE_STRING			"Nova " PACKAGE_VERSION " develop debug"
 #else
-#	define VERSION_ST				"Nova 0.1.1 alpha releaze "
-#	define PACKAGE_STRING			"Nova 0.1.1 alpha releaze "
+#	define VERSION_ST				"Nova " PACKAGE_VERSION " develop releaze"
+#	define PACKAGE_STRING			"Nova " PACKAGE_VERSION " develop releaze"
 #endif
-
-#define PACKAGE_NAME			"Nova Engine"
-
-#define PACKAGE_VERSION			"0.1.1"
 
 #define YEAR					"2009"
 

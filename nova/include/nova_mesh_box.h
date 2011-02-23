@@ -159,8 +159,8 @@ public:
 		TIndexes nTVIndexList;
 		TTexCoords nTVMappingList;
 // For mesh internal loading
-		CDataStream *pMeshStream;
-		bool nInternalLoading;
+		CFilesPackage *pPackage;
+		bool nPackageLoading;
 		nstring nMeshfile;
 	} TMeshContainer;
 

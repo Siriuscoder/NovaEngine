@@ -44,8 +44,7 @@ CNovaEngine::CNovaEngine() : CBase("CNovaEngine")
 	mSystemLog->PrintMessage(mes, CLog::LG_WITH_TIME_TITLE);
 
 	mes.clear();
-	mes.append("Hello! Engine version: ");
-	mes += GetEngineVersion();
+	mes += "Hello! Engine version: " + GetPackageString();
 	mes += " (c) sirius 2009\n\n";
 
 	LOG_MESSAGE(mes);

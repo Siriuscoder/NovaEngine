@@ -209,11 +209,25 @@ void CMesh::LoadResourceImpl(void)
 	//CalculateNormals();
 	// Сортируем вершины по материалам
 
-	if(mMeshDef.nInternalLoading)
+	if(mMeshDef.nPackageLoading && mMeshDef.pPackage)
 	{
 // use to load mesh with internal format 
-		mMeshDef = CGlobalMshLoader::LoadMeshFromStream(mMeshDef.pMeshStream);
-		mMeshDef.nInternalLoading = true;
+		CMemoryBuffer fileBuf = mMeshDef.pPackage->GetFile(mMeshDef.nMeshfile);
+		if(fileBuf.GetBegin())
+		{
+			CMemoryStream fileStream;
+			fileStream.Open(fileBuf);
+			mMeshDef = CGlobalMshLoader::LoadMeshFromStream(&fileStream);
+
+			fileStream.Close();
+		}
+
+		mMeshDef.nPackageLoading = true;
+	}
+	else
+	{
+		mMeshDef = CGlobalMshLoader::LoadMeshFromFile(mMeshDef.nMeshfile);
+		mMeshDef.nPackageLoading = false;
 	}
 }
 
@@ -371,12 +385,58 @@ CMeshBoxPtr CMeshManager::CreateMesh(CMesh::TMeshContainer *def, const nstring &
 
 CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
-	return CResourcePtr();
+	if(!node)
+		return CResourcePtr();
+
+	CMesh::TMeshContainer meshStruct;
+	while(node != NULL)
+	{
+		if(xmlIsBlankNode(node))
+		{
+			node = node->next;
+			continue;
+		}
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "Meshfile"))
+			meshStruct.nMeshfile.append(reinterpret_cast<char *>(node->children->content));
+
+		node = node->next;
+	}
+
+	meshStruct.pPackage = NULL;
+	meshStruct.nPackageLoading = false;
+
+	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, "default");
+
+	return meshPtr;
 }
 
 CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
-	return CResourcePtr();
+	if(!node)
+		return CResourcePtr();
+
+	CMesh::TMeshContainer meshStruct;
+	while(node != NULL)
+	{
+		if(xmlIsBlankNode(node))
+		{
+			node = node->next;
+			continue;
+		}
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "Meshfile"))
+			meshStruct.nMeshfile.append(reinterpret_cast<char *>(node->children->content));
+
+		node = node->next;
+	}
+
+	meshStruct.pPackage = &package;
+	meshStruct.nPackageLoading = true;
+
+	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, "default");
+
+	return meshPtr;
 }
 
 }

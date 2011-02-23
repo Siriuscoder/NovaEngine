@@ -150,9 +150,9 @@ public:
 
 	void Open (const size_t maxsize, bool write);
 
-	void Open (void *buf, const size_t maxsize, bool write);
+	void Open (void *buf, const size_t maxsize, bool write = false);
 
-	void Open (const CMemoryBuffer &buffer, bool write);
+	void Open (const CMemoryBuffer &buffer, bool write = false);
 };
 
 

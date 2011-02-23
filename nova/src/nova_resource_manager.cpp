@@ -575,7 +575,7 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 		}
 
 		cur = cur->children;
-		xmlNodePtr data = NULL;
+		xmlNodePtr dataNode = NULL;
 		while(cur != NULL)
 		{
 			if(xmlIsBlankNode(cur))
@@ -598,7 +598,7 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 			if(!xmlStrcmp(cur->name, (xmlChar *) "ResourceData"))
 			{
 				xmlChar * managerName = xmlGetProp(cur, (xmlChar *) "ResourceFactory");
-				data = cur->children;
+				dataNode = cur->children;
 
 				if(!managerName)
 				{
@@ -622,7 +622,7 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 
 		if(manager)
 		{
-			res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, data, package);
+			res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, dataNode, package);
 			res->LoadResource();
 		}
 
