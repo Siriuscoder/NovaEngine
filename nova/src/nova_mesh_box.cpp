@@ -431,7 +431,7 @@ CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, cons
 		node = node->next;
 	}
 
-	meshStruct.pPackage = &package;
+	meshStruct.pPackage = const_cast<CFilesPackage *>(&package);
 	meshStruct.nPackageLoading = true;
 
 	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, "default");
