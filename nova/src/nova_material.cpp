@@ -23,6 +23,7 @@
 
 #include "nova_material.h"
 #include "nova_render_system.h"
+#include "nova_string_utils.h"
 
 namespace nova
 {
@@ -153,6 +154,9 @@ void CMaterial::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 {
 	if(!writer)
 		return;
+
+	if(xmlTextWriterWriteFormatElement(writer, BAD_CAST "MatID", "%d", mMaterialSource.nID) < 0)
+		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
 
 	if(xmlTextWriterStartElement(writer, BAD_CAST "AmbientColor") < 0)
 		NOVA_EXP("CMaterial::SerializeToXmlFileImpl: xmlTextWriterStartElement fail", BAD_OPERATION);
@@ -332,12 +336,115 @@ CMaterialPtr CMaterialManager::CreateMaterial(const nstring & name, const nstrin
 
 CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node)
 {
-	return CResourcePtr();
+	if(!node)
+		return CResourcePtr();
+
+	CMaterial::TMaterialContainer materialParam;
+	materialParam.nName = name;
+	
+
+	while(node != NULL)
+	{
+		if(xmlIsBlankNode(node))
+		{
+			node = node->next;
+			continue;
+		}
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "MatID"))
+			materialParam.nID = CStringUtils::StringToInt(reinterpret_cast<char *>(node->children->content));
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "AmbientColor"))
+			materialParam.nAmbientColor = CColorRGB(
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "R"))),
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "G"))),
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "B"))));
+		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseColor"))
+			materialParam.nDiffuseColor = CColorRGB(
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "R"))),
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "G"))),
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "B"))));
+		if(!xmlStrcmp(node->name, (xmlChar *) "SpecularColor"))
+			materialParam.nSpecularColor = CColorRGB(
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "R"))),
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "G"))),
+				CStringUtils::StringToFloat(reinterpret_cast<char *>(xmlGetProp(node, (xmlChar *) "B"))));
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "Shininess"))
+			materialParam.nShininess = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ShinStrength"))
+			materialParam.nShinStrength = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "Transparency"))
+			materialParam.nTransparency = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "Falloff"))
+			materialParam.nFalloff = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "SelfIllum"))
+			materialParam.nSelfIllum = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "Blur"))
+			materialParam.nBlur = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+		if(!xmlStrcmp(node->name, (xmlChar *) "Shading"))
+			materialParam.nShading = CStringUtils::StringToFloat(reinterpret_cast<char *>(node->children->content));
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "SelfIllumFlag"))
+			materialParam.nSelfIllumFlag = xmlStrcmp(node->children->content, (xmlChar *) "true") ? false : true;
+		if(!xmlStrcmp(node->name, (xmlChar *) "TwoSided"))
+			materialParam.nTwoSided = xmlStrcmp(node->children->content, (xmlChar *) "true") ? false : true;
+		if(!xmlStrcmp(node->name, (xmlChar *) "MapDecal"))
+			materialParam.nMapDecal = xmlStrcmp(node->children->content, (xmlChar *) "true") ? false : true;
+		if(!xmlStrcmp(node->name, (xmlChar *) "IsAdditive"))
+			materialParam.nIsAdditive = xmlStrcmp(node->children->content, (xmlChar *) "true") ? false : true;
+		if(!xmlStrcmp(node->name, (xmlChar *) "Soften"))
+			materialParam.nSoften = xmlStrcmp(node->children->content, (xmlChar *) "true") ? false : true;
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseMap1"))
+			materialParam.nDiffuseMap1 = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseMap2"))
+			materialParam.nDiffuseMap2 = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "AmbientMap"))
+			materialParam.nAmbientMap = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "OpacMap"))
+			materialParam.nOpacMap = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "SpecMap"))
+			materialParam.nSpecMap = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "BumpMap"))
+			materialParam.nBumpMap = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ShinMap"))
+			materialParam.nShinMap = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "SelfIlMap"))
+			materialParam.nSelfIlMap = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ReflectionMap"))
+			materialParam.nReflectionMap = nstring((reinterpret_cast<char *>(node->children->content)));
+
+		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseMap1Mask"))
+			materialParam.nDiffuseMap1Mask = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseMap2Mask"))
+			materialParam.nDiffuseMap2Mask = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "AmbientMapMask"))
+			materialParam.nAmbientMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "OpacMapMask"))
+			materialParam.nOpacMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "SpecMapMask"))
+			materialParam.nSpecMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "BumpMapMask"))
+			materialParam.nBumpMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ShinMapMask"))
+			materialParam.nShinMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "SelfIlMapMask"))
+			materialParam.nSelfIlMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+		if(!xmlStrcmp(node->name, (xmlChar *) "ReflectionMapMask"))
+			materialParam.nReflectionMap = nstring((reinterpret_cast<char *>(node->children->content)));
+
+		node = node->next;
+	}
+
+	CMaterialPtr materialPtr = CreateMaterial(name, group, materialParam);
+	return materialPtr;
 }
 
 CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(const nstring &name, const nstring &group, xmlNodePtr node, const CFilesPackage &package)
 {
-	return CResourcePtr();
+	CFilesPackage nullPackage;
+	return LoadResourceFromXmlNodeImpl(name, group, node, nullPackage);
 }
 
 }
