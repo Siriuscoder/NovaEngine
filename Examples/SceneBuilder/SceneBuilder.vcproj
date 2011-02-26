@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Nova.lib"
+				AdditionalDependencies="Nova.lib libxml2.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\nova\lib;..\..\bin\debug"
 				GenerateDebugInformation="true"
@@ -148,7 +148,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Nova.lib"
+				AdditionalDependencies="Nova.lib libxml2.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\nova\lib;..\..\bin\release"
 				GenerateDebugInformation="true"

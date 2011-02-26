@@ -47,6 +47,84 @@ public:
 
 	}
 
+	void WriteMeshObject(xmlTextWriterPtr xmlWriter)
+	{
+		nova::stl<nstring>::vector meshes = mLoader.GetMeshList();
+		for(nova::nUInt32 i = 0; i < meshes.size(); i++)
+		{
+			nova::CMesh::TMeshContainer *meshInfo = mLoader.GetMesh(meshes[i]);
+			if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "MeshObject") < 0) // NovaScene doc
+				NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+			if(xmlTextWriterWriteAttribute(xmlWriter, BAD_CAST "ResourceName", BAD_CAST meshInfo->nName.c_str()) < 0)
+				NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+
+			if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "Orientation") < 0) // NovaScene doc
+				NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+
+			for(nova::nUInt32 i = 0; i < 4; i++)
+			{
+				nstring rowName = "Row" + CStringUtils::IntToString(i);
+				if(xmlTextWriterStartElement(xmlWriter, BAD_CAST rowName.c_str()) < 0) // NovaScene doc
+					NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+
+				for(nova::nUInt32 j = 0; j < 4; j++)
+				{
+					nstring colName = "C" + CStringUtils::IntToString(j);
+					if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST colName.c_str(), "%f", meshInfo->nTMatrix[i][j]) < 0)
+						NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+				}
+				xmlTextWriterEndElement(xmlWriter);
+			}
+
+			xmlTextWriterEndElement(xmlWriter);
+			xmlTextWriterEndElement(xmlWriter);
+		}
+	}
+
+	void SerializeSceneToXmlFile(const nova::nstring &destFolder)
+	{
+	    xmlTextWriterPtr xmlWriter = NULL;
+		nova::nstring xmlSceneFileName =  destFolder + "scene.xml";
+
+	    /* Create a new XmlWriter for uri, with no compression. */
+		if((xmlWriter = xmlNewTextWriterFilename(xmlSceneFileName.c_str(), 0)) == NULL)
+			NOVA_EXP("CResource::SerializeToXmlFile: Error creating the xml writer", BAD_OPERATION);
+
+		// automatic indentation for readability
+		xmlTextWriterSetIndent(xmlWriter, 1);
+		if(xmlTextWriterStartDocument(xmlWriter, NULL, "UTF-8", NULL) < 0) // start doc
+			NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartDocument fail", BAD_OPERATION);
+
+		if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "NovaScene") < 0) // NovaScene doc
+			NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+
+		xmlTextWriterWriteComment(xmlWriter, BAD_CAST "Scene resource lister");
+		if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "SceneRecources") < 0) // NovaScene doc
+			NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+
+		for(nova::nUInt32 i = 0; i < mFiles.size(); i++)
+		{	
+			if(mFiles[i].find(".xml") != nstring::npos)
+			{
+				if(xmlTextWriterWriteElement(xmlWriter, BAD_CAST "ResourceFile", BAD_CAST mFiles[i].c_str()) < 0)
+					NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterWriteElement fail", BAD_OPERATION);
+			}
+		}
+
+		xmlTextWriterEndElement(xmlWriter);
+
+		xmlTextWriterWriteComment(xmlWriter, BAD_CAST "Scene objects and scene managers");
+		if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "SceneContent") < 0) // NovaScene doc
+			NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+		if(xmlTextWriterWriteAttribute(xmlWriter, BAD_CAST "SceneManager", BAD_CAST "BasicSceneManager") < 0)
+			NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+
+		WriteMeshObject(xmlWriter);
+
+		xmlTextWriterEndDocument(xmlWriter);
+		xmlFreeTextWriter(xmlWriter);
+	}
+
 	void Launch(const nova::nstring &aseFileName, const nova::nstring &destFolder, bool pack, bool copyLocal)
 	{
 		nova::CFileStream aseFile;
@@ -63,6 +141,7 @@ public:
 		std::cout << "File parsed with " << msec << " ms" << std::endl << std::endl;std::cout.flush();
 
 		CreateAndSaveResources(destFolder, copyLocal);
+		SerializeSceneToXmlFile(destFolder);
 	}
 
 	void CreateAndSaveResources(const nstring &destFolder, bool copyLocal)
