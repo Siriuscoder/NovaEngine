@@ -389,7 +389,7 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk,  CMesh::TMeshContainer *me
         {
         case T3DS_TRI_MAT_GROUP:
 			{
-				nInt32 mat_id = 0;
+				//nInt32 mat_id = 0;
 				char str[128] = "\0";
 				mpStream->ReadASCIIZ(str, 128);
 				mat_id++;

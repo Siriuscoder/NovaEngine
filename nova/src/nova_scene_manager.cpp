@@ -22,7 +22,6 @@
 #include "nova_stable_precompiled_headers.h"
 
 #include "nova_scene_manager.h"
-#include "nova_octree_scene_node.h"
 
 namespace nova
 {
@@ -58,6 +57,18 @@ void CSceneNode::InValidateNode(void)
 	isValidated = false;
 }
 
+void CSceneNode::PrepareNode(void)
+{
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneNodeListener * lis = 
+			dynamic_cast<CSceneNodeListener *>(GetListener(i));
+		lis->PrepareNodeListener(this);
+	}
+
+	PrepareNodeImpl();
+}
+
 void CSceneNode::ReleaseNode(void)
 {
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
@@ -68,6 +79,22 @@ void CSceneNode::ReleaseNode(void)
 	}
 
 	InValidateNode();
+	ReleaseNodeImpl();
+
+	if(mpSceneObject)
+		delete mpSceneObject;
+}
+
+void CSceneNode::RenderNode(void)
+{
+	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
+	{
+		CSceneNodeListener * lis = 
+			dynamic_cast<CSceneNodeListener *>(GetListener(i));
+		lis->RenderNodeListener(this);
+	}
+
+	RenderNodeImpl();
 }
 
 CBoundingBox &CSceneNode::GetBoundingBox(void)
@@ -80,16 +107,16 @@ void CSceneNode::SetBoundingBox(const CBoundingBox &box)
 	mBoundingBox = box;
 }
 
-void CSceneNode::PrepareNode(void)
+void CSceneNode::BuildNode(void)
 {
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CSceneNodeListener * lis = 
 			dynamic_cast<CSceneNodeListener *>(GetListener(i));
-		lis->PrepareNodeListener(this);
+		lis->BuildNodeListener(this);
 	}
 
-	PrepareNodeImpl();
+	BuildNodeImpl();
 }
 
 CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
@@ -146,11 +173,6 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 nstring CSceneManager::GetSceneName(void)
 {
 	return mSceneName;
-}
-
-CTreeNode<CSceneNode*> *CSceneManager::ConstactSpecifiedNode()
-{
-	return NULL;
 }
 
 CTreeNode<CSceneNode*> *CSceneManager::GetRootElement(void)
@@ -236,7 +258,10 @@ void CSceneManager::DestroySceneNode(CTreeNode<CSceneNode*> *node)
 			DestroySceneNode(node->GetNode(i));
 
 		if(node->GetData())
+		{
+			node->GetData()->ReleaseNode();
 			delete node->GetData();
+		}
 	}
 }
 
@@ -245,7 +270,7 @@ void CSceneManager::ClearObjects(void)
 	ClearObjectsImpl();
 }
 
-CRenderableObject *CSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
+CSceneNode *CSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
 {
 	return NULL;
 }

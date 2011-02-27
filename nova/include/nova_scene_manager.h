@@ -44,9 +44,13 @@ public:
 
 	virtual void InValidateNodeListener(CSceneNode *object) {}
 
-	virtual void PrepareNodeListener(CSceneNode *object) {}
+	virtual void BuildNodeListener(CSceneNode *object) {}
 
 	virtual void ReleaseNodeListener(CSceneNode *object) {}
+
+	virtual void RenderNodeListener(CSceneNode *object) {}
+
+	virtual void PrepareNodeListener(CSceneNode *object) {}
 };
 
 class NOVA_EXPORT CSceneNode : public CListenerInterface
@@ -56,6 +60,7 @@ protected:
 	bool isValidated;
 	CBoundingBox mBoundingBox;
 	CSceneManager *mParentSceneManager;
+	CRenderableObject *mpSceneObject;
 
 	virtual void ValidateNodeImpl(void) = 0;
 
@@ -63,15 +68,20 @@ protected:
 
 	virtual void ReleaseNodeImpl(void) = 0;
 
+	virtual void BuildNodeImpl(void) = 0;
+
+	virtual void RenderNodeImpl(void) = 0;
+
 	virtual void PrepareNodeImpl(void) = 0;
 
 public:
 
-	CSceneNode(CSceneManager *scene) : mParentSceneManager(scene), isValidated(false) {}
+	CSceneNode(CRenderableObject *pRenObj, CSceneManager *scene) : 
+		mParentSceneManager(scene), mpSceneObject(pRenObj), isValidated(false) {}
 
 	virtual ~CSceneNode() {}
 
-	void PrepareNode(void);
+	void BuildNode(void);
 
 	void ValidateNode(void);
 
@@ -81,9 +91,15 @@ public:
 
 	bool IsValidated(void);
 
+	void RenderNode(void);
+
+	void PrepareNode(void);
+
 	CBoundingBox &GetBoundingBox(void);
 
 	void SetBoundingBox(const CBoundingBox &box);
+
+	inline CRenderableObject* GetObjectInterface(void) { return mpSceneObject; }
 };
 
 class NOVA_EXPORT CSceneManagerListener : public CEventListener
@@ -141,9 +157,7 @@ public:
 
 	void RenderScene(CCamera *camera, CViewPort *view);
 
-	virtual CTreeNode<CSceneNode*> *ConstactSpecifiedNode();
-
-	virtual CRenderableObject *AddRenderableResourceToScene(const nstring &resource_name);
+	virtual CSceneNode *AddRenderableResourceToScene(const nstring &resource_name);
 
 	CTreeNode<CSceneNode*> *GetRootElement(void);
 

@@ -215,6 +215,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\src\nova_basic_scene_manager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\nova_bounding_box.cpp"
 				>
 			</File>
@@ -499,18 +503,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="OctreeSceneManager"
-				>
-				<File
-					RelativePath=".\src\nova_octree_scene_manager.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\nova_octree_scene_node.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="Allocator"
 				>
 				<File
@@ -568,6 +560,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\include\nova_basic_scene_manager.h"
+				>
+			</File>
 			<File
 				RelativePath=".\include\nova_bounding_box.h"
 				>
@@ -909,18 +905,6 @@
 				</File>
 				<File
 					RelativePath=".\include\nova_msh_loader.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="OctreeSceneManager"
-				>
-				<File
-					RelativePath=".\include\nova_octree_scene_manager.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\nova_octree_scene_node.h"
 					>
 				</File>
 			</Filter>

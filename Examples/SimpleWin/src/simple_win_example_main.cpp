@@ -84,9 +84,9 @@ public:
 		nova::CScene::GetSingelton().AddScrap(mainscrap);
 	*/
 
-		nova::COctreeSceneManager *nSceneMan = new nova::COctreeSceneManager("TestScene", "Manual");
-		nSceneMan->AddListener(&mRenderListener);
-		nova::CScene::GetSingelton().AddScrap(nSceneMan);
+		//nova::COctreeSceneManager *nSceneMan = new nova::COctreeSceneManager("TestScene", "Manual");
+		//nSceneMan->AddListener(&mRenderListener);
+		//nova::CScene::GetSingelton().AddScrap(nSceneMan);
 	}
 
 	virtual void InitViewport(void)
