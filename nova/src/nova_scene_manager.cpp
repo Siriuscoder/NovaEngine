@@ -80,9 +80,6 @@ void CSceneNode::ReleaseNode(void)
 
 	InValidateNode();
 	ReleaseNodeImpl();
-
-	if(mpSceneObject)
-		delete mpSceneObject;
 }
 
 void CSceneNode::RenderNode(void)
@@ -121,7 +118,7 @@ void CSceneNode::BuildNode(void)
 
 CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
 {
-	//ClearObjects(); // Error R6025: Pure virual function call ..fuck =)
+	//ReleaseObjects(); // Error R6025: Pure virual function call ..fuck =)
 	mRegisterGroup = group;
 	mSceneName = scene_name;
 	isEnabled = true;
@@ -129,7 +126,7 @@ CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
 
 CSceneManager::~CSceneManager()
 {
-	//ClearObjects(); // Error R6025: Pure virual function call ..fuck =)
+	//ReleaseObjects(); // Error R6025: Pure virual function call ..fuck =)
 } 
 
 nInt32 CSceneManager::GetRenderedBatches(void)
@@ -265,9 +262,9 @@ void CSceneManager::DestroySceneNode(CTreeNode<CSceneNode*> *node)
 	}
 }
 
-void CSceneManager::ClearObjects(void)
+void CSceneManager::ReleaseObjects(void)
 {
-	ClearObjectsImpl();
+	ReleaseObjectsImpl();
 }
 
 CSceneNode *CSceneManager::AddRenderableResourceToScene(const nstring &resource_name)

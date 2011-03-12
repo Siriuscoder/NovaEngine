@@ -27,6 +27,13 @@ namespace nova
 class CImage;
 class CImageManager;
 
+class NOVA_EXPORT CImageXmlLoaderListener : public CResourceListener
+{
+public:
+
+	void PostLoadResourceListener(CResource * object);
+};
+
 // For multiple image formats data store
 class NOVA_EXPORT CImageBox : public CBase
 {
@@ -82,6 +89,8 @@ private:
 	CImageBox mImageSource;
 
 protected:
+
+	CImageXmlLoaderListener mEventListnr;
 
 	void LoadResourceImpl(void);
 
@@ -150,6 +159,8 @@ public:
 	void Pixelization(nova::nUInt32 pix_size);
 
 	void Sharpering(nReal factor, nInt32 iter);
+
+	CMemoryBuffer GetSubImageBits(size_t xoff, size_t yoff, size_t zoff, size_t width, size_t height, size_t depth);
 #endif
 
 	void BackWidth();

@@ -47,20 +47,20 @@ void CBasicSceneManager::PrepareNode(CTreeNode<CSceneNode*> *node)
 {
 	if(node)
 	{
+		CBasicSceneNode *curNode = dynamic_cast<CBasicSceneNode *>(node->GetData());
+		// Preparing mesh
+		// Generating normals to faces and sub mats info
+		curNode->GetMeshBox()->GenerateNormalsToFaces();
+		if(curNode->GetMeshBox()->GetMeshDefinition().nNormalList.size() == 0)
+		//Generating normals to vertexes
+			curNode->GetMeshBox()->CalculateNormals();
+
+		// Sorting faces by material id
+		// using fast qsort algorithm
+		curNode->GetMeshBox()->SortFaceIndexByMaterials();
+
 		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
 		{
-			CBasicSceneNode *curNode = dynamic_cast<CBasicSceneNode *>(node->GetData());
-			// Preparing mesh
-			// Generating normals to faces and sub mats info
-			curNode->GetMeshBox()->GenerateNormalsToFaces();
-			if(curNode->GetMeshBox()->GetMeshDefinition().nNormalList.size() == 0)
-			//Generating normals to vertexes
-				curNode->GetMeshBox()->CalculateNormals();
-
-			// Sorting faces by material id
-			// using fast qsort algorithm
-			curNode->GetMeshBox()->SortFaceIndexByMaterials();
-
 			// next layer
 			PrepareNode(node->GetNode(i));
 		}
@@ -89,9 +89,22 @@ void CBasicSceneManager::BuildSceneImpl(void)
 
 }
 
-void CBasicSceneManager::ClearObjectsImpl(void)
+void CBasicSceneManager::ReleaseObjectsImpl(void)
 {
+	ReleaseNodeRenderableObject(GetRootElement());
+}
 
+void CBasicSceneManager::ReleaseNodeRenderableObject(CTreeNode<CSceneNode*> *node)
+{
+	if(node)
+	{
+		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
+		{
+			ReleaseNodeRenderableObject(node->GetNode(i));
+		}
+
+		delete node->GetData()->GetObjectInterface();
+	}
 }
 
 nInt32 CBasicSceneManager::RenderNode(CTreeNode<CSceneNode*> *node)

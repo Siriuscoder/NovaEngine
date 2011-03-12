@@ -145,7 +145,7 @@ protected:
 
 	virtual void BuildSceneImpl(void) = 0;
 
-	virtual void ClearObjectsImpl(void) = 0;
+	virtual void ReleaseObjectsImpl(void) = 0;
 
 	void DestroySceneNode(CTreeNode<CSceneNode*> *node);
 
@@ -173,9 +173,9 @@ public:
 
 	void BuildScene(void);
 
-	void DestroyScene(void);
+	virtual void DestroyScene(void);
 
-	void ClearObjects(void);
+	void ReleaseObjects(void);
 
 	nstring GetSceneName(void);
 

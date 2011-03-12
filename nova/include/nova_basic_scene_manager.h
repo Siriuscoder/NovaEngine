@@ -55,12 +55,12 @@ protected:
 	TBatchList mBatchList;
 	CMeshBoxPtr mMeshBox;
 
-	void ValidateNodeImpl(void);
-	void ReleaseNodeImpl(void);
-	void BuildNodeImpl(void);
-	void InValidateNodeImpl(void);
-	void RenderNodeImpl(void);
-	void PrepareNodeImpl(void);
+	void ValidateNodeImpl(void) {}
+	void ReleaseNodeImpl(void) {}
+	void BuildNodeImpl(void) {}
+	void InValidateNodeImpl(void) {}
+	void RenderNodeImpl(void) {}
+	void PrepareNodeImpl(void) {}
 
 
 	void PreparingBatchList(void);
@@ -69,7 +69,7 @@ public:
 
 	CBasicSceneNode(CMovableObject *pObj, CSceneManager *scene);
 
-	~CBasicSceneNode();
+	~CBasicSceneNode() {}
 
 	void SetMeshBox(CMeshBoxPtr &mesh);
 
@@ -91,13 +91,13 @@ protected:
 
 	void BuildSceneImpl(void);
 
-	void ClearObjectsImpl(void);
+	void ReleaseObjectsImpl(void);
 
 	nInt32 RenderNode(CTreeNode<CSceneNode*> *node);
 
 	void PrepareNode(CTreeNode<CSceneNode*> *node);
 
-	//stl<nstring, std::pair<CBasicSceneNode *, CMeshBoxPtr>>::map mObjectsMap;
+	void ReleaseNodeRenderableObject(CTreeNode<CSceneNode*> *node);
 
 public:
 

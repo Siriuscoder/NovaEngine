@@ -26,6 +26,14 @@
 namespace nova
 {
 
+void CImageXmlLoaderListener::PostLoadResourceListener(CResource * object)
+{
+	CImage *image = dynamic_cast<CImage *>(object);
+
+	image->GetImageSource().mSourceImageBits.FreeBuffer();
+	image->RemoveListener(this);
+}
+
 CImageBox::CImageBox() : CBase("CImageBox")
 {
 	CleanData();
@@ -160,7 +168,7 @@ void CImage::LoadResourceImpl(void)
 			{
 				codec->DecodeFromBuffer(mImageSource.mSourceImageBits, this, mImageSource.mPixelFormat, mImageSource.mCompressor);
 				// source image buffer free
-				mImageSource.mSourceImageBits.FreeBuffer();
+				//mImageSource.mSourceImageBits.FreeBuffer();
 			}
 			else
 			{
@@ -411,6 +419,46 @@ void CImage::Sharpering(nReal factor, nInt32 iter)
 	ilDeleteImages(1, &image);
 }
 
+CMemoryBuffer CImage::GetSubImageBits(size_t xoff, size_t yoff, size_t zoff, size_t width, size_t height, size_t depth)
+{
+	ILuint srcImage;//, destImage;
+	CDevILFormats informat;
+	CMemoryBuffer result;
+
+	informat.SetExFormat(mImageSource.mPixelFormat);
+	// Generate source image to use
+	ilGenImages(1, &srcImage);
+	// Ganerate destination image to copy to
+	//ilGenImages(1, &destImage);
+
+	// Bind and create source image
+	ilBindImage(srcImage);
+	ilTexImage(mImageSource.mWidth, mImageSource.mHeight, mImageSource.mDepth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, mImage.GetBegin());
+/*
+	// binding and create destination image
+	ilBindImage(destImage);
+	ilTexImage(width, height, depth, informat.GetInternalChannels(),
+		informat.GetFormat(), IL_UNSIGNED_BYTE, NULL);
+	// bliting part of source image to destination image
+	ilBlit(srcImage, 0, 0, 0, xoff, yoff, zoff, width, height, depth);
+	
+	result.AllocBuffer(ilGetInteger(IL_IMAGE_SIZE_OF_DATA));
+	ilCopyPixels(0, 0, 0, width, height, depth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, result.GetBegin());
+
+	ilDeleteImages(1, &srcImage);
+	ilDeleteImages(1, &destImage);
+*/
+	result.AllocBuffer(width * height * depth * informat.GetInternalChannels());
+	ilCopyPixels(xoff, yoff, zoff, width, height, depth, informat.GetFormat(),
+		IL_UNSIGNED_BYTE, result.GetBegin());
+
+	ilDeleteImages(1, &srcImage);
+
+	return result;
+}
+
 #endif
 
 void CImage::BackHeigth()
@@ -632,7 +680,8 @@ CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, con
 		node = node->next;
 	}
 
-	CResourcePtr image = CreateNewImage(name, group, nfile, ncodec, format);
+	CImagePtr image = CreateNewImage(name, group, nfile, ncodec, format);
+	image->AddListener(&image->mEventListnr);
 
 	return image;
 }
@@ -675,7 +724,8 @@ CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, con
 		throw NOVA_EXP(nstring("CImageManager::LoadResourceFromXmlNodeImpl - Can not find image file ") + nfile + 
 			" in package " + package.GetPackageName(), BAD_OPERATION);
 
-	CResourcePtr image = CreateNewImage(name, group, image_buf, comp, ncodec, format);
+	CImagePtr image = CreateNewImage(name, group, image_buf, comp, ncodec, format);
+	image->AddListener(&image->mEventListnr);
 
 	return image;
 }

@@ -46,7 +46,7 @@ void CScene::DeleteAllScraps(void)
 	for(; it != mScraps.end(); it++)
 	{
 		(*it)->DestroyScene();
-		(*it)->ClearObjects();
+		(*it)->ReleaseObjects();
 		delete (*it);
 	}
 

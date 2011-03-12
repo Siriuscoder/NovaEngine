@@ -222,6 +222,7 @@ void CMesh::LoadResourceImpl(void)
 			fileStream.Close();
 		}
 
+		fileBuf.FreeBuffer();
 		mMeshDef.nPackageLoading = true;
 	}
 	else

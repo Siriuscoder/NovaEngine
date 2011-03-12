@@ -624,6 +624,7 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename, cons
 		{
 			res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, dataNode, package);
 			res->LoadResource();
+			//res->RemoveAllListeners();
 		}
 
 		xmlFreeDoc(doc);
@@ -711,6 +712,7 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 	{
 		res = manager->LoadResourceFromXmlNodeImpl(rname, rgroup, data);
 		res->LoadResource();
+		//res->RemoveAllListeners();
 	}
 
 	xmlFreeDoc(doc);
