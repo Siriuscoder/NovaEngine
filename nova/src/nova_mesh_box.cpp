@@ -50,8 +50,8 @@ void CMesh::CalculateNormals(void/* Simple method */)
 
 	typedef stl< stl<nInt32>::vector >::vector t_expl;
 	t_expl expl;
-	TNormal3d normal;
-	mMeshDef.nNormalList.clear();
+	//TNormal3d normal;
+	mMeshDef.nNormalList.resize(mMeshDef.nVertexList.size());
 
 	expl.resize(mMeshDef.nVertexList.size());
 	for(nova::nUInt32 i = 0; i < mMeshDef.nMeshInfoList.size(); ++i)
@@ -63,28 +63,29 @@ void CMesh::CalculateNormals(void/* Simple method */)
 
     for (nova::nUInt32 i = 0; i < mMeshDef.nVertexList.size(); ++i)
     {
-		memset(&normal, 0, sizeof(TNormal3d));
+		//memset(&normal, 0, sizeof(TNormal3d));
+		Vector3f vec;
 		nova::nUInt32 t = expl[i].size();
 
         for (nova::nUInt32 k = 0; k < t; ++k)
         {
-			normal.x += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.x;
-			normal.y += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.y;
-			normal.z += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.z;
+			vec.X() += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.x;
+			vec.Y() += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.y;
+			vec.Z() += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.z;
         }
 
-		Vector3f vec(&(normal.x));
+
 		vec.Normalize();
 
-		normal.x = vec.X();
-		normal.y = vec.Y();
-		normal.z = vec.Z();
-		mMeshDef.nNormalList.push_back(normal);
+		mMeshDef.nNormalList[i].x = vec.X();
+		mMeshDef.nNormalList[i].y = vec.Y();
+		mMeshDef.nNormalList[i].z = vec.Z();
     }
-
+/*
 	for(nova::nUInt32 i = 0; i < expl.size(); ++i)
 		expl[i].clear();
 	expl.clear();
+*/
 
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
@@ -104,7 +105,7 @@ nInt32 CMesh::QComparer(const void * a, const void * b)
 
 void CMesh::QSortFaces(TIndexes &index, TFacesInfo &faces)
 {
-	qsort(&(faces[0]), faces.size(), sizeof(TTriangleInfo), QComparer);
+	qsort(&(faces[0]), faces.size(), sizeof(TTriangleInfo), CMesh::QComparer);
 
 	TIndexes tmp;
 	tmp.resize(index.size());
