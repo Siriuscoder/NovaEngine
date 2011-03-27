@@ -147,6 +147,10 @@ protected:
 
 	virtual void ReleaseObjectsImpl(void) = 0;
 
+	virtual void SerializeSceneToXmlImpl(xmlTextWriterPtr xmlWriter) = 0;
+
+	virtual void DeSerializeSceneFromXmlImpl(xmlNodePtr node) = 0;
+
 	void DestroySceneNode(CTreeNode<CSceneNode*> *node);
 
 public:
@@ -184,6 +188,10 @@ public:
 	nInt32 GetRenderedBatches(void);
 
 	nInt32 GetRenderedFaces(void);
+
+	void SerializeSceneToXml(xmlTextWriterPtr xmlWriter);
+
+	void DeSerializeSceneFromXml(xmlNodePtr node);
 
 	inline bool IsEnabled(void) { return isEnabled; }
 

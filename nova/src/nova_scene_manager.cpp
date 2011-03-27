@@ -272,4 +272,14 @@ CSceneNode *CSceneManager::AddRenderableResourceToScene(const nstring &resource_
 	return NULL;
 }
 
+void CSceneManager::SerializeSceneToXml(xmlTextWriterPtr xmlWriter)
+{
+	SerializeSceneToXmlImpl(xmlWriter);
+}
+
+void CSceneManager::DeSerializeSceneFromXml(xmlNodePtr node)
+{
+	DeSerializeSceneFromXmlImpl(node);
+}
+
 }

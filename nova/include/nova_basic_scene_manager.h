@@ -99,6 +99,14 @@ protected:
 
 	void ReleaseNodeRenderableObject(CTreeNode<CSceneNode*> *node);
 
+	void SerializeSceneToXmlImpl(xmlTextWriterPtr xmlWriter);
+
+	void SerializeNodeToXml(CTreeNode<CSceneNode*> *node, xmlTextWriterPtr xmlWriter);
+
+	void DeSerializeSceneFromXmlImpl(xmlNodePtr node);
+
+	void DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CSceneNode*> *sceneNode);
+
 public:
 
 	CBasicSceneManager(const nstring &scene_name, const nstring & factory_name);
