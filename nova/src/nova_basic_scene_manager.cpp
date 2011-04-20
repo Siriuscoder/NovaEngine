@@ -27,6 +27,26 @@
 namespace nova
 {
 
+void CBasicSceneNode::PrepareNodeImpl(void)
+{
+	if(mMeshBox.IsNull())
+		return;
+	// Preparing mesh
+	// Generating normals to faces and sub mats info
+	mMeshBox->GenerateNormalsToFaces();
+	if(mMeshBox->GetMeshDefinition().nNormalList.size() == 0)
+	//Generating normals to vertexes
+		mMeshBox->CalculateNormals();
+
+	// Sorting faces by material id
+	// using fast qsort algorithm
+	mMeshBox->SortFaceIndexByMaterials();
+	// Generating mat changes groups
+	mMeshBox->GenerateMatChangesGroups();
+	// Generating bouding box
+	mBoundingBox = mMeshBox->GenerateBoundingBox();
+}
+
 
 CBasicSceneNode::CBasicSceneNode(CMovableObject *pObj, CSceneManager *scene) :
 	CSceneNode(pObj, scene)
@@ -44,24 +64,10 @@ nInt32 CBasicSceneManager::RenderSceneImpl(void)
 	return RenderNode(GetRootElement());
 }
 
-void CBasicSceneManager::PrepareNode(CTreeNode<CSceneNode*> *node)
+void CBasicSceneManager::PrepareNode(CTreeNode<CSceneManager::TNodeType> *node)
 {
 	if(node)
 	{
-		CBasicSceneNode *curNode = dynamic_cast<CBasicSceneNode *>(node->GetData());
-		// Preparing mesh
-		// Generating normals to faces and sub mats info
-		curNode->GetMeshBox()->GenerateNormalsToFaces();
-		if(curNode->GetMeshBox()->GetMeshDefinition().nNormalList.size() == 0)
-		//Generating normals to vertexes
-			curNode->GetMeshBox()->CalculateNormals();
-
-		// Sorting faces by material id
-		// using fast qsort algorithm
-		curNode->GetMeshBox()->SortFaceIndexByMaterials();
-		// Generating mat changes groups
-		curNode->GetMeshBox()->GenerateMatChangesGroups();
-
 		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
 		{
 			// next layer
@@ -92,51 +98,47 @@ void CBasicSceneManager::BuildSceneImpl(void)
 
 }
 
-void CBasicSceneManager::ReleaseObjectsImpl(void)
+void CBasicSceneManager::BuildNode(CTreeNode<CSceneManager::TNodeType> *node)
 {
-	ReleaseNodeRenderableObject(GetRootElement());
+
 }
 
-void CBasicSceneManager::ReleaseNodeRenderableObject(CTreeNode<CSceneNode*> *node)
-{
-	if(node)
-	{
-		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
-		{
-			ReleaseNodeRenderableObject(node->GetNode(i));
-		}
-
-		delete node->GetData()->GetObjectInterface();
-	}
-}
-
-nInt32 CBasicSceneManager::RenderNode(CTreeNode<CSceneNode*> *node)
+nInt32 CBasicSceneManager::RenderNode(CTreeNode<CSceneManager::TNodeType> *node)
 {
 	nova::nUInt32 nodesRenderedCount = 0;
 	if(node)
 	{
-		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
+		node->GetData()->ValidateNode();
+		if(node->GetData()->IsVisible())
 		{
-			node->GetData()->ValidateNode();
 			node->GetData()->RenderNode();
 			nodesRenderedCount++;
-
-			RenderNode(node->GetNode(i));
-			node->GetData()->InValidateNode();
+			mRenderedFaces += node->GetData()->GetRenderedFacesCount();
+			mRenderedBatches += node->GetData()->GetRenderedBatchesCount();
 		}
+
+		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
+		{
+			nodesRenderedCount += RenderNode(node->GetNode(i));
+		}
+
+		node->GetData()->InValidateNode();
 	}
 
 	return nodesRenderedCount;
 }
 
-CSceneNode *CBasicSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
+CSceneManager::TNodeType CBasicSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
 {
 	CMeshBoxPtr mesh = CMeshManager::GetSingelton().GetResourceFromHash(resource_name);
 	if(!mesh.IsNull())
 	{
-		CMovableObject *obj = new CMovableObject(mesh->GetResName(), GetSceneSlavesGroup());
-		CBasicSceneNode *target = new CBasicSceneNode(obj, this);
-		target->SetMeshBox(mesh);
+		CSceneManager::TNodeType target(new CBasicSceneNode(new CMovableObject(mesh->GetResName(), GetSceneSlavesGroup()), this));
+
+		if(!target.IsNull())
+			dynamic_cast<CBasicSceneNode *>(target.GetPtr())->SetMeshBox(mesh);
+		else
+			throw NOVA_EXP("CBasicSceneManager::AddRenderableResourceToScene: target is bad pointer", MEM_ERROR);
 
 		return target;
 	}
@@ -144,12 +146,12 @@ CSceneNode *CBasicSceneManager::AddRenderableResourceToScene(const nstring &reso
 	return NULL;
 }
 
-void CBasicSceneManager::SerializeNodeToXml(CTreeNode<CSceneNode*> *node, xmlTextWriterPtr xmlWriter)
+void CBasicSceneManager::SerializeNodeToXml(CTreeNode<CSceneManager::TNodeType> *node, xmlTextWriterPtr xmlWriter)
 {
 	if(!node)
 		return;
 
-	CBasicSceneNode *curNode = dynamic_cast<CBasicSceneNode *>(node->GetData());
+	CBasicSceneNode *curNode = dynamic_cast<CBasicSceneNode *>(node->GetData().GetPtr());
 	if(curNode)
 	{
 		if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "MeshObject") < 0) // NovaScene doc
@@ -190,7 +192,7 @@ void CBasicSceneManager::SerializeSceneToXmlImpl(xmlTextWriterPtr xmlWriter)
 	SerializeNodeToXml(GetRootElement(), xmlWriter);
 }
 
-void CBasicSceneManager::DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CSceneNode*> *sceneNode)
+void CBasicSceneManager::DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CSceneManager::TNodeType> *sceneNode)
 {
 	while(node != NULL)
 	{
@@ -203,10 +205,21 @@ void CBasicSceneManager::DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CScen
 		if(!xmlStrcmp(node->name, (xmlChar *)"MeshObject"))
 		{
 			xmlChar * resourceName = xmlGetProp(node, (xmlChar *) "ResourceName");
-			CBasicSceneNode *newNode = dynamic_cast<CBasicSceneNode *>(AddRenderableResourceToScene((char *)resourceName));	
-			CTreeNode<CSceneNode*> *newSceneNode = new CTreeNode<CSceneNode*>(newNode);
+			CBasicSceneNode *newNode = NULL;
+			CTreeNode<CSceneManager::TNodeType> *newSceneNode = NULL;
 
-			sceneNode->AddCurrentNone(newSceneNode);
+			if(!sceneNode)
+			{
+				GetSceneTree().CreateRoot(AddRenderableResourceToScene((char *)resourceName));
+				newSceneNode = GetSceneTree().GetRootElement();
+			}
+			else
+			{
+				newSceneNode = sceneNode->GetNode(sceneNode->AddNone(AddRenderableResourceToScene((char *)resourceName)));
+			}
+
+
+			newNode = dynamic_cast<CBasicSceneNode *>(newSceneNode->GetData().GetPtr());
 			for(xmlNodePtr subNode = node->children; subNode; subNode = subNode->next)
 			{
 				if(xmlIsBlankNode(subNode))
@@ -288,7 +301,7 @@ void CBasicSceneManager::DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CScen
 
 void CBasicSceneManager::DeSerializeSceneFromXmlImpl(xmlNodePtr node)
 {
-
+	DeSerializeNodeFromXml(node, GetRootElement());
 }
 
 }

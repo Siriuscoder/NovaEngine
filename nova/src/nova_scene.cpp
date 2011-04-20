@@ -41,13 +41,11 @@ CScene::~CScene()
 
 void CScene::DeleteAllScraps(void)
 {
-	stl<CSceneManager *>::list::iterator it = mScraps.begin();
+	stl<nova::CSmartPtr<CSceneManager>>::list::iterator it = mScraps.begin();
 
 	for(; it != mScraps.end(); it++)
 	{
 		(*it)->DestroyScene();
-		(*it)->ReleaseObjects();
-		delete (*it);
 	}
 
 	mScraps.clear();
@@ -68,7 +66,7 @@ void CScene::RenderAllScene(CCamera * camera, CViewPort * view)
 	if(!camera || !view)
 		return;
 
-	stl<CSceneManager *>::list::iterator it = mScraps.begin();
+	stl<nova::CSmartPtr<CSceneManager>>::list::iterator it = mScraps.begin();
 	mRenderedBatches = 0;
 	mRenderedFaces = 0;
 
@@ -94,9 +92,9 @@ void CScene::RenderAllScene(CCamera * camera, CViewPort * view)
 	}
 }
 
-CSceneManager *CScene::FindScene(const nstring &name)
+nova::CSmartPtr<CSceneManager> CScene::FindScene(const nstring &name)
 {
-	stl<CSceneManager *>::list::iterator it = mScraps.begin();
+	stl<nova::CSmartPtr<CSceneManager>>::list::iterator it = mScraps.begin();
 
 	for(; it != mScraps.end(); it++)
 	{

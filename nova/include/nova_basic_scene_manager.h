@@ -51,18 +51,12 @@ public:
 	typedef stl<TBatchStruct>::vector TBatchList;
 
 protected:
-
-	TBatchList mBatchList;
-	CMeshBoxPtr mMeshBox;
-
 	void ValidateNodeImpl(void) {}
 	void ReleaseNodeImpl(void) {}
 	void BuildNodeImpl(void) {}
 	void InValidateNodeImpl(void) {}
 	void RenderNodeImpl(void) {}
-	void PrepareNodeImpl(void) {}
-
-
+	void PrepareNodeImpl(void);
 	void PreparingBatchList(void);
 
 public:
@@ -74,6 +68,11 @@ public:
 	void SetMeshBox(CMeshBoxPtr &mesh);
 
 	inline CMeshBoxPtr GetMeshBox(void) { return mMeshBox; }
+
+protected:
+
+	TBatchList mBatchList;
+	CMeshBoxPtr mMeshBox;
 };
 
 
@@ -91,21 +90,19 @@ protected:
 
 	void BuildSceneImpl(void);
 
-	void ReleaseObjectsImpl(void);
+	nInt32 RenderNode(CTreeNode<CSceneManager::TNodeType> *node);
 
-	nInt32 RenderNode(CTreeNode<CSceneNode*> *node);
+	void PrepareNode(CTreeNode<CSceneManager::TNodeType> *node);
 
-	void PrepareNode(CTreeNode<CSceneNode*> *node);
-
-	void ReleaseNodeRenderableObject(CTreeNode<CSceneNode*> *node);
+	void BuildNode(CTreeNode<CSceneManager::TNodeType> *node);
 
 	void SerializeSceneToXmlImpl(xmlTextWriterPtr xmlWriter);
 
-	void SerializeNodeToXml(CTreeNode<CSceneNode*> *node, xmlTextWriterPtr xmlWriter);
+	void SerializeNodeToXml(CTreeNode<CSceneManager::TNodeType> *node, xmlTextWriterPtr xmlWriter);
 
 	void DeSerializeSceneFromXmlImpl(xmlNodePtr node);
 
-	void DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CSceneNode*> *sceneNode);
+	void DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CSceneManager::TNodeType> *sceneNode);
 
 public:
 
@@ -113,7 +110,7 @@ public:
 
 	~CBasicSceneManager() {}
 
-	CSceneNode *AddRenderableResourceToScene(const nstring &resource_name);
+	CSceneManager::TNodeType AddRenderableResourceToScene(const nstring &resource_name);
 
 };
 

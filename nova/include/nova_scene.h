@@ -41,7 +41,7 @@ friend CSceneManager;
 */
 protected:
 
-	stl<CSceneManager *>::list mScraps;
+	stl<nova::CSmartPtr<CSceneManager>>::list mScraps;
 	nInt32 mRenderedFaces;
 	nInt32 mRenderedBatches;
 
@@ -55,7 +55,7 @@ public:
 
 	nInt32 AddScrap(CSceneManager *manager);
 
-	CSceneManager *FindScene(const nstring &name);
+	nova::CSmartPtr<CSceneManager> FindScene(const nstring &name);
 
 	void RenderAllScene(CCamera * camera, CViewPort * view);
 

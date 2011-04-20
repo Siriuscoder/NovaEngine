@@ -116,6 +116,11 @@ void CSceneNode::BuildNode(void)
 	BuildNodeImpl();
 }
 
+bool CSceneNode::IsVisible(void)
+{
+	return  mpSceneObject.IsNull() ? false : mpSceneObject->IsVisible();
+}
+
 CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
 {
 	//ReleaseObjects(); // Error R6025: Pure virual function call ..fuck =)
@@ -172,19 +177,19 @@ nstring CSceneManager::GetSceneName(void)
 	return mSceneName;
 }
 
-CTreeNode<CSceneNode*> *CSceneManager::GetRootElement(void)
+CTreeNode<CSceneManager::TNodeType> *CSceneManager::GetRootElement(void)
 {
 	return mSceneTree.GetRootElement();
 }
 
-void CSceneManager::SetRootElement(CSceneNode *elem)
+void CSceneManager::SetRootElement(TNodeType elem)
 {
 	mSceneTree.CreateRoot(elem);
 }
 
-CTree<CSceneNode*> *CSceneManager::GetSceneTreePtr(void)
+CTree<CSceneManager::TNodeType> &CSceneManager::GetSceneTree(void)
 {
-	return &mSceneTree;
+	return mSceneTree;
 }
 
 nstring CSceneManager::GetSceneSlavesGroup(void)
@@ -247,29 +252,23 @@ void CSceneManager::DestroyScene(void)
 	mSceneTree.FreeAll();
 }
 
-void CSceneManager::DestroySceneNode(CTreeNode<CSceneNode*> *node)
+void CSceneManager::DestroySceneNode(CTreeNode<CSceneManager::TNodeType> *node)
 {
 	if(node)
 	{
 		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
 			DestroySceneNode(node->GetNode(i));
 
-		if(node->GetData())
+		if(!node->GetData().IsNull())
 		{
 			node->GetData()->ReleaseNode();
-			delete node->GetData();
 		}
 	}
 }
 
-void CSceneManager::ReleaseObjects(void)
+CSceneManager::TNodeType CSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
 {
-	ReleaseObjectsImpl();
-}
-
-CSceneNode *CSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
-{
-	return NULL;
+	return CSceneManager::TNodeType(NULL);
 }
 
 void CSceneManager::SerializeSceneToXml(xmlTextWriterPtr xmlWriter)

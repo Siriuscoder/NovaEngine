@@ -131,7 +131,7 @@ void CMesh::SortFaceIndexByMaterials(void)
 
 CBoundingBox CMesh::GenerateBoundingBox(void)
 {
-	CBoundingBox testbox;
+	CBoundingBox testBox;
 
 	nova::nReal xmax = mMeshDef.nVertexList[0].x,
 		xmin = mMeshDef.nVertexList[0].x,
@@ -151,10 +151,10 @@ CBoundingBox CMesh::GenerateBoundingBox(void)
 		zmin = std::min((*it).z, zmin);
 	}
 
-	nova::Vector3f maxpoint(xmax, ymax, zmax);
-	nova::Vector3f minpoint(xmin, ymin, zmin);
+	nova::Vector3f maxPoint(xmax, ymax, zmax);
+	nova::Vector3f minPoint(xmin, ymin, zmin);
 
-	testbox.CalcSides(minpoint, maxpoint);
+	testBox.CalcSides(minPoint, maxPoint);
 
 
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
@@ -164,7 +164,7 @@ CBoundingBox CMesh::GenerateBoundingBox(void)
 		lis->GenerateBoundingBoxListener(this);
 	}
 
-	return testbox;
+	return testBox;
 }
 
 void CMesh::FreeResourceImpl()

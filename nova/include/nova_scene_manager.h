@@ -60,7 +60,7 @@ protected:
 	bool isValidated;
 	CBoundingBox mBoundingBox;
 	CSceneManager *mParentSceneManager;
-	CRenderableObject *mpSceneObject;
+	nova::CSmartPtr<CRenderableObject> mpSceneObject;
 
 	virtual void ValidateNodeImpl(void) = 0;
 
@@ -99,7 +99,18 @@ public:
 
 	void SetBoundingBox(const CBoundingBox &box);
 
-	inline CRenderableObject* GetObjectInterface(void) { return mpSceneObject; }
+	inline nova::CSmartPtr<CRenderableObject> GetObjectInterface(void) { return mpSceneObject; }
+
+	bool IsVisible(void);
+
+	inline nova::nUInt32 GetRenderedBatchesCount(void) { return mBatchesCount; }
+
+	inline nova::nUInt32 GetRenderedFacesCount(void) { return mFacesCount; }
+
+protected:
+
+	nova::nUInt32 mBatchesCount;
+	nova::nUInt32 mFacesCount;
 };
 
 class NOVA_EXPORT CSceneManagerListener : public CEventListener
@@ -121,6 +132,9 @@ public:
 
 class NOVA_EXPORT CSceneManager : public CListenerInterface
 {
+public:
+
+	typedef nova::CSmartPtr<CSceneNode> TNodeType;
 protected:
 
 	nInt32 mRenderedBatches;
@@ -129,7 +143,7 @@ protected:
 	CCamera *mCurCamera; 
 	CViewPort *mCurView;
 	nstring mSceneName;
-	CTree<CSceneNode*> mSceneTree;
+	CTree<TNodeType> mSceneTree;
 
 	bool isEnabled;
 
@@ -145,13 +159,11 @@ protected:
 
 	virtual void BuildSceneImpl(void) = 0;
 
-	virtual void ReleaseObjectsImpl(void) = 0;
-
 	virtual void SerializeSceneToXmlImpl(xmlTextWriterPtr xmlWriter) = 0;
 
 	virtual void DeSerializeSceneFromXmlImpl(xmlNodePtr node) = 0;
 
-	void DestroySceneNode(CTreeNode<CSceneNode*> *node);
+	void DestroySceneNode(CTreeNode<TNodeType> *node);
 
 public:
 
@@ -161,13 +173,13 @@ public:
 
 	void RenderScene(CCamera *camera, CViewPort *view);
 
-	virtual CSceneNode *AddRenderableResourceToScene(const nstring &resource_name);
+	virtual CSceneManager::TNodeType AddRenderableResourceToScene(const nstring &resource_name);
 
-	CTreeNode<CSceneNode*> *GetRootElement(void);
+	CTreeNode<TNodeType> *GetRootElement(void);
 
-	void SetRootElement(CSceneNode *elem);
+	void SetRootElement(TNodeType elem);
 
-	CTree<CSceneNode*> *GetSceneTreePtr(void);
+	CTree<TNodeType> &GetSceneTree(void);
 
 	void PrepareScene(void);
 
@@ -178,8 +190,6 @@ public:
 	void BuildScene(void);
 
 	virtual void DestroyScene(void);
-
-	void ReleaseObjects(void);
 
 	nstring GetSceneName(void);
 
