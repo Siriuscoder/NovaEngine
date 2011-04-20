@@ -95,29 +95,9 @@ void CMesh::CalculateNormals(void/* Simple method */)
 	}
 }
 
-nInt32 CMesh::QComparer(const void * a, const void * b)
+bool CMesh::operator() (TTriangleInfo &left, TTriangleInfo &right)
 {
-	TTriangleInfo *right = (TTriangleInfo *)b;
-	TTriangleInfo *left = (TTriangleInfo *)a;
-
-	return left->nMatSubID - right->nMatSubID;
-}
-
-void CMesh::QSortFaces(TIndexes &index, TFacesInfo &faces)
-{
-	qsort(&(faces[0]), faces.size(), sizeof(TTriangleInfo), CMesh::QComparer);
-
-	TIndexes tmp;
-	tmp.resize(index.size());
-	std::copy(index.begin(), index.end(), tmp.begin());
-// переставляем элементы в массиве индексов
-	for(nova::nUInt32 i = 0; i < faces.size(); i++)
-	{
-		index[i] = tmp[faces[i].nFace];
-		faces[i].nFace = i;
-	}
-
-	tmp.clear();
+	return (left.nMatSubID < right.nMatSubID);
 }
 
 CMesh::TMeshContainer &CMesh::GetMeshDefinition(void)
@@ -133,7 +113,20 @@ void CMesh::SetMeshDefinition(TMeshContainer *_mesh)
 
 void CMesh::SortFaceIndexByMaterials(void)
 {
-	QSortFaces(mMeshDef.nIndexList, mMeshDef.nMeshInfoList);
+	//QSortFaces(mMeshDef.nIndexList, mMeshDef.nMeshInfoList);
+	std::sort(mMeshDef.nMeshInfoList.begin(), mMeshDef.nMeshInfoList.end(), (*this));
+
+	TIndexes tmp;
+	tmp.resize(mMeshDef.nIndexList.size());
+	std::copy(mMeshDef.nIndexList.begin(), mMeshDef.nIndexList.end(), tmp.begin());
+// переставляем элементы в массиве индексов
+	for(nova::nUInt32 i = 0; i < mMeshDef.nMeshInfoList.size(); i++)
+	{
+		mMeshDef.nIndexList[i] = tmp[mMeshDef.nMeshInfoList[i].nFace];
+		mMeshDef.nMeshInfoList[i].nFace = i;
+	}
+
+	tmp.clear();
 }
 
 CBoundingBox CMesh::GenerateBoundingBox(void)
@@ -293,6 +286,22 @@ void * CMesh::GetIndexesPointer(size_t *count)
 	}
 
 	return NULL;
+}
+
+void CMesh::GenerateMatChangesGroups(void)
+{
+	TFacesInfo::iterator it;
+	nova::nInt32 group = -1;
+
+	mMeshDef.nMatChangesGroups.clear();
+	for(it = mMeshDef.nMeshInfoList.begin(); it != mMeshDef.nMeshInfoList.end(); it++)
+	{
+		if(group != it->nMatSubID)
+		{
+			mMeshDef.nMatChangesGroups.push_back(it->nFace);
+			group = it->nMatSubID;
+		}
+	}
 }
 
 void CMesh::GenerateNormalsToFaces(void)

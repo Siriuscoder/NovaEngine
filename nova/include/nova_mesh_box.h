@@ -142,7 +142,7 @@ public:
 	typedef nova::stl<TUVMapping>::vector TTexCoords;
 	typedef nova::stl<TFaceIndex>::vector TIndexes;
 	typedef nova::stl<TTriangleInfo>::vector TFacesInfo;
-	typedef nova::stl<nInt32>::vector TSubMats;
+	typedef nova::stl<nInt32>::vector TSubMats, TMatChange;
 
 	typedef struct _MeshContainer
 	{
@@ -158,17 +158,14 @@ public:
 // Reserved buffers
 		TIndexes nTVIndexList;
 		TTexCoords nTVMappingList;
+		TMatChange nMatChangesGroups;
 // For mesh internal loading
 		CFilesPackage *pPackage;
 		bool nPackageLoading;
 		nstring nMeshfile;
 	} TMeshContainer;
 
-	static void QSortFaces(TIndexes &index, TFacesInfo &faces);
-
-private:
-
-	static nInt32 QComparer(const void * a, const void * b);
+	bool operator() (TTriangleInfo &left, TTriangleInfo &right);
 
 protected:
 
@@ -201,6 +198,8 @@ public:
 	void GenerateNormalsToFaces(void);
 
 	void SortFaceIndexByMaterials(void);
+
+	void GenerateMatChangesGroups(void);
 
 	void * GetVertexPointer(size_t *count);
 

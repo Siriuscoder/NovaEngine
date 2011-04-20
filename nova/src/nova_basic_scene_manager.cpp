@@ -59,6 +59,8 @@ void CBasicSceneManager::PrepareNode(CTreeNode<CSceneNode*> *node)
 		// Sorting faces by material id
 		// using fast qsort algorithm
 		curNode->GetMeshBox()->SortFaceIndexByMaterials();
+		// Generating mat changes groups
+		curNode->GetMeshBox()->GenerateMatChangesGroups();
 
 		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
 		{
