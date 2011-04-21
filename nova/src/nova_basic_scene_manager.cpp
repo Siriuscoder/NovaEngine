@@ -47,6 +47,10 @@ void CBasicSceneNode::PrepareNodeImpl(void)
 	mBoundingBox = mMeshBox->GenerateBoundingBox();
 }
 
+void CBasicSceneNode::BuildNodeImpl(void)
+{
+
+}
 
 CBasicSceneNode::CBasicSceneNode(CMovableObject *pObj, CSceneManager *scene) :
 	CSceneNode(pObj, scene)
@@ -68,6 +72,9 @@ void CBasicSceneManager::PrepareNode(CTreeNode<CSceneManager::TNodeType> *node)
 {
 	if(node)
 	{
+		if(!node->GetData().IsNull())
+			node->GetData()->PrepareNode();
+
 		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
 		{
 			// next layer
@@ -95,12 +102,21 @@ void CBasicSceneManager::PrepareSceneFrameImpl(void)
 
 void CBasicSceneManager::BuildSceneImpl(void)
 {
-
+	BuildNode(GetRootElement());
 }
 
 void CBasicSceneManager::BuildNode(CTreeNode<CSceneManager::TNodeType> *node)
 {
-
+	if(node)
+	{
+		if(!node->GetData().IsNull())
+			node->GetData()->BuildNode();
+		for(nInt32 i = 0; i < node->GetChildrenLen(); i++)
+		{
+			// next layer
+			BuildNode(node->GetNode(i));
+		}
+	}
 }
 
 nInt32 CBasicSceneManager::RenderNode(CTreeNode<CSceneManager::TNodeType> *node)

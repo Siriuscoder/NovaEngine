@@ -51,13 +51,19 @@ public:
 	typedef stl<TBatchStruct>::vector TBatchList;
 
 protected:
-	void ValidateNodeImpl(void) {}
-	void ReleaseNodeImpl(void) {}
-	void BuildNodeImpl(void) {}
-	void InValidateNodeImpl(void) {}
-	void RenderNodeImpl(void) {}
-	void PrepareNodeImpl(void);
-	void PreparingBatchList(void);
+	virtual void ValidateNodeImpl(void) {}
+
+	virtual void ReleaseNodeImpl(void) {}
+
+	virtual void BuildNodeImpl(void);
+
+	virtual void InValidateNodeImpl(void) {}
+
+	virtual void RenderNodeImpl(void) {}
+
+	virtual void PrepareNodeImpl(void);
+
+	virtual void PreparingBatchList(void);
 
 public:
 
@@ -80,15 +86,21 @@ class NOVA_EXPORT CBasicSceneManager : public CSceneManager
 {
 protected:
 
-	nInt32 RenderSceneImpl(void);
+	virtual nInt32 RenderSceneImpl(void);
 
-	void PrepareSceneImpl(void);
+	virtual void PrepareSceneImpl(void);
 
-	nInt32 PrepareRenderQueueImpl(void);
+	virtual nInt32 PrepareRenderQueueImpl(void);
 
-	void PrepareSceneFrameImpl(void);
+	virtual void PrepareSceneFrameImpl(void);
 
-	void BuildSceneImpl(void);
+	virtual void BuildSceneImpl(void);
+
+	virtual void SerializeSceneToXmlImpl(xmlTextWriterPtr xmlWriter);
+
+	virtual void DeSerializeSceneFromXmlImpl(xmlNodePtr node);
+
+private:
 
 	nInt32 RenderNode(CTreeNode<CSceneManager::TNodeType> *node);
 
@@ -96,11 +108,7 @@ protected:
 
 	void BuildNode(CTreeNode<CSceneManager::TNodeType> *node);
 
-	void SerializeSceneToXmlImpl(xmlTextWriterPtr xmlWriter);
-
 	void SerializeNodeToXml(CTreeNode<CSceneManager::TNodeType> *node, xmlTextWriterPtr xmlWriter);
-
-	void DeSerializeSceneFromXmlImpl(xmlNodePtr node);
 
 	void DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CSceneManager::TNodeType> *sceneNode);
 
