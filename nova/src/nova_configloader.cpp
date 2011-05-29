@@ -89,9 +89,9 @@ nInt32 CConfig::MakeTree()
 			if(line.size() > 0)
 			{
 				if(parseflag == CConfig::RECURSIVE)
-					conftree.GetRootElement()->AddCurrentNone(CParser::ParseStringRecurseTree(line));
+					conftree.GetRootElement()->AddCurrentNode(CParser::ParseStringRecurseTree(line));
 				else if(parseflag == CConfig::COMMON)
-					conftree.GetRootElement()->AddCurrentNone(CParser::ParseStringTree(line));
+					conftree.GetRootElement()->AddCurrentNode(CParser::ParseStringTree(line));
 			}	
 		}
 

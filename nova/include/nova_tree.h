@@ -79,7 +79,7 @@ public:
 	nInt32 AddNone(usertype & _data);
 
 /// \brief Добавить вершину в конец листа
-	nInt32 AddCurrentNone(CTreeNode<usertype> * node);
+	nInt32 AddCurrentNode(CTreeNode<usertype> * node);
 
 /// \brief Удалить вершину и все ее дочерние элементы, по номеру листа. 
 	void DeleteNode(nInt32 id);
@@ -187,7 +187,7 @@ template <class usertype> nInt32 CTreeNode<usertype>::AddNone(usertype &_data)
 	return ch_nodes.size()-1;
 }
 
-template <class usertype> nInt32 CTreeNode<usertype>::AddCurrentNone(CTreeNode<usertype> * node)
+template <class usertype> nInt32 CTreeNode<usertype>::AddCurrentNode(CTreeNode<usertype> * node)
 {
 	ch_nodes.push_back(node);
 
