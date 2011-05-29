@@ -71,7 +71,7 @@ public:
 /// \brief Взять дочернюю вершину по номеру в листе.
 ///
 /// \attention Будьте внимаетельны с номером!
-	CTreeNode<usertype> * GetNode(nInt32 id);
+	CTreeNode<usertype> * GetNode(nUInt32 id);
 
 /// \brief Добавить вершину в конец листа
 ///
@@ -148,14 +148,16 @@ template <class usertype> usertype CTreeNode<usertype>::GetData()
 	return data;
 }
 
-template <class usertype> CTreeNode<usertype> * CTreeNode<usertype>::GetNode(nInt32 id)
+template <class usertype> CTreeNode<usertype> * CTreeNode<usertype>::GetNode(nUInt32 id)
 {
 	if(id < 0)
 		throw NovaExp("CTreeNode::GetNode - id < 0 !!", BAD_OPERATION);
+	if(id >= ch_nodes.size())
+		return NULL;	
+
 	typename stl< CTreeNode<usertype> *>::list::iterator it;
-	//list< void *, CNovaAlloc<void *> >::iterator it;
 	it = ch_nodes.begin();
-	for(nInt32 i = 0; i < id; ++i, it++);
+	std::advance(it, id);
 
 	return *it;
 }
@@ -199,8 +201,8 @@ template <class usertype> void CTreeNode<usertype>::DeleteNode(nInt32 id)
 
 	try 
 	{
-		typename stl< CTreeNode<usertype> *>::list::iterator it;
-		it = ch_nodes.begin() + id;
+		typename stl< CTreeNode<usertype> *>::list::iterator it = ch_nodes.begin();
+		std::advance(it, id);
 		CTreeNode<usertype> * node = *it;
 		
 		node->DeleteAll();

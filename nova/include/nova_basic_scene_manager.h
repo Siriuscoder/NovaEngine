@@ -67,11 +67,9 @@ protected:
 
 public:
 
-	CBasicSceneNode(CMovableObject *pObj, CSceneManager *scene);
+	CBasicSceneNode(CMovableObject *pObj, CMeshBoxPtr &sourceMesh, CSceneManager *scene);
 
 	~CBasicSceneNode() {}
-
-	void SetMeshBox(CMeshBoxPtr &mesh);
 
 	inline CMeshBoxPtr GetMeshBox(void) { return mMeshBox; }
 
@@ -118,7 +116,7 @@ public:
 
 	~CBasicSceneManager() {}
 
-	CSceneManager::TNodeType AddRenderableResourceToScene(const nstring &resource_name);
+	CSceneManager::TNodeType CreateRenderableNodeFromResource(const nstring &resource_name);
 
 };
 

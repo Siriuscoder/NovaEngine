@@ -173,7 +173,7 @@ public:
 
 	void RenderScene(CCamera *camera, CViewPort *view);
 
-	virtual CSceneManager::TNodeType AddRenderableResourceToScene(const nstring &resource_name);
+	virtual CSceneManager::TNodeType CreateRenderableNodeFromResource(const nstring &resource_name);
 
 	CTreeNode<TNodeType> *GetRootElement(void);
 
