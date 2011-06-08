@@ -26,6 +26,11 @@
 #include "nova_gzstreams.h"
 #include "nova_fstream.h"
 
+#define NPK_VERSION(major,minor)	(nova::nUInt32)(((nova::nUInt16)major & 0xffff) | ((((nova::nUInt32)minor) & 0xffff) << 16))
+
+#define NPK_VERSION_1_0				NPK_VERSION(1, 0)
+#define NPK_VERSION_2_0				NPK_VERSION(2, 0)
+
 namespace nova
 {
 
@@ -49,7 +54,7 @@ private:
 		char package_name[50];
 	} TPackageHeader;
 
-	typedef struct FileHeader
+	typedef struct FileHeaderV10
 	{
 		nova::nUInt32 number;
 		size_t size;
@@ -57,12 +62,26 @@ private:
 		char file_name[150];
 		char ext[10];
 		char resource_group[50];
-	} TFileHeader;
+	} TFileHeaderV10;
+
+#ifdef NPK_VERSION_2_0
+	typedef struct FileHeaderV20
+	{
+		nova::nUInt32 number;
+		size_t size;
+		size_t pos;
+		char file_name[150];
+		char ext[10];
+		char resource_group[50];
+		char filePath[255];
+	} TFileHeaderV20;
+#endif
+
 #pragma pack(pop)
 
 protected:
 
-	stl<nstring, TFileHeader>::map mPackageMap;
+	stl<nstring, TFileHeaderV20>::map mPackageMap;
 	TPackageHeader mPackageHeader;
 
 	bool InFileList(const nstring & name);
@@ -83,11 +102,13 @@ public:
 
 	nova::nstring GetFileExt(const nstring & name) const ;
 
+	nova::nstring GetFilePath(const nstring & name) const ;
+
 	CMemoryBuffer GetFile(const nstring & name) const ;
 
 	bool IsOpened(void) const;
 
-	void PutFile(const CMemoryBuffer &buf , const nstring & name, const nstring & ext, const nstring &grs); 
+	void PutFile(const CMemoryBuffer &buf , const nstring & name, const nstring & ext, const nstring &grs, const nstring &inPath); 
 
 	nstring GetPackageName(void) const;
 

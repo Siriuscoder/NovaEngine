@@ -28,6 +28,7 @@ class ResourcePackerTool : public CExampleApplication
 protected:
 
 	nova::CFilesPackage mPack;
+	nova::nstring mPackageName;
 
 public:
 
@@ -42,37 +43,74 @@ public:
 		mEngine = NULL;
 	}
 
-	void StartPack(const nstring &package, const stl<nstring>::vector & files)
+#ifdef NOVA_PLATFORM_WINDOWS
+	void ListDir(const nova::nstring sdir, int count)
+	{
+		nova::nstring str, strDir;
+		struct _finddata_t c_file;
+		long hFile;
+
+		// Find first file in current directory
+		str = sdir + "\\*";
+		if( (hFile = _findfirst( str.c_str(), &c_file )) == -1L )
+			return;
+
+		do
+		{
+			//skip if find . and ..
+			if ((strcmp(c_file.name, ".") == 0 ||  strcmp(c_file.name, "..") == 0)) 
+				continue;
+
+			if (c_file.attrib & _A_SUBDIR)
+			{
+				strDir = sdir + "\\" + c_file.name;
+				ListDir(strDir.c_str(), count+1);
+				continue;
+			}
+
+			OnFile(c_file.name, sdir);
+		}
+		while(_findnext( hFile, &c_file ) == 0);
+
+		_findclose( hFile );
+		return;
+	}
+#endif
+
+	void OnFile(const nova::nstring &fileName, const nova::nstring &path)
+	{
+		nova::CFileStream packingfile;
+		nova::CMemoryBuffer buf;
+
+		cout << "Packing file " << path << "\\" << fileName << "..."; 
+		cout.flush();
+
+		packingfile.Open(path + "\\" + fileName, false, false);
+		buf.AllocBuffer(packingfile.Size());
+		packingfile.Read(buf);	
+
+		stl<nstring>::vector vfex = CStringUtils::Split(fileName, '.');
+		mPack.PutFile(buf, fileName, vfex[vfex.size()-1], mPackageName, path);
+
+		cout << "done." << std::endl;
+		buf.FreeBuffer();
+		packingfile.Close();
+	}
+
+	void StartPack(const nstring &package, const nstring &folder)
 	{
 		mPack.OpenPackage(package, true);
 
+		stl<nstring>::vector vfpk = CStringUtils::Split(package, DELIM);
+		mPackageName = vfpk[vfpk.size()-1];
 
-		for(nova::nUInt32 i = 0; i < files.size(); i++)
-		{
-			nova::CFileStream packingfile;
-			packingfile.Open(files[i], false, false);
-
-			nova::CMemoryBuffer buf;
-			buf.AllocBuffer(packingfile.Size());
-			packingfile.Read(buf);
-
-			stl<nstring>::vector vf = CStringUtils::Split(files[i], DELIM);
-			stl<nstring>::vector vfex = CStringUtils::Split(files[i], '.');
-			stl<nstring>::vector vfpk = CStringUtils::Split(package, DELIM);
-
-			mPack.PutFile(buf, vf[vf.size()-1], vfex[vfex.size()-1], vfpk[vfpk.size()-1]);
-
-			cout << "=";
-			buf.FreeBuffer();
-			packingfile.Close();
-		}
+		ListDir(folder, 0);
 
 		mPack.ClosePackage();
-
 		cout << endl << endl << "Packing complete.." << endl;
 	}
 
-	void StartUnpack(const nstring &package)
+	void StartUnpack(const nstring &package, const nstring &folder)
 	{
 		mPack.OpenPackage(package, false);
 		stl<nstring>::vector vf = mPack.GetFileList();
@@ -84,7 +122,7 @@ public:
 			nova::CMemoryBuffer buf = mPack.GetFile(vf[i]);
 
 			nova::CFileStream stream;
-			stream.Open(vf[i], true, false);
+			stream.Open(folder + "\\" + vf[i], true, false);
 			stream.Write(buf);
 
 			buf.FreeBuffer();
@@ -96,12 +134,12 @@ public:
 		cout << endl << "Done.." << endl;
 	}
 
-	void Launch(const nstring &package, const stl<nstring>::vector & files, bool extract)
+	void Launch(const nstring &package, const nstring &folder, bool extract)
 	{
 		if(extract)
-			StartUnpack(package);
+			StartUnpack(package, folder);
 		else
-			StartPack(package, files);
+			StartPack(package, folder);
 	}
 
 	void PrintHelp(void)
@@ -120,7 +158,6 @@ ENTRY_POINT
 /////// Parsing unput args //////////////
 		CParser rParser;
 		stl<nstring>::vector args;
-		stl<nstring>::vector files;
 		cout << "Hello, this is Resource Packing tool for Nova engine.." << endl;
 
 		{
@@ -139,25 +176,22 @@ ENTRY_POINT
 		{
 			packer.PrintHelp();
 		}
-		else if(args[0] == nstring("-pack"))
+		else if(args[0] == "-pack")
 		{
-			if(args.size() >= 3)
+			if(args.size() == 3)
 			{
-				cout << "Trying to create pack " << args[1].c_str() << "..." << endl;
-				for(nova::nUInt32 i = 2; i < args.size(); i++)
-					files.push_back(args[i]);
-					
-				packer.Launch(args[1], files, false);
+				cout << "Trying to create package " << args[1].c_str() << "..." << endl;
+				packer.Launch(args[1], args[2], false);
 			}
 			else
 				packer.PrintHelp();
 		}
-		else if(args[0] == nstring("-unpack"))
+		else if(args[0] == "-unpack")
 		{
-			if(args.size() == 2)
+			if(args.size() == 3)
 			{
 				cout << "Trying to unpack " << args[1].c_str() << "..." << endl;
-				packer.Launch(args[1], files, true);
+				packer.Launch(args[1], args[2], true);
 			}
 			else
 				packer.PrintHelp();
