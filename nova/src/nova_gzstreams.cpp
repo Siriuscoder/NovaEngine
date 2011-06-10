@@ -194,18 +194,24 @@ size_t CGZFileStream::Read (const CMemoryBuffer & dest)
 
 	nInt32 block = 0xFFFF;
 	nova::nUInt32 len = dest.GetBufferSize();
-	nova::nUInt32 slen = 0;
+	nova::nUInt32 slen = 0;		
+	nova::nUInt32 ilen = 0;
+	nova::nUInt32 iread = 0;
 
 	while(slen < len)
 	{
-		nova::nUInt32 ilen = 0;
+		ilen = 0;
 		if((slen + block) > len)
 			ilen = len - slen;
 		else
 			ilen = block;
 
 		void * pchunk = ((nova::nByte *)dest.GetBegin()) + slen;
-		slen += gzread(mGZFile, pchunk, ilen);
+		iread = gzread(mGZFile, pchunk, ilen);
+		slen += iread;
+
+		if(!iread)
+			break;
 	}
 
 	return slen;

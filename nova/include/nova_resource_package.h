@@ -70,7 +70,7 @@ private:
 		nova::nUInt32 number;
 		size_t size;
 		size_t pos;
-		char file_name[150];
+		char file_name[100];
 		char ext[10];
 		char resource_group[50];
 		char filePath[255];
@@ -100,15 +100,15 @@ public:
 
 	nova::stl<nstring>::vector GetFileList(void) const;
 
-	nova::nstring GetFileExt(const nstring & name) const ;
+	nova::nstring GetFileExt(const nstring & fullName) const ;
 
-	nova::nstring GetFilePath(const nstring & name) const ;
+	nova::nstring GetFileName(const nstring & fullName) const ;
 
-	CMemoryBuffer GetFile(const nstring & name) const ;
+	CMemoryBuffer GetFile(const nstring & fullName) const ;
 
 	bool IsOpened(void) const;
 
-	void PutFile(const CMemoryBuffer &buf , const nstring & name, const nstring & ext, const nstring &grs, const nstring &inPath); 
+	void PutFile(const CMemoryBuffer &buf , const nstring & fullName, const nstring & ext, const nstring &grs); 
 
 	nstring GetPackageName(void) const;
 

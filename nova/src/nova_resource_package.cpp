@@ -21,6 +21,7 @@
  ***************************************************************************/
 #include "nova_stable_precompiled_headers.h"
 
+#include "nova_string_utils.h"
 #include "nova_resource_package.h"
 
 #define NPK_MAIN_SIGNATURE			0x10AF00DF
@@ -88,13 +89,13 @@ void CFilesPackage::OpenPackage(CDataStream *pkgstream, bool write)
 				throw NOVA_EXP("CFilesPackage::OpenPackage: package unknown version signature!", BAD_OPERATION);
 
 			mPackageName.append(header.package_name);
+			TFileHeaderV20 f_header;
 			while(!mFile->Eof())
 			{
-				TFileHeaderV20 f_header;
 				mFile->Read(&f_header, sizeof(TFileHeaderV20));
 
 				std::pair<nstring, TFileHeaderV20> pf;
-				pf.first = nstring(f_header.file_name);
+				pf.first = nstring(f_header.filePath);
 				pf.second = f_header;
 				mPackageMap.insert(pf);
 
@@ -163,31 +164,31 @@ nova::stl<nstring>::vector CFilesPackage::GetFileList(void) const
 	return result;
 }
 
-nova::nstring CFilesPackage::GetFilePath(const nstring & name) const
+nova::nstring CFilesPackage::GetFileName(const nstring & fullName) const
 {
 	stl<nstring, TFileHeaderV20>::map::const_iterator it;
 	if(!mIsOpened)
 		throw NOVA_EXP("CFilesPackage::GetFilePath: package not opened, open package file first!", BAD_OPERATION);
 
-	if((it = mPackageMap.find(name)) != mPackageMap.end())
-		return nstring((*it).second.filePath);
+	if((it = mPackageMap.find(fullName)) != mPackageMap.end())
+		return nstring((*it).second.file_name);
 
 	return nstring();
 }
 
-nova::nstring CFilesPackage::GetFileExt(const nstring & name) const
+nova::nstring CFilesPackage::GetFileExt(const nstring & fullName) const
 {
 	stl<nstring, TFileHeaderV20>::map::const_iterator it;
 	if(!mIsOpened)
 		throw NOVA_EXP("CFilesPackage::GetFileExt: package not opened, open package file first!", BAD_OPERATION);
 
-	if((it = mPackageMap.find(name)) != mPackageMap.end())
+	if((it = mPackageMap.find(fullName)) != mPackageMap.end())
 		return nstring((*it).second.ext);
 
 	return nstring();
 }
 
-CMemoryBuffer CFilesPackage::GetFile(const nstring & name) const 
+CMemoryBuffer CFilesPackage::GetFile(const nstring & fullName) const 
 {
 	stl<nstring, TFileHeaderV20>::map::const_iterator it;
 	TFileHeaderV20 header;
@@ -197,7 +198,7 @@ CMemoryBuffer CFilesPackage::GetFile(const nstring & name) const
 	if(mWritePackage)
 		throw NOVA_EXP("CFilesPackage::GetFile: package opened for writing!", BAD_OPERATION);
 
-	if((it = mPackageMap.find(name)) != mPackageMap.end())
+	if((it = mPackageMap.find(fullName)) != mPackageMap.end())
 		header = (*it).second;
 	else
 		return CMemoryBuffer();
@@ -225,23 +226,30 @@ bool CFilesPackage::InFileList(const nstring & name)
 	return false;
 }
 
-void CFilesPackage::PutFile(const CMemoryBuffer &buf , const nstring & name, const nstring & ext, const nstring &grs, const nstring &inPath)
+void CFilesPackage::PutFile(const CMemoryBuffer &buf , const nstring & fullName, const nstring & ext, const nstring &grs)
 {
 	TFileHeaderV20 fheader;
 	memset(&fheader, 0, sizeof(TFileHeaderV20));
 
-	strcpy(fheader.file_name, name.c_str());
+#ifdef NOVA_PLATFORM_WINDOWS
+	stl<nstring>::vector vfpk = CStringUtils::Split(fullName, '\\');
+	strcpy(fheader.file_name, vfpk[vfpk.size()-1].c_str());
+#else
+	stl<nstring>::vector vfpk = CStringUtils::Split(package, '/');
+	strcpy(fheader.file_name, vfpk[vfpk.size()-1].c_str());
+#endif
+
 	strcpy(fheader.ext, ext.c_str());
 	strcpy(fheader.resource_group, grs.c_str());
-	strcpy(fheader.filePath, inPath.c_str());
+	strcpy(fheader.filePath, fullName.c_str());
 
 	if(!mIsOpened)
 		throw NOVA_EXP("CFilesPackage::PutFile: package not opened, open package file first!", BAD_OPERATION);
 	if(!mWritePackage)
 		throw NOVA_EXP("CFilesPackage::PutFile: package opened for reading!", BAD_OPERATION);	
 
-	if(InFileList(name))
-		return;//throw NOVA_EXP("CFilesPackage::PutFile: package already contains this name!", BAD_OPERATION);	
+	if(InFileList(fullName))
+		throw NOVA_EXP("CFilesPackage::PutFile: package already contains this name!", BAD_OPERATION);	
 
 	fheader.pos = mFile->Tell() + sizeof(TFileHeaderV20);
 	fheader.number = mPackageMap.size() + 1;
@@ -251,7 +259,7 @@ void CFilesPackage::PutFile(const CMemoryBuffer &buf , const nstring & name, con
 	mFile->Write(buf);
 
 	std::pair<nstring, TFileHeaderV20> pf;
-	pf.first = name;
+	pf.first = fullName;
 	pf.second = fheader;
 	mPackageMap.insert(pf);
 

@@ -81,16 +81,17 @@ public:
 	{
 		nova::CFileStream packingfile;
 		nova::CMemoryBuffer buf;
+		nova::nstring fullName = path + DELIM + fileName;
 
-		cout << "Packing file " << path << "\\" << fileName << "..."; 
+		cout << "Packing file " << path << DELIM << fileName << "..."; 
 		cout.flush();
 
-		packingfile.Open(path + "\\" + fileName, false, false);
+		packingfile.Open(fullName, false, false);
 		buf.AllocBuffer(packingfile.Size());
 		packingfile.Read(buf);	
 
 		stl<nstring>::vector vfex = CStringUtils::Split(fileName, '.');
-		mPack.PutFile(buf, fileName, vfex[vfex.size()-1], mPackageName, path);
+		mPack.PutFile(buf, fullName, vfex[vfex.size()-1], mPackageName);
 
 		cout << "done." << std::endl;
 		buf.FreeBuffer();
@@ -115,14 +116,16 @@ public:
 		mPack.OpenPackage(package, false);
 		stl<nstring>::vector vf = mPack.GetFileList();
 		cout << endl << "File list unpacked successfully, begin saving files -> " << endl;
+		nova::CFileStream stream;
+		nova::nstring fileName;
 
 		for(nova::nUInt32 i = 0; i < vf.size(); i++)
 		{
-			cout << "Unpacking file: " << vf[i] << endl;
+			fileName = mPack.GetFileName(vf[i]);
+			cout << "Unpacking file: " << fileName << ", internal path " << vf[i] << endl;
 			nova::CMemoryBuffer buf = mPack.GetFile(vf[i]);
 
-			nova::CFileStream stream;
-			stream.Open(folder + "\\" + vf[i], true, false);
+			stream.Open(folder + "\\" + fileName, true, false);
 			stream.Write(buf);
 
 			buf.FreeBuffer();
