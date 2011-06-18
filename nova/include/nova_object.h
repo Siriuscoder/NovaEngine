@@ -100,6 +100,11 @@ public:
 		return mVisible;
 	}
 
+	inline nova::Matrix4f & GetMatrix(void)
+	{
+		return mLocalMatrix;
+	}
+
 	void SetEnabled(bool flag);
 
 	void SetVisible(bool flag);

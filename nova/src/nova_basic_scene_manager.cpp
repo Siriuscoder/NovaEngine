@@ -52,15 +52,15 @@ void CBasicSceneNode::BuildNodeImpl(void)
 
 }
 
-CBasicSceneNode::CBasicSceneNode(CMovableObject *pObj, CSceneManager *scene) :
-	CSceneNode(pObj, scene)
+void CBasicSceneNode::PreparingBatchList(void)
 {
 
 }
 
-void CBasicSceneNode::SetMeshBox(CMeshBoxPtr &mesh)
+CBasicSceneNode::CBasicSceneNode(CMovableObject *pObj, CMeshBoxPtr &sourceMesh, CSceneManager *scene) :
+	CSceneNode(pObj, scene), mMeshBox(sourceMesh)
 {
-	mMeshBox = mesh;
+
 }
 
 nInt32 CBasicSceneManager::RenderSceneImpl(void)
@@ -88,6 +88,8 @@ void CBasicSceneManager::PrepareSceneImpl(void)
 {
 	PrepareNode(GetRootElement());
 }
+
+
 
 nInt32 CBasicSceneManager::PrepareRenderQueueImpl(void)
 {
@@ -144,16 +146,14 @@ nInt32 CBasicSceneManager::RenderNode(CTreeNode<CSceneManager::TNodeType> *node)
 	return nodesRenderedCount;
 }
 
-CSceneManager::TNodeType CBasicSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
+CSceneManager::TNodeType CBasicSceneManager::CreateRenderableNodeFromResource(const nstring &resource_name)
 {
 	CMeshBoxPtr mesh = CMeshManager::GetSingelton().GetResourceFromHash(resource_name);
 	if(!mesh.IsNull())
 	{
-		CSceneManager::TNodeType target(new CBasicSceneNode(new CMovableObject(mesh->GetResName(), GetSceneSlavesGroup()), this));
+		CSceneManager::TNodeType target(new CBasicSceneNode(new CMovableObject(mesh->GetResName(), GetSceneSlavesGroup()), mesh, this));
 
-		if(!target.IsNull())
-			dynamic_cast<CBasicSceneNode *>(target.GetPtr())->SetMeshBox(mesh);
-		else
+		if(target.IsNull())
 			throw NOVA_EXP("CBasicSceneManager::AddRenderableResourceToScene: target is bad pointer", MEM_ERROR);
 
 		return target;
@@ -167,12 +167,12 @@ void CBasicSceneManager::SerializeNodeToXml(CTreeNode<CSceneManager::TNodeType> 
 	if(!node)
 		return;
 
-	CBasicSceneNode *curNode = dynamic_cast<CBasicSceneNode *>(node->GetData().GetPtr());
-	if(curNode)
+	//CBasicSceneNode *curNode = dynamic_cast<CBasicSceneNode *>(node->GetData().GetPtr());
+	if(!node->GetData().IsNull())
 	{
 		if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "MeshObject") < 0) // NovaScene doc
 			NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
-		if(xmlTextWriterWriteAttribute(xmlWriter, BAD_CAST "ResourceName", BAD_CAST curNode->GetMeshBox()->GetMeshDefinition().nName.c_str()) < 0)
+		if(xmlTextWriterWriteAttribute(xmlWriter, BAD_CAST "ResourceName", BAD_CAST node->GetData()->GetObjectInterface()->GetObjectName().c_str()) < 0)
 			NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
 
 		if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "Orientation") < 0) // NovaScene doc
@@ -187,7 +187,7 @@ void CBasicSceneManager::SerializeNodeToXml(CTreeNode<CSceneManager::TNodeType> 
 			for(nova::nUInt32 j = 0; j < 4; j++)
 			{
 				nstring colName = "C" + CStringUtils::IntToString(j);
-				if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST colName.c_str(), "%f", curNode->GetMeshBox()->GetMeshDefinition().nTMatrix[i][j]) < 0)
+				if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST colName.c_str(), "%f", node->GetData()->GetObjectInterface()->GetMatrix()[i][j]) < 0)
 					NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
 			}
 			xmlTextWriterEndElement(xmlWriter);
@@ -199,7 +199,7 @@ void CBasicSceneManager::SerializeNodeToXml(CTreeNode<CSceneManager::TNodeType> 
 		SerializeNodeToXml(node->GetNode(i), xmlWriter);
 	}
 	
-	if(curNode)
+	if(!node->GetData().IsNull())
 		xmlTextWriterEndElement(xmlWriter);
 }
 
@@ -221,21 +221,18 @@ void CBasicSceneManager::DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CScen
 		if(!xmlStrcmp(node->name, (xmlChar *)"MeshObject"))
 		{
 			xmlChar * resourceName = xmlGetProp(node, (xmlChar *) "ResourceName");
-			CBasicSceneNode *newNode = NULL;
 			CTreeNode<CSceneManager::TNodeType> *newSceneNode = NULL;
 
 			if(!sceneNode)
 			{
-				GetSceneTree().CreateRoot(AddRenderableResourceToScene((char *)resourceName));
+				GetSceneTree().CreateRoot(CreateRenderableNodeFromResource((char *)resourceName));
 				newSceneNode = GetSceneTree().GetRootElement();
 			}
 			else
 			{
-				newSceneNode = sceneNode->GetNode(sceneNode->AddNone(AddRenderableResourceToScene((char *)resourceName)));
+				newSceneNode = sceneNode->GetNode(sceneNode->AddNone(CreateRenderableNodeFromResource((char *)resourceName)));
 			}
 
-
-			newNode = dynamic_cast<CBasicSceneNode *>(newSceneNode->GetData().GetPtr());
 			for(xmlNodePtr subNode = node->children; subNode; subNode = subNode->next)
 			{
 				if(xmlIsBlankNode(subNode))
@@ -256,49 +253,49 @@ void CBasicSceneManager::DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CScen
 						 
 						if(!xmlStrcmp(orientNode->name, (xmlChar *)"Row0"))
 						{
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[0][0] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[0][0] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C0"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[0][1] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[0][1] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C1"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[0][2] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[0][2] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C2"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[0][3] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[0][3] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C3"));
 						}
 
 						if(!xmlStrcmp(orientNode->name, (xmlChar *)"Row1"))
 						{
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[1][0] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[1][0] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C0"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[1][1] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[1][1] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C1"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[1][2] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[1][2] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C2"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[1][3] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[1][3] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C3"));
 						}
 
 						if(!xmlStrcmp(orientNode->name, (xmlChar *)"Row2"))
 						{
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[2][0] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[2][0] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C0"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[2][1] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[2][1] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C1"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[2][2] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[2][2] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C2"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[2][3] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[2][3] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C3"));
 						}
 
 						if(!xmlStrcmp(orientNode->name, (xmlChar *)"Row3"))
 						{
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[3][0] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[3][0] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C0"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[3][1] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[3][1] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C1"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[3][2] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[3][2] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C2"));
-							newNode->GetMeshBox()->GetMeshDefinition().nTMatrix[3][3] = 
+							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[3][3] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C3"));
 						}
 					}

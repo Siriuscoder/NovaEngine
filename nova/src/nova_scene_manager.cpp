@@ -266,7 +266,7 @@ void CSceneManager::DestroySceneNode(CTreeNode<CSceneManager::TNodeType> *node)
 	}
 }
 
-CSceneManager::TNodeType CSceneManager::AddRenderableResourceToScene(const nstring &resource_name)
+CSceneManager::TNodeType CSceneManager::CreateRenderableNodeFromResource(const nstring &resource_name)
 {
 	return CSceneManager::TNodeType(NULL);
 }
