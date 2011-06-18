@@ -23,46 +23,35 @@
 namespace nova
 {
 
-CCamera::CCamera() : mProjectionChanged(false),
+CCamera::CCamera() : mProjectionChanged(true),
 	mParentView(NULL), mAspect(1.3333333f), mFOV(90), mZFar(-1), mZNear(1),
-	mLeft(0), mRight(0), mBottom(0), mTop(0), mPolygonMode(PM_SOLID), mSide(FS_FRONT_AND_BACK)
-
+	mLeft(0), mRight(0), mBottom(0), mTop(0), mPolygonMode(PM_SOLID), mSide(FS_FRONT_AND_BACK),
+	mOrientation(nova::Quaternionf::IDENTITY), mDirection( nova::Vector3f::ZERO),
+	mType(PT_PERSPECTIVE)
 {
-	mOrientation = nova::Quaternionf::IDENTITY;
-	mDirection = nova::Vector3f::ZERO;
-	mType = PT_PERSPECTIVE;
-	mProjectionChanged = true;
-
 	LOG_MESSAGE("Creating perspective camera...");
 }
 
 CCamera::CCamera(nova::nReal Left, nova::nReal Right, nova::nReal Bottom, nova::nReal Top,
 				 nova::nReal ZFar, nova::nReal ZNear, CViewPort * mParentView) : 
-	mProjectionChanged(false), mParentView(mParentView), 
+	mProjectionChanged(true), mParentView(mParentView), 
 	mAspect(1.3333333f), mFOV(90), mZFar(ZFar), mZNear(ZNear),
 	mLeft(Left), mRight(Right), mBottom(Bottom), mTop(Top), mPolygonMode(PM_SOLID),
-	mSide(FS_FRONT_AND_BACK)
+	mSide(FS_FRONT_AND_BACK), mOrientation(nova::Quaternionf::IDENTITY), mDirection( nova::Vector3f::ZERO),
+	mType(PT_ORTHO)
 {
-	mOrientation = nova::Quaternionf::IDENTITY;
-	mDirection = nova::Vector3f::ZERO;
-	mType = PT_ORTHO;
-	mProjectionChanged = true;
-
 	LOG_MESSAGE("Creating ORTHO camera...");
 }
 
 CCamera::CCamera(nova::nReal FOV, nova::nReal ZFar, 
 				 nova::nReal ZNear, CViewPort * mParentView) :
-	mProjectionChanged(false), mParentView(mParentView), 
+	mProjectionChanged(true), mParentView(mParentView), 
 	mFOV(FOV), mZFar(ZFar), mZNear(ZNear),
 	mLeft(0), mRight(0), mBottom(0), mTop(0), mPolygonMode(PM_SOLID),
-	mSide(FS_FRONT_AND_BACK)
+	mSide(FS_FRONT_AND_BACK), mOrientation(nova::Quaternionf::IDENTITY), mDirection( nova::Vector3f::ZERO),
+	mType(PT_ORTHO)
 {
-	mOrientation = nova::Quaternionf::IDENTITY;
-	mType = PT_PERSPECTIVE;
 	mAspect = (nova::nReal)mParentView->GetActualWidth() / (nova::nReal)mParentView->GetActualHeight();
-	mProjectionChanged = true;
-
 	LOG_MESSAGE("Creating perspective camera...");
 }
 
