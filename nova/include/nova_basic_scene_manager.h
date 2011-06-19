@@ -63,7 +63,7 @@ protected:
 
 	virtual void PrepareNodeImpl(void);
 
-	virtual void PreparingBatchList(void) {};
+	virtual void PreparingBatchList(void);
 
 public:
 
