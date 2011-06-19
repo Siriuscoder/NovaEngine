@@ -58,6 +58,7 @@ public:
 
 	static nstring ToLowerCase(const nstring &str);
 
+	static nstring ReplaceCharaster(const nstring &str, char a, char b);
 };
 
 }

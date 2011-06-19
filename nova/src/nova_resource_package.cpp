@@ -229,19 +229,20 @@ bool CFilesPackage::InFileList(const nstring & name)
 void CFilesPackage::PutFile(const CMemoryBuffer &buf , const nstring & fullName, const nstring & ext, const nstring &grs)
 {
 	TFileHeaderV20 fheader;
+	nova::nstring interFullName;
 	memset(&fheader, 0, sizeof(TFileHeaderV20));
 
 #ifdef NOVA_PLATFORM_WINDOWS
 	stl<nstring>::vector vfpk = CStringUtils::Split(fullName, '\\');
-	strcpy(fheader.file_name, vfpk[vfpk.size()-1].c_str());
+	interFullName = CStringUtils::ReplaceCharaster(fullName, '\\', '/');
 #else
 	stl<nstring>::vector vfpk = CStringUtils::Split(package, '/');
-	strcpy(fheader.file_name, vfpk[vfpk.size()-1].c_str());
 #endif
 
+	strcpy(fheader.file_name, vfpk[vfpk.size()-1].c_str());
 	strcpy(fheader.ext, ext.c_str());
 	strcpy(fheader.resource_group, grs.c_str());
-	strcpy(fheader.filePath, fullName.c_str());
+	strcpy(fheader.filePath, interFullName.c_str());
 
 	if(!mIsOpened)
 		throw NOVA_EXP("CFilesPackage::PutFile: package not opened, open package file first!", BAD_OPERATION);

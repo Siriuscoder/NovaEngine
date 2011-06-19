@@ -63,6 +63,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Nova.lib"
+				OutputFile="$(OutDir)\pkgz.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\nova\lib;..\..\bin\debug"
 				GenerateDebugInformation="true"
@@ -149,6 +150,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Nova.lib"
+				OutputFile="$(OutDir)\pkgz.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\nova\lib;..\..\bin\release"
 				GenerateDebugInformation="true"

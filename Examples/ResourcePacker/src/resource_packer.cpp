@@ -43,9 +43,10 @@ public:
 		mEngine = NULL;
 	}
 
-#ifdef NOVA_PLATFORM_WINDOWS
+
 	void ListDir(const nova::nstring sdir, int count)
 	{
+#ifdef NOVA_PLATFORM_WINDOWS
 		nova::nstring str, strDir;
 		struct _finddata_t c_file;
 		long hFile;
@@ -74,8 +75,8 @@ public:
 
 		_findclose( hFile );
 		return;
-	}
 #endif
+	}
 
 	void OnFile(const nova::nstring &fileName, const nova::nstring &path)
 	{
@@ -86,7 +87,7 @@ public:
 		cout << "Packing file " << path << DELIM << fileName << "..."; 
 		cout.flush();
 
-		packingfile.Open(fullName, false, false);
+		packingfile.Open(fullName);
 		buf.AllocBuffer(packingfile.Size());
 		packingfile.Read(buf);	
 
@@ -125,7 +126,7 @@ public:
 			cout << "Unpacking file: " << fileName << ", internal path " << vf[i] << endl;
 			nova::CMemoryBuffer buf = mPack.GetFile(vf[i]);
 
-			stream.Open(folder + "\\" + fileName, true, false);
+			stream.Open(folder + DELIM + fileName, true, false);
 			stream.Write(buf);
 
 			buf.FreeBuffer();

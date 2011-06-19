@@ -162,4 +162,15 @@ nstring CStringUtils::ToLowerCase(const nstring &str)
 	return lower.str();
 }
 
+nstring CStringUtils::ReplaceCharaster(const nstring &str, char a, char b)
+{
+	nova::nstring dest = str;
+	size_t pos = nstring::npos;
+
+	while((pos = dest.find(a)) != nstring::npos)
+		dest.replace(pos, 1, &b, 1);
+
+	return dest;
+}
+
 }
