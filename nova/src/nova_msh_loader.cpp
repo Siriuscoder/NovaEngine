@@ -96,11 +96,13 @@ CMesh::TMeshContainer &CGlobalMshLoader::LoadMeshFromStream(CDataStream *stream)
 		{
 			stream->Read(&size, sizeof(nUInt32));
 			gMeshBuffer.nMeshInfoList.resize(size);
+			nUInt16 pp;
 
 			for(nUInt32 i = 0; i < size; i++)
 			{
 				gMeshBuffer.nMeshInfoList[i].nFace = i;
-				stream->Read((void *)&(gMeshBuffer.nMeshInfoList[i].nMatSubID), sizeof(nUInt16));
+				stream->Read((void *)&(pp), sizeof(nUInt16));
+				gMeshBuffer.nMeshInfoList[i].nMatSubID = pp;
 			}
 		}
 	}

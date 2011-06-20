@@ -53,6 +53,7 @@ public:
 		for(nova::nUInt32 i = 0; i < meshes.size(); i++)
 		{
 			nova::CMesh::TMeshContainer *meshInfo = mLoader.GetMesh(meshes[i]);
+
 			if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "MeshObject") < 0) // NovaScene doc
 				NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
 			if(xmlTextWriterWriteAttribute(xmlWriter, BAD_CAST "ResourceName", BAD_CAST meshInfo->nName.c_str()) < 0)
@@ -77,6 +78,35 @@ public:
 			}
 
 			xmlTextWriterEndElement(xmlWriter);
+
+			// Sorting faces by material id
+			// using fast qsort algorithm
+			nova::CMeshBoxPtr meshPtr = nova::CMeshManager::GetSingelton().CreateMesh(meshInfo, "default");
+			if(meshPtr.IsNull())
+				continue;
+
+			meshPtr->SortFaceIndexByMaterials();
+			meshPtr->GenerateMatChangesGroups();
+
+			if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "Sub-materials") < 0) // NovaScene doc
+				NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+			for(nova::nUInt32 i = 0; i < meshPtr->GetMeshDefinition().nMatChangesGroups.size(); i++)
+			{
+				if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "Material") < 0) // NovaScene doc
+					NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
+				if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST "MatName", "%s", 
+					meshPtr->GetMeshDefinition().nMeshInfoList[meshPtr->GetMeshDefinition().nMatChangesGroups[i]].nMatName.c_str()) < 0)
+					NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+				if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST "SubMatID", "%d", 
+					meshPtr->GetMeshDefinition().nMeshInfoList[meshPtr->GetMeshDefinition().nMatChangesGroups[i]].nMatSubID) < 0)
+					NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
+
+				xmlTextWriterEndElement(xmlWriter);
+			}
+
+			xmlTextWriterEndElement(xmlWriter);
+			nova::CResourceManager::UnloadResourceFromHash(meshInfo->nName);
+
 			xmlTextWriterEndElement(xmlWriter);
 		}
 	}
@@ -99,7 +129,7 @@ public:
 			NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
 
 		xmlTextWriterWriteComment(xmlWriter, BAD_CAST "Scene resource lister");
-		if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "SceneRecources") < 0) // NovaScene doc
+		if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "SceneResources") < 0) // NovaScene doc
 			NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
 
 		for(nova::nUInt32 i = 0; i < mFiles.size(); i++)
@@ -187,22 +217,33 @@ public:
 
 	void SerializeMeshObject(const nstring &meshName, nova::CMesh::TMeshContainer &meshInfo, const nstring &destFolder)
 	{
-		meshInfo.nMeshfile = meshName + ".msh";
+		meshInfo.nMeshfile = destFolder + meshName + ".msh";
 		nova::CMeshBoxPtr meshPtr = nova::CMeshManager::GetSingelton().CreateMesh(&meshInfo, "default");
 
 		if(!meshPtr.IsNull())
 		{
 			nstring xmlMeshFileName = destFolder + meshName + ".xml";
-			nstring meshFileName = destFolder + meshInfo.nMeshfile;
 
-			std::cout << "Saving mesh object to file " << meshFileName << "..."; std::cout.flush();
-			CGlobalMshLoader::SaveMeshToFile(meshInfo, meshFileName);
-			mFiles.push_back(meshFileName);
+			std::cout << "Optimizing mesh.."; std::cout.flush();
+			// Preparing mesh
+			// Generating normals to faces and sub mats info
+			meshPtr->GenerateNormalsToFaces();
+			if(meshPtr->GetMeshDefinition().nNormalList.size() == 0)
+			//Generating normals to vertexes
+				meshPtr->CalculateNormals();
+
+			// Sorting faces by material id
+			// using fast qsort algorithm
+			meshPtr->SortFaceIndexByMaterials();
+
+			std::cout << "Saving mesh object to file " << meshInfo.nMeshfile << "..."; std::cout.flush();
+			CGlobalMshLoader::SaveMeshToFile(meshPtr->GetMeshDefinition(), meshPtr->GetMeshDefinition().nMeshfile);
+			mFiles.push_back(meshInfo.nMeshfile);
 			std::cout << "Done" << std::endl; std::cout.flush();
 
 			meshPtr->SerializeToXmlFile(xmlMeshFileName);
 			mFiles.push_back(xmlMeshFileName);
-			nova::CResourceManager::UnloadResourceFromHash(meshInfo.nName);
+			nova::CResourceManager::UnloadResourceFromHash(meshPtr->GetMeshDefinition().nName);
 		}
 	}
 
@@ -225,7 +266,7 @@ public:
 	void CopyAndSerializeImage(const nstring &imageName, const nstring &imageFile, const nstring &destFolder, bool copyLocal)
 	{
 		nova::CImagePtr imagePtr = nova::CImageManager::GetSingelton().CreateNewImage(imageName, 
-			"default", imageFile, "DevIL", nova::CImageFormats::NF_DEFAULT);
+			"default", imageFile, nova::SF_UNKNOWN, "DevIL", nova::CImageFormats::NF_DEFAULT);
 
 		if(!imagePtr.IsNull())
 		{

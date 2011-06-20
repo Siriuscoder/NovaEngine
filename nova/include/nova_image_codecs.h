@@ -32,6 +32,7 @@ typedef stl<nstring>::vector StringList;
 
 enum ESaveFormats
 {
+SF_UNKNOWN = 0x0,
 SF_BMP = 0xCC,
 SF_ICO,
 SF_JPG,

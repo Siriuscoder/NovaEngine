@@ -53,6 +53,8 @@ public:
 
 	void DeleteAllScraps(void);
 
+	void BuildAllScraps(void);
+
 	nInt32 AddScrap(CSceneManager *manager);
 
 	nova::CSmartPtr<CSceneManager> FindScene(const nstring &name);
@@ -63,13 +65,13 @@ public:
 
 	nInt32 GetRenderedFaces(void);
 
-	nInt32 LoadSceneForce(const CFilesPackage &rPack, bool withResorces);
+	nInt32 LoadSceneForce(const CFilesPackage &rPack, const nstring &pckFile, bool withResorces = true);
 
-	nInt32 LoadSceneForce(const nstring &pckFile, bool withResorces);
+	nInt32 LoadSceneForce(const nstring &pckFile, bool withResorces = true);
 
-	nInt32 LoadSceneInBackgroundMode(const CFilesPackage &rPack, bool withResorces);
+	nInt32 LoadSceneInBackgroundMode(const CFilesPackage &rPack, const nstring &pckFile, bool withResorces = true);
 
-	nInt32 LoadSceneInBackgroundMode(const nstring &pckFile, bool withResorces);
+	nInt32 LoadSceneInBackgroundMode(const nstring &pckFile, bool withResorces = true);
 };
 
 }

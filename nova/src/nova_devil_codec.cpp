@@ -282,7 +282,6 @@ void CDevILCodec::DecodeFromFile(const nstring & filename, CImage *image,
 	image->GetImageSource().mHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 	image->GetImageSource().mWidth = ilGetInteger(IL_IMAGE_WIDTH);
 	image->GetImageSource().mDepth = ilGetInteger(IL_IMAGE_DEPTH);
-
 //	this->size = ilGetInteger(IL_IMAGE_SIZE_OF_DATA);
 	if(format == CImageFormats::NF_DEFAULT)
 	{

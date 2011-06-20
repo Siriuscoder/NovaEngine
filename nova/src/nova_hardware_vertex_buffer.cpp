@@ -76,7 +76,7 @@ CHardwareVertexBuffer::CHardwareVertexBuffer(CMemoryBuffer &data, THardwareBuffe
 		glBufferDataARB(GL_ARRAY_BUFFER_ARB, data.GetBufferSize(), data.GetBegin(), usage);
 
 		mReady = true;
-		mSize = data.GetBufferSize();
+		glGetBufferParameterivARB(GL_ARRAY_BUFFER_ARB, GL_BUFFER_SIZE_ARB, (GLint*)&mSize);
 
 		UnbindBuffer();
 	}
@@ -187,7 +187,7 @@ CHardwareIndexBuffer::CHardwareIndexBuffer(CMemoryBuffer &data, THardwareBufferL
 		glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, data.GetBufferSize(), data.GetBegin(), usage);
 
 		mReady = true;
-		mSize = data.GetBufferSize();
+		glGetBufferParameterivARB(GL_ELEMENT_ARRAY_BUFFER_ARB, GL_BUFFER_SIZE_ARB, (GLint*)&mSize);
 
 		UnbindBuffer();
 	}

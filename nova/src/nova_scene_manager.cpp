@@ -121,11 +121,9 @@ bool CSceneNode::IsVisible(void)
 	return  mpSceneObject.IsNull() ? false : mpSceneObject->IsVisible();
 }
 
-CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group)
+CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group) : 
+	mSceneName(scene_name), mRegisterGroup(group)
 {
-	//ReleaseObjects(); // Error R6025: Pure virual function call ..fuck =)
-	mRegisterGroup = group;
-	mSceneName = scene_name;
 	isEnabled = true;
 }
 

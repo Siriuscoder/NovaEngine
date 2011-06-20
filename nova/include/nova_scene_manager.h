@@ -77,7 +77,8 @@ protected:
 public:
 
 	CSceneNode(CRenderableObject *pRenObj, CSceneManager *scene) : 
-		mParentSceneManager(scene), mpSceneObject(pRenObj), isValidated(false) {}
+		mParentSceneManager(scene), mpSceneObject(pRenObj), isValidated(false), 
+		mBatchesCount(0), mFacesCount(0) {}
 
 	virtual ~CSceneNode() {}
 

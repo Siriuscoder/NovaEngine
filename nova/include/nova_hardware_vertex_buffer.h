@@ -24,6 +24,8 @@
 #include "nova_hardware_buffer.h"
 #include "nova_smart_ptr.h"
 
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 namespace nova
 {
 

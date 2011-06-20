@@ -102,12 +102,12 @@ union TFaceIndex
 {
 	struct
 	{
-		nInt32 a;
-		nInt32 b;
-		nInt32 c;
+		nUInt32 a;
+		nUInt32 b;
+		nUInt32 c;
 	};
 
-	nova::nInt32 v[3];
+	nova::nUInt32 v[3];
 };
 
 struct TTriangleInfo
@@ -164,8 +164,6 @@ public:
 		bool nPackageLoading;
 		nstring nMeshfile;
 	} TMeshContainer;
-
-	bool operator() (TTriangleInfo &left, TTriangleInfo &right);
 
 protected:
 

@@ -84,7 +84,7 @@ public:
 	CImagePtr LoadImageFromFile(const nstring & file)
 	{
 		CImagePtr image = CImageManager::GetSingelton().CreateNewImage(file, nstring("manual"),
-			file, "DevIL", CImageFormats::NF_DEFAULT);
+			file, nova::SF_UNKNOWN, "DevIL", CImageFormats::NF_DEFAULT);
 
 		image->LoadResource();
 		return image;

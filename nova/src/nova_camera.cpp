@@ -49,7 +49,7 @@ CCamera::CCamera(nova::nReal FOV, nova::nReal ZFar,
 	mFOV(FOV), mZFar(ZFar), mZNear(ZNear),
 	mLeft(0), mRight(0), mBottom(0), mTop(0), mPolygonMode(PM_SOLID),
 	mSide(FS_FRONT_AND_BACK), mOrientation(nova::Quaternionf::IDENTITY), mDirection( nova::Vector3f::ZERO),
-	mType(PT_ORTHO)
+	mType(PT_PERSPECTIVE)
 {
 	mAspect = (nova::nReal)mParentView->GetActualWidth() / (nova::nReal)mParentView->GetActualHeight();
 	LOG_MESSAGE("Creating perspective camera...");

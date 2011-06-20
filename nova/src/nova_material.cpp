@@ -397,42 +397,42 @@ CResourcePtr CMaterialManager::LoadResourceFromXmlNodeImpl(const nstring &name, 
 			materialParam.nSoften = xmlStrcmp(node->children->content, (xmlChar *) "true") ? false : true;
 
 		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseMap1"))
-			materialParam.nDiffuseMap1 = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nDiffuseMap1 = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseMap2"))
-			materialParam.nDiffuseMap2 = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nDiffuseMap2 = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "AmbientMap"))
-			materialParam.nAmbientMap = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nAmbientMap = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "OpacMap"))
-			materialParam.nOpacMap = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nOpacMap = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "SpecMap"))
-			materialParam.nSpecMap = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nSpecMap = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "BumpMap"))
-			materialParam.nBumpMap = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nBumpMap = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "ShinMap"))
-			materialParam.nShinMap = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nShinMap = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "SelfIlMap"))
-			materialParam.nSelfIlMap = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nSelfIlMap = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "ReflectionMap"))
-			materialParam.nReflectionMap = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nReflectionMap = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 
 		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseMap1Mask"))
-			materialParam.nDiffuseMap1Mask = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nDiffuseMap1Mask = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "DiffuseMap2Mask"))
-			materialParam.nDiffuseMap2Mask = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nDiffuseMap2Mask = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "AmbientMapMask"))
-			materialParam.nAmbientMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nAmbientMapMask = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "OpacMapMask"))
-			materialParam.nOpacMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nOpacMapMask = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "SpecMapMask"))
-			materialParam.nSpecMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nSpecMapMask = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "BumpMapMask"))
-			materialParam.nBumpMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nBumpMapMask = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "ShinMapMask"))
-			materialParam.nShinMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nShinMapMask = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "SelfIlMapMask"))
-			materialParam.nSelfIlMapMask = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nSelfIlMapMask = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 		if(!xmlStrcmp(node->name, (xmlChar *) "ReflectionMapMask"))
-			materialParam.nReflectionMap = nstring((reinterpret_cast<char *>(node->children->content)));
+			materialParam.nReflectionMap = nstring(node->children ? reinterpret_cast<char *>(node->children->content) : "");
 
 		node = node->next;
 	}

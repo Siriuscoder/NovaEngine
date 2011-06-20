@@ -29,7 +29,7 @@ namespace nova
 {
 
 CResource::CResource(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
-	mState(state), isLoaded(false), isBuilded(false), CBase("CResource")
+	mState(state), isLoaded(false), isBuilded(false), mSize(0), CBase("CResource")
 {
 	mName = name;
 	mGroup = group;
@@ -715,6 +715,8 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 		//res->RemoveAllListeners();
 	}
 
+	LOG_MESSAGE(nstring("Resource file ") + filename + " loaded successfully");
+
 	xmlFreeDoc(doc);
 
 	return res;
@@ -723,58 +725,70 @@ CResourcePtr CResourceManager::LoadResourceFromXml(const nstring &filename)
 void CResourceManager::BuildAllManagedResources(void)
 {
 	stl<nstring, CResourcePtr>::map::iterator it;
+	stl<nstring, CResourcePtr>::map copyHash;
 
 	RESOURCE_MUTEX_SECTION_LOCK;
 
-	for(it = mResourceHash.begin(); it !=  mResourceHash.end(); it++)
+	copyHash = mResourceHash;
+
+	RESOURCE_MUTEX_SECTION_UNLOCK;
+
+	for(it = copyHash.begin(); it !=  copyHash.end(); it++)
 	{
 		it->second->BuildResource();
 	}
-
-	RESOURCE_MUTEX_SECTION_UNLOCK;
 }
 
 void CResourceManager::ReLoadAllManagedResources(void)
 {
 	stl<nstring, CResourcePtr>::map::iterator it;
+	stl<nstring, CResourcePtr>::map copyHash;
 
 	RESOURCE_MUTEX_SECTION_LOCK;
 
-	for(it = mResourceHash.begin(); it !=  mResourceHash.end(); it++)
+	copyHash = mResourceHash;
+
+	RESOURCE_MUTEX_SECTION_UNLOCK;
+
+	for(it = copyHash.begin(); it !=  copyHash.end(); it++)
 	{
 		it->second->FreeResource();
 		it->second->LoadResource();
 	}
-
-	RESOURCE_MUTEX_SECTION_UNLOCK;
 }
 
 void CResourceManager::ReBuildAllManagedResources(void)
 {
 	stl<nstring, CResourcePtr>::map::iterator it;
+	stl<nstring, CResourcePtr>::map copyHash;
 
 	RESOURCE_MUTEX_SECTION_LOCK;
 
-	for(it = mResourceHash.begin(); it !=  mResourceHash.end(); it++)
+	copyHash = mResourceHash;
+
+	RESOURCE_MUTEX_SECTION_UNLOCK;
+
+	for(it = copyHash.begin(); it !=  copyHash.end(); it++)
 	{
 		it->second->RebuildResource();
 	}
-
-	RESOURCE_MUTEX_SECTION_UNLOCK;
 }
 
 void CResourceManager::LoadAllManagedResources(void)
 {
 	stl<nstring, CResourcePtr>::map::iterator it;
+	stl<nstring, CResourcePtr>::map copyHash;
 
 	RESOURCE_MUTEX_SECTION_LOCK;
 
-	for(it = mResourceHash.begin(); it !=  mResourceHash.end(); it++)
+	copyHash = mResourceHash;
+
+	RESOURCE_MUTEX_SECTION_UNLOCK;
+
+	for(it = copyHash.begin(); it !=  copyHash.end(); it++)
 	{
 		it->second->LoadResource();
 	}
-
-	RESOURCE_MUTEX_SECTION_UNLOCK;
 }
 
 void CResourceManager::RegisterResourceFactory(CResourceManager *factory)

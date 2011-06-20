@@ -40,26 +40,23 @@ public:
 
 	typedef struct _batch_st
 	{
-		CHardwareVertexBufferPtr Vbo;
-		CHardwareIndexBufferPtr VboIndex;
-
 		CMaterialPtr Material;
-		nInt32 start_index;
-		nInt32 end_index;
+		nInt32 startOffset;
+		nInt32 count;
 	} TBatchStruct;
 
 	typedef stl<TBatchStruct>::vector TBatchList;
 
 protected:
-	virtual void ValidateNodeImpl(void) {}
+	virtual void ValidateNodeImpl(void);
 
-	virtual void ReleaseNodeImpl(void) {}
+	virtual void ReleaseNodeImpl(void);
 
 	virtual void BuildNodeImpl(void);
 
-	virtual void InValidateNodeImpl(void) {}
+	virtual void InValidateNodeImpl(void);
 
-	virtual void RenderNodeImpl(void) {}
+	virtual void RenderNodeImpl(void);
 
 	virtual void PrepareNodeImpl(void);
 
@@ -77,6 +74,8 @@ protected:
 
 	TBatchList mBatchList;
 	CMeshBoxPtr mMeshBox;
+	CHardwareVertexBufferPtr mVertexChainBuffer;
+	CHardwareIndexBufferPtr mVboIndexBuffer;
 };
 
 

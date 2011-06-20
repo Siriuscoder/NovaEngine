@@ -69,6 +69,7 @@ void CImageBox::SetData(const CMemoryBuffer & bits,
 }
 
 void CImageBox::SetData(const nstring & file,
+		ESaveFormats compressor,
 		CImageFormats::NovaPixelFormats format,
 		const nstring & codec)
 {
@@ -76,6 +77,7 @@ void CImageBox::SetData(const nstring & file,
 	mPixelFormat = format;
 	mFilename = file;
 	mCodecName = codec;
+	mCompressor = compressor;
 }
 
 void CImageBox::SetData(const CMemoryBuffer & buffer,
@@ -148,6 +150,7 @@ void CImage::LoadResourceImpl(void)
 		CImageCodec * codec = CImageCodec::GetCodec(mImageSource.mCodecName);
 		if(codec)
 		{
+			LOG_MESSAGE(nstring("Loading texture image ") + mImageSource.mFilename);
 			codec->DecodeFromFile(mImageSource.mFilename, this, mImageSource.mPixelFormat);
 		}
 		else
@@ -573,6 +576,7 @@ void CImageManager::UnloadAllManagerResources()
 CImagePtr CImageManager::CreateNewImage(const nstring & name,
 	const nstring & group,
 	const nstring & file,
+	ESaveFormats compressor,
 	const nstring & codec,
 	CImageFormats::NovaPixelFormats p,
 	CResource::TAttach state)
@@ -585,7 +589,7 @@ CImagePtr CImageManager::CreateNewImage(const nstring & name,
 	// Попробуем загрузить изображение
 	//imgp->SetParam(file, p);
 	CImageBox storage;
-	storage.SetData(file, p, codec);
+	storage.SetData(file, compressor, p, codec);
 	imgp->SetImageSource(storage);
 
 	nova::nstringstream str;
@@ -680,7 +684,7 @@ CResourcePtr CImageManager::LoadResourceFromXmlNodeImpl(const nstring &name, con
 		node = node->next;
 	}
 
-	CImagePtr image = CreateNewImage(name, group, nfile, ncodec, format);
+	CImagePtr image = CreateNewImage(name, group, nfile, comp, ncodec, format);
 	image->AddListener(&image->mEventListnr);
 
 	return image;

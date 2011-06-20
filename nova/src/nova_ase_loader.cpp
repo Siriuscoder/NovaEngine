@@ -1109,8 +1109,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 					memset(&mat, 0, sizeof(CMaterial::TMaterialContainer));
 
 					mat.nName = nMatName;
-					mat.nID = submat_count;
-					submat_count++;
+					mat.nID = -1;//submat_count;
+					//submat_count++;
 					mMaterialsMap.insert(std::pair<nstring, CMaterial::TMaterialContainer>(nMatName, mat));
 
 					if(LastMaterial)

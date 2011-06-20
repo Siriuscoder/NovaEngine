@@ -24,8 +24,6 @@ class CExampleApplication : public nova::CBase
 protected:
 	nova::CNovaEngine * mEngine;
 
-//CMyEventHandler * myevent;
-
 public:
 	CExampleApplication() : CBase("CExampleApplication") {}
 	~CExampleApplication() {}
@@ -51,8 +49,14 @@ public:
 		delete mEngine;
 	}
 
-//	virtual void AddTimers() {}
-//	virtual void RemoveTimers() {}
+	virtual void BuildResources()
+	{
+		// build all loaded resources
+		nova::CResourceManager::BuildAllManagedResources();
+		// build all scene managers
+		nova::CScene::GetSingelton().BuildAllScraps();
+	}
+
 	virtual void InitExample() {}
 
 	virtual void LoadResources() {}
@@ -66,9 +70,11 @@ public:
 		InitExample();
 
 		mEngine->MakeRenderWindow();
-		LoadResources();
-		InitViewport();
 
+		LoadResources();
+		BuildResources();
+
+		InitViewport();
 		mEngine->StartRender();
 
 		ShutDown();

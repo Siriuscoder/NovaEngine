@@ -67,6 +67,7 @@ public:
 		CImageFormats::NovaPixelFormats format);
 
 	void SetData(const nstring & file,
+		ESaveFormats compressor,
 		CImageFormats::NovaPixelFormats format,
 		const nstring & codec);
 
@@ -194,6 +195,7 @@ public:
 
 	virtual CImagePtr CreateNewImage(const nstring & name, const nstring & group,
 		const nstring & file,
+		ESaveFormats compressor,
 		const nstring & codec,
 		CImageFormats::NovaPixelFormats p = CImageFormats::NF_RGB,
 		CResource::TAttach state = CResource::NV_ATTACHED);

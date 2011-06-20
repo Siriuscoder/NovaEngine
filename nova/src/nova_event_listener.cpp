@@ -54,6 +54,7 @@ void CListenerInterface::RemoveListener(CEventListener * listener)
 		{
 			//delete listener;
 			mListeners.erase(it);
+			break;
 		}
 }
 

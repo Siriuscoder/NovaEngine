@@ -95,11 +95,6 @@ void CMesh::CalculateNormals(void/* Simple method */)
 	}
 }
 
-bool CMesh::operator() (TTriangleInfo &left, TTriangleInfo &right)
-{
-	return (left.nMatSubID < right.nMatSubID);
-}
-
 CMesh::TMeshContainer &CMesh::GetMeshDefinition(void)
 {
 	return mMeshDef;
@@ -111,10 +106,15 @@ void CMesh::SetMeshDefinition(TMeshContainer *_mesh)
 		mMeshDef = *_mesh;
 }
 
+bool __SortComparer(TTriangleInfo &left, TTriangleInfo &right)
+{
+	return (left.nMatSubID < right.nMatSubID);
+}
+
 void CMesh::SortFaceIndexByMaterials(void)
 {
 	//QSortFaces(mMeshDef.nIndexList, mMeshDef.nMeshInfoList);
-	std::sort(mMeshDef.nMeshInfoList.begin(), mMeshDef.nMeshInfoList.end(), (*this));
+	std::sort(mMeshDef.nMeshInfoList.begin(), mMeshDef.nMeshInfoList.end(), __SortComparer);
 
 	TIndexes tmp;
 	tmp.resize(mMeshDef.nIndexList.size());
@@ -414,10 +414,11 @@ CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, cons
 		node = node->next;
 	}
 
+	meshStruct.nName = name;
 	meshStruct.pPackage = NULL;
 	meshStruct.nPackageLoading = false;
 
-	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, "default");
+	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, group);
 
 	return meshPtr;
 }
@@ -442,10 +443,11 @@ CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, cons
 		node = node->next;
 	}
 
+	meshStruct.nName = name;
 	meshStruct.pPackage = const_cast<CFilesPackage *>(&package);
 	meshStruct.nPackageLoading = true;
 
-	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, "default");
+	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, group);
 
 	return meshPtr;
 }
