@@ -48,14 +48,6 @@ private:
 
 	nInt32 LoadAseInternal(void);
 
-	struct TVLeaf
-		{
-			nUInt32 face;
-			TUVMapping uv;
-			size_t pos;
-		};
-stl<TVLeaf>::vector indLeafs;
-
 };
 
 }

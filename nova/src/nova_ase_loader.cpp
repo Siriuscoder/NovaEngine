@@ -1644,6 +1644,12 @@ void CASELoader::CloseLoader(void)
 			mesh_def->nMappingFacesList[face.c] = mesh_def->nTVMappingList[tex_face.c];
 		}
 */
+		struct TVLeaf
+		{
+			nUInt32 face;
+			TUVMapping uv;
+			size_t pos;
+		};
 
 		mesh_def->nMappingFacesList.resize(mesh_def->nVertexList.size());
 		size_t vertSize = mesh_def->nVertexList.size();
@@ -1651,7 +1657,7 @@ void CASELoader::CloseLoader(void)
 		{
 			// определяем количество граней содержащих эту точку
 			TVertex3d vertex = mesh_def->nVertexList[i];
-
+			stl<TVLeaf>::vector indLeafs;
 			for(nUInt32 j = 0; j < mesh_def->nIndexList.size(); j++)
 			{
 				for(nUInt32 p = 0; p < 3; p++)
