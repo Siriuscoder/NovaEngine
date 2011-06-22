@@ -101,9 +101,11 @@ CCameraPtr CViewPort::CreateLinearCamera(const nstring & name, nova::nReal Left,
 	nova::nReal Bottom, nova::nReal Top, nova::nReal ZFar, nova::nReal ZNear)
 {
 	mActiveCamera = new CCamera(Left, Right, Bottom, Top, ZFar, ZNear, this);
+	LOG_MESSAGE(nstring("Apply linear camera ") + name);
 
 	CCameraPtr camera(mActiveCamera);
 	camera->SetObjectName(name);
+	camera->SetObjectGroup("Linear camera");
 
 	pair<nstring, CCameraPtr> l_pair;
 	l_pair.first = name;
@@ -118,9 +120,11 @@ CCameraPtr CViewPort::CreatePerspectiveCamera(const nstring & name, nova::nReal 
 	nova::nReal ZNear)
 {
 	mActiveCamera = new CCamera(FOV, ZFar, ZNear, this);
+	LOG_MESSAGE(nstring("Apply perspective camera ") + name);
 
 	CCameraPtr camera(mActiveCamera);
 	camera->SetObjectName(name);
+	camera->SetObjectGroup("Perspective camera");
 
 	pair<nstring, CCameraPtr> l_pair;
 	l_pair.first = name;

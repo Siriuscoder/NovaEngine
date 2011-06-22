@@ -122,15 +122,16 @@ void CMaterial::ApplyMaterial(void)
 
 	if(!mDiffuseMap1.IsNull())
 	{
-		if(mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_ALPHA ||
+		/*if(mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_ALPHA ||
 			mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_BGRA ||
 			mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_LUMINANCE_ALPHA ||
 			mDiffuseMap1->GetPixelFormat() == CImageFormats::NF_RGBA)
 			CRenderSystem::GetSingelton().SetBlend(true);
+		*/
 
 		mDiffuseMap1->ApplyTexture();
 	}
-
+/*
 	glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
 	glColor4f(mMaterialSource.nDiffuseColor.R(), mMaterialSource.nDiffuseColor.G(), mMaterialSource.nDiffuseColor.B(), mMaterialSource.nTransparency);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
@@ -141,6 +142,7 @@ void CMaterial::ApplyMaterial(void)
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mMaterialSource.nShininess);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mMaterialSource.nAmbientColor);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mMaterialSource.nSpecularColor);
+*/
 
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{

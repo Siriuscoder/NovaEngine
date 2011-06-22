@@ -29,7 +29,7 @@ CCamera::CCamera() : mProjectionChanged(true),
 	mOrientation(nova::Quaternionf::IDENTITY), mDirection( nova::Vector3f::ZERO),
 	mType(PT_PERSPECTIVE)
 {
-	LOG_MESSAGE("Creating perspective camera...");
+	//LOG_MESSAGE("Creating perspective camera...");
 }
 
 CCamera::CCamera(nova::nReal Left, nova::nReal Right, nova::nReal Bottom, nova::nReal Top,
@@ -40,7 +40,7 @@ CCamera::CCamera(nova::nReal Left, nova::nReal Right, nova::nReal Bottom, nova::
 	mSide(FS_FRONT_AND_BACK), mOrientation(nova::Quaternionf::IDENTITY), mDirection( nova::Vector3f::ZERO),
 	mType(PT_ORTHO)
 {
-	LOG_MESSAGE("Creating ORTHO camera...");
+	//LOG_MESSAGE("Creating ORTHO camera...");
 }
 
 CCamera::CCamera(nova::nReal FOV, nova::nReal ZFar, 
@@ -52,7 +52,7 @@ CCamera::CCamera(nova::nReal FOV, nova::nReal ZFar,
 	mType(PT_PERSPECTIVE)
 {
 	mAspect = (nova::nReal)mParentView->GetActualWidth() / (nova::nReal)mParentView->GetActualHeight();
-	LOG_MESSAGE("Creating perspective camera...");
+	//LOG_MESSAGE(nstring("Creating perspective camera " + );
 }
 
 void CCamera::Validate(void)

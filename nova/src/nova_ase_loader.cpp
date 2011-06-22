@@ -1609,6 +1609,8 @@ CMaterial::TMaterialContainer CASELoader::FindMatByID(nInt32 id)
 	return CMaterial::TMaterialContainer();
 }
 
+
+
 void CASELoader::CloseLoader(void)
 {
 	stl<nstring, CMesh::TMeshContainer>::map::iterator it;
@@ -1630,6 +1632,7 @@ void CASELoader::CloseLoader(void)
 			}
 		}
 // Calculating real uv from texture faces
+/*
 		mesh_def->nMappingFacesList.resize(mesh_def->nVertexList.size());
 		for(nUInt32 i = 0; i < mesh_def->nTVIndexList.size(); i++)
 		{
@@ -1640,6 +1643,56 @@ void CASELoader::CloseLoader(void)
 			mesh_def->nMappingFacesList[face.b] = mesh_def->nTVMappingList[tex_face.b];
 			mesh_def->nMappingFacesList[face.c] = mesh_def->nTVMappingList[tex_face.c];
 		}
+*/
+
+		mesh_def->nMappingFacesList.resize(mesh_def->nVertexList.size());
+		size_t vertSize = mesh_def->nVertexList.size();
+		for(nUInt32 i = 0; i < vertSize; i++)
+		{
+			// определяем количество граней содержащих эту точку
+			TVertex3d vertex = mesh_def->nVertexList[i];
+
+			for(nUInt32 j = 0; j < mesh_def->nIndexList.size(); j++)
+			{
+				for(nUInt32 p = 0; p < 3; p++)
+				{
+					if(mesh_def->nIndexList[j].v[p] == i)
+					{
+						TVLeaf leaf;
+
+						leaf.face = j;
+						leaf.pos = p;
+						leaf.uv = mesh_def->nTVMappingList[mesh_def->nTVIndexList[j].v[p]];
+						indLeafs.push_back(leaf);
+					}
+				}
+			}
+
+			TUVMapping prevUv = indLeafs[0].uv;
+			nUInt32 indLast = mesh_def->nIndexList[indLeafs[0].face].v[indLeafs[0].pos];
+			mesh_def->nMappingFacesList[i] = indLeafs[0].uv;
+			for(nUInt32 j = 1; j < indLeafs.size(); j++)
+			{
+				if(prevUv.s != indLeafs[j].uv.s || 
+					prevUv.t != indLeafs[j].uv.t ||
+					prevUv.w != indLeafs[j].uv.w)
+				{
+					prevUv = indLeafs[j].uv;
+					// вставляем дополнительную вершину (мнимую)
+					mesh_def->nVertexList.push_back(vertex);
+					// добавляем к ней ее текстурную координату
+					mesh_def->nMappingFacesList.push_back(prevUv);
+					// обновляем массив индексов
+					indLast = mesh_def->nVertexList.size()-1;
+				}
+
+				mesh_def->nIndexList[indLeafs[j].face].v[indLeafs[j].pos] = indLast;
+			}
+
+			indLeafs.clear();
+		}
+			
+			
 
 		mesh_def->nTVMappingList.clear();
 		mesh_def->nTVIndexList.clear();

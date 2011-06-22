@@ -101,7 +101,7 @@ public:
 	}
 
 
-	bool IsNull()
+	bool IsNull() const
 	{
 		return !mPtr;
 	}

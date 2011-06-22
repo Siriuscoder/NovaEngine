@@ -61,7 +61,9 @@ public:
 		//sceneManager->SetRootElement(sceneManager->CreateRenderableNodeFromResource(meshResource->GetResName()));
 		//sceneManager->PrepareScene();
 
-		nova::CScene::GetSingelton().LoadSceneForce("test1/scene.xml");
+		nova::CScene::GetSingelton().LoadSceneForce("minigun/scene.xml");
+		nova::CImagePtr image = nova::CImageManager::GetResourceFromHash("iMinigunTX");
+		image->BackHeigth();
 	}
 
 	virtual void InitViewport(void)
@@ -76,10 +78,11 @@ public:
 		//viewport2->SetActiveCamera("cam2");
 
 		camera1->SetLocation(0, 0, -100.0f);
-		camera1->SetPolygonMode(nova::CCamera::PM_WIREFRAME, nova::CCamera::FS_FRONT_AND_BACK);
+		//camera1->SetPolygonMode(nova::CCamera::PM_WIREFRAME, nova::CCamera::FS_FRONT_AND_BACK);
 
 		//camera2->SetLocation(0, 0, -100.0f);
 		//camera2->SetPolygonMode(nova::CCamera::PM_WIREFRAME, nova::CCamera::FS_FRONT_AND_BACK);
+		glEnable(GL_DEPTH_TEST);
 	}
 };
 

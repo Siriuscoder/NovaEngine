@@ -75,6 +75,7 @@ protected:
 	TBatchList mBatchList;
 	CMeshBoxPtr mMeshBox;
 	CHardwareVertexBufferPtr mVertexChainBuffer;
+	CHardwareVertexBufferPtr mUVBuffer;
 	CHardwareIndexBufferPtr mVboIndexBuffer;
 };
 

@@ -77,29 +77,33 @@ void CBasicSceneNode::InValidateNodeImpl(void)
 void CBasicSceneNode::RenderNodeImpl(void)
 {
 	TBatchList::const_iterator it;
-	float colorG = 0.4f;
+	//float colorG = 0.4f;
 	it = mBatchList.begin();
-
-	glDisable(GL_TEXTURE_1D);
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_3D);
 
 	mVertexChainBuffer->BindBuffer();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
 
+
+	mUVBuffer->BindBuffer();
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glTexCoordPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));   //The starting point of texcoords, 24 bytes away
+
 	mVboIndexBuffer->BindBuffer();
 	for(; it != mBatchList.end(); it++)
 	{
 		//glDrawRangeElements(GL_TRIANGLES, it->start_index, it->end_index, it->end_index-it->start_index+1, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-		glColor3f(0.5f, colorG, 0.8f);
+		//glColor3f(0.5f, colorG, 0.8f);
+		if(!it->Material.IsNull())
+			it->Material->ApplyMaterial();
 		glDrawElements(GL_TRIANGLES, it->count*3, GL_UNSIGNED_INT, BUFFER_OFFSET(it->startOffset * sizeof(TFaceIndex)));
 
 		//glDrawRangeElements(GL_TRIANGLES, 16, 35, 12, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
-		colorG = 0.8f;
+		//colorG = 0.8f;
 	}
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	mVertexChainBuffer->UnbindBuffer();
 
 /*
@@ -128,9 +132,12 @@ void CBasicSceneNode::PreparingBatchList(void)
 		sizeof(TVertex3d) * mMeshBox->GetMeshDefinition().nVertexList.size());
 	CMemoryBuffer indexes(&(mMeshBox->GetMeshDefinition().nIndexList[0]), 
 		sizeof(TFaceIndex) * mMeshBox->GetMeshDefinition().nIndexList.size());
+	CMemoryBuffer uvw(&(mMeshBox->GetMeshDefinition().nMappingFacesList[0]), 
+		sizeof(TUVMapping) * mMeshBox->GetMeshDefinition().nMappingFacesList.size());
 
 	mVertexChainBuffer.Bind(new CHardwareVertexBuffer(vertexes, HWB_STATIC));
 	mVboIndexBuffer.Bind(new CHardwareIndexBuffer(indexes, HWB_STATIC));
+	mUVBuffer.Bind(new CHardwareVertexBuffer(uvw, HWB_STATIC));
 
 	TBatchStruct batch;
 	for(nova::nUInt32 i = 0; i < mMeshBox->GetMeshDefinition().nMatChangesGroups.size(); i++)
@@ -141,7 +148,7 @@ void CBasicSceneNode::PreparingBatchList(void)
 			batch.count = mMeshBox->GetMeshDefinition().nIndexList.size() - mMeshBox->GetMeshDefinition().nMatChangesGroups[i];
 		else
 			batch.count = mMeshBox->GetMeshDefinition().nMatChangesGroups[i+1] - mMeshBox->GetMeshDefinition().nMatChangesGroups[i];
-		//batch.Material = CResourceManager::GetResourceFromHash(mMeshBox->GetMeshDefinition().nMeshInfoList[batch.start_index].nMatName);
+		batch.Material = CResourceManager::GetResourceFromHash(mMeshBox->GetMeshDefinition().nMeshInfoList[batch.startOffset].nMatName);
 		mBatchList.push_back(batch);
 	}
 }
@@ -411,6 +418,29 @@ void CBasicSceneManager::DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CScen
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C2"));
 							newSceneNode->GetData()->GetObjectInterface()->GetMatrix()[3][3] = 
 								CStringUtils::StringToFloat((char *)xmlGetProp(orientNode, (xmlChar *) "C3"));
+						}
+					}
+				}
+
+				if(!xmlStrcmp(subNode->name, (xmlChar *)"Sub-materials"))
+				{
+					for(xmlNodePtr texNode = subNode->children; texNode; texNode = texNode->next)
+					{
+						if(xmlIsBlankNode(texNode))
+						{
+							continue;
+						}
+
+						if(!xmlStrcmp(texNode->name, (xmlChar *)"Material"))
+						{
+							CMeshBoxPtr nodeMesh = dynamic_cast<CBasicSceneNode *>(newSceneNode->GetData().GetPtr())->GetMeshBox();
+							nova::nInt32 matID = CStringUtils::StringToInt((char *)xmlGetProp(texNode, (xmlChar *) "SubMatID"));
+
+							for(nUInt32 i = 0; i < nodeMesh->GetMeshDefinition().nMeshInfoList.size(); i++)
+							{
+								if(nodeMesh->GetMeshDefinition().nMeshInfoList[i].nMatSubID == matID)
+									nodeMesh->GetMeshDefinition().nMeshInfoList[i].nMatName = (char *)xmlGetProp(texNode, (xmlChar *) "MatName");
+							}
 						}
 					}
 				}
