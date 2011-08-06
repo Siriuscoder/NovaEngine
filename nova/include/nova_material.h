@@ -22,6 +22,7 @@
 #pragma once
 
 #include "nova_texture_manager.h"
+#include "nova_hardware_texture_buffer.h"
 #include "nova_color.h"
 
 namespace nova

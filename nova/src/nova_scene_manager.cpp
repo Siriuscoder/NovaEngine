@@ -122,7 +122,7 @@ bool CSceneNode::IsVisible(void)
 }
 
 CSceneManager::CSceneManager(const nstring & scene_name, const nstring & group) : 
-	mSceneName(scene_name), mRegisterGroup(group)
+	mSceneName(scene_name), mRegisterGroup(group), mDepthTestEnabled(true)
 {
 	isEnabled = true;
 }
@@ -158,6 +158,11 @@ void CSceneManager::RenderScene(CCamera *camera, CViewPort *view)
 	mRenderedBatches = 0;
 	mCurCamera = camera;
 	mCurView = view;
+
+	if(mDepthTestEnabled)
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
 
 	RenderSceneImpl();
 	RenderСompoundObjects();

@@ -130,7 +130,9 @@ void CDevILCodec::Initialize()
 	ilSetMemory(DevILAlloc, DevILFree);
 	ilInit();
 	iluInit();
-	ilEnable( IL_FILE_OVERWRITE );
+	ilEnable(IL_FILE_OVERWRITE);
+	ilEnable(IL_ORIGIN_SET);
+	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 
 	ILenum Error = 0;
 	if((Error = ilGetError()) != NULL)
@@ -282,6 +284,10 @@ void CDevILCodec::DecodeFromFile(const nstring & filename, CImage *image,
 	image->GetImageSource().mHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 	image->GetImageSource().mWidth = ilGetInteger(IL_IMAGE_WIDTH);
 	image->GetImageSource().mDepth = ilGetInteger(IL_IMAGE_DEPTH);
+
+	//if (ilGetInteger(IL_IMAGE_ORIGIN) == IL_ORIGIN_LOWER_LEFT)
+	//	iluFlipImage();
+
 //	this->size = ilGetInteger(IL_IMAGE_SIZE_OF_DATA);
 	if(format == CImageFormats::NF_DEFAULT)
 	{
@@ -306,7 +312,9 @@ void CDevILCodec::DecodeFromFile(const nstring & filename, CImage *image,
 	ILenum Error = 0;
 	if((Error = ilGetError()) != NULL)
 	{
-		nstring str("CDevILCodec::DecodeFromFile(): Can not load image file - ");
+		nstring str("CDevILCodec::DecodeFromFile(): Can not load image file ");
+		str.append(filename);
+		str.append(", reason: ");
 		str.append(iluErrorString(Error));
 		throw NOVA_EXP(str.c_str(), BAD_OPERATION);
 	}
@@ -380,6 +388,9 @@ void CDevILCodec::DecodeFromBuffer(const CMemoryBuffer & input, CImage *image,
 	image->GetImageSource().mHeight = ilGetInteger(IL_IMAGE_HEIGHT);
 	image->GetImageSource().mWidth = ilGetInteger(IL_IMAGE_WIDTH);
 	image->GetImageSource().mDepth = ilGetInteger(IL_IMAGE_DEPTH);
+
+	//if (ilGetInteger(IL_IMAGE_ORIGIN) == IL_ORIGIN_UPPER_LEFT)
+	//	iluFlipImage();
 
 	if(format == CImageFormats::NF_DEFAULT)
 	{

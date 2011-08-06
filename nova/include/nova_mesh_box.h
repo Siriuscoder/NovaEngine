@@ -28,97 +28,13 @@
 #include "nova_matrix4d.h"
 #include "nova_matrix3d.h"
 #include "nova_color.h"
+#include "nova_hardware_vertex_buffer.h"
 
 namespace nova
 {
 
 class CMesh;
 
-#pragma pack(push, 1)
-
-union TVertex3d
-{
-	struct 
-	{
-		nova::nReal x;
-		nova::nReal y;
-		nova::nReal z;
-	};
-
-	nova::nReal v[3];
-};
-
-union TVertex4d
-{
-	struct 
-	{
-		nova::nReal x;
-		nova::nReal y;
-		nova::nReal z;
-		nova::nReal t;
-	};
-
-	nova::nReal v[4];
-};
-
-union TUVMapping
-{
-	struct 
-	{
-		nova::nReal s;
-		nova::nReal t;
-		nova::nReal w;
-	};
-
-	nova::nReal v[3];
-};
-
-union TNormal3d
-{
-	struct
-	{
-		nova::nReal x;
-		nova::nReal y;
-		nova::nReal z;
-	};
-
-	nova::nReal v[3];
-};	
-
-union TNormal4d
-{
-	struct
-	{
-		nova::nReal x;
-		nova::nReal y;
-		nova::nReal z;
-		nova::nReal t;
-	};
-
-	nova::nReal v[4];
-};	
-
-union TFaceIndex
-{
-	struct
-	{
-		nUInt32 a;
-		nUInt32 b;
-		nUInt32 c;
-	};
-
-	nova::nUInt32 v[3];
-};
-
-struct TTriangleInfo
-{
-	nstring nMatName;
-	nUInt32 nMatSubID;
-	nUInt32 nFace;
-	TNormal3d nFaceNormal;
-};
-
-#pragma pack(pop)
 
 class NOVA_EXPORT CMeshBoxListener : public CResourceListener
 {
@@ -137,37 +53,115 @@ class NOVA_EXPORT CMesh : public CResource
 {
 public:
 
-	typedef nova::stl<TVertex3d>::vector TVertexes;
-	typedef nova::stl<TNormal3d>::vector TNormals;
-	typedef nova::stl<TUVMapping>::vector TTexCoords;
-	typedef nova::stl<TFaceIndex>::vector TIndexes;
-	typedef nova::stl<TTriangleInfo>::vector TFacesInfo;
+#pragma pack(push, 1)
+// vertex node full structure
+	typedef struct
+	{
+		union
+		{
+			struct 
+			{
+				nova::nReal x;
+				nova::nReal y;
+				nova::nReal z;
+			};
+
+			nova::nReal v[3];
+		};
+
+		union
+		{
+			struct 
+			{
+				nova::nReal nx;
+				nova::nReal ny;
+				nova::nReal nz;
+			};
+
+			nova::nReal nv[3];
+		};
+
+		union 
+		{
+			struct 
+			{
+				nova::nReal s;
+				nova::nReal t;
+				nova::nReal w;
+			};
+
+			nova::nReal stw[3];
+		};
+	} stVertex3d3n3uv_t;
+
+	typedef union
+	{
+		struct
+		{
+			nUInt32 a;
+			nUInt32 b;
+			nUInt32 c;
+		};
+
+		nova::nUInt32 v[3];
+	} TFaceABC;
+
+	typedef struct
+	{
+		TFaceABC faceIndex;
+		nstring matName;
+		nUInt32 matSubID;
+		nUInt32 faceNo;
+		nova::nReal faceNormal[3];
+	} TFaceInfo;
+
+	typedef struct FaceInfoToFaceABC
+	{
+		FaceInfoToFaceABC(size_t maxCount) : count(0)
+		{
+			mIndexes.resize(maxCount);
+		}
+
+
+		void operator()(TFaceInfo &face)
+		{
+			mIndexes[count] = face.faceIndex;
+			count++;
+		}
+		
+		stl<TFaceABC>::vector mIndexes;
+	private:
+
+		int count;
+	} TFaceInfoToFaceABC;
+
+#pragma pack(pop)
+
+	typedef nova::stl<stVertex3d3n3uv_t>::vector TStVertexArray;
+	typedef nova::stl<TFaceInfo>::vector TFacesInfoArray;
 	typedef nova::stl<nInt32>::vector TSubMats, TMatChange;
 
 	typedef struct _MeshContainer
 	{
 		nstring nName;
 		nova::CColorRGB mMeshColor;
-		TVertexes nVertexList;
-		TTexCoords nMappingFacesList;
-		TNormals nNormalList;
-		TIndexes nIndexList;
-		TFacesInfo nMeshInfoList;
+		TStVertexArray nVertexList;
+		TFacesInfoArray nMeshInfoList;
 		Matrix4f nTMatrix;
 		nInt32 MatID;
 // Reserved buffers
-		TIndexes nTVIndexList;
-		TTexCoords nTVMappingList;
+		//TIndexes nTVIndexList;
+		//TTexCoords nTVMappingList;
 		TMatChange nMatChangesGroups;
 // For mesh internal loading
-		CFilesPackage *pPackage;
-		bool nPackageLoading;
-		nstring nMeshfile;
 	} TMeshContainer;
 
-protected:
+	struct TIndexSortCmp
+	{
+		bool operator()(TFaceInfo &left, TFaceInfo &right);
+	};
 
-	TMeshContainer mMeshDef;
+protected:
 
 	void LoadResourceImpl(void);
 
@@ -189,8 +183,6 @@ public:
 	void CalculateNormals(void/* Simple method calc normals or not? 
 							  i want to use smoothing groups in future*/);
 
-	bool CheckValidLength();
-
 	CBoundingBox GenerateBoundingBox(void);
 
 	void GenerateNormalsToFaces(void);
@@ -199,15 +191,24 @@ public:
 
 	void GenerateMatChangesGroups(void);
 
-	void * GetVertexPointer(size_t *count);
+	CHardwareVertexBufferPtr CreateVBO(void);
 
-	void * GetNormalsPointer(size_t *count);
+	CHardwareIndexBufferPtr CreateIBO(void);
 
-	void * GetUVPointer(size_t *count);
+	void SetSourcePackage(CFilesPackage *package);
 
-	void * GetIndexesPointer(size_t *count);
+	inline CFilesPackage *GetSourcePackage(void) const { return mPackage; }
 
-	void ToWorldCoord(void);
+	inline void SetMshFile(const nova::nstring &name) { mMeshfile = name; }
+
+	inline nova::nstring GetMshFileName() const { return mMeshfile; }
+
+private:
+
+	CFilesPackage *mPackage;
+	bool mPackageLoading;
+	nstring mMeshfile;
+	TMeshContainer mMeshDef;
 };
 
 typedef CSmartPtr<CMesh> CMeshBoxPtr;

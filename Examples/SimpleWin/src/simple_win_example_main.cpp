@@ -61,16 +61,16 @@ public:
 		//sceneManager->SetRootElement(sceneManager->CreateRenderableNodeFromResource(meshResource->GetResName()));
 		//sceneManager->PrepareScene();
 
-		nova::CScene::GetSingelton().LoadSceneForce("minigun/scene.xml");
-		nova::CImagePtr image = nova::CImageManager::GetResourceFromHash("iMinigunTX");
-		image->BackHeigth();
+		nova::CScene::GetSingelton().LoadSceneForce("sniper/scene.xml");
+		//nova::CImagePtr image = nova::CImageManager::GetResourceFromHash("iMinigunTX");
+		//image->BackHeigth();
 	}
 
 	virtual void InitViewport(void)
 	{
 		nova::CRenderWindowPtr win = mEngine->GetRenderSystem()->GetRootWindow();
-		nova::CViewPortPtr viewport1 = win->AddViewport(0, 0, 800, 600, 2);
-		//nova::CViewPortPtr viewport2 = win->AddViewport(0, 0, 256, 192, 2);
+		nova::CViewPortPtr viewport1 = win->AddViewport(0, 0, win->GetWidth(), win->GetHeight(), 1);
+		//nova::CViewPortPtr viewport2 = win->AddViewport(0, 100, 640, 480, 2);
 
 		nova::CCameraPtr camera1 = viewport1->CreatePerspectiveCamera("cam1", 45.0f, 200.0f, 0.1f);
 		//nova::CCameraPtr camera2 = viewport2->CreatePerspectiveCamera("cam2", 45.0f, 200.0f, 0.1f);
@@ -82,7 +82,6 @@ public:
 
 		//camera2->SetLocation(0, 0, -100.0f);
 		//camera2->SetPolygonMode(nova::CCamera::PM_WIREFRAME, nova::CCamera::FS_FRONT_AND_BACK);
-		glEnable(GL_DEPTH_TEST);
 	}
 };
 

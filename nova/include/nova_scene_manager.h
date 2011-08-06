@@ -147,6 +147,7 @@ protected:
 	CTree<TNodeType> mSceneTree;
 
 	bool isEnabled;
+	bool mDepthTestEnabled;
 
 	virtual nInt32 RenderSceneImpl(void) = 0;
 
@@ -209,6 +210,10 @@ public:
 	inline void Enable(void) { isEnabled = true; }
 
 	inline void Disable(void) { isEnabled = false; }
+
+	inline void DepthTest(bool flag) { mDepthTestEnabled = flag; }
+
+	inline bool IsDepthTestEnabled() { return mDepthTestEnabled; }
 };
 
 }

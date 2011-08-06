@@ -131,6 +131,12 @@ void CMaterial::ApplyMaterial(void)
 
 		mDiffuseMap1->ApplyTexture();
 	}
+	else
+	{
+		glDisable(GL_TEXTURE_1D);
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_TEXTURE_3D);
+	}
 /*
 	glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
 	glColor4f(mMaterialSource.nDiffuseColor.R(), mMaterialSource.nDiffuseColor.G(), mMaterialSource.nDiffuseColor.B(), mMaterialSource.nTransparency);

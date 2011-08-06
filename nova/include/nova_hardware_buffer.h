@@ -35,9 +35,6 @@ enum THardwareBufferLock
 	HWB_DYNAMIC,
 };
 
-
-/*******************************************************************/
-
 class NOVA_EXPORT CHardwareBuffer : public CBase
 {
 protected:

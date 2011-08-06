@@ -85,7 +85,6 @@ void CBasicSceneNode::RenderNodeImpl(void)
 	glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
 
 
-	mUVBuffer->BindBuffer();
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glTexCoordPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));   //The starting point of texcoords, 24 bytes away
 
@@ -96,7 +95,7 @@ void CBasicSceneNode::RenderNodeImpl(void)
 		//glColor3f(0.5f, colorG, 0.8f);
 		if(!it->Material.IsNull())
 			it->Material->ApplyMaterial();
-		glDrawElements(GL_TRIANGLES, it->count*3, GL_UNSIGNED_INT, BUFFER_OFFSET(it->startOffset * sizeof(TFaceIndex)));
+		glDrawElements(GL_TRIANGLES, it->count*3, GL_UNSIGNED_INT, BUFFER_OFFSET(it->startOffset * sizeof(CMesh::TFaceABC)));
 
 		//glDrawRangeElements(GL_TRIANGLES, 16, 35, 12, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 		//colorG = 0.8f;
@@ -105,39 +104,13 @@ void CBasicSceneNode::RenderNodeImpl(void)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	mVertexChainBuffer->UnbindBuffer();
-
-/*
-	glBegin(GL_TRIANGLES);
-	for(int i = 0; i < mMeshBox->GetMeshDefinition().nIndexList.size(); i++)
-	{
-		glVertex3f(mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].a].x, 
-			mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].a].y,
-			mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].a].z);
-
-		glVertex3f(mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].b].x,
-			mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].b].y,
-			mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].b].z);
-
-		glVertex3f(mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].c].x,
-			mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].c].y,
-			mMeshBox->GetMeshDefinition().nVertexList[mMeshBox->GetMeshDefinition().nIndexList[i].c].z);
-	}
-	glEnd();
-*/
+	mVboIndexBuffer->UnbindBuffer();
 }
 
 void CBasicSceneNode::PreparingBatchList(void)
 {
-	CMemoryBuffer vertexes(&(mMeshBox->GetMeshDefinition().nVertexList[0]), 
-		sizeof(TVertex3d) * mMeshBox->GetMeshDefinition().nVertexList.size());
-	CMemoryBuffer indexes(&(mMeshBox->GetMeshDefinition().nIndexList[0]), 
-		sizeof(TFaceIndex) * mMeshBox->GetMeshDefinition().nIndexList.size());
-	CMemoryBuffer uvw(&(mMeshBox->GetMeshDefinition().nMappingFacesList[0]), 
-		sizeof(TUVMapping) * mMeshBox->GetMeshDefinition().nMappingFacesList.size());
-
-	mVertexChainBuffer.Bind(new CHardwareVertexBuffer(vertexes, HWB_STATIC));
-	mVboIndexBuffer.Bind(new CHardwareIndexBuffer(indexes, HWB_STATIC));
-	mUVBuffer.Bind(new CHardwareVertexBuffer(uvw, HWB_STATIC));
+	mVertexChainBuffer = mMeshBox->CreateVBO();
+	mVboIndexBuffer = mMeshBox->CreateIBO();
 
 	TBatchStruct batch;
 	for(nova::nUInt32 i = 0; i < mMeshBox->GetMeshDefinition().nMatChangesGroups.size(); i++)
@@ -145,10 +118,10 @@ void CBasicSceneNode::PreparingBatchList(void)
 		batch.startOffset = mMeshBox->GetMeshDefinition().nMatChangesGroups[i];
 
 		if(mMeshBox->GetMeshDefinition().nMatChangesGroups.size() == i+1)
-			batch.count = mMeshBox->GetMeshDefinition().nIndexList.size() - mMeshBox->GetMeshDefinition().nMatChangesGroups[i];
+			batch.count = mMeshBox->GetMeshDefinition().nMeshInfoList.size() - mMeshBox->GetMeshDefinition().nMatChangesGroups[i];
 		else
 			batch.count = mMeshBox->GetMeshDefinition().nMatChangesGroups[i+1] - mMeshBox->GetMeshDefinition().nMatChangesGroups[i];
-		batch.Material = CResourceManager::GetResourceFromHash(mMeshBox->GetMeshDefinition().nMeshInfoList[batch.startOffset].nMatName);
+		batch.Material = CResourceManager::GetResourceFromHash(mMeshBox->GetMeshDefinition().nMeshInfoList[batch.startOffset].matName);
 		mBatchList.push_back(batch);
 	}
 }
@@ -304,10 +277,10 @@ void CBasicSceneManager::SerializeNodeToXml(CTreeNode<CSceneManager::TNodeType> 
 			if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "Material") < 0) // NovaScene doc
 				NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
 			if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST "MatName", "%s", 
-				nodeMesh->GetMeshDefinition().nMeshInfoList[nodeMesh->GetMeshDefinition().nMatChangesGroups[i]].nMatName.c_str()) < 0)
+				nodeMesh->GetMeshDefinition().nMeshInfoList[nodeMesh->GetMeshDefinition().nMatChangesGroups[i]].matName.c_str()) < 0)
 				NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
 			if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST "SubMatID", "%d", 
-				nodeMesh->GetMeshDefinition().nMeshInfoList[nodeMesh->GetMeshDefinition().nMatChangesGroups[i]].nMatSubID) < 0)
+				nodeMesh->GetMeshDefinition().nMeshInfoList[nodeMesh->GetMeshDefinition().nMatChangesGroups[i]].matSubID) < 0)
 				NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
 
 			xmlTextWriterEndElement(xmlWriter);
@@ -438,8 +411,8 @@ void CBasicSceneManager::DeSerializeNodeFromXml(xmlNodePtr node, CTreeNode<CScen
 
 							for(nUInt32 i = 0; i < nodeMesh->GetMeshDefinition().nMeshInfoList.size(); i++)
 							{
-								if(nodeMesh->GetMeshDefinition().nMeshInfoList[i].nMatSubID == matID)
-									nodeMesh->GetMeshDefinition().nMeshInfoList[i].nMatName = (char *)xmlGetProp(texNode, (xmlChar *) "MatName");
+								if(nodeMesh->GetMeshDefinition().nMeshInfoList[i].matSubID == matID)
+									nodeMesh->GetMeshDefinition().nMeshInfoList[i].matName = (char *)xmlGetProp(texNode, (xmlChar *) "MatName");
 							}
 						}
 					}

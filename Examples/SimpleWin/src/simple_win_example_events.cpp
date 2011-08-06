@@ -64,19 +64,24 @@ void CMyEventHandler::OnChar(nova::nUInt16 s, int m)
 
 void CMyEventHandler::OnMouseMove(int x, int y, int code)
 {
-	nova::CRenderWindowPtr window = nova::CRenderSystem::GetSingelton().GetRootWindow();
-	nova::CViewPortPtr view = window->GetViewport(2);
-	if(!view.IsNull())
+	if(code == nova::BT_LBUTTON)
 	{
-		nova::CCameraPtr camera = view->GetActiveCamera();
-		if(!camera.IsNull())
+		nova::CRenderWindowPtr window = nova::CRenderSystem::GetSingelton().GetRootWindow();
+		nova::CViewPortPtr view1 = window->GetViewport(1);
+		//nova::CViewPortPtr view2 = window->GetViewport(2);
+		if(!view1.IsNull())
 		{
-			if(code == nova::BT_LBUTTON)
+			nova::CCameraPtr camera1 = view1->GetCameraByName("cam1");
+			//nova::CCameraPtr camera2 = view2->GetCameraByName("cam2");
+			if(!camera1.IsNull())
 			{
-				camera->SetOrientation(nova::Quaternionf::IDENTITY);
+				camera1->SetOrientation(nova::Quaternionf::IDENTITY);
+				//camera2->SetOrientation(nova::Quaternionf::IDENTITY);
 
-				camera->Yaw(-((x - (view->GetActualWidth() >> 1)) * 0.008f));
-				camera->Pitch(-((y - (view->GetActualHeight() >> 1)) * 0.008f));
+				camera1->Yaw(-((x - (view1->GetActualWidth() >> 1)) * 0.008f));
+				camera1->Pitch(-((y - (view1->GetActualHeight() >> 1)) * 0.008f));
+				//camera2->Yaw(-((x - (view1->GetActualWidth() >> 1)) * 0.008f));
+				//camera2->Pitch(-((y - (view1->GetActualHeight() >> 1)) * 0.008f));
 			}
 		}
 	}

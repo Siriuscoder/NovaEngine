@@ -23,8 +23,6 @@
 
 #include "nova_scene_manager.h"
 #include "nova_material.h"
-#include "nova_hardware_texture_buffer.h"
-#include "nova_hardware_vertex_buffer.h"
 #include "nova_movable_object.h"
 #include "nova_math.h"
 #include "nova_matrix3d.h"
@@ -75,7 +73,6 @@ protected:
 	TBatchList mBatchList;
 	CMeshBoxPtr mMeshBox;
 	CHardwareVertexBufferPtr mVertexChainBuffer;
-	CHardwareVertexBufferPtr mUVBuffer;
 	CHardwareIndexBufferPtr mVboIndexBuffer;
 };
 

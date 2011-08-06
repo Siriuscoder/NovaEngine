@@ -28,7 +28,7 @@ namespace nova
 {
 
 CMesh::CMesh(CResourceManager * rm, const nstring & name, const nstring & group, TAttach state) :
-	CResource(rm, name, group, state)
+	CResource(rm, name, group, state), mPackage(NULL)
 {
 	memset(&mMeshDef, 0, sizeof(TMeshContainer));
 	mMeshDef.nTMatrix = Matrix4f::IDENTITY;
@@ -50,15 +50,13 @@ void CMesh::CalculateNormals(void/* Simple method */)
 
 	typedef stl< stl<nInt32>::vector >::vector t_expl;
 	t_expl expl;
-	//TNormal3d normal;
-	mMeshDef.nNormalList.resize(mMeshDef.nVertexList.size());
 
 	expl.resize(mMeshDef.nVertexList.size());
 	for(nova::nUInt32 i = 0; i < mMeshDef.nMeshInfoList.size(); ++i)
 	{
-		expl[mMeshDef.nIndexList[i].a].push_back(i);
-		expl[mMeshDef.nIndexList[i].b].push_back(i);
-		expl[mMeshDef.nIndexList[i].c].push_back(i);
+		expl[mMeshDef.nMeshInfoList[i].faceIndex.a].push_back(i);
+		expl[mMeshDef.nMeshInfoList[i].faceIndex.b].push_back(i);
+		expl[mMeshDef.nMeshInfoList[i].faceIndex.c].push_back(i);
 	}
 
     for (nova::nUInt32 i = 0; i < mMeshDef.nVertexList.size(); ++i)
@@ -69,29 +67,31 @@ void CMesh::CalculateNormals(void/* Simple method */)
 
         for (nova::nUInt32 k = 0; k < t; ++k)
         {
-			vec.X() += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.x;
-			vec.Y() += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.y;
-			vec.Z() += mMeshDef.nMeshInfoList[expl[i][k]].nFaceNormal.z;
+			vec += Vector3f(mMeshDef.nMeshInfoList[expl[i][k]].faceNormal);
         }
-
 
 		vec.Normalize();
 
-		mMeshDef.nNormalList[i].x = vec.X();
-		mMeshDef.nNormalList[i].y = vec.Y();
-		mMeshDef.nNormalList[i].z = vec.Z();
+		mMeshDef.nVertexList[i].nx = vec.X();
+		mMeshDef.nVertexList[i].ny = vec.Y();
+		mMeshDef.nVertexList[i].nz = vec.Z();
     }
-/*
-	for(nova::nUInt32 i = 0; i < expl.size(); ++i)
-		expl[i].clear();
-	expl.clear();
-*/
+
 
 	for(nova::nUInt32 i = 0; i < GetListenersCount(); i++)
 	{
 		CMeshBoxListener * lis =
 			dynamic_cast<CMeshBoxListener *>(GetListener(i));
 		lis->CalculateNormalsListener(this);
+	}
+}
+
+void CMesh::SetSourcePackage(CFilesPackage *package)
+{
+	if(package)
+	{
+		mPackage = package;
+		mPackageLoading = true;
 	}
 }
 
@@ -106,27 +106,16 @@ void CMesh::SetMeshDefinition(TMeshContainer *_mesh)
 		mMeshDef = *_mesh;
 }
 
-bool __SortComparer(TTriangleInfo &left, TTriangleInfo &right)
+bool CMesh::TIndexSortCmp::operator()(TFaceInfo &left, TFaceInfo &right)
 {
-	return (left.nMatSubID < right.nMatSubID);
+	return (left.matSubID < right.matSubID);
 }
 
 void CMesh::SortFaceIndexByMaterials(void)
 {
+	TIndexSortCmp cmp;
 	//QSortFaces(mMeshDef.nIndexList, mMeshDef.nMeshInfoList);
-	std::sort(mMeshDef.nMeshInfoList.begin(), mMeshDef.nMeshInfoList.end(), __SortComparer);
-
-	TIndexes tmp;
-	tmp.resize(mMeshDef.nIndexList.size());
-	std::copy(mMeshDef.nIndexList.begin(), mMeshDef.nIndexList.end(), tmp.begin());
-// переставляем элементы в массиве индексов
-	for(nova::nUInt32 i = 0; i < mMeshDef.nMeshInfoList.size(); i++)
-	{
-		mMeshDef.nIndexList[i] = tmp[mMeshDef.nMeshInfoList[i].nFace];
-		mMeshDef.nMeshInfoList[i].nFace = i;
-	}
-
-	tmp.clear();
+	std::sort(mMeshDef.nMeshInfoList.begin(), mMeshDef.nMeshInfoList.end(), cmp);
 }
 
 CBoundingBox CMesh::GenerateBoundingBox(void)
@@ -140,7 +129,7 @@ CBoundingBox CMesh::GenerateBoundingBox(void)
 		zmax = mMeshDef.nVertexList[0].z,
 		zmin = mMeshDef.nVertexList[0].z;
 
-	TVertexes::iterator it = mMeshDef.nVertexList.begin()+1;
+	TStVertexArray::iterator it = mMeshDef.nVertexList.begin()+1;
 	for(; it != mMeshDef.nVertexList.end(); ++it)
 	{
 		xmax = std::max((*it).x, xmax);
@@ -167,24 +156,25 @@ CBoundingBox CMesh::GenerateBoundingBox(void)
 	return testBox;
 }
 
-void CMesh::FreeResourceImpl()
+CHardwareVertexBufferPtr CMesh::CreateVBO(void)
 {
-
+	CMemoryBuffer buffer(&(mMeshDef.nVertexList[0]), mMeshDef.nVertexList.size() * sizeof(stVertex3d3n3uv_t));
+	return CHardwareVertexBufferPtr(new CHardwareVertexBuffer(buffer, HWB_STATIC));
 }
 
-
-
-void CMesh::ToWorldCoord()
+CHardwareIndexBufferPtr CMesh::CreateIBO(void)
 {
-	for(nUInt32 i = 0; i < mMeshDef.nVertexList.size(); i++)
-	{
-		nova::Vector4f vec(mMeshDef.nVertexList[i].x, mMeshDef.nVertexList[i].y, mMeshDef.nVertexList[i].z, 0);
-		vec = vec * mMeshDef.nTMatrix;
+	TFaceInfoToFaceABC funct(mMeshDef.nMeshInfoList.size());
+	std::for_each(mMeshDef.nMeshInfoList.begin(), mMeshDef.nMeshInfoList.end(), funct);
 
-		mMeshDef.nVertexList[i].x = vec.X();
-		mMeshDef.nVertexList[i].y = vec.Y();
-		mMeshDef.nVertexList[i].z = vec.Z();
-	}
+	CMemoryBuffer buffer(&(funct.mIndexes[0]), funct.mIndexes.size() * sizeof(TFaceABC));
+	return CHardwareIndexBufferPtr(new CHardwareIndexBuffer(buffer, HWB_STATIC));
+}
+
+void CMesh::FreeResourceImpl()
+{
+	mMeshDef.nVertexList.clear();
+	mMeshDef.nMeshInfoList.clear();
 }
 
 void CMesh::LoadResourceImpl(void)
@@ -203,10 +193,10 @@ void CMesh::LoadResourceImpl(void)
 	//CalculateNormals();
 	// Сортируем вершины по материалам
 
-	if(mMeshDef.nPackageLoading && mMeshDef.pPackage)
+	if(mPackageLoading && mPackage)
 	{
 // use to load mesh with internal format 
-		CMemoryBuffer fileBuf = mMeshDef.pPackage->GetFile(mMeshDef.nMeshfile);
+		CMemoryBuffer fileBuf = mPackage->GetFile(mMeshfile);
 		if(fileBuf.GetBegin())
 		{
 			CMemoryStream fileStream;
@@ -217,124 +207,69 @@ void CMesh::LoadResourceImpl(void)
 		}
 
 		fileBuf.FreeBuffer();
-		mMeshDef.nPackageLoading = true;
 	}
 	else
 	{
-		mMeshDef = CGlobalMshLoader::LoadMeshFromFile(mMeshDef.nMeshfile);
-		mMeshDef.nPackageLoading = false;
+		if(!mMeshfile.empty())
+		{
+			mMeshDef = CGlobalMshLoader::LoadMeshFromFile(mMeshfile);
+		}
 	}
 }
 
 void CMesh::BuildResourceImpl(void)
 {
-	mSize += mMeshDef.nVertexList.size() * sizeof(TVertex3d);
-	mSize += mMeshDef.nNormalList.size() * sizeof(TNormal3d);
-	mSize += mMeshDef.nMappingFacesList.size() * sizeof(TUVMapping);
-	mSize += mMeshDef.nIndexList.size() * sizeof(TFaceIndex);
-	mSize += mMeshDef.nMeshInfoList.size() * sizeof(TTriangleInfo);
+	mSize += mMeshDef.nVertexList.size() * sizeof(stVertex3d3n3uv_t);
+	mSize += mMeshDef.nMeshInfoList.size() * sizeof(TFaceInfo);
 
-}
-
-bool CMesh::CheckValidLength()
-{
-	if(mMeshDef.nVertexList.size() == mMeshDef.nNormalList.size() == mMeshDef.nMappingFacesList.size())
-		return true;
-
-	return false;
-}
-
-void * CMesh::GetVertexPointer(size_t *count)
-{
-	*count = mMeshDef.nVertexList.size();
-	if(*count > 0)
-	{
-		return &(mMeshDef.nVertexList[0]);
-	}
-
-	return NULL;
-}
-
-void * CMesh::GetNormalsPointer(size_t *count)
-{
-	*count = mMeshDef.nNormalList.size();
-	if(*count > 0)
-	{
-		return &(mMeshDef.nNormalList[0]);
-	}
-
-	return NULL;
-}
-
-void * CMesh::GetUVPointer(size_t *count)
-{
-	*count = mMeshDef.nMappingFacesList.size();
-	if(*count > 0)
-	{
-		return &(mMeshDef.nMappingFacesList[0]);
-	}
-
-	return NULL;
-}
-
-void * CMesh::GetIndexesPointer(size_t *count)
-{
-	*count = mMeshDef.nIndexList.size();
-	if(*count > 0)
-	{
-		return &(mMeshDef.nIndexList[0]);
-	}
-
-	return NULL;
 }
 
 void CMesh::GenerateMatChangesGroups(void)
 {
-	TFacesInfo::iterator it;
+	TFacesInfoArray::iterator it;
 	nova::nInt32 group = -1;
+	int count = 0;
 
 	mMeshDef.nMatChangesGroups.clear();
-	for(it = mMeshDef.nMeshInfoList.begin(); it != mMeshDef.nMeshInfoList.end(); it++)
+	for(it = mMeshDef.nMeshInfoList.begin(); it != mMeshDef.nMeshInfoList.end(); it++, count++)
 	{
-		if(group != it->nMatSubID)
+		if(group != it->matSubID)
 		{
-			mMeshDef.nMatChangesGroups.push_back(it->nFace);
-			group = it->nMatSubID;
+			mMeshDef.nMatChangesGroups.push_back(count);
+			group = it->matSubID;
 		}
 	}
 }
 
 void CMesh::GenerateNormalsToFaces(void)
 {
-	TFacesInfo::iterator it;
+	TFacesInfoArray::iterator it;
 	it = mMeshDef.nMeshInfoList.begin();
 
 	try
 	{
-		for(nInt32 i = 0; it != mMeshDef.nMeshInfoList.end(); ++it, ++i)
+		for(; it != mMeshDef.nMeshInfoList.end(); ++it)
 		{
 			Vector3f a, b, normal;
 
-			a = Vector3f(mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].b].x, 
-							mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].b].y, 
-							mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].b].z) -
-				Vector3f(mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].a].x, 
-							mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].a].y, 
-							mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].a].z);
+			a = Vector3f(mMeshDef.nVertexList[(*it).faceIndex.b].x, 
+							mMeshDef.nVertexList[(*it).faceIndex.b].y, 
+							mMeshDef.nVertexList[(*it).faceIndex.b].z) -
+				Vector3f(mMeshDef.nVertexList[(*it).faceIndex.a].x, 
+							mMeshDef.nVertexList[(*it).faceIndex.a].y, 
+							mMeshDef.nVertexList[(*it).faceIndex.a].z);
 
-			b = Vector3f(mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].b].x, 
-							mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].b].y, 
-							mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].b].z) -
-				Vector3f(mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].c].x, 
-							mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].c].y, 
-							mMeshDef.nVertexList[mMeshDef.nIndexList[(*it).nFace].c].z);
+			b = Vector3f(mMeshDef.nVertexList[(*it).faceIndex.b].x,
+							mMeshDef.nVertexList[(*it).faceIndex.b].y,
+							mMeshDef.nVertexList[(*it).faceIndex.b].z) -
+				Vector3f(mMeshDef.nVertexList[(*it).faceIndex.c].x,
+							mMeshDef.nVertexList[(*it).faceIndex.c].y,
+							mMeshDef.nVertexList[(*it).faceIndex.c].z);
 
 			normal = a.Cross(b);
 			normal.Normalize();
 
-			mMeshDef.nMeshInfoList[i].nFaceNormal.x = normal.X();
-			mMeshDef.nMeshInfoList[i].nFaceNormal.y = normal.Y();
-			mMeshDef.nMeshInfoList[i].nFaceNormal.z = normal.Z();
+			Vector3f(it->faceNormal) = normal;
 		}
 	}
 	catch(std::exception & ex)
@@ -347,7 +282,7 @@ void CMesh::GenerateNormalsToFaces(void)
 
 void CMesh::SerializeToXmlFileImpl(xmlTextWriterPtr writer)
 {
-	if(xmlTextWriterWriteElement(writer, BAD_CAST "Meshfile", BAD_CAST mMeshDef.nMeshfile.c_str()) < 0)
+	if(xmlTextWriterWriteElement(writer, BAD_CAST "Meshfile", BAD_CAST mMeshfile.c_str()) < 0)
 		NOVA_EXP("CMesh::SerializeToXmlFileImpl: xmlTextWriterWriteElement fail", BAD_OPERATION);
 }
 
@@ -400,6 +335,7 @@ CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, cons
 		return CResourcePtr();
 
 	CMesh::TMeshContainer meshStruct;
+	nova::nstring meshFile;
 	while(node != NULL)
 	{
 		if(xmlIsBlankNode(node))
@@ -409,16 +345,14 @@ CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, cons
 		}
 
 		if(!xmlStrcmp(node->name, (xmlChar *) "Meshfile"))
-			meshStruct.nMeshfile.append(reinterpret_cast<char *>(node->children->content));
+			meshFile.append(reinterpret_cast<char *>(node->children->content));
 
 		node = node->next;
 	}
 
 	meshStruct.nName = name;
-	meshStruct.pPackage = NULL;
-	meshStruct.nPackageLoading = false;
-
 	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, group);
+	meshPtr->SetMshFile(meshFile);
 
 	return meshPtr;
 }
@@ -429,6 +363,7 @@ CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, cons
 		return CResourcePtr();
 
 	CMesh::TMeshContainer meshStruct;
+	nova::nstring meshFile;
 	while(node != NULL)
 	{
 		if(xmlIsBlankNode(node))
@@ -438,16 +373,15 @@ CResourcePtr CMeshManager::LoadResourceFromXmlNodeImpl(const nstring &name, cons
 		}
 
 		if(!xmlStrcmp(node->name, (xmlChar *) "Meshfile"))
-			meshStruct.nMeshfile.append(reinterpret_cast<char *>(node->children->content));
+			meshFile.append(reinterpret_cast<char *>(node->children->content));
 
 		node = node->next;
 	}
 
 	meshStruct.nName = name;
-	meshStruct.pPackage = const_cast<CFilesPackage *>(&package);
-	meshStruct.nPackageLoading = true;
-
 	CMeshBoxPtr meshPtr = CreateMesh(&meshStruct, group);
+	meshPtr->SetSourcePackage(const_cast<CFilesPackage *>(&package));
+	meshPtr->SetMshFile(meshFile);
 
 	return meshPtr;
 }

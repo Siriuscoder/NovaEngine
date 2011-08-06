@@ -45,7 +45,7 @@ public:
 
 	CHardwareGeometryDataBuffer();
 
-	~CHardwareGeometryDataBuffer();
+	virtual ~CHardwareGeometryDataBuffer();
 
 	GLuint GetBufferID(void);
 
