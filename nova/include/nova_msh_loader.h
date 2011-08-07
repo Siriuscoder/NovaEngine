@@ -26,11 +26,9 @@
 namespace nova
 {
 
-#define MSH_VERTEX_BIT		0x00000001
-#define MSH_INDEX_BIT		0x00000002
-#define MSH_MAPPING_BIT		0x00000004
-#define MSH_NORMALS_BIT		0x00000008
-#define MSH_MAT_GROUP_BIT	0x00000010
+#define MSH_VERTEX_BIT		(0x1)
+#define MSH_INDEX_BIT		((0x1) << 1)
+#define MSH_MAT_GROUP_BIT	((0x1) << 2)
 
 class NOVA_EXPORT CGlobalMshLoader : public CMemoryManaged
 {

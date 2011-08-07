@@ -34,6 +34,20 @@ public:
 
 	~CASELoader() {}
 
+	typedef struct 
+	{
+		typedef struct 
+		{
+			nova::nReal s;
+			nova::nReal t;
+			nova::nReal w;
+		} stCoords;
+
+		CMesh::TMeshContainer *mesh;
+		stl<CMesh::TFaceABC>::vector tvIndexList;
+		stl<stCoords>::vector tvMappingList;
+	} exMeshContainer;
+
 protected:
 
 	void InitLoader(void);

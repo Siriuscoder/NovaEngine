@@ -26,6 +26,7 @@
 #define MSH_MAIN_SIGNATURE			0x000005AF
 #define MSH_VERSION(major,minor)	(nova::nUInt32)(((nova::nUInt16)major & 0xffff) | ((((nova::nUInt32)minor) & 0xffff) << 16))
 #define MSH_VERSION_1_0				MSH_VERSION(1, 0)
+#define MSH_VERSION_1_1				MSH_VERSION(1, 1)
 #define MSH_VERSION_SIGN(x)			(nova::nUInt32)((nova::nUInt32)x | MSH_MAIN_SIGNATURE)
 
 namespace nova
@@ -58,51 +59,29 @@ CMesh::TMeshContainer &CGlobalMshLoader::LoadMeshFromStream(CDataStream *stream)
 		throw NOVA_EXP("CGlobalMshLoader::LoadMeshFromStream: disparity of signatures, unknown format ", BAD_OPERATION);
 
 	gMeshBuffer.nName.append(header.nName);
-	if(header.nVersion == MSH_VERSION_1_0)
+	if(header.nVersion == MSH_VERSION_1_1)
 	{
-		if(header.nVersionSgn != MSH_VERSION_SIGN(MSH_VERSION_1_0))
+		if(header.nVersionSgn != MSH_VERSION_SIGN(MSH_VERSION_1_1))
 			throw NOVA_EXP("CGlobalMshLoader::LoadMeshFromStream: disparity of version signatures, unknown format version ", BAD_OPERATION);
 
-		nUInt32 size;
+		size_t size;
 		if((header.nDataMask & MSH_VERTEX_BIT) == MSH_VERTEX_BIT)
 		{
-			stream->Read(&size, sizeof(nUInt32));
+			stream->Read(&size, sizeof(size_t));
 			gMeshBuffer.nVertexList.resize(size);
-			stream->Read((void *)&(gMeshBuffer.nVertexList[0]), size * sizeof(TVertex3d));
+			stream->Read((void *)&(gMeshBuffer.nVertexList[0]), size * sizeof(CMesh::stVertex3d3n3uv_t));
 		}
 
 		if((header.nDataMask & MSH_INDEX_BIT) == MSH_INDEX_BIT)
 		{
-			stream->Read(&size, sizeof(nUInt32));
-			gMeshBuffer.nIndexList.resize(size);
-			stream->Read((void *)&(gMeshBuffer.nIndexList[0]), size * sizeof(TFaceIndex));
-		}
-
-		if((header.nDataMask & MSH_MAPPING_BIT) == MSH_MAPPING_BIT)
-		{
-			stream->Read(&size, sizeof(nUInt32));
-			gMeshBuffer.nMappingFacesList.resize(size);
-			stream->Read((void *)&(gMeshBuffer.nMappingFacesList[0]), size * sizeof(TUVMapping));
-		}
-
-		if((header.nDataMask & MSH_NORMALS_BIT) == MSH_NORMALS_BIT)
-		{
-			stream->Read(&size, sizeof(nUInt32));
-			gMeshBuffer.nNormalList.resize(size);
-			stream->Read((void *)&(gMeshBuffer.nNormalList[0]), size * sizeof(TNormal3d));
-		}
-
-		if((header.nDataMask & MSH_MAT_GROUP_BIT) == MSH_MAT_GROUP_BIT)
-		{
-			stream->Read(&size, sizeof(nUInt32));
+			stream->Read(&size, sizeof(size_t));
 			gMeshBuffer.nMeshInfoList.resize(size);
-			nUInt16 pp;
 
-			for(nUInt32 i = 0; i < size; i++)
+			for(size_t i = 0; i < size; i++)
 			{
-				gMeshBuffer.nMeshInfoList[i].nFace = i;
-				stream->Read((void *)&(pp), sizeof(nUInt16));
-				gMeshBuffer.nMeshInfoList[i].nMatSubID = pp;
+				stream->Read((void *)&(gMeshBuffer.nMeshInfoList[i].faceIndex), size * sizeof(CMesh::TFaceABC));
+				stream->Read((void *)&(gMeshBuffer.nMeshInfoList[i].matSubID), sizeof(nova::nUInt32));
+				gMeshBuffer.nMeshInfoList[i].faceNo = i;
 			}
 		}
 	}
@@ -118,14 +97,11 @@ void CGlobalMshLoader::SaveMeshToStream(const CMesh::TMeshContainer &mesh, CData
 	memset(&header, 0, sizeof(TMSHHeader));
 
 	header.nSignature = MSH_MAIN_SIGNATURE;
-	header.nVersion = MSH_VERSION_1_0;
-	header.nVersionSgn = MSH_VERSION_SIGN(MSH_VERSION_1_0);
+	header.nVersion = MSH_VERSION_1_1;
+	header.nVersionSgn = MSH_VERSION_SIGN(MSH_VERSION_1_1);
 
 	header.nDataMask |= mesh.nVertexList.size() ? MSH_VERTEX_BIT : 0;
-	header.nDataMask |= mesh.nIndexList.size() ? MSH_INDEX_BIT : 0;
-	header.nDataMask |= mesh.nMappingFacesList.size() ? MSH_MAPPING_BIT : 0;
-	header.nDataMask |= mesh.nNormalList.size() ? MSH_NORMALS_BIT : 0;
-	header.nDataMask |= mesh.nMeshInfoList.size() ? MSH_MAT_GROUP_BIT : 0;
+	header.nDataMask |= mesh.nMeshInfoList.size() ? MSH_INDEX_BIT : 0;
 	strcpy(header.nName, mesh.nName.c_str());
 
 	if(!stream)
@@ -133,47 +109,24 @@ void CGlobalMshLoader::SaveMeshToStream(const CMesh::TMeshContainer &mesh, CData
 
 	stream->Write(&header, sizeof(TMSHHeader));
 
-	nUInt32 block;
+	size_t block;
 	if(mesh.nVertexList.size())
 	{
 		block = mesh.nVertexList.size();
-		stream->Write(&block, sizeof(nUInt32));
-		stream->Write((void *)&(mesh.nVertexList[0]), block * sizeof(TVertex3d));
-	}
-
-	if(mesh.nIndexList.size())
-	{
-		block = mesh.nIndexList.size();
-		stream->Write(&block, sizeof(nUInt32));
-		stream->Write((void *)&(mesh.nIndexList[0]), block * sizeof(TFaceIndex));
-	}
-
-	if(mesh.nMappingFacesList.size())
-	{
-		block = mesh.nMappingFacesList.size();
-		stream->Write(&block, sizeof(nUInt32));
-		stream->Write((void *)&(mesh.nMappingFacesList[0]), block * sizeof(TUVMapping));
-	}
-
-	if(mesh.nNormalList.size())
-	{
-		block = mesh.nNormalList.size();
-		stream->Write(&block, sizeof(nUInt32));
-		stream->Write((void *)&(mesh.nNormalList[0]), block * sizeof(TNormal3d));
+		stream->Write(&block, sizeof(size_t));
+		stream->Write((void *)&(mesh.nVertexList[0]), block * sizeof(CMesh::stVertex3d3n3uv_t));
 	}
 
 	if(mesh.nMeshInfoList.size())
 	{
-		block = mesh.nIndexList.size(); // size like faces num
-		stream->Write(&block, sizeof(nUInt32));
+		block = mesh.nMeshInfoList.size();
+		stream->Write(&block, sizeof(size_t));
 
-		stl<nUInt16>::vector mMatGroups;
-		mMatGroups.resize(block);
-
-		for(nUInt16 i = 0; i < mesh.nMeshInfoList.size(); i++)
-			mMatGroups[mesh.nMeshInfoList[i].nFace] = mesh.nMeshInfoList[i].nMatSubID;
-
-		stream->Write((void *)&(mMatGroups[0]), block * sizeof(nUInt16));
+		for(size_t i = 0; i < block; i++)
+		{
+			stream->Write((void *)&(mesh.nMeshInfoList[i].faceIndex), block * sizeof(CMesh::TFaceABC));
+			stream->Write((void *)&(mesh.nMeshInfoList[i].matSubID), sizeof(nova::nUInt32));
+		}
 	}
 }
 

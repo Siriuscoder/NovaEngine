@@ -115,26 +115,6 @@ public:
 		nova::nReal faceNormal[3];
 	} TFaceInfo;
 
-	typedef struct FaceInfoToFaceABC
-	{
-		FaceInfoToFaceABC(size_t maxCount) : count(0)
-		{
-			mIndexes.resize(maxCount);
-		}
-
-
-		void operator()(TFaceInfo &face)
-		{
-			mIndexes[count] = face.faceIndex;
-			count++;
-		}
-		
-		stl<TFaceABC>::vector mIndexes;
-	private:
-
-		int count;
-	} TFaceInfoToFaceABC;
-
 #pragma pack(pop)
 
 	typedef nova::stl<stVertex3d3n3uv_t>::vector TStVertexArray;
@@ -160,6 +140,26 @@ public:
 	{
 		bool operator()(TFaceInfo &left, TFaceInfo &right);
 	};
+
+	typedef struct FaceInfoToFaceABC
+	{
+		FaceInfoToFaceABC(size_t maxCount) : count(0)
+		{
+			mIndexes.resize(maxCount);
+		}
+
+
+		void operator()(TFaceInfo &face)
+		{
+			mIndexes[count] = face.faceIndex;
+			count++;
+		}
+		
+		stl<TFaceABC>::vector mIndexes;
+	private:
+
+		int count;
+	} TFaceInfoToFaceABC;
 
 protected:
 

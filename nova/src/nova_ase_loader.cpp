@@ -125,7 +125,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 	nlbrack = 0;
 	nrbrack = 0;
 
-	CMesh::TMeshContainer *LastGeomObject = NULL;
+	exMeshContainer LastGeomObject;
+	memset(&LastGeomObject, 0, sizeof(exMeshContainer));
 	CMaterial::TMaterialContainer *LastMaterial = NULL;
 	CMaterial::TMaterialContainer *LastSubMaterial = NULL;
 	CTexture::TTextureContainer *LastTexture = NULL;
@@ -225,7 +226,7 @@ nInt32 CASELoader::LoadAseInternal(void)
        			else if ( strcmp ( word, "}" ) == 0 )
        			{
        				level = nlbrack - nrbrack;
-					LastGeomObject = NULL;
+					LastGeomObject.mesh = NULL;
        				continue;
        			}
 //
@@ -242,7 +243,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 
 					mesh.nName = nObjName;
 					mMeshesMap.insert(std::pair<nstring, CMesh::TMeshContainer>(nObjName, mesh));
-					LastGeomObject = &(mMeshesMap[nObjName]);
+					LastGeomObject.mesh = &(mMeshesMap[nObjName]);
 					break;
 				}
 				else if ( strcmp ( word, "*NODE_TM" ) == 0 )
@@ -270,8 +271,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 					count = sscanf ( next, "%d%n", &i, &width );
 		    		next = next + width;
 
-					if(LastGeomObject)
-						LastGeomObject->MatID = i;
+					if(LastGeomObject.mesh)
+						LastGeomObject.mesh->MatID = i;
 					break;
 				}
 				else
@@ -438,10 +439,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    	}
 		    	else if ( strcmp ( word, "*MESH_FACE" ) == 0 )
 		    	{
-					TFaceIndex index;
-					TTriangleInfo mat_alias;
+					CMesh::TFaceInfo index;
 
-					count = sscanf ( next, "%d%n", &mat_alias.nFace, &width );
+					count = sscanf ( next, "%d%n", &index.faceNo, &width );
 		    		next = next + width;
 
 		    		count = sscanf ( next, "%s%n", word2, &width );
@@ -450,19 +450,19 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		count = sscanf ( next, "%s%n", word2, &width );
 		    		next = next + width;
 
-		    		count = sscanf ( next, "%d%n", &index.a, &width );
+					count = sscanf ( next, "%d%n", &index.faceIndex.a, &width );
 		    		next = next + width;
 
 		    		count = sscanf ( next, "%s%n", word2, &width );
 		    		next = next + width;
 
-		    		count = sscanf ( next, "%d%n", &index.b, &width );
+		    		count = sscanf ( next, "%d%n", &index.faceIndex.b, &width );
 		    		next = next + width;
 
 		    		count = sscanf ( next, "%s%n", word2, &width );
 		    		next = next + width;
 
-		    		count = sscanf ( next, "%d%n", &index.c, &width );
+		    		count = sscanf ( next, "%d%n", &index.faceIndex.c, &width );
 		    		next = next + width;
 
 
@@ -476,15 +476,14 @@ nInt32 CASELoader::LoadAseInternal(void)
 						{
 							count = sscanf ( next, "%d%n", &i, &width );
 		    				next = next + width;
-							mat_alias.nMatSubID = i;
+							index.matSubID = i;
 							break;
 						}
 					}
 
-					if(LastGeomObject)
+					if(LastGeomObject.mesh)
 					{
-						LastGeomObject->nIndexList.push_back(index);
-						LastGeomObject->nMeshInfoList.push_back(mat_alias);
+						LastGeomObject.mesh->nMeshInfoList.push_back(index);
 					}
 					
 
@@ -567,7 +566,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word1, "*MESH_TFACE" ) == 0 )
 				{
-					TFaceIndex index;
+					CMesh::TFaceABC index;
 
 					count = sscanf ( next, "%d%n", &i, &width );
 		    		next = next + width;
@@ -581,11 +580,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		count = sscanf ( next, "%d%n", &index.c, &width );
 		    		next = next + width;
 
-					if(LastGeomObject)
-					{
-						LastGeomObject->nTVIndexList.push_back(index);
-					}
-
+					LastGeomObject.tvIndexList.push_back(index);
 					break;
 				}
 				else
@@ -611,7 +606,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word1, "*MESH_TVERT" ) == 0  )
 				{
-					TUVMapping uv;
+					exMeshContainer::stCoords uv;
 
 					count = sscanf ( next, "%d%n", &i, &width );
 					next = next + width;
@@ -625,11 +620,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 					count = sscanf ( next, "%f%n", &uv.w, &width );
 					next = next + width;
 
-					if(LastGeomObject)
-					{
-						LastGeomObject->nTVMappingList.push_back(uv);
-					}
-
+					LastGeomObject.tvMappingList.push_back(uv);
 					break;
 				}
 				else
@@ -655,7 +646,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word1, "*MESH_VERTEX" ) == 0 )
 				{
-					TVertex3d vertex;
+					CMesh::stVertex3d3n3uv_t vertex;
 
 					count = sscanf ( next, "%d%n", &i, &width );
 					next = next + width;
@@ -669,9 +660,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					count = sscanf ( next, "%f%n", &vertex.z, &width );
 					next = next + width;
 
-					if(LastGeomObject)
+					if(LastGeomObject.mesh)
 					{
-						LastGeomObject->nVertexList.push_back(vertex);
+						LastGeomObject.mesh->nVertexList.push_back(vertex);
 					}
 
 					break;
@@ -740,9 +731,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(LastGeomObject)
+					if(LastGeomObject.mesh)
 					{
-						LastGeomObject->nTMatrix.SetRow(0, row);
+						LastGeomObject.mesh->nTMatrix.SetRow(0, row);
 					}
 
 					break;
@@ -760,9 +751,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(LastGeomObject)
+					if(LastGeomObject.mesh)
 					{
-						LastGeomObject->nTMatrix.SetRow(1, row);
+						LastGeomObject.mesh->nTMatrix.SetRow(1, row);
 					}
 
 					break;
@@ -780,9 +771,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(LastGeomObject)
+					if(LastGeomObject.mesh)
 					{
-						LastGeomObject->nTMatrix.SetRow(2, row);
+						LastGeomObject.mesh->nTMatrix.SetRow(2, row);
 					}
 
 					break;
@@ -800,9 +791,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 1;
-					if(LastGeomObject)
+					if(LastGeomObject.mesh)
 					{
-						LastGeomObject->nTMatrix.SetRow(3, row);
+						LastGeomObject.mesh->nTMatrix.SetRow(3, row);
 					}
 
 					break;
@@ -1647,7 +1638,7 @@ void CASELoader::CloseLoader(void)
 		struct TVLeaf
 		{
 			nUInt32 face;
-			TUVMapping uv;
+			exMeshContainer::stCoords uv;
 			size_t pos;
 		};
 
