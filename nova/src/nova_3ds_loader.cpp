@@ -306,28 +306,28 @@ CMesh::TMeshContainer * C3DSLoader::LoadSingleMesh(const C3DSChunk &chunk, nstri
 		case T3DS_TRI_VERTEXLIST:
 			{
 				count = mpStream->ReadMemOfType<nUInt16>();
+				// realocate vetrex array
+				if(pMesh->nVertexList.size() != count)
+					pMesh->nVertexList.resize(count);
 				for(nUInt16 ic = 0; ic < count; ic++)
 				{
-					TVertex3d vertex;
-					vertex.x = mpStream->ReadMemOfType<float>();
-					vertex.y = mpStream->ReadMemOfType<float>();
-					vertex.z = mpStream->ReadMemOfType<float>();
-
-					pMesh->nVertexList.push_back(vertex);
+					pMesh->nVertexList[ic].x = mpStream->ReadMemOfType<float>();
+					pMesh->nVertexList[ic].y = mpStream->ReadMemOfType<float>();
+					pMesh->nVertexList[ic].z = mpStream->ReadMemOfType<float>();
 				}
 			}
 			break;
 		case T3DS_TRI_FACEMAPPING:
 			{
 				count = mpStream->ReadMemOfType<nova::nUInt16>();
+				// realocate vetrex array
+				if(pMesh->nVertexList.size() != count)
+					pMesh->nVertexList.resize(count);
 				for(nUInt16 ic = 0; ic < count; ic++)
 				{
-					TUVMapping uv;
-					uv.s = mpStream->ReadMemOfType<float>();
-					uv.t = mpStream->ReadMemOfType<float>();
-					uv.w = 0;
-
-					pMesh->nMappingFacesList.push_back(uv);
+					pMesh->nVertexList[ic].s = mpStream->ReadMemOfType<float>();
+					pMesh->nVertexList[ic].t = mpStream->ReadMemOfType<float>();
+					pMesh->nVertexList[ic].w = 0;
 				}
 			}
 			break;
@@ -369,15 +369,14 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk,  CMesh::TMeshContainer *me
 	GotoChunk(chunk);
 
 	count = mpStream->ReadMemOfType<nova::nUInt16>();
+	if(mesh->nMeshInfoList.size() != count)
+		mesh->nMeshInfoList.resize(count);
 	for(nUInt16 i = 0; i < count; ++i)
 	{
-		TFaceIndex index;
-		index.a = mpStream->ReadMemOfType<nova::nUInt16>();
-		index.b = mpStream->ReadMemOfType<nova::nUInt16>();
-		index.c = mpStream->ReadMemOfType<nova::nUInt16>();
+		mesh->nMeshInfoList[i].faceIndex.a = mpStream->ReadMemOfType<nova::nUInt16>();
+		mesh->nMeshInfoList[i].faceIndex.b = mpStream->ReadMemOfType<nova::nUInt16>();
+		mesh->nMeshInfoList[i].faceIndex.c = mpStream->ReadMemOfType<nova::nUInt16>();
 		mpStream->ReadMemOfType<nova::nUInt16>();
-
-		mesh->nIndexList.push_back(index);
 	}
 
 	// now read the optional chunks
@@ -395,15 +394,13 @@ void C3DSLoader::ReadFaceList(const C3DSChunk &chunk,  CMesh::TMeshContainer *me
 				mat_id++;
 
 				count = mpStream->ReadMemOfType<nova::nUInt16>();
+				if(mesh->nMeshInfoList.size() != count)
+					mesh->nMeshInfoList.resize(count);
 				for (nova::nUInt16 i = 0; i < count; i++)
 				{
-					TTriangleInfo info;
-
-					info.nMatName = nstring(str);
-					info.nFace = mpStream->ReadMemOfType<nova::nUInt16>();
-					info.nMatSubID = mat_id;
-
-					mesh->nMeshInfoList.push_back(info);
+					mesh->nMeshInfoList[i].matName = nstring(str);
+					mesh->nMeshInfoList[i].faceNo = mpStream->ReadMemOfType<nova::nUInt16>();
+					mesh->nMeshInfoList[i].matSubID = mat_id;
 				}
 			}
             break;
