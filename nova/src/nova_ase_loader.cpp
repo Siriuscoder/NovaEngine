@@ -125,8 +125,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 	nlbrack = 0;
 	nrbrack = 0;
 
-	exMeshContainer LastGeomObject;
-	memset(&LastGeomObject, 0, sizeof(exMeshContainer));
+	CMesh::TMeshContainer *LastGeomObject = NULL;
+	exInternalAseArrays *exMatCoordsIndexes = NULL;
 	CMaterial::TMaterialContainer *LastMaterial = NULL;
 	CMaterial::TMaterialContainer *LastSubMaterial = NULL;
 	CTexture::TTextureContainer *LastTexture = NULL;
@@ -226,7 +226,8 @@ nInt32 CASELoader::LoadAseInternal(void)
        			else if ( strcmp ( word, "}" ) == 0 )
        			{
        				level = nlbrack - nrbrack;
-					LastGeomObject.mesh = NULL;
+					LastGeomObject = NULL;
+					exMatCoordsIndexes = NULL;
        				continue;
        			}
 //
@@ -242,8 +243,10 @@ nInt32 CASELoader::LoadAseInternal(void)
 					memset(&mesh, 0, sizeof(CMesh::TMeshContainer));
 
 					mesh.nName = nObjName;
-					mMeshesMap.insert(std::pair<nstring, CMesh::TMeshContainer>(nObjName, mesh));
-					LastGeomObject.mesh = &(mMeshesMap[nObjName]);
+					mMeshesMap.insert(std::make_pair(nObjName, mesh));
+					mExdenedArrays.insert(std::make_pair(nObjName, exInternalAseArrays()));
+					LastGeomObject = &(mMeshesMap[nObjName]);
+					exMatCoordsIndexes = &(mExdenedArrays[nObjName]);
 					break;
 				}
 				else if ( strcmp ( word, "*NODE_TM" ) == 0 )
@@ -271,8 +274,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 					count = sscanf ( next, "%d%n", &i, &width );
 		    		next = next + width;
 
-					if(LastGeomObject.mesh)
-						LastGeomObject.mesh->MatID = i;
+					if(LastGeomObject)
+						LastGeomObject->MatID = i;
 					break;
 				}
 				else
@@ -440,6 +443,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    	else if ( strcmp ( word, "*MESH_FACE" ) == 0 )
 		    	{
 					CMesh::TFaceInfo index;
+					memset(&index, 0, sizeof(CMesh::TFaceInfo));
 
 					count = sscanf ( next, "%d%n", &index.faceNo, &width );
 		    		next = next + width;
@@ -481,9 +485,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 						}
 					}
 
-					if(LastGeomObject.mesh)
+					if(LastGeomObject)
 					{
-						LastGeomObject.mesh->nMeshInfoList.push_back(index);
+						LastGeomObject->nMeshInfoList.push_back(index);
 					}
 					
 
@@ -580,7 +584,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 		    		count = sscanf ( next, "%d%n", &index.c, &width );
 		    		next = next + width;
 
-					LastGeomObject.tvIndexList.push_back(index);
+					if(exMatCoordsIndexes)
+						exMatCoordsIndexes->tvIndexList.push_back(index);
 					break;
 				}
 				else
@@ -606,7 +611,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				}
 				else if ( strcmp ( word1, "*MESH_TVERT" ) == 0  )
 				{
-					exMeshContainer::stCoords uv;
+					stCoords uv;
 
 					count = sscanf ( next, "%d%n", &i, &width );
 					next = next + width;
@@ -620,7 +625,8 @@ nInt32 CASELoader::LoadAseInternal(void)
 					count = sscanf ( next, "%f%n", &uv.w, &width );
 					next = next + width;
 
-					LastGeomObject.tvMappingList.push_back(uv);
+					if(exMatCoordsIndexes)
+						exMatCoordsIndexes->tvMappingList.push_back(uv);
 					break;
 				}
 				else
@@ -647,6 +653,7 @@ nInt32 CASELoader::LoadAseInternal(void)
 				else if ( strcmp ( word1, "*MESH_VERTEX" ) == 0 )
 				{
 					CMesh::stVertex3d3n3uv_t vertex;
+					memset(&vertex, 0, sizeof(CMesh::stVertex3d3n3uv_t));
 
 					count = sscanf ( next, "%d%n", &i, &width );
 					next = next + width;
@@ -660,9 +667,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					count = sscanf ( next, "%f%n", &vertex.z, &width );
 					next = next + width;
 
-					if(LastGeomObject.mesh)
+					if(LastGeomObject)
 					{
-						LastGeomObject.mesh->nVertexList.push_back(vertex);
+						LastGeomObject->nVertexList.push_back(vertex);
 					}
 
 					break;
@@ -731,9 +738,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(LastGeomObject.mesh)
+					if(LastGeomObject)
 					{
-						LastGeomObject.mesh->nTMatrix.SetRow(0, row);
+						LastGeomObject->nTMatrix.SetRow(0, row);
 					}
 
 					break;
@@ -751,9 +758,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(LastGeomObject.mesh)
+					if(LastGeomObject)
 					{
-						LastGeomObject.mesh->nTMatrix.SetRow(1, row);
+						LastGeomObject->nTMatrix.SetRow(1, row);
 					}
 
 					break;
@@ -771,9 +778,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 0;
-					if(LastGeomObject.mesh)
+					if(LastGeomObject)
 					{
-						LastGeomObject.mesh->nTMatrix.SetRow(2, row);
+						LastGeomObject->nTMatrix.SetRow(2, row);
 					}
 
 					break;
@@ -791,9 +798,9 @@ nInt32 CASELoader::LoadAseInternal(void)
 					next = next + width;
 
 					row[3] = 1;
-					if(LastGeomObject.mesh)
+					if(LastGeomObject)
 					{
-						LastGeomObject.mesh->nTMatrix.SetRow(3, row);
+						LastGeomObject->nTMatrix.SetRow(3, row);
 					}
 
 					break;
@@ -1612,14 +1619,14 @@ void CASELoader::CloseLoader(void)
 // Preparing sub mat indexes
 		for(nUInt32 i = 0; i < mesh_def->nMeshInfoList.size(); i++)
 		{
-			if(mesh_def->nMeshInfoList[i].nMatSubID >= matref.nSubMats.size())
+			if(mesh_def->nMeshInfoList[i].matSubID >= matref.nSubMats.size())
 			{
-				mesh_def->nMeshInfoList[i].nMatSubID = 0;
-				mesh_def->nMeshInfoList[i].nMatName = matref.nName;
+				mesh_def->nMeshInfoList[i].matSubID = 0;
+				mesh_def->nMeshInfoList[i].matName = matref.nName;
 			}
 			else
 			{
-				mesh_def->nMeshInfoList[i].nMatName = matref.nSubMats[mesh_def->nMeshInfoList[i].nMatSubID];
+				mesh_def->nMeshInfoList[i].matName = matref.nSubMats[mesh_def->nMeshInfoList[i].matSubID];
 			}
 		}
 // Calculating real uv from texture faces
@@ -1638,61 +1645,61 @@ void CASELoader::CloseLoader(void)
 		struct TVLeaf
 		{
 			nUInt32 face;
-			exMeshContainer::stCoords uv;
+			stCoords uv;
 			size_t pos;
 		};
 
-		mesh_def->nMappingFacesList.resize(mesh_def->nVertexList.size());
+		exInternalAseArrays *matCoordsIndexes = &(mExdenedArrays[mesh_def->nName]);
 		size_t vertSize = mesh_def->nVertexList.size();
 		for(nUInt32 i = 0; i < vertSize; i++)
 		{
 			// определяем количество граней содержащих эту точку
-			TVertex3d vertex = mesh_def->nVertexList[i];
+			CMesh::stVertex3d3n3uv_t vertex = mesh_def->nVertexList[i];
 			stl<TVLeaf>::vector indLeafs;
-			for(nUInt32 j = 0; j < mesh_def->nIndexList.size(); j++)
+			for(nUInt32 j = 0; j < mesh_def->nMeshInfoList.size(); j++)
 			{
 				for(nUInt32 p = 0; p < 3; p++)
 				{
-					if(mesh_def->nIndexList[j].v[p] == i)
+					if(mesh_def->nMeshInfoList[j].faceIndex.v[p] == i)
 					{
 						TVLeaf leaf;
 
 						leaf.face = j;
 						leaf.pos = p;
-						leaf.uv = mesh_def->nTVMappingList[mesh_def->nTVIndexList[j].v[p]];
+						leaf.uv = matCoordsIndexes->tvMappingList[matCoordsIndexes->tvIndexList[j].v[p]];
 						indLeafs.push_back(leaf);
 					}
 				}
 			}
 
-			TUVMapping prevUv = indLeafs[0].uv;
-			nUInt32 indLast = mesh_def->nIndexList[indLeafs[0].face].v[indLeafs[0].pos];
-			mesh_def->nMappingFacesList[i] = indLeafs[0].uv;
+			stCoords prevUv = indLeafs[0].uv;
+			nUInt32 indLast = mesh_def->nMeshInfoList[indLeafs[0].face].faceIndex.v[indLeafs[0].pos];
+			mesh_def->nVertexList[i].s = prevUv.s;
+			mesh_def->nVertexList[i].t = prevUv.t;
+			mesh_def->nVertexList[i].w = prevUv.w;
+
 			for(nUInt32 j = 1; j < indLeafs.size(); j++)
 			{
 				if(prevUv.s != indLeafs[j].uv.s || 
 					prevUv.t != indLeafs[j].uv.t ||
 					prevUv.w != indLeafs[j].uv.w)
 				{
-					prevUv = indLeafs[j].uv;
+					prevUv = indLeafs[j].uv;				
+					// добавляем к ней ее текстурную координату
+					memcpy(vertex.stw, &prevUv, sizeof(stCoords));
 					// вставляем дополнительную вершину (мнимую)
 					mesh_def->nVertexList.push_back(vertex);
-					// добавляем к ней ее текстурную координату
-					mesh_def->nMappingFacesList.push_back(prevUv);
 					// обновляем массив индексов
 					indLast = mesh_def->nVertexList.size()-1;
 				}
 
-				mesh_def->nIndexList[indLeafs[j].face].v[indLeafs[j].pos] = indLast;
+				mesh_def->nMeshInfoList[indLeafs[j].face].faceIndex.v[indLeafs[j].pos] = indLast;
 			}
 
 			indLeafs.clear();
 		}
 			
-			
-
-		mesh_def->nTVMappingList.clear();
-		mesh_def->nTVIndexList.clear();
+		mExdenedArrays.clear();
 	}
 }
 

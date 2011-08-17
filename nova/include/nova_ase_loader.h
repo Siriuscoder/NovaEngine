@@ -36,17 +36,16 @@ public:
 
 	typedef struct 
 	{
-		typedef struct 
-		{
-			nova::nReal s;
-			nova::nReal t;
-			nova::nReal w;
-		} stCoords;
+		nova::nReal s;
+		nova::nReal t;
+		nova::nReal w;
+	} stCoords;
 
-		CMesh::TMeshContainer *mesh;
+	typedef struct 
+	{
 		stl<CMesh::TFaceABC>::vector tvIndexList;
 		stl<stCoords>::vector tvMappingList;
-	} exMeshContainer;
+	} exInternalAseArrays;
 
 protected:
 
@@ -60,6 +59,7 @@ protected:
 
 private:
 
+	std::map<nova::nstring, exInternalAseArrays> mExdenedArrays;
 	nInt32 LoadAseInternal(void);
 
 };

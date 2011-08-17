@@ -95,10 +95,10 @@ public:
 				if(xmlTextWriterStartElement(xmlWriter, BAD_CAST "Material") < 0) // NovaScene doc
 					NOVA_EXP("CResource::SerializeToXmlFile: xmlTextWriterStartElement fail", BAD_OPERATION);
 				if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST "MatName", "%s", 
-					meshPtr->GetMeshDefinition().nMeshInfoList[meshPtr->GetMeshDefinition().nMatChangesGroups[i]].nMatName.c_str()) < 0)
+					meshPtr->GetMeshDefinition().nMeshInfoList[meshPtr->GetMeshDefinition().nMatChangesGroups[i]].matName.c_str()) < 0)
 					NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
 				if(xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST "SubMatID", "%d", 
-					meshPtr->GetMeshDefinition().nMeshInfoList[meshPtr->GetMeshDefinition().nMatChangesGroups[i]].nMatSubID) < 0)
+					meshPtr->GetMeshDefinition().nMeshInfoList[meshPtr->GetMeshDefinition().nMatChangesGroups[i]].matSubID) < 0)
 					NOVA_EXP("CImage::SerializeToXmlFileImpl: xmlTextWriterWriteAttribute fail", BAD_OPERATION);
 
 				xmlTextWriterEndElement(xmlWriter);
@@ -184,7 +184,7 @@ public:
 			nova::CMesh::TMeshContainer *meshInfo = mLoader.GetMesh(meshes[i]);
 
 			std::cout << "-- Vertex count: " << nova::CStringUtils::IntToString(meshInfo->nVertexList.size()) << std::endl;std::cout.flush();
-			std::cout << "-- Face count: " << nova::CStringUtils::IntToString(meshInfo->nIndexList.size()) << std::endl;std::cout.flush();
+			std::cout << "-- Face count: " << nova::CStringUtils::IntToString(meshInfo->nMeshInfoList.size()) << std::endl;std::cout.flush();
 			std::cout << "-- Mat ID: " << nova::CStringUtils::IntToString(meshInfo->MatID) << std::endl << std::endl;std::cout.flush();
 			SerializeMeshObject(meshes[i], *meshInfo, destFolder);
 
@@ -217,28 +217,26 @@ public:
 
 	void SerializeMeshObject(const nstring &meshName, nova::CMesh::TMeshContainer &meshInfo, const nstring &destFolder)
 	{
-		meshInfo.nMeshfile = destFolder + meshName + ".msh";
+		nstring xmlMeshFileName = destFolder + meshName + ".xml";
 		nova::CMeshBoxPtr meshPtr = nova::CMeshManager::GetSingelton().CreateMesh(&meshInfo, "default");
+		meshPtr->SetMshFile(xmlMeshFileName);
 
 		if(!meshPtr.IsNull())
 		{
-			nstring xmlMeshFileName = destFolder + meshName + ".xml";
-
 			std::cout << "Optimizing mesh.."; std::cout.flush();
 			// Preparing mesh
 			// Generating normals to faces and sub mats info
 			meshPtr->GenerateNormalsToFaces();
-			if(meshPtr->GetMeshDefinition().nNormalList.size() == 0)
 			//Generating normals to vertexes
-				meshPtr->CalculateNormals();
+			meshPtr->CalculateNormals();
 
 			// Sorting faces by material id
 			// using fast qsort algorithm
 			meshPtr->SortFaceIndexByMaterials();
 
-			std::cout << "Saving mesh object to file " << meshInfo.nMeshfile << "..."; std::cout.flush();
-			CGlobalMshLoader::SaveMeshToFile(meshPtr->GetMeshDefinition(), meshPtr->GetMeshDefinition().nMeshfile);
-			mFiles.push_back(meshInfo.nMeshfile);
+			std::cout << "Saving mesh object to file " << meshPtr->GetMshFileName() << "..."; std::cout.flush();
+			CGlobalMshLoader::SaveMeshToFile(meshPtr->GetMeshDefinition(), meshPtr->GetMshFileName());
+			mFiles.push_back(meshPtr->GetMshFileName());
 			std::cout << "Done" << std::endl; std::cout.flush();
 
 			meshPtr->SerializeToXmlFile(xmlMeshFileName);
